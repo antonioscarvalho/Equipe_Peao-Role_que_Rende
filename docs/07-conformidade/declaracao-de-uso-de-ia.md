@@ -84,7 +84,7 @@ Declaramos que as informações acima são verdadeiras.
 | Danillo Meira | | |
 | Ian Costa Guimarães | | |
 | Maykon Júnio | | |
-| vanessaramos-byte | | |
+| Vanessa Ramos | | |
 
 ---
 
