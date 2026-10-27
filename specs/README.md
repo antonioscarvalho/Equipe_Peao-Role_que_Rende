@@ -19,6 +19,6 @@ specs/
 
 | # | Funcionalidade | Pilar do desafio | Prioridade | Estado | Responsável |
 |---|---|---|---|---|---|
-| _—_ | _—_ | _—_ | _—_ | _—_ | _—_ |
+| 001 | [Base do app, SOS de fissura e protocolo de crise](001-base-sos-crise/spec.md) | Vontade de jogar · Ajuda especializada | Must | 🔍 revisão (clínica pendente) | Antonio Carvalho |
 
 Estados: 📝 spec · 🗺️ plano · 📋 tarefas · 🔨 implementando · 🔍 revisão · ✅ pronto
