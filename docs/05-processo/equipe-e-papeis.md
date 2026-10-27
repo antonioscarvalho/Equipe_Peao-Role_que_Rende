@@ -22,8 +22,8 @@ Perfis do edital: **Desenvolvimento** (Técnico) · **Game Design** (Visionário
 | Conteúdo e textos | _a definir_ | _a definir_ |
 | Pitch deck (PDF) | _a definir_ | _a definir_ |
 | Apresentador(es) do pitch | _a definir_ | _a definir_ |
-| Declaração de IA e licenças | _a definir_ | _a definir_ |
-| Documentação | _a definir_ | _a definir_ |
+| Declaração de IA e licenças | Antonio Carvalho | _a definir_ |
+| Documentação | Antonio Carvalho | _a definir_ |
 
 ## Acordos da equipe
 
