@@ -4,7 +4,10 @@
 
 ## Pré-requisitos
 
-- _a definir_ (ex.: Node 20+, Godot 4.x, Python 3.12…)
+- Node 20 ou mais novo
+- Docker, para rodar o Supabase local (`npx supabase start`)
+- Celular com o app **Expo Go**, para testar o mobile
+- Stack e motivação em [stack e motivação](stack-e-motivacao.md)
 
 ## Instalação
 

@@ -7,6 +7,8 @@ description: Decide e revisa a estrutura do backend (backend/): onde cada códig
 
 Stack: Node 20, TypeScript strict, Fastify, publicado como função na Vercel. Leia `backend/README.md` antes de começar.
 
+> **O backend inicial do projeto é o Supabase.** Este backend é o "customizado futuro" e só recebe código depois que a skill `backend-customizado` disser que a regra não cabe no Supabase. Motivação em `docs/04-tecnico/stack-e-motivacao.md`.
+
 ## Passos
 
 1. Diga em uma frase qual recurso está sendo criado e de que tela do frontend ele vem. Recurso sem tela que o use não entra no MVP (ver `docs/02-produto/escopo-e-backlog.md`).
