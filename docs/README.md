@@ -25,6 +25,7 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 - [Público-alvo e personas](02-produto/publico-e-personas.md)
 - [Jornada do usuário](02-produto/jornada-do-usuario.md)
 - [Escopo e backlog do MVP](02-produto/escopo-e-backlog.md)
+- [Matriz conceito → funcionalidade e MVP (Fase 2)](02-produto/matriz-conceito-funcionalidade.md)
 
 ### 03 · Design
 - [Game design / experiência](03-design/game-design.md)
