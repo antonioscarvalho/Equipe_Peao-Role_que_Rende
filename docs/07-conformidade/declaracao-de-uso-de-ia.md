@@ -23,6 +23,7 @@ A Equipe Peão declara que usou ferramentas de Inteligência Artificial **como a
 | Ferramenta | Fornecedor | Modelo / versão | Forma de acesso | Termos de uso |
 |---|---|---|---|---|
 | Claude Code | Anthropic | Claude Opus 5.5 (`claude-opus-5-5`) | CLI no terminal | https://www.anthropic.com/legal |
+| Antigravity | Google DeepMind | Gemini 3.8 Flash | IDE / Assistente de código | https://ai.google.dev/terms |
 | _a preencher_ | | | | |
 
 ## 3. Finalidades do uso
@@ -32,7 +33,7 @@ Marque todas as que se aplicam e detalhe no registro (seção 4).
 | Categoria | Usou? | Descrição resumida |
 |---|---|---|
 | **Geração de documentação** (README, docs, guias) | ✅ | Estrutura e textos iniciais do README e da pasta `docs/`, com base no edital |
-| **Definição de tema e conceito** (brainstorm de ideias, narrativa, mecânicas) | ⬜ | _a preencher_ |
+| **Definição de tema e conceito** (brainstorm de ideias, narrativa, mecânicas) | ✅ | Análise crítica do conceito frente aos requisitos do edital e refinamento da visão do Guardião + Open Finance |
 | **Geração de código** (funcionalidades, correções, testes) | ⬜ | _a preencher_ |
 | **Conexão com APIs externas** (código de integração, ou IA como API dentro do produto) | ⬜ | _a preencher_ |
 | **Conteúdo do produto** (textos, diálogos, mensagens ao usuário) | ⬜ | _a preencher_ |
@@ -66,14 +67,16 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 2 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Criar a pasta `docs/` organizada e esta declaração de uso de IA | Estrutura, modelos de documento e textos-base | _pendente_ | `docs/**` |
 | 3 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Criar skills de SDD para agentes de IA e modelos de especificação | Skills em `.claude/skills/` e modelos em `specs/_modelo/` | _pendente_ | `.claude/**`, `specs/**` |
 | 4 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) | Pesquisa / Documentação | Extrair o guia de estilo do site oficial do Rolê que Rende e do Manual de Identidade Visual, e criar uma skill sobre ele | Skill `guia-estilo-role-que-rende`: paleta, tipografia, grafismos, componentes, proposta de animações, tom de voz, tokens CSS/JSON e página de exemplo | _pendente_ | `.claude/skills/guia-estilo-role-que-rende/**` |
-| 5 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Trazer de `projeto-app-bets` as 6 skills clínicas e éticas e o prompt de produto | Skills copiadas sem alteração, exceto um aviso regulatório (MP 1.394) em `controle-estimulos-financas` | _pendente_ | `.claude/skills/{seguranca-e-crise,design-etico-saude-digital,entrevista-motivacional,prevencao-recaida,tcc-reestruturacao-cognitiva,controle-estimulos-financas}/`, `.claude/prompts/` |
-| 6 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) com busca na web | Pesquisa | Fase 1: pesquisa baseada em evidências sobre transtorno do jogo, intervenções, instrumentos, contexto brasileiro e saúde digital | Síntese e 5 documentos com fontes; afirmações não confirmadas marcadas com ⚠️ | _pendente: revisão humana e clínica_ | `docs/pesquisa/**` |
-| 7 | | | | | | | | |
+| 5 | 2026-10-27 | Ian Costa Guimarães | Antigravity (Gemini 3.8 Flash) | Definição de tema e conceito / Documentação | Análise crítica do conceito frente aos requisitos do edital BBDW 2026 e refinamento da proposta de valor do Guardião + Open Finance | Estruturação da visão de produto, pilares do desafio, escopo e conformidade | _pendente_ | `docs/02-produto/visao-do-produto.md` |
+| 6 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Trazer de `projeto-app-bets` as 6 skills clínicas e éticas e o prompt de produto | Skills copiadas sem alteração, exceto um aviso regulatório (MP 1.394) em `controle-estimulos-financas` | _pendente_ | `.claude/skills/{seguranca-e-crise,design-etico-saude-digital,entrevista-motivacional,prevencao-recaida,tcc-reestruturacao-cognitiva,controle-estimulos-financas}/`, `.claude/prompts/` |
+| 7 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) com busca na web | Pesquisa | Fase 1: pesquisa baseada em evidências sobre transtorno do jogo, intervenções, instrumentos, contexto brasileiro e saúde digital | Síntese e 5 documentos com fontes; afirmações não confirmadas marcadas com ⚠️ | _pendente: revisão humana e clínica_ | `docs/pesquisa/**` |
+| 8 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 
 Liste o que foi produzido **sem** IA, para deixar clara a autoria humana:
 
+- Levantamento, triagem e verificação das fontes e pesquisas sobre apostas online no Brasil (`docs/07-conformidade/fontes-e-referencias.md`)
 - _a preencher_ (ex.: mecânica central, direção de arte, roteiro principal)
 
 ## 6. Assinaturas
