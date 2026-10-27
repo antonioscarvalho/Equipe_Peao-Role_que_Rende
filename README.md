@@ -11,11 +11,22 @@ Repositório da **Equipe Peão** no **Rolê que Rende – BBDW 2026**, hackathon
 
 | Integrante | GitHub | Perfil principal |
 |---|---|---|
-| Antonio Carvalho | [@antonioscarvalho](https://github.com/antonioscarvalho) | _a definir_ |
-| _Nome_ | [@usuario](https://github.com/usuario) | _a definir_ |
-| _Nome_ | [@usuario](https://github.com/usuario) | _a definir_ |
+| Antonio Carvalho | [@antonioscarvalho](https://github.com/antonioscarvalho) | Produto e Gestão |
+| Atyrson Souto | [@Atyrson](https://github.com/Atyrson) | Game Design |
+| Danillo Meira | [@danillomeira](https://github.com/danillomeira) | Desenvolvimento |
+| Ian Costa Guimarães | [@iancostag](https://github.com/iancostag) | Desenvolvimento |
+| Maykon Júnio | [@maykonjuso](https://github.com/maykonjuso) | Arte e Som |
+| Vanessa Ramos | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | Narrativa e Conteúdo |
 
 > Perfis previstos no edital (Seção 5.1): **Desenvolvimento** (Técnico), **Game Design** (Visionário), **Arte e Som** (Criativo), **Narrativa e Conteúdo** (Estratégico) e **Produto e Gestão** (Colaborador). Cada equipe tem de 3 a 6 integrantes.
+
+---
+
+## 📚 Documentação
+
+Toda a documentação do projeto está em [`docs/`](docs/README.md): produto, design, parte técnica, processo, entrega e conformidade com o edital.
+
+O desenvolvimento segue **SDD (Spec-Driven Development)** com agentes de IA. As skills ficam em [`.claude/`](.claude/README.md) e as especificações em [`specs/`](specs/README.md).
 
 ---
 
@@ -88,9 +99,7 @@ Informações sobre saúde, finanças ou legislação precisam estar corretas e,
 
 #### Declaração de uso de IA, código aberto e assets de terceiros
 
-| Item | Tipo | Licença / Ferramenta | Uso no projeto |
-|---|---|---|---|
-| _a preencher_ | | | |
+Veja [docs/07-conformidade/declaracao-de-uso-de-ia.md](docs/07-conformidade/declaracao-de-uso-de-ia.md) e [docs/07-conformidade/licencas-e-assets.md](docs/07-conformidade/licencas-e-assets.md).
 
 ---
 
