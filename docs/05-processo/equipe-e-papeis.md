@@ -5,8 +5,11 @@
 | Integrante | GitHub | Perfil (Seção 5.1) | Responsabilidades no projeto | Contato |
 |---|---|---|---|---|
 | Antonio Carvalho | [@antonioscarvalho](https://github.com/antonioscarvalho) | _a definir_ | _a definir_ | _a definir_ |
-| _Nome_ | _@usuario_ | _a definir_ | _a definir_ | _a definir_ |
-| _Nome_ | _@usuario_ | _a definir_ | _a definir_ | _a definir_ |
+| Atyrson Souto | [@Atyrson](https://github.com/Atyrson) | _a definir_ | _a definir_ | _a definir_ |
+| Danillo Meira | [@danillomeira](https://github.com/danillomeira) | _a definir_ | _a definir_ | _a definir_ |
+| Ian Costa Guimarães | [@iancostag](https://github.com/iancostag) | _a definir_ | _a definir_ | _a definir_ |
+| Maykon Júnio | [@maykonjuso](https://github.com/maykonjuso) | _a definir_ | _a definir_ | _a definir_ |
+| vanessaramos-byte | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | _a definir_ | _a definir_ | _a definir_ |
 
 Perfis do edital: **Desenvolvimento** (Técnico) · **Game Design** (Visionário) · **Arte e Som** (Criativo) · **Narrativa e Conteúdo** (Estratégico) · **Produto e Gestão** (Colaborador).
 

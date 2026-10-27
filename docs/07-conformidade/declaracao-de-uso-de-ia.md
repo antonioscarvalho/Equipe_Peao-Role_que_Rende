@@ -80,8 +80,11 @@ Declaramos que as informações acima são verdadeiras.
 | Integrante | Assinatura / de acordo | Data |
 |---|---|---|
 | Antonio Carvalho | | |
-| _Nome_ | | |
-| _Nome_ | | |
+| Atyrson Souto | | |
+| Danillo Meira | | |
+| Ian Costa Guimarães | | |
+| Maykon Júnio | | |
+| vanessaramos-byte | | |
 
 ---
 
