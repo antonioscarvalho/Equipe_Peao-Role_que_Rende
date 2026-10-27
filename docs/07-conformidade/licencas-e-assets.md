@@ -20,7 +20,11 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 | PostgreSQL | a do Supabase | PostgreSQL License | https://www.postgresql.org/about/licence/ | Banco de dados |
 | Fastify | 5.x | MIT | https://github.com/fastify/fastify | Backend customizado (`backend/`) |
 | Zod | 4.x | MIT | https://github.com/colinhacks/zod | Validação de entrada no backend |
-| Vitest | 3.x | MIT | https://github.com/vitest-dev/vitest | Testes |
+| Vitest | 4.1 (web) / 3.x (backend) | MIT | https://github.com/vitest-dev/vitest | Testes |
+| idb | 8.0 | ISC | https://github.com/jakearchibald/idb | IndexedDB no web: registros da pessoa só no aparelho |
+| jsdom | 30.1 | MIT | https://github.com/jsdom/jsdom | Ambiente de navegador nos testes do web |
+| Testing Library (react, user-event, jest-dom) | 16.3 / 14.6 / 7.0 | MIT | https://github.com/testing-library | Testes de tela do web |
+| fake-indexeddb | 6.2 | Apache 2.0 | https://github.com/dumbmatter/fakeIndexedDB | IndexedDB em memória nos testes |
 
 ## Skills de IA de terceiros (`.claude/skills/`)
 
