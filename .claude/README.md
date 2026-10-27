@@ -23,6 +23,8 @@ Esta pasta guarda as **skills do Claude Code** que a equipe usa para trabalhar c
 /sdd-implementar → código + commits              (uma tarefa por vez)
        ↓
 /sdd-revisar     → specs/NNN-nome/revisao.md     (spec x código x edital)
+       ↓
+/conformidade-legal-br → relatório de conformidade (edital + leis)
 
 Durante todo o fluxo:
 /registrar-uso-ia  → docs/07-conformidade/declaracao-de-uso-de-ia.md
@@ -43,6 +45,7 @@ Durante todo o fluxo:
 | [`registrar-uso-ia`](skills/registrar-uso-ia/SKILL.md) | 🟢 base pronta | _a definir_ | Adiciona uma linha na declaração de uso de IA |
 | [`registrar-asset`](skills/registrar-asset/SKILL.md) | 🟢 base pronta | _a definir_ | Registra biblioteca, asset ou API e sua licença |
 | [`guia-estilo-role-que-rende`](skills/guia-estilo-role-que-rende/SKILL.md) | 🟢 base pronta | Maykon Júnio | Guia de estilo do Rolê que Rende (cores, fontes, grafismos, componentes, animações, tom de voz), extraído do site oficial e do Manual de Identidade Visual. Inclui tokens CSS/JSON e página de exemplo |
+| [`conformidade-legal-br`](skills/conformidade-legal-br/SKILL.md) | 🟢 base pronta | Atyrson Souto | Revisa código, telas e textos contra o edital (Seção 8.4, 8.5, Anexo 2) e leis brasileiras: LGPD (dados de saúde são sensíveis), apostas, saúde mental, acessibilidade (LBI/WCAG), CDC, ECA, direitos autorais e Marco Civil. Também disponível em `.kiro/skills/` |
 
 ### Skills de conteúdo clínico e ético (app de apoio a apostadores)
 
