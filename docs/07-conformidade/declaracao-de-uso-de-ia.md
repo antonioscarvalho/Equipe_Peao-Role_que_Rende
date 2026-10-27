@@ -74,7 +74,8 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 9 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) | Geração de código | Esqueleto do backend em Fastify para a Vercel, com Repository e Retry pattern e testes | Estrutura em `backend/` e skill `arquiteto-de-software` | _pendente_ | `backend/**`, `.claude/skills/arquiteto-de-software/` |
 | 10 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) com busca na web | Documentação / Pesquisa | Documentar a motivação da stack com dados de mercado e criar uma skill por tecnologia | Documento de stack, decisões técnicas e 7 skills; números conferidos na Stack Overflow 2025 e no State of JS 2025 | _pendente_ | `docs/04-tecnico/**`, `docs/07-conformidade/{licencas-e-assets,fontes-e-referencias}.md`, `.claude/skills/{web-react-vite,mobile-expo,ui-ux-designer,supabase,postgresql,deploy-vercel,backend-customizado}/` |
 | 11 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação / Conteúdo do produto | Fase 3: arquitetura de privacidade, fluxos e microcopy, com base nas skills clínicas, éticas e de estilo | Fluxos de 10 telas, textos de interface e regras de dados locais | _pendente: revisão humana e clínica (textos 🩺)_ | `docs/02-produto/fluxos.md`, `docs/02-produto/microcopy.md`, `docs/04-tecnico/privacidade-e-dados-locais.md` |
-| 12 | | | | | | | | |
+| 12 | 2026-10-27 | Ian Costa Guimarães | Antigravity (Gemini 3.8 Flash) | Documentação / Definição de tema | Elaboração e estruturação das 5 especificações técnicas do MVP (Specs 001 a 005) e backlog com critérios de aceite verificáveis | Specs em specs/001 a 005, specs/README.md e docs/02-produto/escopo-e-backlog.md | _pendente_ | `specs/**`, `docs/02-produto/escopo-e-backlog.md` |
+| 13 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 
