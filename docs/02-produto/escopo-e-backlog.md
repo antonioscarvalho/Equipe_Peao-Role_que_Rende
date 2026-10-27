@@ -2,6 +2,8 @@
 
 > O tempo é curto: de 27/10 às 15h30 até 29/10 às 11h. Priorize o que aparece na demo.
 
+> A priorização proposta, com base na pesquisa, está em [matriz conceito → funcionalidade](matriz-conceito-funcionalidade.md#3-priorização-moscow). Copie aqui o que a equipe aprovar.
+
 ## Priorização (MoSCoW)
 
 ### Must have — sem isso não há demo

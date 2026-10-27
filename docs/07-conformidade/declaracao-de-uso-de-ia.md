@@ -70,7 +70,8 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 5 | 2026-10-27 | Ian Costa Guimarães | Antigravity (Gemini 3.8 Flash) | Definição de tema e conceito / Documentação | Análise crítica do conceito frente aos requisitos do edital BBDW 2026 e refinamento da proposta de valor do Guardião + Open Finance | Estruturação da visão de produto, pilares do desafio, escopo e conformidade | _pendente_ | `docs/02-produto/visao-do-produto.md` |
 | 6 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Trazer de `projeto-app-bets` as 6 skills clínicas e éticas e o prompt de produto | Skills copiadas sem alteração, exceto um aviso regulatório (MP 1.394) em `controle-estimulos-financas` | _pendente_ | `.claude/skills/{seguranca-e-crise,design-etico-saude-digital,entrevista-motivacional,prevencao-recaida,tcc-reestruturacao-cognitiva,controle-estimulos-financas}/`, `.claude/prompts/` |
 | 7 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) com busca na web | Pesquisa | Fase 1: pesquisa baseada em evidências sobre transtorno do jogo, intervenções, instrumentos, contexto brasileiro e saúde digital | Síntese e 5 documentos com fontes; afirmações não confirmadas marcadas com ⚠️ | _pendente: revisão humana e clínica_ | `docs/pesquisa/**` |
-| 8 | | | | | | | | |
+| 8 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Definição de tema e conceito | Fase 2: matriz conceito → funcionalidade, MoSCoW e MVP, com base na pesquisa, nas skills e na visão do produto | Matriz com 18 funcionalidades, ajustes propostos à visão e MVP de 10 itens | _pendente_ | `docs/02-produto/matriz-conceito-funcionalidade.md` |
+| 9 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 
