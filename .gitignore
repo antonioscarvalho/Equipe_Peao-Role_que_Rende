@@ -1,8 +1,27 @@
-.env
-.env.*
-!.env.example
-.claude/settings.local.json
+# Sistema operacional
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Dependências e build
 node_modules/
 dist/
 build/
-.DS_Store
+__pycache__/
+.venv/
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Claude Code (configurações pessoais)
+.claude/settings.local.json

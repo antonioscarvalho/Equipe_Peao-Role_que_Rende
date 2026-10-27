@@ -26,6 +26,13 @@
 | Banco Central do Brasil — Cidadania Financeira | Orçamento, dívidas, crédito | https://www.bcb.gov.br | ⬜ |
 | Consumidor.gov.br | Renegociação e reclamações | https://www.consumidor.gov.br | ⬜ |
 
+## Identidade visual
+
+| Fonte | Tema | Link | Verificado |
+|---|---|---|---|
+| Página oficial Rolê que Rende (BB) | Cores, componentes, textos e tom de voz do programa | https://www.bb.com.br/site/role-que-rende/ | ✅ 2026-10-27 |
+| Manual de Aplicação de Marca / Identidade Visual Rolê que Rende 2025 | Paleta oficial, fontes, logo, grafismos, ícones | https://www.bb.com.br/docs/portal/direc/BB-ROLE-QUE-RENDE-MANUAL-IDV.pdf | ✅ 2026-10-27 |
+
 ## Pesquisas e dados citados
 
 | Dado / afirmação | Fonte | Link | Data de acesso | Verificado |
