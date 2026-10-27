@@ -16,7 +16,7 @@ Repositório da **Equipe Peão** no **Rolê que Rende – BBDW 2026**, hackathon
 | Danillo Meira | [@danillomeira](https://github.com/danillomeira) | _a definir_ |
 | Ian Costa Guimarães | [@iancostag](https://github.com/iancostag) | _a definir_ |
 | Maykon Júnio | [@maykonjuso](https://github.com/maykonjuso) | _a definir_ |
-| vanessaramos-byte | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | _a definir_ |
+| Vanessa Ramos | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | _a definir_ |
 
 > Perfis previstos no edital (Seção 5.1): **Desenvolvimento** (Técnico), **Game Design** (Visionário), **Arte e Som** (Criativo), **Narrativa e Conteúdo** (Estratégico) e **Produto e Gestão** (Colaborador). Cada equipe tem de 3 a 6 integrantes.
 

@@ -9,7 +9,7 @@
 | Danillo Meira | [@danillomeira](https://github.com/danillomeira) | _a definir_ | _a definir_ | _a definir_ |
 | Ian Costa Guimarães | [@iancostag](https://github.com/iancostag) | _a definir_ | _a definir_ | _a definir_ |
 | Maykon Júnio | [@maykonjuso](https://github.com/maykonjuso) | _a definir_ | _a definir_ | _a definir_ |
-| vanessaramos-byte | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | _a definir_ | _a definir_ | _a definir_ |
+| Vanessa Ramos | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | _a definir_ | _a definir_ | _a definir_ |
 
 Perfis do edital: **Desenvolvimento** (Técnico) · **Game Design** (Visionário) · **Arte e Som** (Criativo) · **Narrativa e Conteúdo** (Estratégico) · **Produto e Gestão** (Colaborador).
 
