@@ -39,7 +39,7 @@ Marque todas as que se aplicam e detalhe no registro (seção 4).
 | **Arte e assets visuais** (imagens, ícones, sprites) | ⬜ | _a preencher_ |
 | **Áudio** (música, efeitos, voz/TTS) | ⬜ | _a preencher_ |
 | **Pitch** (roteiro, slides, revisão de texto) | ⬜ | _a preencher_ |
-| **Pesquisa** (resumo de fontes, dados sobre o tema) | ✅ | Extração da identidade visual do Rolê que Rende a partir do site oficial e do Manual de Identidade Visual do BB |
+| **Pesquisa** (resumo de fontes, dados sobre o tema) | ✅ | Extração da identidade visual do Rolê que Rende (site oficial e Manual de Identidade Visual do BB); pesquisa baseada em evidências da Fase 1 (`docs/pesquisa/`) |
 | **Tradução / revisão ortográfica** | ⬜ | _a preencher_ |
 
 ### 3.1 IA dentro do produto (se houver)
@@ -66,7 +66,9 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 2 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Criar a pasta `docs/` organizada e esta declaração de uso de IA | Estrutura, modelos de documento e textos-base | _pendente_ | `docs/**` |
 | 3 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Criar skills de SDD para agentes de IA e modelos de especificação | Skills em `.claude/skills/` e modelos em `specs/_modelo/` | _pendente_ | `.claude/**`, `specs/**` |
 | 4 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) | Pesquisa / Documentação | Extrair o guia de estilo do site oficial do Rolê que Rende e do Manual de Identidade Visual, e criar uma skill sobre ele | Skill `guia-estilo-role-que-rende`: paleta, tipografia, grafismos, componentes, proposta de animações, tom de voz, tokens CSS/JSON e página de exemplo | _pendente_ | `.claude/skills/guia-estilo-role-que-rende/**` |
-| 5 | | | | | | | | |
+| 5 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação | Trazer de `projeto-app-bets` as 6 skills clínicas e éticas e o prompt de produto | Skills copiadas sem alteração, exceto um aviso regulatório (MP 1.394) em `controle-estimulos-financas` | _pendente_ | `.claude/skills/{seguranca-e-crise,design-etico-saude-digital,entrevista-motivacional,prevencao-recaida,tcc-reestruturacao-cognitiva,controle-estimulos-financas}/`, `.claude/prompts/` |
+| 6 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) com busca na web | Pesquisa | Fase 1: pesquisa baseada em evidências sobre transtorno do jogo, intervenções, instrumentos, contexto brasileiro e saúde digital | Síntese e 5 documentos com fontes; afirmações não confirmadas marcadas com ⚠️ | _pendente: revisão humana e clínica_ | `docs/pesquisa/**` |
+| 7 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 

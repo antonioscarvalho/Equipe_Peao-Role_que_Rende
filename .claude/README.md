@@ -44,6 +44,21 @@ Durante todo o fluxo:
 | [`registrar-asset`](skills/registrar-asset/SKILL.md) | 🟢 base pronta | _a definir_ | Registra biblioteca, asset ou API e sua licença |
 | [`guia-estilo-role-que-rende`](skills/guia-estilo-role-que-rende/SKILL.md) | 🟢 base pronta | Maykon Júnio | Guia de estilo do Rolê que Rende (cores, fontes, grafismos, componentes, animações, tom de voz), extraído do site oficial e do Manual de Identidade Visual. Inclui tokens CSS/JSON e página de exemplo |
 
+### Skills de conteúdo clínico e ético (app de apoio a apostadores)
+
+Vieram do prompt de produto em [`prompts/app-apoio-apostadores.md`](prompts/app-apoio-apostadores.md). As duas marcadas com ⚠️ são **obrigatórias em toda funcionalidade**.
+
+| Skill | Estado | Responsável | O que faz |
+|---|---|---|---|
+| [`seguranca-e-crise`](skills/seguranca-e-crise/SKILL.md) ⚠️ | 🟢 base pronta | _a definir_ | Protocolo de risco e crise: CVV 188, SAMU 192, CAPS, plano de segurança, limites clínicos |
+| [`design-etico-saude-digital`](skills/design-etico-saude-digital/SKILL.md) ⚠️ | 🟢 base pronta | _a definir_ | Gamificação sem mecânica de aposta, notificações discretas, LGPD, linguagem simples, acessibilidade |
+| [`entrevista-motivacional`](skills/entrevista-motivacional/SKILL.md) | 🟢 base pronta | _a definir_ | Onboarding, metas e textos baseados em Entrevista Motivacional |
+| [`prevencao-recaida`](skills/prevencao-recaida/SKILL.md) | 🟢 base pronta | _a definir_ | Gatilhos, botão SOS, urge surfing, plano Se/Então, resposta a lapsos |
+| [`tcc-reestruturacao-cognitiva`](skills/tcc-reestruturacao-cognitiva/SKILL.md) | 🟢 base pronta | _a definir_ | Distorções cognitivas das apostas, registro de pensamentos, cards "Pare e examine" |
+| [`controle-estimulos-financas`](skills/controle-estimulos-financas/SKILL.md) | 🟢 base pronta | _a definir_ | Bloqueios, autoexclusão, barreiras financeiras, dinheiro preservado, organizador de dívidas |
+
+> Todo conteúdo clínico gerado com essas skills precisa de **revisão por psicólogo(a)** antes de ir para o produto.
+
 As skills "base pronta" funcionam, mas são um ponto de partida. **Cada colaborador fica responsável por evoluir uma delas** conforme a stack e a ideia escolhidas (por exemplo: comandos de build e teste reais em `sdd-implementar`).
 
 ## Skills a construir pelos colaboradores
