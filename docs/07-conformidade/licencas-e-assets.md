@@ -12,7 +12,13 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 |---|---|---|---|---|
 | TypeScript | 5.x | Apache 2.0 | https://github.com/microsoft/TypeScript | Linguagem de todo o projeto |
 | React | 19.x | MIT | https://github.com/facebook/react | Interface do web e do mobile |
-| Vite | a definir no setup | MIT | https://github.com/vitejs/vite | Dev server e build do web |
+| Vite | 8.3.5 | MIT | https://github.com/vitejs/vite | Dev server e build do web |
+| React DOM | 19.3.1 | MIT | https://github.com/facebook/react | Renderização do web |
+| React Router | 7.18.4 | MIT | https://github.com/remix-run/react-router | Rotas do web |
+| @vitejs/plugin-react | 6.1.2 | MIT | https://github.com/vitejs/vite-plugin-react | Plugin React do Vite |
+| vite-plugin-pwa + Workbox | 2.0.0 / 7.4.1 | MIT | https://github.com/vite-pwa/vite-plugin-pwa | PWA: service worker e funcionamento offline |
+| Testing Library (react, jest-dom, user-event) | 16.3.3 / 6.9.1 / 14.6.8 | MIT | https://github.com/testing-library | Testes de tela do web |
+| jsdom | 30.1.3 | MIT | https://github.com/jsdom/jsdom | Ambiente de teste do web |
 | React Native | 0.88 | MIT | https://github.com/facebook/react-native | App mobile |
 | Expo | SDK 58 | MIT | https://github.com/expo/expo | Framework do app mobile |
 | Supabase (plataforma e CLI) | a definir no setup | Apache 2.0 | https://github.com/supabase/supabase | Backend inicial: Auth, API, Storage, Edge Functions |
@@ -20,7 +26,7 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 | PostgreSQL | a do Supabase | PostgreSQL License | https://www.postgresql.org/about/licence/ | Banco de dados |
 | Fastify | 5.x | MIT | https://github.com/fastify/fastify | Backend customizado (`backend/`) |
 | Zod | 4.x | MIT | https://github.com/colinhacks/zod | Validação de entrada no backend |
-| Vitest | 3.x | MIT | https://github.com/vitest-dev/vitest | Testes |
+| Vitest | 3.x (backend) / 5.0.5 (web) | MIT | https://github.com/vitest-dev/vitest | Testes |
 
 ## Skills de IA de terceiros (`.claude/skills/`)
 
@@ -46,13 +52,13 @@ Avaliadas e **não instaladas** por não terem licença declarada: `brainstorm` 
 | Fontes BancoDoBrasil Títulos / Textos | Banco do Brasil | Proprietária: **não incluída no repo**; só usar se a organização fornecer | — | não | — | — |
 | Fonte Nunito Sans (fallback de títulos) | Vernon Adams et al. / Google Fonts | SIL OFL 1.1 | https://fonts.google.com/specimen/Nunito+Sans | não | Não exige no produto | carregada via Google Fonts em `assets/exemplo.html` |
 | Fonte Roboto (fallback de textos) | Google / Google Fonts | SIL OFL 1.1 | https://fonts.google.com/specimen/Roboto | não | Não exige no produto | carregada via Google Fonts em `assets/exemplo.html` |
-| _a preencher_ | | | | sim/não | | |
+| Personagem Guardião (SVG) e ícone do app | Equipe Peão (Maykon Júnio), com apoio do Claude Code | MIT (licença do projeto) | — | parcialmente (desenho em SVG escrito com apoio de IA, revisado pela equipe) | — | `web/src/components/Guardiao.tsx`, `web/public/icone*` |
 
 ## Assets sonoros (música, efeitos, voz)
 
 | Asset | Autor / fonte | Licença | Link | Gerado por IA? | Atribuição exigida | Arquivo no repo |
 |---|---|---|---|---|---|---|
-| _a preencher_ | | | | sim/não | | |
+| — | Nenhum: o MVP não tem áudio | — | — | — | — | — |
 
 ## APIs e serviços externos
 

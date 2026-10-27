@@ -13,7 +13,9 @@
 
 | # | Serviço / API | Finalidade | Dados enviados | Autenticação | Termos / licença | Usa IA? | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | _a definir_ | _a definir_ | _a definir_ | _a definir_ | _link_ | sim/não | ⬜ |
+| — | **Nenhuma no MVP** | O app web funciona offline e não chama nenhuma API | Nenhum | — | — | não | ✅ |
+| 1 | Links externos que **a própria pessoa** abre: `tel:` (CVV 188, SAMU 192, contatos), `wa.me` (mensagem pronta), sites do CVV, Meu SUS Digital, Jogadores Anônimos, Consumidor.gov.br, gov.br | Ponte para ajuda humana | Nada é enviado pelo app; no `wa.me`, só o texto pronto, se a pessoa tocar | — | Termos de cada site | não | ✅ |
+| 2 | Pluggy (Open Finance, sandbox) | Demo do "sensor" do Guardião (#16, Could) | Só dados sintéticos do sandbox | Chave em Edge Function, nunca no navegador | https://pluggy.ai | não | ⬜ não iniciado |
 
 ## Checklist por integração
 

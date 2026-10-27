@@ -1,0 +1,56 @@
+{
+  "revisaoClinica": "pendente",
+  "fontes": [
+    "skill tcc-reestruturacao-cognitiva",
+    "Ladouceur et al., 2001 (ECR) — correção cognitiva no transtorno do jogo",
+    "Cowlishaw et al., 2012 (revisão Cochrane) — terapias psicológicas para jogo patológico"
+  ],
+  "cards": [
+    {
+      "id": "recuperar-perdas",
+      "titulo": "\"Mais uma e eu recupero\"",
+      "validacao": "Faz sentido querer o dinheiro de volta. Perder dói.",
+      "perguntas": [
+        "Quantas vezes essa tentativa já aumentou a dívida?",
+        "Se eu não recuperar, como vou me sentir amanhã?",
+        "O que eu diria para um amigo pensando isso agora?"
+      ]
+    },
+    {
+      "id": "ilusao-controle",
+      "titulo": "\"Eu entendo do jogo, sei analisar\"",
+      "validacao": "Conhecer o esporte é real. E dá prazer acertar.",
+      "perguntas": [
+        "Se fosse habilidade, por que a casa sempre lucra no longo prazo?",
+        "Meus acertos pagaram as minhas perdas?"
+      ]
+    },
+    {
+      "id": "falacia-apostador",
+      "titulo": "\"Perdeu 5 seguidas, agora vai\"",
+      "validacao": "Nosso cérebro procura padrões. Isso é normal.",
+      "perguntas": [
+        "A partida sabe o que aconteceu antes?",
+        "Quantas vezes essa certeza já deu errado?"
+      ]
+    },
+    {
+      "id": "quase-ganho",
+      "titulo": "\"Faltou um gol, quase ganhei\"",
+      "validacao": "Quase ganhar dá uma sensação forte. Ela é real.",
+      "perguntas": [
+        "Quase ganhar é ganhar ou é perder?",
+        "Quem ganha quando eu sinto que quase consegui?"
+      ]
+    },
+    {
+      "id": "solucao-financeira",
+      "titulo": "\"É o único jeito de pagar as contas\"",
+      "validacao": "Estar apertado de dinheiro é muito pesado.",
+      "perguntas": [
+        "Quais outras saídas existem, mesmo que difíceis?",
+        "Com quem eu poderia conversar sobre essas contas?"
+      ]
+    }
+  ]
+}

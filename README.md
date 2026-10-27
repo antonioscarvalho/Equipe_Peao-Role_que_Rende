@@ -43,39 +43,53 @@ O objetivo do hackathon é **criar protótipos de produtos ou serviços digitais
 
 ## 💡 Nossa solução
 
-> _Esta seção será preenchida durante o Game Jam, a partir da ideia escolhida pela equipe no Dia 1._
+- **Nome:** **Guardião** (o uso de "Rolê que Rende" no nome depende de autorização da organização)
+- **Formato:** aplicativo web instalável (PWA), com gamificação ética, que funciona **sem internet e sem cadastro**
+- **Público-alvo:** pessoas adultas que apostavam em plataformas digitais e querem parar ou reduzir, em grande parte de baixa renda e com Android simples ([personas](docs/02-produto/publico-e-personas.md))
+- **Proposta:** um companheiro calmo que ajuda a atravessar a vontade de apostar, proteger o dinheiro, chamar a rede de apoio e chegar à ajuda especializada, sem nunca punir quem escorrega
+- **Jornada do usuário:** boas-vindas e "Seu motivo" → tela inicial com SOS → registro do dia → SOS de fissura → plano e bloqueios → apoio ([jornada](docs/02-produto/jornada-do-usuario.md))
+- **Principais funcionalidades** ([spec 001](specs/001-mvp-guardiao/spec.md)):
+  - **SOS de fissura** a 1 toque: vontade 0–10, respiração de 10–15 min ("a onda vai passar"), seu motivo, card "Pare e examine", plano ou contato, vontade de novo
+  - **Onboarding "Seu motivo"** com Entrevista Motivacional
+  - **Plano Se/Então** e mapa de gatilhos
+  - **Registro de 1 toque** e fluxo pós-lapso sem punição
+  - **Contador** de dias sem apostar (um lapso não zera) e de dinheiro preservado (estimativa ligada a uma meta)
+  - **Guardião**, personagem que cresce em marcos anunciados (7, 30, 90 dias) e acolhe nos lapsos
+  - **Guia de bloqueio** e barreiras financeiras
+  - **Círculo de Confiança** (até 3 contatos, mensagem pronta enviada pela própria pessoa)
+  - **Hub de apoio** (CVV, UBS/CAPS, Meu SUS Digital, Jogadores Anônimos, Defensoria/Procon)
+  - **Protocolo de crise** com CVV 188 e SAMU 192 a 1 toque de qualquer tela, offline
+- **Como medir o impacto:** dias sem apostar por mês, queda da vontade no SOS e uso de ajuda profissional, nunca tempo de tela ([métricas](docs/06-entrega/metricas-de-impacto.md))
 
-- **Nome:** _a definir_
-- **Formato:** _jogo / aplicativo / plataforma / ferramenta / serviço gamificado_
-- **Público-alvo:** _a definir_
-- **Proposta:** como a solução ajuda a pessoa afetada a retomar o controle financeiro, emocional e social.
-- **Jornada do usuário:** _a definir_
-- **Principais funcionalidades:** _a definir_
-- **Como medir o impacto:** _a definir_
+> ⚠️ Os textos clínicos (em `web/src/content/`) ainda precisam de **revisão por profissional de psicologia**. O Guardião não faz diagnóstico e não substitui tratamento.
 
 ### Acessibilidade
 
-O edital dá até **5% de bônus** a soluções com recursos efetivos de acessibilidade. Nossas metas:
+O edital dá até **5% de bônus** a soluções com recursos efetivos de acessibilidade ([detalhes](docs/03-design/acessibilidade.md)):
 
-- [ ] Legendas e textos alternativos
-- [ ] Modo de alto contraste
-- [ ] Compatibilidade com leitores de tela
-- [ ] Modos para daltonismo
-- [ ] Navegação por teclado
+- [x] Textos alternativos (o Guardião tem descrição para leitor de tela); legendas não se aplicam, porque não há áudio nem vídeo
+- [x] Modo de alto contraste
+- [ ] Compatibilidade com leitores de tela (implementada; falta testar com NVDA ou TalkBack)
+- [x] Modos para daltonismo (nada depende só de cor)
+- [x] Navegação por teclado
+- [x] Tamanho de texto ajustável e opção de reduzir animações
 
 ---
 
 ## 🛠️ Tecnologias
 
-> _A definir. O edital deixa a engine e as ferramentas livres, com preferência por engines open source._
-
-O protótipo deve ser **jogável ou demonstrável** no computador, na web ou em dispositivos móveis.
+React 19 + Vite 8 + TypeScript, como PWA offline (`vite-plugin-pwa`), testes com Vitest e Testing Library. Os dados ficam só no aparelho. Supabase, Expo e o backend em Fastify estão planejados para depois do MVP ([arquitetura](docs/04-tecnico/arquitetura.md), [stack e motivação](docs/04-tecnico/stack-e-motivacao.md)).
 
 ### Como executar
 
 ```bash
-# instruções serão adicionadas quando o protótipo estiver pronto
+cd web
+npm install
+npm run dev          # http://localhost:5173  (demo com dados sintéticos: http://localhost:5173/?demo)
+npm run check        # typecheck + testes + build
 ```
+
+Passo a passo completo, deploy e plano B offline em [setup e execução](docs/04-tecnico/setup-e-execucao.md).
 
 ---
 
@@ -113,8 +127,8 @@ Veja [docs/07-conformidade/declaracao-de-uso-de-ia.md](docs/07-conformidade/decl
 
 ## 📦 Entregáveis da etapa eliminatória
 
-- [ ] Protótipo demonstrável
-- [ ] Pitch deck em PDF
+- [x] Protótipo demonstrável (`web/`; falta testar em 2 notebooks)
+- [ ] Pitch deck em PDF (rascunho em [docs/06-entrega/pitch-deck.pdf](docs/06-entrega/pitch-deck.pdf))
 - [ ] Declaração de uso de IA, código aberto e assets de terceiros
 
 **Pitch (3 minutos, sem leitura):** problema e público-alvo; como a solução apoia a pessoa afetada (funcionalidades, jornada e mensagem); demonstração ao vivo ou em vídeo; recursos de acessibilidade; resultados esperados e como medir o impacto.

@@ -11,16 +11,16 @@
 ### Princípios
 1. **Elástico e leve** — tudo "quica" um pouco ao chegar (overshoot), como adesivo colado.
 2. **Feito à mão** — linhas se desenham como pincelada; nada desliza perfeitamente reto.
-3. **Curto** — UI entre 150ms e 600ms. Loops decorativos lentos (3–8s) e sutis.
+3. **Curto** — UI entre 150 e 250 ms (alinhado à skill `ui-ux-designer`). A respiração guiada usa ciclos lentos de 4 s e 6 s, porque é um exercício, não um enfeite.
 4. **Com propósito** — anima para dar feedback (acerto, progresso, conquista), não para enfeitar o texto.
 5. **Respeitar `prefers-reduced-motion`** — desliga loops e troca entradas por fade simples.
 
 ### Tokens de movimento
 ```css
 --rqr-dur-rapida: 150ms;   /* hover, press */
---rqr-dur-base: 300ms;     /* padrão do site */
---rqr-dur-media: 450ms;    /* entrada de cards, modais */
---rqr-dur-lenta: 600ms;    /* pincelada se desenhando, celebração */
+--rqr-dur-base: 200ms;     /* padrão do app (o site usa 300ms) */
+--rqr-dur-media: 250ms;    /* entrada de cards, modais (teto da UI) */
+--rqr-dur-lenta: 600ms;    /* só decoração fora do app (pincelada em peça de divulgação) */
 --rqr-ease-padrao: cubic-bezier(.2, .8, .2, 1);         /* saída suave */
 --rqr-ease-pop: cubic-bezier(.34, 1.56, .64, 1);        /* overshoot "adesivo" */
 --rqr-ease-entrada: cubic-bezier(.4, 0, 1, 1);
@@ -29,11 +29,11 @@
 ### Catálogo
 | Nome | Quando usar | Como |
 |---|---|---|
-| `rqr-pop` | Entrada de cards, ícones em círculo, conquistas | scale .6 → 1.08 → 1, rotate −6° → 0, 450ms `--rqr-ease-pop` |
+| `rqr-pop` | Entrada de cards, ícones em círculo, conquistas | scale .6 → 1.08 → 1, rotate −6° → 0, 250ms `--rqr-ease-pop`. No app, sem overshoot (use `--rqr-ease-padrao`) |
 | `rqr-pincelada` | Sublinhado de título, setas, separadores | SVG `stroke-dashoffset` do comprimento → 0, 600ms |
-| `rqr-marca-texto` | Destacar palavra-chave | fundo amarelo cresce da esquerda (`background-size 0→100%`), 450ms |
+| `rqr-marca-texto` | Destacar palavra-chave | fundo amarelo cresce da esquerda (`background-size 0→100%`), 250ms |
 | `rqr-flutuar` | Grafismos decorativos parados | translateY ±6px + rotate ±3°, 4–6s infinito, alternate |
-| `rqr-moeda` | Recompensa, economia, progresso financeiro | rotateY 0→360° com leve pulo, 800ms |
+| `rqr-moeda` | **Não usar no app Guardião** (lembra cassino). Só em peça de divulgação, se a equipe aprovar | rotateY 0→360° com leve pulo, 800ms |
 | `rqr-tremida` | Erro / tentativa errada (sem punir) | translateX ±4px, 3 ciclos, 300ms |
 | `rqr-botao` | Botão de jogo | hover: translateY(−2px) + sombra maior; active: translateY(2px) + sombra 0 |
 | `rqr-on` | Estado ativo/conectado ("estar ON") | pulso de anel azul-claro ao redor, 1,6s |

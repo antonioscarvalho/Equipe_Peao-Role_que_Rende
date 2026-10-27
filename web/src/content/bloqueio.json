@@ -1,0 +1,20 @@
+{
+  "revisaoClinica": "pendente",
+  "verificadoEm": "2026-10-27",
+  "fontes": [
+    "skill controle-estimulos-financas",
+    "docs/pesquisa/04-contexto-brasil.md (MP 1.394/2026; Plataforma Centralizada de Autoexclusão)",
+    "https://www.gov.br/fazenda/pt-br/composicao/orgaos/secretaria-de-premios-e-apostas/medida-provisoria-ndeg-1-394-2026-entenda-as-novas-regras-para-as-apostas-de-quota-fixa"
+  ],
+  "aviso": "Desde a MP 1.394/2026, todo site de apostas que ainda funciona é ilegal e não respeita autoexclusão. Por isso os bloqueios no celular e no dinheiro são os mais importantes.",
+  "passos": [
+    { "id": "desinstalar", "grupo": "Celular", "titulo": "Apagar apps de apostas", "como": "Segure o ícone do app e toque em Desinstalar. Faça o mesmo com atalhos de sites na tela inicial." },
+    { "id": "dns", "grupo": "Celular", "titulo": "Ligar um filtro de sites", "como": "No Android: Configurações > Rede e internet > DNS privado. Use um serviço de DNS com filtro de conteúdo. Peça ajuda a alguém se precisar." },
+    { "id": "grupos", "grupo": "Celular", "titulo": "Sair de grupos de palpites", "como": "Saia de grupos e canais de \"tips\" no WhatsApp e no Telegram." },
+    { "id": "influenciadores", "grupo": "Celular", "titulo": "Parar de seguir quem fala de apostas", "como": "Deixe de seguir e silencie palavras como \"bet\" e \"odd\" nas redes sociais." },
+    { "id": "pix-noturno", "grupo": "Dinheiro", "titulo": "Baixar o limite do Pix à noite", "como": "No app do seu banco, procure Limites do Pix e reduza o limite noturno." },
+    { "id": "pix-limite", "grupo": "Dinheiro", "titulo": "Baixar o limite do Pix de dia", "como": "Deixe só o que você precisa para as contas da semana." },
+    { "id": "cartao-confianca", "grupo": "Dinheiro", "titulo": "Combinar com alguém de confiança", "como": "Se fizer sentido para você, deixe o cartão com alguém de confiança por um tempo. A decisão é sua." },
+    { "id": "autoexclusao", "grupo": "Governo", "titulo": "Ver a autoexclusão do governo", "como": "A Plataforma Centralizada de Autoexclusão bloqueava o CPF nas casas autorizadas. Depois da MP 1.394/2026 não sabemos se ela continua ativa. Confira antes de contar com ela.", "link": "https://www.gov.br/pt-br/servicos/plataforma-centralizada-de-autoexclusao-apostas", "condicional": true }
+  ]
+}

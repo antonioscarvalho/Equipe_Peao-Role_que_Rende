@@ -1,0 +1,28 @@
+{
+  "revisaoClinica": "pendente",
+  "verificadoEm": "2026-10-27",
+  "fontes": [
+    "docs/pesquisa/04-contexto-brasil.md, seção 4 (rede de cuidado)",
+    "docs/07-conformidade/fontes-e-referencias.md",
+    "skill seguranca-e-crise"
+  ],
+  "crise": {
+    "titulo": "Você não precisa passar por isso sozinho(a)",
+    "texto": "Parece que você está passando por um momento muito difícil. Escolha uma das opções abaixo. Ligar é gratuito.",
+    "limites": "O Guardião não é um serviço de emergência e não substitui atendimento profissional.",
+    "contatos": [
+      { "id": "cvv", "nome": "CVV — conversar com alguém agora", "detalhe": "Ligação gratuita, 24 horas", "telefone": "188", "link": "https://cvv.org.br" },
+      { "id": "samu", "nome": "SAMU — risco imediato", "detalhe": "Emergência", "telefone": "192" }
+    ]
+  },
+  "hub": [
+    { "id": "cvv", "nome": "CVV", "descricao": "Apoio emocional, gratuito e 24h. Também tem chat pelo site.", "telefone": "188", "link": "https://cvv.org.br" },
+    { "id": "ubs-caps", "nome": "Unidade de saúde (UBS) ou CAPS", "descricao": "O SUS acolhe quem tem problemas com apostas. Comece pela unidade de saúde do seu bairro. Casos mais graves vão para o CAPS." },
+    { "id": "meu-sus", "nome": "Meu SUS Digital", "descricao": "Autoteste e encaminhamento para atendimento.", "link": "https://meususdigital.saude.gov.br", "aviso": "Teleatendimento ainda não confirmado em fonte oficial." },
+    { "id": "ja", "nome": "Jogadores Anônimos", "descricao": "Grupos de ajuda mútua, presenciais e online.", "link": "https://www.jogadoresanonimos.com.br" },
+    { "id": "dividas", "nome": "Defensoria Pública e Procon", "descricao": "Ajuda gratuita para renegociar dívidas e para superendividamento (Lei 14.181/2021)." },
+    { "id": "consumidor", "nome": "Consumidor.gov.br", "descricao": "Renegociação e reclamação contra empresas.", "link": "https://www.consumidor.gov.br" }
+  ],
+  "mensagemContato": "Oi, estou com vontade de apostar. Pode falar comigo um pouco?",
+  "palavrasRisco": ["me matar", "morrer", "suicid", "não aguento mais", "nao aguento mais", "sem saída", "sem saida", "acabar com tudo", "me machucar", "agiota"]
+}

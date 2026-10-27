@@ -34,12 +34,12 @@ Marque todas as que se aplicam e detalhe no registro (seção 4).
 |---|---|---|
 | **Geração de documentação** (README, docs, guias) | ✅ | Estrutura e textos iniciais do README e da pasta `docs/`, com base no edital |
 | **Definição de tema e conceito** (brainstorm de ideias, narrativa, mecânicas) | ✅ | Análise crítica do conceito frente aos requisitos do edital e refinamento da visão do Guardião + Open Finance |
-| **Geração de código** (funcionalidades, correções, testes) | ⬜ | _a preencher_ |
+| **Geração de código** (funcionalidades, correções, testes) | ✅ | MVP web do Guardião (telas, regras, testes) e esqueleto do backend |
 | **Conexão com APIs externas** (código de integração, ou IA como API dentro do produto) | ⬜ | _a preencher_ |
-| **Conteúdo do produto** (textos, diálogos, mensagens ao usuário) | ⬜ | _a preencher_ |
-| **Arte e assets visuais** (imagens, ícones, sprites) | ⬜ | _a preencher_ |
+| **Conteúdo do produto** (textos, diálogos, mensagens ao usuário) | ✅ | Rascunho dos textos do app em `web/src/content/`, a partir das skills clínicas; revisão humana e clínica pendente |
+| **Arte e assets visuais** (imagens, ícones, sprites) | ✅ | Personagem Guardião e ícone do app em SVG |
 | **Áudio** (música, efeitos, voz/TTS) | ⬜ | _a preencher_ |
-| **Pitch** (roteiro, slides, revisão de texto) | ⬜ | _a preencher_ |
+| **Pitch** (roteiro, slides, revisão de texto) | ✅ | Rascunho do roteiro e do pitch deck |
 | **Pesquisa** (resumo de fontes, dados sobre o tema) | ✅ | Extração da identidade visual do Rolê que Rende (site oficial e Manual de Identidade Visual do BB); pesquisa baseada em evidências da Fase 1 (`docs/pesquisa/`) |
 | **Tradução / revisão ortográfica** | ⬜ | _a preencher_ |
 
@@ -74,7 +74,8 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 9 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) | Geração de código | Esqueleto do backend em Fastify para a Vercel, com Repository e Retry pattern e testes | Estrutura em `backend/` e skill `arquiteto-de-software` | _pendente_ | `backend/**`, `.claude/skills/arquiteto-de-software/` |
 | 10 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) com busca na web | Documentação / Pesquisa | Documentar a motivação da stack com dados de mercado e criar uma skill por tecnologia | Documento de stack, decisões técnicas e 7 skills; números conferidos na Stack Overflow 2025 e no State of JS 2025 | _pendente_ | `docs/04-tecnico/**`, `docs/07-conformidade/{licencas-e-assets,fontes-e-referencias}.md`, `.claude/skills/{web-react-vite,mobile-expo,ui-ux-designer,supabase,postgresql,deploy-vercel,backend-customizado}/` |
 | 11 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) com busca na web | Pesquisa / Documentação | Pesquisar, revisar e instalar skills de terceiros (ideias, mercado, pitch, revisão de código) e testar se todas as skills do projeto são chamadas automaticamente | 17 skills de terceiros com licença MIT/Apache; gatilhos em português nas descrições de `supabase` e `critique-product` | _pendente_ | `.claude/skills/**`, `.claude/README.md`, `docs/07-conformidade/licencas-e-assets.md` |
-| 12 | | | | | | | | |
+| 12 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) | Geração de código / Conteúdo do produto / Arte / Documentação | Implementar o MVP do Guardião em `web/` a partir da matriz e das skills; preencher as pendências da documentação; desenhar o Guardião; rascunhar o pitch | App web (PWA) com 10 funcionalidades e 26 testes; spec, plano e tarefas 001; personas, jornada, backlog, métricas, roteiro e deck do pitch como **propostas**; personagem e ícone em SVG | _pendente_ (textos clínicos também pendentes de psicólogo) | `web/**`, `specs/001-mvp-guardiao/**`, `docs/**`, `README.md` |
+| 13 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 
