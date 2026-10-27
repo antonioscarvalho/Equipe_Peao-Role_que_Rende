@@ -12,6 +12,7 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 | [04-tecnico](04-tecnico/) | Arquitetura, integrações externas, setup e execução | Dias 1 a 3 |
 | [05-processo](05-processo/) | Papéis, fluxo de Git, convenções e diário de bordo | O tempo todo |
 | [06-entrega](06-entrega/) | Checklist de entrega, roteiro de pitch e métricas de impacto | Dia 3 |
+| [pesquisa](pesquisa/00-sintese.md) | Pesquisa baseada em evidências (Fase 1): transtorno do jogo, intervenções, instrumentos, contexto brasileiro, saúde digital | Antes de projetar qualquer funcionalidade |
 | [07-conformidade](07-conformidade/) | **Declaração de uso de IA**, licenças e assets, regras de conteúdo, dados e privacidade | Atualizar sempre; obrigatório na entrega |
 
 ## Índice
@@ -44,6 +45,14 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 - [Checklist de entrega](06-entrega/checklist-de-entrega.md)
 - [Roteiro do pitch](06-entrega/roteiro-do-pitch.md)
 - [Métricas de impacto](06-entrega/metricas-de-impacto.md)
+
+### Pesquisa (Fase 1)
+- [Síntese: 10 conclusões para o produto](pesquisa/00-sintese.md)
+- [Transtorno do jogo](pesquisa/01-transtorno-do-jogo.md)
+- [Intervenções com evidência](pesquisa/02-intervencoes.md)
+- [Instrumentos de rastreio](pesquisa/03-instrumentos.md)
+- [Contexto brasileiro (inclui MP 1.394/2026)](pesquisa/04-contexto-brasil.md)
+- [Saúde digital](pesquisa/05-saude-digital.md)
 
 ### 07 · Conformidade
 - [Declaração de uso de IA](07-conformidade/declaracao-de-uso-de-ia.md) ⚠️ obrigatória
