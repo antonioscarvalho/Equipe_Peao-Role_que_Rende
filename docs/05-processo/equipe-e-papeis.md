@@ -4,12 +4,12 @@
 
 | Integrante | GitHub | Perfil (Seção 5.1) | Responsabilidades no projeto | Contato |
 |---|---|---|---|---|
-| Antonio Carvalho | [@antonioscarvalho](https://github.com/antonioscarvalho) | _a definir_ | _a definir_ | _a definir_ |
-| Atyrson Souto | [@Atyrson](https://github.com/Atyrson) | _a definir_ | _a definir_ | _a definir_ |
-| Danillo Meira | [@danillomeira](https://github.com/danillomeira) | _a definir_ | _a definir_ | _a definir_ |
-| Ian Costa Guimarães | [@iancostag](https://github.com/iancostag) | _a definir_ | _a definir_ | _a definir_ |
-| Maykon Júnio | [@maykonjuso](https://github.com/maykonjuso) | _a definir_ | _a definir_ | _a definir_ |
-| Vanessa Ramos | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | _a definir_ | _a definir_ | _a definir_ |
+| Antonio Carvalho | [@antonioscarvalho](https://github.com/antonioscarvalho) | Produto e Gestão | _a definir_ | _a definir_ |
+| Atyrson Souto | [@Atyrson](https://github.com/Atyrson) | Game Design | _a definir_ | _a definir_ |
+| Danillo Meira | [@danillomeira](https://github.com/danillomeira) | Desenvolvimento | _a definir_ | _a definir_ |
+| Ian Costa Guimarães | [@iancostag](https://github.com/iancostag) | Desenvolvimento | _a definir_ | _a definir_ |
+| Maykon Júnio | [@maykonjuso](https://github.com/maykonjuso) | Arte e Som | _a definir_ | _a definir_ |
+| Vanessa Ramos | [@vanessaramos-byte](https://github.com/vanessaramos-byte) | Narrativa e Conteúdo | _a definir_ | _a definir_ |
 
 Perfis do edital: **Desenvolvimento** (Técnico) · **Game Design** (Visionário) · **Arte e Som** (Criativo) · **Narrativa e Conteúdo** (Estratégico) · **Produto e Gestão** (Colaborador).
 
