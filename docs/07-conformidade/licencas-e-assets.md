@@ -16,6 +16,10 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 
 | Asset | Autor / fonte | Licença | Link | Gerado por IA? | Atribuição exigida | Arquivo no repo |
 |---|---|---|---|---|---|---|
+| Mockups do Manual de Identidade Visual Rolê que Rende (5 imagens) | Banco do Brasil | Marca de terceiro, sem licença aberta: **só referência interna**, não usar no produto | https://www.bb.com.br/docs/portal/direc/BB-ROLE-QUE-RENDE-MANUAL-IDV.pdf | não | Uso da marca BB só com autorização da organização (Seção 8.4) | `.claude/skills/guia-estilo-role-que-rende/assets/referencias/` |
+| Fontes BancoDoBrasil Títulos / Textos | Banco do Brasil | Proprietária: **não incluída no repo**; só usar se a organização fornecer | — | não | — | — |
+| Fonte Nunito Sans (fallback de títulos) | Vernon Adams et al. / Google Fonts | SIL OFL 1.1 | https://fonts.google.com/specimen/Nunito+Sans | não | Não exige no produto | carregada via Google Fonts em `assets/exemplo.html` |
+| Fonte Roboto (fallback de textos) | Google / Google Fonts | SIL OFL 1.1 | https://fonts.google.com/specimen/Roboto | não | Não exige no produto | carregada via Google Fonts em `assets/exemplo.html` |
 | _a preencher_ | | | | sim/não | | |
 
 ## Assets sonoros (música, efeitos, voz)

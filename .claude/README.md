@@ -42,6 +42,7 @@ Durante todo o fluxo:
 | [`sdd-revisar`](skills/sdd-revisar/SKILL.md) | 🟢 base pronta | _a definir_ | Confere implementação x spec x edital |
 | [`registrar-uso-ia`](skills/registrar-uso-ia/SKILL.md) | 🟢 base pronta | _a definir_ | Adiciona uma linha na declaração de uso de IA |
 | [`registrar-asset`](skills/registrar-asset/SKILL.md) | 🟢 base pronta | _a definir_ | Registra biblioteca, asset ou API e sua licença |
+| [`guia-estilo-role-que-rende`](skills/guia-estilo-role-que-rende/SKILL.md) | 🟢 base pronta | Maykon Júnio | Guia de estilo do Rolê que Rende (cores, fontes, grafismos, componentes, animações, tom de voz), extraído do site oficial e do Manual de Identidade Visual. Inclui tokens CSS/JSON e página de exemplo |
 
 As skills "base pronta" funcionam, mas são um ponto de partida. **Cada colaborador fica responsável por evoluir uma delas** conforme a stack e a ideia escolhidas (por exemplo: comandos de build e teste reais em `sdd-implementar`).
 
