@@ -47,6 +47,21 @@ Durante todo o fluxo:
 | [`guia-estilo-role-que-rende`](skills/guia-estilo-role-que-rende/SKILL.md) | 🟢 base pronta | Maykon Júnio | Guia de estilo do Rolê que Rende (cores, fontes, grafismos, componentes, animações, tom de voz), extraído do site oficial e do Manual de Identidade Visual. Inclui tokens CSS/JSON e página de exemplo |
 | [`conformidade-legal-br`](skills/conformidade-legal-br/SKILL.md) | 🟢 base pronta | Atyrson Souto | Revisa código, telas e textos contra o edital (Seção 8.4, 8.5, Anexo 2) e leis brasileiras: LGPD (dados de saúde são sensíveis), apostas, saúde mental, acessibilidade (LBI/WCAG), CDC, ECA, direitos autorais e Marco Civil. Também disponível em `.kiro/skills/` |
 
+### Skills de stack
+
+Uma por tecnologia. A motivação de cada escolha está em [`docs/04-tecnico/stack-e-motivacao.md`](../docs/04-tecnico/stack-e-motivacao.md).
+
+| Skill | Estado | Responsável | O que faz |
+|---|---|---|---|
+| [`web-react-vite`](skills/web-react-vite/SKILL.md) | 🟢 base pronta | Danillo Meira | App web em React + Vite + TypeScript: estrutura, componente, hook, variável de ambiente, build |
+| [`mobile-expo`](skills/mobile-expo/SKILL.md) | 🟢 base pronta | Danillo Meira | App mobile em React Native com Expo: Expo Router, biblioteca compatível, teste no Expo Go |
+| [`ui-ux-designer`](skills/ui-ux-designer/SKILL.md) | 🟢 base pronta | Danillo Meira | Componente reutilizável, tokens do guia de estilo, os quatro estados de uma tela, acessibilidade |
+| [`supabase`](skills/supabase/SKILL.md) | 🟢 base pronta | Danillo Meira | Cliente único, repositório com retry, chaves, Edge Functions, ambiente local |
+| [`postgresql`](skills/postgresql/SKILL.md) | 🟢 base pronta | Danillo Meira | Migração, nomes, RLS em toda tabela, seed sintético |
+| [`deploy-vercel`](skills/deploy-vercel/SKILL.md) | 🟢 base pronta | Danillo Meira | Publicação do web, variáveis, pré-visualização por PR, checklist da demo |
+| [`backend-customizado`](skills/backend-customizado/SKILL.md) | 🟢 base pronta | Danillo Meira | Quando criar backend próprio, Fastify ou Go, Repository e Retry |
+| [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do `backend/` em Fastify, quando ele existir |
+
 ### Skills de conteúdo clínico e ético (app de apoio a apostadores)
 
 Vieram do prompt de produto em [`prompts/app-apoio-apostadores.md`](prompts/app-apoio-apostadores.md). As duas marcadas com ⚠️ são **obrigatórias em toda funcionalidade**.

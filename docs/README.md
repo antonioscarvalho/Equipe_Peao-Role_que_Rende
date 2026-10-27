@@ -33,6 +33,7 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 
 ### 04 · Técnico
 - [Arquitetura](04-tecnico/arquitetura.md)
+- [Stack e motivação](04-tecnico/stack-e-motivacao.md)
 - [Integrações e APIs externas](04-tecnico/integracoes-externas.md)
 - [Setup e execução](04-tecnico/setup-e-execucao.md)
 
