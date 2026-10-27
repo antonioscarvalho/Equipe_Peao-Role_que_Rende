@@ -24,7 +24,7 @@
 ## Pilares do desafio atendidos (Edital — Seção 1 e Anexo 2)
 
 - [x] **Vontade de jogar:** **Botão de SOS / Fissura** de acionamento imediato com timer de *urge surfing* de 10–15 minutos ("a vontade sobe, chega no pico e passa"), exercícios guiados de respiração diafragmática (grounding) e atalho de 1 toque para o **Ligue 188 (CVV)**.
-- [x] **Vida financeira:** **Dinheiro preservado**: estimativa calculada a partir do quanto a pessoa costumava apostar (modo manual, padrão), traduzida em metas tangíveis (ex.: botijão de gás garantido, conta de luz quitada, compras da semana). O Open Finance entra só como **demonstração com dados sintéticos** ([spec 007](../../specs/007-open-finance-demo/spec.md), Could) e nunca "detecta" aposta.
+- [x] **Vida financeira:** **Dinheiro preservado**: estimativa calculada a partir do quanto a pessoa costumava apostar (modo manual, padrão), traduzida em metas tangíveis (ex.: botijão de gás garantido, conta de luz quitada, compras da semana). O Open Finance entra só como **demonstração com dados sintéticos** ([spec 007](../../specs/007-open-finance-demo/spec.md), Must, diferencial do produto) e nunca "detecta" aposta.
 - [x] **Rede de apoio:** **Círculo de Confiança**. Até 3 pessoas de confiança (familiar ou amigo), guardadas só no celular, chamadas pela própria pessoa com uma mensagem pronta; o app nunca envia nada sozinho e nada vai para redes sociais.
 - [x] **Ajuda especializada:** **Hub de Apoio e Saúde Pública**. Acesso desestigmatizado e direto aos canais do SUS (Meu SUS Digital, autoteste, teleatendimentos especializados, UBS/CAPS) e link para a **Plataforma Centralizada de Autoexclusão** do Ministério da Fazenda, **condicional**: a situação dela depois da MP 1.394/2026 não está confirmada.
 

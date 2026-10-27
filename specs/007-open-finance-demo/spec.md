@@ -3,13 +3,13 @@
 - **Estado:** 📝 rascunho (criada na revisão de 27/10/2026, a partir do antigo CA-6 da spec 004)
 - **Autor(es):** Maykon Júnio (com apoio de IA), a partir do texto de Ian Costa Guimarães
 - **Aprovada por:** _—_ em _aaaa-mm-dd_
-- **Prioridade:** Could
+- **Prioridade:** Must (decisão de Maykon Júnio em 27/10/2026: o Open Finance é um dos diferenciais do produto e do pitch)
 - **Responsável:** _a definir_
 - **Issue:** [#15](https://github.com/antonioscarvalho/equipepeao/issues/15)
 
 ## 1. Contexto e problema
 
-A [visão do produto](../../docs/02-produto/visao-do-produto.md) propõe o Open Finance como diferencial: mostrar, sem esforço manual, quanto dinheiro a pessoa preservou. A [matriz](../../docs/02-produto/matriz-conceito-funcionalidade.md) (linha 16) classificou isso como **alto risco**: dado financeiro é sensível; "detectar recaída" vira vigilância; com sites ilegais, os intermediários de pagamento mudam o tempo todo; e o edital veda dados de clientes do BB (Seção 8.5). Por isso, no Game Jam, o Open Finance entra **só como demonstração com dados sintéticos**, que mostra o potencial sem nenhum desses riscos.
+A [visão do produto](../../docs/02-produto/visao-do-produto.md) propõe o Open Finance como diferencial: mostrar, sem esforço manual, quanto dinheiro a pessoa preservou. A [matriz](../../docs/02-produto/matriz-conceito-funcionalidade.md) (linha 16) classificou isso como **alto risco**: dado financeiro é sensível; "detectar recaída" vira vigilância; com sites ilegais, os intermediários de pagamento mudam o tempo todo; e o edital veda dados de clientes do BB (Seção 8.5). Por isso, no Game Jam, o Open Finance entra **só como demonstração com dados sintéticos**, que mostra o potencial sem nenhum desses riscos. Ele é um **diferencial do produto** (prioridade Must): no pitch, a mensagem é *"hoje é demonstração; com autorização, vira integração real pelo Open Finance"*.
 
 ## 2. Pilar do desafio
 

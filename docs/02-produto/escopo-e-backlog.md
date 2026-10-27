@@ -11,6 +11,7 @@
 - [x] **Spec 003:** Botão SOS "Bateu a vontade" com timer de urge surfing (10-15 min) e cards socráticos
 - [x] **Spec 004:** Check-in diário de 1 toque, total de dias sem apostar desde o início e dinheiro preservado (estimativa)
 - [x] **Spec 006:** Protocolo de Crise (offline, 1 toque: CVV 188 / SAMU 192), Hub de Apoio e Guia de Bloqueio
+- [x] **Spec 007:** Demonstração de Open Finance com dados sintéticos — diferencial do produto (sem marca BB até autorização, sem "detectar aposta")
 - [x] **Spec 008:** Configurações, privacidade e acessibilidade (PIN, apagar/exportar, fonte, contraste, reduzir animações — bônus de 5%)
 
 ### Should have — importante, mas a demo sobrevive sem
@@ -18,7 +19,6 @@
 
 ### Could have — se sobrar tempo
 - [ ] Simulação visual educativa de probabilidade da casa (1.000 apostas)
-- [ ] **Spec 007:** Demonstração de Open Finance só com dados sintéticos (sem marca BB, sem "detectar aposta")
 
 ### Won't have (agora) — fica para o "próximos passos" do pitch
 - Agenda com push notifications (alto risco de virar gatilho involuntário)
@@ -36,7 +36,7 @@
 | 3 | [Spec 004 — Contador e Dinheiro Preservado](../../specs/004-contador-e-dinheiro/spec.md) | Danillo Meira | Must | [#7](https://github.com/antonioscarvalho/equipepeao/issues/7) | 🔄 spec revisada, reaprovar |
 | 4 | [Spec 005 — Prevenção e Círculo de Confiança](../../specs/005-prevencao-e-circulo/spec.md) | Atyrson Souto | Should | [#8](https://github.com/antonioscarvalho/equipepeao/issues/8) | 🔄 spec revisada, reaprovar |
 | 5 | [Spec 006 — Protocolo de Crise e Hub de Apoio](../../specs/006-protocolo-crise-e-hub/spec.md) | Vanessa Ramos | Must | [#9](https://github.com/antonioscarvalho/equipepeao/issues/9) | 🔄 spec revisada, reaprovar |
-| 6 | [Spec 007 — Open Finance (demo sintética)](../../specs/007-open-finance-demo/spec.md) | _a definir_ | Could | [#15](https://github.com/antonioscarvalho/equipepeao/issues/15) | 📝 rascunho |
+| 6 | [Spec 007 — Open Finance (demo sintética)](../../specs/007-open-finance-demo/spec.md) | _a definir_ | Must | [#15](https://github.com/antonioscarvalho/equipepeao/issues/15) | 📝 rascunho |
 | 7 | [Spec 008 — Configurações, privacidade e acessibilidade](../../specs/008-configuracoes-privacidade-acessibilidade/spec.md) | Maykon Júnio | Must | [#16](https://github.com/antonioscarvalho/equipepeao/issues/16) | 📝 rascunho |
 
 Status: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado

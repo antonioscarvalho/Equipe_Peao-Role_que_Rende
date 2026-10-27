@@ -36,7 +36,7 @@
 
 ### 2026-10-27 — Revisão das specs 001–006
 **Quem:** Maykon Júnio (com apoio de IA, ver declaração)
-**O que aconteceu / foi decidido:** revisão de todas as specs contra o edital, as skills obrigatórias, a matriz e os fluxos. Specs 002–006 corrigidas e marcadas para **reaprovação**; criadas a **007** (Open Finance só com dados sintéticos, Could) e a **008** (configurações, privacidade e acessibilidade, Must, responsável Maykon). Decisões de Maykon: persona principal **Marcos**; contador mostra o **total desde o início** (o mês vira detalhe); Open Finance sai da 004. Issues #4, #5, #7, #8 e #9 renumeradas; #15 e #16 criadas.
+**O que aconteceu / foi decidido:** revisão de todas as specs contra o edital, as skills obrigatórias, a matriz e os fluxos. Specs 002–006 corrigidas e marcadas para **reaprovação**; criadas a **007** (Open Finance só com dados sintéticos; primeiro Could, depois elevada a **Must** por Maykon por ser diferencial do produto, responsável a definir) e a **008** (configurações, privacidade e acessibilidade, Must, responsável Maykon). Decisões de Maykon: persona principal **Marcos**; contador mostra o **total desde o início** (o mês vira detalhe); Open Finance sai da 004. Issues #4, #5, #7, #8 e #9 renumeradas; #15 e #16 criadas.
 **Por quê:** a 004 tinha Open Finance com marca BB como Must; o fluxo F10 (privacidade e acessibilidade, que valem bônus) não tinha spec; havia afirmações clínicas sem fonte e critérios que não dava para testar.
 **Próximos passos:** reaprovar 002–006 e aprovar 007 e 008; definir o responsável da 007; responder as dúvidas abertas (link de CAPS, autoexclusão, revisão clínica, PIN com criptografia).
 
