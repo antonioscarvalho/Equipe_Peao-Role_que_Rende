@@ -34,6 +34,12 @@
 **Por quê:** dado de saúde é sensível (LGPD); offline e sem cadastro combina com o público (Android de entrada, internet instável) e reduz risco na demo.
 **Próximos passos:** a equipe validar os ajustes à visão do produto (Open Finance como demo sintética, uso da marca); revisão clínica dos textos 🩺; Fase 4 (implementação).
 
+### 2026-10-27 — Revisão das specs 001–006
+**Quem:** Maykon Júnio (com apoio de IA, ver declaração)
+**O que aconteceu / foi decidido:** revisão de todas as specs contra o edital, as skills obrigatórias, a matriz e os fluxos. Specs 002–006 corrigidas e marcadas para **reaprovação**; criadas a **007** (Open Finance só com dados sintéticos, Could) e a **008** (configurações, privacidade e acessibilidade, Must, responsável Maykon). Decisões de Maykon: persona principal **Marcos**; contador mostra o **total desde o início** (o mês vira detalhe); Open Finance sai da 004. Issues #4, #5, #7, #8 e #9 renumeradas; #15 e #16 criadas.
+**Por quê:** a 004 tinha Open Finance com marca BB como Must; o fluxo F10 (privacidade e acessibilidade, que valem bônus) não tinha spec; havia afirmações clínicas sem fonte e critérios que não dava para testar.
+**Próximos passos:** reaprovar 002–006 e aprovar 007 e 008; definir o responsável da 007; responder as dúvidas abertas (link de CAPS, autoexclusão, revisão clínica, PIN com criptografia).
+
 ## Dia 2 — 28/10/2026
 
 _—_

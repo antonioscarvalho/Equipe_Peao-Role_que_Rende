@@ -1,6 +1,7 @@
 # Acessibilidade
 
 > Vale até **5% de bônus** na nota final, se o recurso for implementado **e demonstrado** no pitch.
+> Os recursos desta tabela são especificados na [spec 008](../../specs/008-configuracoes-privacidade-acessibilidade/spec.md) (responsável: Maykon Júnio).
 
 ## Recursos planejados
 
