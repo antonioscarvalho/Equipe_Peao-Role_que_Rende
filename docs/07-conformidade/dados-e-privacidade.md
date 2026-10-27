@@ -19,7 +19,16 @@ O tema envolve dados sensíveis (saúde, finanças, comportamento). Mesmo sendo 
 
 | Dado | Finalidade | Onde fica | Sintético na demo? | Enviado a terceiros? |
 |---|---|---|---|---|
-| _a preencher_ | | | sim | não |
+| Motivo, metas, régua de importância/confiança | Onboarding motivacional e SOS | IndexedDB no aparelho | sim | não |
+| Registro diário, lapsos, humor, fissura antes/depois | Contador, pós-lapso, autoeficácia | IndexedDB no aparelho | sim | não |
+| Gatilhos e planos Se/Então | Prevenção de recaída | IndexedDB no aparelho | sim | não |
+| Estimativa de gasto semanal e meta | Dinheiro preservado | IndexedDB no aparelho | sim | não |
+| Contatos do Círculo de Confiança (dado de terceiro) | Mensagem pronta enviada pelo próprio usuário | IndexedDB no aparelho | sim | não |
+| Plano de segurança | Protocolo de crise | IndexedDB no aparelho | sim | não |
+| Preferências (tema, fonte, modo discreto) | Acessibilidade e discrição | localStorage | — | não |
+| Transações bancárias | Demo de Open Finance | `seed.sql` / mock | **só sintético** | não (Pluggy sandbox, se usado) |
+
+Detalhes e regras em [privacidade e dados locais](../04-tecnico/privacidade-e-dados-locais.md).
 
 ## Dados sintéticos
 

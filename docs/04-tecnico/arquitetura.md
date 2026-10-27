@@ -41,8 +41,8 @@ Motivação detalhada de cada escolha, com os dados de mercado, em [stack e moti
 
 ## Dados
 
-- Que dados o protótipo guarda? _a definir_
-- Onde ficam? Prefira armazenamento **local** no dispositivo, sem servidor com dados pessoais.
+- **Dado sensível da pessoa (registros, SOS, plano, contatos, finanças) fica só no aparelho**, em IndexedDB, atrás de um repositório local. O Supabase serve conteúdo público e a demo sintética de Open Finance. Detalhes, tabela completa e regras em [privacidade e dados locais](privacidade-e-dados-locais.md).
+- Uso sem cadastro e offline-first (service worker) no MVP.
 - Todos os dados de exemplo são **sintéticos**. Veja [dados e privacidade](../07-conformidade/dados-e-privacidade.md).
 
 ## Decisões técnicas (ADRs curtas)
@@ -53,4 +53,5 @@ Motivação detalhada de cada escolha, com os dados de mercado, em [stack e moti
 | 2026-10-27 | Mobile em React Native com Expo | Flutter; React Native sem framework | Mesmo React e TypeScript do web; framework recomendado pela documentação do React Native |
 | 2026-10-27 | Backend inicial no Supabase (PostgreSQL) | Firebase; Fastify desde o início | Auth, API e RLS prontos; open source e roda local; PostgreSQL portável |
 | 2026-10-27 | Deploy web na Vercel | Netlify; Cloudflare Pages | Deploy por push e pré-visualização por PR; trocável porque o build é estático |
+| 2026-10-27 | Dados pessoais e de saúde só no aparelho (IndexedDB); Supabase só para conteúdo público e demo sintética; sem login no MVP | Guardar tudo no Supabase com RLS e login | Dado de saúde é sensível na LGPD; a pesquisa e as skills de segurança pedem offline-first e uso sem cadastro; menos risco na demo |
 | 2026-10-27 | Backend customizado (Fastify ou Go) só sob demanda | Backend próprio no MVP | Um deploy a mais é um risco a mais na demo; o Supabase cobre o MVP |

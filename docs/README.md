@@ -26,6 +26,8 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 - [Jornada do usuário](02-produto/jornada-do-usuario.md)
 - [Escopo e backlog do MVP](02-produto/escopo-e-backlog.md)
 - [Matriz conceito → funcionalidade e MVP (Fase 2)](02-produto/matriz-conceito-funcionalidade.md)
+- [Fluxos principais (Fase 3)](02-produto/fluxos.md)
+- [Microcopy (Fase 3)](02-produto/microcopy.md)
 
 ### 03 · Design
 - [Game design / experiência](03-design/game-design.md)
@@ -35,6 +37,7 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 ### 04 · Técnico
 - [Arquitetura](04-tecnico/arquitetura.md)
 - [Stack e motivação](04-tecnico/stack-e-motivacao.md)
+- [Privacidade e dados locais (Fase 3)](04-tecnico/privacidade-e-dados-locais.md)
 - [Integrações e APIs externas](04-tecnico/integracoes-externas.md)
 - [Setup e execução](04-tecnico/setup-e-execucao.md)
 
