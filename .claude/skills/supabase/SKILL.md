@@ -1,6 +1,6 @@
 ---
 name: supabase
-description: Como usar o Supabase neste projeto: cliente único, autenticação, consulta via repositório com retry, Storage, Edge Functions, tipos gerados, ambiente local com a CLI e as chaves. Use ao ler ou gravar dado, mexer em login, subir arquivo, criar Edge Function, configurar o projeto Supabase ou gerar os tipos.
+description: Como usar o Supabase neste projeto: cliente único, autenticação, consulta via repositório com retry, Storage, Edge Functions, tipos gerados, ambiente local com a CLI e as chaves. Use ao ler ou gravar dado, mexer em login, cadastro, autenticação (e-mail e senha, link mágico, login social), sessão ou logout do usuário, subir arquivo, criar Edge Function, configurar o projeto Supabase ou gerar os tipos — mesmo que a pessoa não cite o Supabase.
 ---
 
 # Supabase

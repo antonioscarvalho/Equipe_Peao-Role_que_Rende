@@ -22,6 +22,22 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 | Zod | 4.x | MIT | https://github.com/colinhacks/zod | Validação de entrada no backend |
 | Vitest | 3.x | MIT | https://github.com/vitest-dev/vitest | Testes |
 
+## Skills de IA de terceiros (`.claude/skills/`)
+
+Copiadas sem alterações; cada pasta tem `LICENSE` e `ORIGEM.md` com o commit de origem. São ferramentas de desenvolvimento, não fazem parte do produto entregue.
+
+| Skills | Repositório | Licença | Atribuição |
+|---|---|---|---|
+| `find-bugs` | https://github.com/getsentry/skills | Apache-2.0 | Manter `LICENSE` |
+| `review-discipline` | https://github.com/Skillproofdev/review-discipline | MIT | Manter aviso de copyright |
+| `architecture-review`, `codebase-review`, `security-scan` | https://github.com/nobelk/claude-tools | Apache-2.0 | Manter `LICENSE` |
+| `startup-design`, `startup-competitors`, `startup-positioning`, `startup-pitch` | https://github.com/ferdinandobons/startup-skill | MIT | Manter aviso de copyright |
+| `startup-validator` | https://github.com/ailabs-393/ai-labs-claude-skills | MIT | Manter aviso de copyright |
+| `market-research` | https://github.com/affaan-m/everything-claude-code | MIT | Manter aviso de copyright |
+| `product-thinking`, `teach-acumen`, `diagnose`, `workshop`, `increment`, `critique-product` | https://github.com/VGrss/Acumen | Apache-2.0 | Manter `LICENSE` |
+
+Avaliadas e **não instaladas** por não terem licença declarada: `brainstorm` (happycatlabs/bradley-skills) e `idea` (jorgenschaefer/skills).
+
 ## Assets gráficos (imagens, ícones, sprites, fontes tipográficas)
 
 | Asset | Autor / fonte | Licença | Link | Gerado por IA? | Atribuição exigida | Arquivo no repo |
