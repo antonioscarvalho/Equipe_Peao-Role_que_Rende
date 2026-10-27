@@ -46,6 +46,8 @@ Durante todo o fluxo:
 | [`registrar-asset`](skills/registrar-asset/SKILL.md) | 🟢 base pronta | _a definir_ | Registra biblioteca, asset ou API e sua licença |
 | [`guia-estilo-role-que-rende`](skills/guia-estilo-role-que-rende/SKILL.md) | 🟢 base pronta | Maykon Júnio | Guia de estilo do Rolê que Rende (cores, fontes, grafismos, componentes, animações, tom de voz), extraído do site oficial e do Manual de Identidade Visual. Inclui tokens CSS/JSON e página de exemplo |
 | [`conformidade-legal-br`](skills/conformidade-legal-br/SKILL.md) | 🟢 base pronta | Atyrson Souto | Revisa código, telas e textos contra o edital (Seção 8.4, 8.5, Anexo 2) e leis brasileiras: LGPD (dados de saúde são sensíveis), apostas, saúde mental, acessibilidade (LBI/WCAG), CDC, ECA, direitos autorais e Marco Civil. Também disponível em `.kiro/skills/` |
+| [`criar-personagem`](skills/criar-personagem/SKILL.md) | 🟢 base pronta | Atyrson Souto | Cria ou evolui o bichinho virtual: ficha, estados (calmo, feliz, orgulhoso, cansado, apoio), SVG animável e prompts de ilustração no estilo pincel seco. Regra: nunca morre nem culpa |
+| [`animar-componente`](skills/animar-componente/SKILL.md) | 🟢 base pronta | Atyrson Souto | Aplica o catálogo de animações `rqr-*` (CSS ou Lottie) com reduzir-movimento e acessibilidade; proíbe visual de cassino |
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
 
 ### Skills de stack
@@ -78,6 +80,43 @@ Vieram do prompt de produto em [`prompts/app-apoio-apostadores.md`](prompts/app-
 > Todo conteúdo clínico gerado com essas skills precisa de **revisão por psicólogo(a)** antes de ir para o produto.
 
 As skills "base pronta" funcionam, mas são um ponto de partida. **Cada colaborador fica responsável por evoluir uma delas** conforme a stack e a ideia escolhidas (por exemplo: comandos de build e teste reais em `sdd-implementar`).
+
+## Skills de terceiros
+
+Skills da comunidade, copiadas **sem alterações** e revisadas antes de entrar (sem chamadas de rede nem comandos perigosos). Cada pasta tem `LICENSE` e `ORIGEM.md` (repositório e commit). Para atualizar, copie de novo a partir do repositório original e revise o conteúdo. As instruções delas estão em inglês e geram saídas em inglês, a menos que você peça em português.
+
+| Skill | Para quê | Origem / licença | Atenção |
+|---|---|---|---|
+| **Ideias e produto** | | | |
+| [`teach-acumen`](skills/teach-acumen/SKILL.md) | Configuração inicial: coleta o contexto do produto em `.acumen.md` | VGrss/Acumen · Apache-2.0 | **Rodar uma vez antes** das outras skills da Acumen |
+| [`product-thinking`](skills/product-thinking/SKILL.md) | Núcleo de "pensamento de produto" usado pelas skills da Acumen | VGrss/Acumen · Apache-2.0 | Base das 4 abaixo |
+| [`diagnose`](skills/diagnose/SKILL.md) | Acha problemas e oportunidades do produto | VGrss/Acumen · Apache-2.0 | Fluxo: diagnose → workshop → increment → critique-product |
+| [`workshop`](skills/workshop/SKILL.md) | Gera várias soluções diferentes para um problema antes de escolher | VGrss/Acumen · Apache-2.0 | |
+| [`increment`](skills/increment/SKILL.md) | Escopo de uma entrega (contexto, spec, wireframe) | VGrss/Acumen · Apache-2.0 | Sobrepõe `sdd-especificar`; prefira o fluxo SDD da equipe |
+| [`critique-product`](skills/critique-product/SKILL.md) | Critica uma ideia/spec com rubrica e personas de avaliadores | VGrss/Acumen · Apache-2.0 | Bom para "pré-banca" |
+| **Mercado e pitch** | | | |
+| [`startup-validator`](skills/startup-validator/SKILL.md) | Validação rápida: mercado, concorrentes, problema, TAM/SAM | ailabs-393/ai-labs-claude-skills · MIT | Mais leve; boa para o Dia 1 |
+| [`market-research`](skills/market-research/SKILL.md) | Pesquisa de mercado e concorrência com fontes | affaan-m/everything-claude-code · MIT | |
+| [`startup-design`](skills/startup-design/SKILL.md) | Estratégia completa em 8 fases | ferdinandobons/startup-skill · MIT | **Pesada**: vários agentes em paralelo e muitas buscas. Cria uma pasta `<nome-do-projeto>/` na raiz |
+| [`startup-competitors`](skills/startup-competitors/SKILL.md) | Battle cards e mapa de concorrentes | ferdinandobons/startup-skill · MIT | Pesada |
+| [`startup-positioning`](skills/startup-positioning/SKILL.md) | Posicionamento (framework April Dunford) | ferdinandobons/startup-skill · MIT | Pesada |
+| [`startup-pitch`](skills/startup-pitch/SKILL.md) | Roteiro de pitch (10, 5, 2 e 1 min), Q&A e rubrica | ferdinandobons/startup-skill · MIT | Útil para o [roteiro do pitch](../docs/06-entrega/roteiro-do-pitch.md) |
+| **Revisão e erros** | | | |
+| [`find-bugs`](skills/find-bugs/SKILL.md) | Bugs e falhas de segurança nas mudanças da branch | getsentry/skills · Apache-2.0 | Usa o comando `gh` para achar a branch base; sem ele, diga a base (ex.: `development`) |
+| [`review-discipline`](skills/review-discipline/SKILL.md) | Revisão de código que exige provar cada problema | Skillproofdev/review-discipline · MIT | Dispara em qualquer pedido de revisão |
+| [`codebase-review`](skills/codebase-review/SKILL.md) | Auditoria do projeto inteiro; gera `to_do.md` priorizado | nobelk/claude-tools · Apache-2.0 | |
+| [`architecture-review`](skills/architecture-review/SKILL.md) | Analisa a arquitetura; gera `architecture_overview.md` | nobelk/claude-tools · Apache-2.0 | |
+| [`security-scan`](skills/security-scan/SKILL.md) | Varredura OWASP Top 10 com script Python local | nobelk/claude-tools · Apache-2.0 | O script só lê arquivos |
+
+Combo sugerido: `startup-validator` (Dia 1) → `critique-product` na ideia → fluxo SDD → `find-bugs` / `review-discipline` antes do PR → `startup-pitch`. Lembre: o que essas skills produzirem com IA entra na [declaração de uso de IA](../docs/07-conformidade/declaracao-de-uso-de-ia.md).
+
+### Chamada automática (testado em 2026-10-27)
+
+Todas as **40 skills** do projeto (da equipe e de terceiros) foram testadas numa sessão separada do Claude Code, com um pedido em português que **não citava o nome da skill**. Todas foram chamadas automaticamente. Duas só passaram depois de ajustar a descrição:
+- `supabase`: não era chamada para "login com e-mail" ou "cadastro com senha"; ganhou esses gatilhos.
+- `critique-product`: não era chamada com pedidos em português; ganhou gatilhos em português (registrado no `ORIGEM.md` dela).
+
+Se uma skill não for chamada sozinha, escreva na `description` as palavras que a equipe usa de verdade, e não só o nome técnico. Ou chame direto com `/nome-da-skill`.
 
 ## Skills a construir pelos colaboradores
 
