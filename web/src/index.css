@@ -1,0 +1,40 @@
+@import '../../.claude/skills/guia-estilo-role-que-rende/assets/tokens.css';
+
+:root {
+  font-family: system-ui, sans-serif;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: var(--rqr-amarelo);
+  color: var(--rqr-azul-escuro);
+}
+
+.inicio {
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.inicio h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  margin: 0 0 8px;
+}
+
+.estado {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.estado dt {
+  font-weight: 700;
+}
+
+.estado dd {
+  margin: 0;
+}
