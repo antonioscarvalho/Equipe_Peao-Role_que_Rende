@@ -46,6 +46,8 @@ Durante todo o fluxo:
 | [`registrar-asset`](skills/registrar-asset/SKILL.md) | 🟢 base pronta | _a definir_ | Registra biblioteca, asset ou API e sua licença |
 | [`guia-estilo-role-que-rende`](skills/guia-estilo-role-que-rende/SKILL.md) | 🟢 base pronta | Maykon Júnio | Guia de estilo do Rolê que Rende (cores, fontes, grafismos, componentes, animações, tom de voz), extraído do site oficial e do Manual de Identidade Visual. Inclui tokens CSS/JSON e página de exemplo |
 | [`conformidade-legal-br`](skills/conformidade-legal-br/SKILL.md) | 🟢 base pronta | Atyrson Souto | Revisa código, telas e textos contra o edital (Seção 8.4, 8.5, Anexo 2) e leis brasileiras: LGPD (dados de saúde são sensíveis), apostas, saúde mental, acessibilidade (LBI/WCAG), CDC, ECA, direitos autorais e Marco Civil. Também disponível em `.kiro/skills/` |
+| [`criar-personagem`](skills/criar-personagem/SKILL.md) | 🟢 base pronta | Atyrson Souto | Cria ou evolui o bichinho virtual: ficha, estados (calmo, feliz, orgulhoso, cansado, apoio), SVG animável e prompts de ilustração no estilo pincel seco. Regra: nunca morre nem culpa |
+| [`animar-componente`](skills/animar-componente/SKILL.md) | 🟢 base pronta | Atyrson Souto | Aplica o catálogo de animações `rqr-*` (CSS ou Lottie) com reduzir-movimento e acessibilidade; proíbe visual de cassino |
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
 
 ### Skills de stack
