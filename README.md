@@ -19,6 +19,14 @@ Repositório da **Equipe Peão** no **Rolê que Rende – BBDW 2026**, hackathon
 
 ---
 
+## 📚 Documentação
+
+Toda a documentação do projeto está em [`docs/`](docs/README.md): produto, design, parte técnica, processo, entrega e conformidade com o edital.
+
+O desenvolvimento segue **SDD (Spec-Driven Development)** com agentes de IA. As skills ficam em [`.claude/`](.claude/README.md) e as especificações em [`specs/`](specs/README.md).
+
+---
+
 ## 🎯 O desafio
 
 As apostas online preocupam cada vez mais a sociedade brasileira. Elas afetam a saúde financeira, emocional e social de milhões de pessoas e famílias, com endividamento, desorganização do orçamento doméstico, rotina prejudicada e vínculos afetivos desgastados.
@@ -88,9 +96,7 @@ Informações sobre saúde, finanças ou legislação precisam estar corretas e,
 
 #### Declaração de uso de IA, código aberto e assets de terceiros
 
-| Item | Tipo | Licença / Ferramenta | Uso no projeto |
-|---|---|---|---|
-| _a preencher_ | | | |
+Veja [docs/07-conformidade/declaracao-de-uso-de-ia.md](docs/07-conformidade/declaracao-de-uso-de-ia.md) e [docs/07-conformidade/licencas-e-assets.md](docs/07-conformidade/licencas-e-assets.md).
 
 ---
 
