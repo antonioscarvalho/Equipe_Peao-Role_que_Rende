@@ -1,23 +1,30 @@
-import { supabase } from './lib/supabase'
-
-const versao = import.meta.env.VITE_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? 'local'
+import { Crise } from '@/app/crise/Crise'
+import { Inicio } from '@/app/inicio/Inicio'
+import { Sos } from '@/app/sos/Sos'
+import { useRota } from '@/hooks/useRota'
 
 function App() {
+  const { rota, ir } = useRota()
+
   return (
-    <main className="inicio">
-      <h1>Rolê que Rende</h1>
-      <p>Protótipo da Equipe Peão em construção.</p>
-      <dl className="estado">
-        <div>
-          <dt>Versão</dt>
-          <dd>{versao}</dd>
-        </div>
-        <div>
-          <dt>Supabase</dt>
-          <dd>{supabase ? 'configurado' : 'ainda não configurado'}</dd>
-        </div>
-      </dl>
-    </main>
+    <>
+      <header className="topo">
+        <button type="button" className="topo__marca" onClick={() => ir('/')}>
+          Guardião
+        </button>
+        {/* Saída para a crise a 1 toque de qualquer tela (skill seguranca-e-crise). */}
+        {rota !== '/ajuda' && (
+          <button type="button" className="topo__ajuda" onClick={() => ir('/ajuda')}>
+            Preciso de ajuda agora
+          </button>
+        )}
+      </header>
+      <main className="conteudo">
+        {rota === '/' && <Inicio aoAbrirSos={() => ir('/sos')} />}
+        {rota === '/sos' && <Sos aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
+        {rota === '/ajuda' && <Crise aoVoltar={() => ir('/')} />}
+      </main>
+    </>
   )
 }
 
