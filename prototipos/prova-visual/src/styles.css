@@ -1,0 +1,228 @@
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: "Nunito Sans", var(--rqr-font-texto);
+  color: var(--rqr-texto);
+  background: var(--rqr-amarelo);
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; }
+h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
+:focus-visible { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Palco e "celular" ---------- */
+.palco { min-height: 100dvh; display: grid; place-items: center; padding: 24px 12px; position: relative; overflow: hidden; }
+.celular {
+  position: relative; z-index: 1; width: min(400px, 100%);
+  background: var(--rqr-branco); border: 4px solid var(--rqr-azul-escuro);
+  border-radius: 36px; box-shadow: 0 10px 0 var(--rqr-azul-escuro);
+  padding: 22px 18px 96px; display: flex; flex-direction: column; gap: 16px;
+  animation: rqr-pop var(--rqr-dur-lenta) var(--rqr-ease-pop) both;
+}
+
+/* ---------- Topo ---------- */
+.topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.topo__oi { margin: 0; font-weight: 700; color: var(--rqr-cinza-900); }
+.topo__titulo { font-size: 26px; font-weight: 900; line-height: 1.15; }
+.interruptor { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: 700; text-align: center; max-width: 76px; }
+.interruptor input { position: absolute; opacity: 0; }
+.interruptor__trilho { width: 44px; height: 26px; border-radius: 99px; background: var(--rqr-cinza-100); border: 3px solid var(--rqr-azul-escuro); position: relative; transition: background var(--rqr-dur-base); }
+.interruptor__trilho::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--rqr-azul-escuro); transition: transform var(--rqr-dur-base) var(--rqr-ease-pop); }
+.interruptor input:checked + .interruptor__trilho { background: var(--rqr-azul-claro); }
+.interruptor input:checked + .interruptor__trilho::after { transform: translateX(18px); }
+.interruptor input:focus-visible + .interruptor__trilho { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
+
+/* ---------- Cena do bichinho ---------- */
+.cena {
+  position: relative; display: grid; justify-items: center;
+  background: linear-gradient(180deg, var(--rqr-amarelo-claro), var(--rqr-amarelo) 70%);
+  border: 3px solid var(--rqr-azul-escuro); border-radius: 28px; padding: 46px 10px 0; overflow: hidden;
+}
+.balao {
+  position: absolute; top: 12px; left: 50%; translate: -50% 0; z-index: 2;
+  background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 16px;
+  padding: 6px 12px; font-weight: 800; font-size: 14px; white-space: nowrap; max-width: 92%;
+  overflow: hidden; text-overflow: ellipsis;
+  animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop) both;
+}
+.bairro { width: 100%; margin-top: -26px; display: block; }
+.bairro__chao { fill: var(--rqr-verde-agro); }
+.bairro__peca { transform-box: fill-box; transform-origin: 50% 100%; transform: scale(0); opacity: 0;
+  transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop), opacity var(--rqr-dur-base); }
+.bairro__peca.is-on { transform: scale(1); opacity: 1; }
+.bairro__vaga { fill: none; stroke: var(--rqr-azul-escuro); stroke-width: 2; stroke-dasharray: 4 4; opacity: .35; }
+
+/* ---------- Bichinho ---------- */
+.bicho { position: relative; z-index: 1; --corpo: var(--rqr-azul-claro); }
+.bicho svg { width: 100%; height: 100%; overflow: visible; }
+.bicho__corpo { fill: var(--corpo); stroke: var(--rqr-azul-escuro); stroke-width: 6; stroke-linejoin: round; transition: fill var(--rqr-dur-lenta); }
+.bicho__braco path { fill: var(--corpo); stroke: var(--rqr-azul-escuro); stroke-width: 6; stroke-linejoin: round; transition: fill var(--rqr-dur-lenta); }
+.bicho__braco { transform-box: fill-box; transition: transform var(--rqr-dur-media) var(--rqr-ease-pop); }
+.bicho__braco--e { transform-origin: 100% 40%; }
+.bicho__braco--d { transform-origin: 0% 40%; }
+.bicho__sombra { fill: var(--rqr-azul-escuro); opacity: .18; transform-box: fill-box; transform-origin: center; }
+.bicho__corpo-grupo { transform-box: fill-box; transform-origin: 50% 100%; }
+.olho ellipse, .olho__luz { fill: var(--rqr-azul-escuro); }
+.olho__luz { fill: #fff; }
+.olho path, .boca { fill: none; stroke: var(--rqr-azul-escuro); stroke-width: 5; stroke-linecap: round; }
+.boca--aberta { fill: var(--rqr-rosa-escuro); stroke-width: 4; }
+.bochecha { fill: var(--rqr-rosa-escuro); opacity: .55; }
+.olho, .boca { opacity: 0; transition: opacity var(--rqr-dur-rapida); }
+.olho--aberto { transform-box: fill-box; transform-origin: center; }
+.bicho__broto path { fill: none; stroke: var(--rqr-azul-escuro); stroke-width: 4; stroke-linecap: round; }
+.bicho__broto .folha { fill: var(--rqr-verde-agro); stroke-width: 3; transform-box: fill-box; transform: scale(0); transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop); }
+.folha--1 { transform-origin: 100% 100%; }
+.folha--2 { transform-origin: 0% 100%; }
+.bicho__broto .flor { fill: var(--rqr-rosa-escuro); stroke: var(--rqr-azul-escuro); stroke-width: 3; transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop) 120ms; }
+.bicho__broto[data-nivel="1"] .folha--1,
+.bicho__broto[data-nivel="2"] .folha, .bicho__broto[data-nivel="3"] .folha { transform: scale(1); }
+.bicho__broto[data-nivel="3"] .flor { transform: scale(1); }
+
+/* calmo: respira + pisca */
+.bicho--calmo .olho--aberto, .bicho--calmo .boca--sorriso,
+.bicho--apoio .olho--aberto, .bicho--apoio .boca--sorriso { opacity: 1; }
+.bicho--calmo .bicho__corpo-grupo { animation: respirar 4s ease-in-out infinite; }
+.bicho--calmo .olho--aberto, .bicho--apoio .olho--aberto { animation: piscar 5s infinite; }
+
+/* feliz: pula */
+.bicho--feliz { --corpo: var(--rqr-azul-claro); }
+.bicho--feliz .olho--feliz, .bicho--feliz .boca--aberta { opacity: 1; }
+.bicho--feliz .bicho__corpo-grupo { animation: pular 700ms var(--rqr-ease-pop) infinite; }
+.bicho--feliz .bicho__sombra { animation: sombra 700ms var(--rqr-ease-pop) infinite; }
+.bicho--feliz .bicho__braco--e { transform: rotate(40deg); }
+.bicho--feliz .bicho__braco--d { transform: rotate(-40deg); }
+
+/* orgulhoso: cresce e brilha */
+.bicho--orgulhoso { --corpo: var(--rqr-rosa-claro); }
+.bicho--orgulhoso .olho--feliz, .bicho--orgulhoso .boca--sorriso { opacity: 1; }
+.bicho--orgulhoso .bicho__corpo-grupo { animation: orgulho 1.6s var(--rqr-ease-padrao) infinite alternate; }
+.bicho--orgulhoso .bicho__braco--e { transform: rotate(-20deg); }
+.bicho--orgulhoso .bicho__braco--d { transform: rotate(20deg); }
+
+/* cansado: encolhe, cor fria, balança devagar. Nunca some. */
+.bicho--cansado { --corpo: var(--rqr-roxo-claro); }
+.bicho--cansado .olho--cansado, .bicho--cansado .boca--reta { opacity: 1; }
+.bicho--cansado .bicho__corpo-grupo { animation: balancar 3.5s ease-in-out infinite; }
+.bicho--cansado .bicho__braco--e { transform: rotate(-12deg); }
+.bicho--cansado .bicho__braco--d { transform: rotate(12deg); }
+
+/* apoio: braços abertos */
+.bicho--apoio .bicho__braco--e { transform: rotate(-35deg); }
+.bicho--apoio .bicho__braco--d { transform: rotate(35deg); }
+
+@keyframes respirar { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.04, .97); } }
+@keyframes piscar { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes pular { 0%, 100% { transform: translateY(0) scale(1.04, .94); } 45% { transform: translateY(-22px) scale(.96, 1.05); } }
+@keyframes sombra { 0%, 100% { transform: scale(1); opacity: .2; } 45% { transform: scale(.7); opacity: .1; } }
+@keyframes orgulho { from { transform: scale(1); } to { transform: scale(1.06) translateY(-4px); } }
+@keyframes balancar { 0%, 100% { transform: rotate(-2deg) scale(.96, .92); } 50% { transform: rotate(2deg) scale(.96, .92); } }
+
+/* ---------- Chips de humor ---------- */
+.humores { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { border: 3px solid var(--rqr-azul-escuro); background: var(--rqr-branco); border-radius: 99px; padding: 6px 12px; font-weight: 800; font-size: 13px; cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop), background var(--rqr-dur-base); }
+.chip:hover { transform: translateY(-2px); }
+.chip.is-on { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); }
+
+/* ---------- Cards ---------- */
+.cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini { padding: 12px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 0 var(--rqr-azul-escuro); }
+.mini p { margin: 0; }
+.mini__icone { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 3px solid var(--rqr-azul-escuro); perspective: 300px; }
+.mini__icone--moeda { background: var(--rqr-amarelo-claro); }
+.moeda { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 900; color: var(--rqr-ouro-sombra);
+  background: radial-gradient(circle at 35% 30%, var(--rqr-ouro-luz), var(--rqr-ouro) 70%); border: 2px solid var(--rqr-ouro-sombra); }
+.mini__rotulo { font-size: 12px; font-weight: 700; color: var(--rqr-cinza-900); }
+.mini__valor { font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.mini__nota { font-size: 11px; color: var(--rqr-cinza-700); }
+
+/* ---------- Missões ---------- */
+.secao { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.secao h2 { font-size: 18px; font-weight: 900; }
+.progresso { flex: 1; max-width: 140px; height: 12px; border-radius: 99px; background: var(--rqr-cinza-100); border: 2px solid var(--rqr-azul-escuro); overflow: hidden; }
+.progresso span { display: block; height: 100%; background: var(--rqr-verde-agro); transform-origin: left; transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop); }
+.missoes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.missao { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer;
+  background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 18px; padding: 10px 12px;
+  box-shadow: 0 4px 0 var(--rqr-azul-escuro);
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-padrao), box-shadow var(--rqr-dur-rapida), background var(--rqr-dur-base); }
+.missao:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--rqr-azul-escuro); }
+.missao:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--rqr-azul-escuro); }
+.missao__icone { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--rqr-azul-claro); border: 2px solid var(--rqr-azul-escuro); transition: background var(--rqr-dur-base); }
+.missao__texto { flex: 1; font-weight: 700; font-size: 14px; }
+.missao__valor { font-size: 12px; font-weight: 900; color: var(--rqr-roxo); }
+.missao.is-ok { background: var(--rqr-verde-claro); cursor: default; }
+.missao.is-ok .missao__icone { background: var(--rqr-verde-agro); animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop); }
+.missao.is-ok .missao__texto { text-decoration: line-through; text-decoration-thickness: 2px; }
+.link { margin-top: 10px; background: none; border: 0; text-decoration: underline; font-weight: 700; cursor: pointer; color: var(--rqr-azul-escuro); }
+
+/* ---------- Botão "Deu vontade" ---------- */
+.sos {
+  position: absolute; left: 50%; bottom: 20px; translate: -50% 0;
+  display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 28px;
+  border: 3px solid var(--rqr-amarelo); border-radius: 99px; cursor: pointer;
+  background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); font-weight: 900; font-size: 18px; white-space: nowrap;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
+}
+.sos:hover { transform: scale(1.04); }
+.sos:active { transform: scale(.96); }
+
+/* ---------- Tela de crise ---------- */
+.crise {
+  position: fixed; inset: 0; z-index: 10; display: grid; place-content: center; justify-items: center; gap: 18px;
+  padding: 24px; text-align: center; color: var(--rqr-branco);
+  background: radial-gradient(circle at 50% 40%, var(--rqr-roxo), var(--rqr-azul-escuro) 70%);
+  animation: fade var(--rqr-dur-media) var(--rqr-ease-padrao) both;
+}
+.crise__fechar { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--rqr-amarelo); background: transparent; color: var(--rqr-amarelo); font-size: 26px; line-height: 1; cursor: pointer; }
+.crise__titulo { color: var(--rqr-amarelo); font-size: 24px; font-weight: 900; line-height: 1.2; }
+.crise__fase { margin: 0; font-size: 22px; font-weight: 800; }
+.crise__fase b { display: inline-block; min-width: 1.4em; color: var(--rqr-amarelo); font-variant-numeric: tabular-nums; }
+.crise__ciclos { display: flex; gap: 8px; }
+.crise__ciclos span { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--rqr-amarelo); transition: background var(--rqr-dur-base); }
+.crise__ciclos .ok { background: var(--rqr-amarelo); }
+.crise__ciclos .agora { background: var(--rqr-azul-claro); }
+.crise__fim { display: grid; justify-items: center; gap: 12px; max-width: 340px; }
+.crise__fim p, .crise__fim small { margin: 0; }
+.crise__fim small { opacity: .85; }
+.ajuda { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px 16px; border-radius: 16px; background: rgb(255 255 255 / .12); border: 2px solid rgb(255 255 255 / .5); color: var(--rqr-branco); font-weight: 800; text-decoration: none; }
+.ajuda:hover { background: rgb(255 255 255 / .2); }
+
+.onda { position: relative; width: 260px; height: 260px; display: grid; place-items: center; }
+.onda__anel { position: absolute; inset: 0; border-radius: 50%; border: 4px solid var(--rqr-azul-claro); transition: transform var(--dur) ease-in-out, opacity var(--dur); }
+.onda__anel--2 { border-color: var(--rqr-amarelo); border-style: dashed; inset: 22px; }
+.onda__centro { transition: transform var(--dur) ease-in-out; }
+.onda--inspira .onda__anel, .onda--segura .onda__anel { transform: scale(1); opacity: 1; }
+.onda--inspira .onda__centro, .onda--segura .onda__centro { transform: scale(1.18); }
+.onda--expira .onda__anel { transform: scale(.62); opacity: .5; }
+.onda--expira .onda__centro { transform: scale(.88); }
+.onda--segura .onda__anel--2 { animation: girar 4s linear; }
+@keyframes girar { to { rotate: 90deg; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Grafismos decorativos ---------- */
+.decor { position: absolute; inset: 0; pointer-events: none; }
+.g { position: absolute; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.g--seta { width: 150px; top: 6%; left: 4%; stroke: var(--rqr-azul); stroke-width: 9; --rqr-rot: -8deg; }
+.g--anel { width: 80px; top: 14%; right: 8%; stroke: var(--rqr-roxo); stroke-width: 10; animation-duration: 6s; }
+.g--flor { width: 70px; bottom: 16%; left: 9%; stroke: var(--rqr-azul-claro); stroke-width: 9; --rqr-rot: 12deg; animation-duration: 4.5s; }
+.g--arco { width: 130px; bottom: 6%; right: 6%; stroke: var(--rqr-rosa-escuro); stroke-width: 12; animation-duration: 5.5s; }
+.g--tri { width: 70px; top: 52%; right: 4%; stroke: var(--rqr-azul-escuro); stroke-width: 7; --rqr-rot: 15deg; }
+@media (max-width: 600px) { .g--seta, .g--tri, .g--flor { display: none; } }
+
+/* ---------- Reduzir animações (interruptor do app) ---------- */
+.reduzir-animacoes *, .reduzir-animacoes *::before, .reduzir-animacoes *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: 1ms !important;
+  transition-delay: 0ms !important;
+}
+
+/* ---------- Lottie (Noto Animated Emoji, CC BY 4.0) ---------- */
+.cena__brilho { position: absolute; top: 34%; right: 8%; z-index: 3; pointer-events: none; }
+.mini__icone--lottie { overflow: hidden; }
+.crise__alivio { display: flex; align-items: center; gap: 4px; }
