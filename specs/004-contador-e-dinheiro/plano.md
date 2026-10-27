@@ -1,8 +1,8 @@
 # Plano 004 — Check-in diário, contador de dias e dinheiro preservado
 
 - **Spec:** [spec.md](spec.md)
-- **Estado:** 🗺️ rascunho
-- **Aprovado por:** _—_ em _aaaa-mm-dd_
+- **Estado:** ✅ aprovado
+- **Aprovado por:** Danillo Meira em 2026-10-27, com as quatro decisões da seção 5: (1) opção **a**; (2), (3) e (4) como propostas
 
 ## 1. Abordagem
 
@@ -82,7 +82,7 @@ INÍCIO
        └─ "Simulação de Open Finance (dados de exemplo)" → painel do CA-6
 ```
 
-## 5. Decisões a confirmar na revisão deste plano
+## 5. Decisões (confirmadas em 2026-10-27)
 
 1. **O que conta como "dia sem apostar".** A spec diz "total de dias sem apostar no mês corrente", e o check-in é opcional. Há dois jeitos de contar:
    - **(a) Só os dias registrados como "Não apostei"** _(recomendado)_. O número é sempre algo que a pessoa afirmou, e o app não inventa dado. A tela mostra "{n} dias sem apostar" e, embaixo, quantos dias do mês ainda não têm registro, sem cobrança.

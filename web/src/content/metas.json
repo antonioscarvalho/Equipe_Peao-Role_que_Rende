@@ -1,0 +1,35 @@
+{
+  "_comentario": "Metas tangíveis para o dinheiro preservado. Só aparecem na tela com status 'confirmado', valor e data de verificação (decisão 3 do plano 004). Conferir cada fonte e registrar em docs/07-conformidade/fontes-e-referencias.md.",
+  "metas": [
+    {
+      "id": "botijao",
+      "nome": "botijão de gás",
+      "plural": "botijões de gás",
+      "valorReferencia": null,
+      "status": "conferir",
+      "verificado_em": null,
+      "fonte": "ANP, Levantamento de Preços de Combustíveis, preço médio do GLP 13 kg",
+      "link": "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/levantamento-de-precos-de-combustiveis-ultimas-semanas-pesquisadas"
+    },
+    {
+      "id": "luz",
+      "nome": "conta de luz",
+      "plural": "contas de luz",
+      "valorReferencia": null,
+      "status": "conferir",
+      "verificado_em": null,
+      "fonte": "ANEEL, tarifa média residencial (consumo típico a definir)",
+      "link": "https://www.gov.br/aneel"
+    },
+    {
+      "id": "compras",
+      "nome": "compras da semana",
+      "plural": "semanas de compras",
+      "valorReferencia": null,
+      "status": "conferir",
+      "verificado_em": null,
+      "fonte": "DIEESE, Pesquisa Nacional da Cesta Básica de Alimentos (valor mensal ÷ 4)",
+      "link": "https://www.dieese.org.br/cesta/"
+    }
+  ]
+}

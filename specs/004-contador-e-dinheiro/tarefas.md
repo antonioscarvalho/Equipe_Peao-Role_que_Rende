@@ -4,20 +4,20 @@
 
 Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` pode ser feita em paralelo
 
-> Só começa depois que o plano for aprovado, com as quatro decisões da seção 5 respondidas.
+> Plano aprovado em 2026-10-27. Pendências que ficaram fora: ver `docs/revisoes/checkin-e-dinheiro.md`.
 
 | ID | Tarefa | CA | Arquivos | Depende de | [P] | Responsável | Estado |
 |---|---|---|---|---|---|---|---|
-| T001 | Datas locais e cálculo do progresso do mês (dias sem apostar, dinheiro preservado) | CA-4, CA-5 | `web/src/domain/datas.ts`, `progresso.ts` + testes | — | [P] | Danillo (IA) | ⬜ |
-| T002 | Banco versão 2 e repositórios de check-in e de configuração | CA-1, CA-7 | `web/src/lib/db.ts`, `checkins.ts`, `configuracao.ts` + testes | — | [P] | Danillo (IA) | ⬜ |
-| T003 | Conteúdo do F4 e gatilhos em JSON, com teste de vocabulário proibido | CA-2, CA-3, CA-4 | `web/src/content/checkin.json`, `conteudo.test.ts` | — | [P] | Danillo (IA) | ⬜ |
-| T004 | Componentes genéricos `Chips` e `Cartao`, no catálogo | CA-1, CA-3 | `web/src/components/` | — | [P] | Danillo (IA) | ⬜ |
-| T005 | `useProgresso` e card do check-in com contador na tela inicial | CA-1, CA-2, CA-4 | `hooks/useProgresso.ts`, `app/inicio/` | T001, T002, T003, T004 | | Danillo (IA) | ⬜ |
-| T006 | Fluxo pós-lapso em `/checkin`, com saída para a crise | CA-3, CA-4 | `app/checkin/`, `hooks/useRota.ts`, `App.tsx` | T005 | | Danillo (IA) | ⬜ |
-| T007 | Tela do dinheiro preservado: estimativa de gasto e troca reais ⇄ metas | CA-5, CA-7 | `app/dinheiro/`, `content/metas.json` | T005 | | Danillo (IA) | ⬜ |
-| T008 | Simulação de Open Finance: extrato sintético, domínio e painel | CA-6 | `domain/openFinance.ts`, `content/open-finance-demo.json`, `app/dinheiro/` | T007 | | Danillo (IA) | ⬜ |
-| T009 | Acessibilidade: leitura completa do contador e do valor, foco, `role="status"`, conferência nos tokens | todos | telas da 004 | T006, T007, T008 | | Danillo (IA) | ⬜ |
-| T010 | Conformidade: checklists de segurança e design ético, fontes das metas, registros de IA e assets | todos | `docs/07-conformidade/*`, `docs/revisoes/` | todas | | Danillo | ⬜ |
+| T001 | Datas locais e cálculo do progresso do mês (dias sem apostar, dinheiro preservado) | CA-4, CA-5 | `web/src/domain/datas.ts`, `progresso.ts` + testes | — | [P] | Danillo (IA) | ✅ |
+| T002 | Banco versão 2 e repositórios de check-in e de configuração | CA-1, CA-7 | `web/src/lib/db.ts`, `checkins.ts`, `configuracao.ts` + testes | — | [P] | Danillo (IA) | ✅ |
+| T003 | Conteúdo do F4 e gatilhos em JSON, com teste de vocabulário proibido | CA-2, CA-3, CA-4 | `web/src/content/checkin.json`, `conteudo.test.ts` | — | [P] | Danillo (IA) | ✅ |
+| T004 | Componentes genéricos `Chips` e `Cartao`, no catálogo | CA-1, CA-3 | `web/src/components/` | — | [P] | Danillo (IA) | ✅ |
+| T005 | `useProgresso` e card do check-in com contador na tela inicial | CA-1, CA-2, CA-4 | `hooks/useProgresso.ts`, `app/inicio/` | T001, T002, T003, T004 | | Danillo (IA) | ✅ |
+| T006 | Fluxo pós-lapso em `/checkin`, com saída para a crise | CA-3, CA-4 | `app/checkin/`, `hooks/useRota.ts`, `App.tsx` | T005 | | Danillo (IA) | ✅ |
+| T007 | Tela do dinheiro preservado: estimativa de gasto e troca reais ⇄ metas | CA-5, CA-7 | `app/dinheiro/`, `content/metas.json` | T005 | | Danillo (IA) | ✅ |
+| T008 | Simulação de Open Finance: extrato sintético, domínio e painel | CA-6 | `domain/openFinance.ts`, `content/open-finance-demo.json`, `app/dinheiro/` | T007 | | Danillo (IA) | ✅ |
+| T009 | Acessibilidade: leitura completa do contador e do valor, foco, `role="status"`, conferência nos tokens | todos | telas da 004 | T006, T007, T008 | | Danillo (IA) | 🟨 por teste; falta conferir à mão com leitor de tela |
+| T010 | Conformidade: checklists de segurança e design ético, fontes das metas, registros de IA e assets | todos | `docs/07-conformidade/*`, `docs/revisoes/` | todas | | Danillo | 🟨 falta conferir os valores das metas na fonte |
 
 ## Critério de pronto por tarefa
 

@@ -30,7 +30,7 @@
 | 0 | [Spec 001 — Base do app, SOS e crise](../../specs/001-base-sos-crise/spec.md) | Antonio Carvalho | Must | — | 🔍 implementada, revisão clínica pendente |
 | 1 | [Spec 002 — Onboarding e Guardião](../../specs/002-onboarding-e-guardiao/spec.md) | Ian Costa Guimarães | Must | [#4](https://github.com/antonioscarvalho/equipepeao/issues/4) | 📝 spec pronta |
 | 2 | [Spec 003 — Botão SOS e Urge Surfing](../../specs/003-sos-fissura/spec.md) | Ian Costa Guimarães | Must | [#5](https://github.com/antonioscarvalho/equipepeao/issues/5) | 📝 spec pronta |
-| 3 | [Spec 004 — Contador e Dinheiro Preservado](../../specs/004-contador-e-dinheiro/spec.md) | Danillo Meira | Must | [#7](https://github.com/antonioscarvalho/equipepeao/issues/7) | 📝 spec pronta |
+| 3 | [Spec 004 — Contador e Dinheiro Preservado](../../specs/004-contador-e-dinheiro/spec.md) | Danillo Meira | Must | [#7](https://github.com/antonioscarvalho/equipepeao/issues/7) | 🔍 implementada, revisão clínica pendente |
 | 4 | [Spec 005 — Prevenção e Círculo de Confiança](../../specs/005-prevencao-e-circulo/spec.md) | Atyrson Souto | Should | [#8](https://github.com/antonioscarvalho/equipepeao/issues/8) | 📝 spec pronta |
 | 5 | [Spec 006 — Protocolo de Crise e Hub de Apoio](../../specs/006-protocolo-crise-e-hub/spec.md) | Vanessa Ramos | Must | [#9](https://github.com/antonioscarvalho/equipepeao/issues/9) | 📝 spec pronta |
 
