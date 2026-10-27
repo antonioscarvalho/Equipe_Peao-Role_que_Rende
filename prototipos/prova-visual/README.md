@@ -6,7 +6,7 @@ Protótipo para validar animações e visual no estilo do Rolê que Rende. Serve
 ```bash
 cd prototipos/prova-visual
 npm install
-npm run dev   # abre em http://localhost:5173
+npm run dev   # abre em http://localhost:5180
 ```
 Na rede corporativa (Zscaler), se o `npm install` falhar por certificado:
 ```bash
