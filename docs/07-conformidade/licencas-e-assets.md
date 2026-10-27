@@ -10,7 +10,17 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 
 | Nome | Versão | Licença | Link | Uso no projeto |
 |---|---|---|---|---|
-| _a preencher_ | | | | |
+| TypeScript | 5.x | Apache 2.0 | https://github.com/microsoft/TypeScript | Linguagem de todo o projeto |
+| React | 19.x | MIT | https://github.com/facebook/react | Interface do web e do mobile |
+| Vite | a definir no setup | MIT | https://github.com/vitejs/vite | Dev server e build do web |
+| React Native | 0.88 | MIT | https://github.com/facebook/react-native | App mobile |
+| Expo | SDK 58 | MIT | https://github.com/expo/expo | Framework do app mobile |
+| Supabase (plataforma e CLI) | a definir no setup | Apache 2.0 | https://github.com/supabase/supabase | Backend inicial: Auth, API, Storage, Edge Functions |
+| supabase-js | 2.x | MIT | https://github.com/supabase/supabase-js | Cliente do Supabase nos apps |
+| PostgreSQL | a do Supabase | PostgreSQL License | https://www.postgresql.org/about/licence/ | Banco de dados |
+| Fastify | 5.x | MIT | https://github.com/fastify/fastify | Backend customizado (`backend/`) |
+| Zod | 4.x | MIT | https://github.com/colinhacks/zod | Validação de entrada no backend |
+| Vitest | 3.x | MIT | https://github.com/vitest-dev/vitest | Testes |
 
 ## Assets gráficos (imagens, ícones, sprites, fontes tipográficas)
 
@@ -34,7 +44,8 @@ Detalhes em [integrações externas](../04-tecnico/integracoes-externas.md).
 
 | Serviço | Termos de uso | Uso no projeto |
 |---|---|---|
-| _a preencher_ | | |
+| Vercel (plano Hobby) | https://vercel.com/legal/terms | Hospedagem do web; o Hobby é para uso pessoal e não comercial |
+| Supabase (plano Free) | https://supabase.com/terms | Backend e banco; projeto pausa após uma semana sem uso |
 
 ## Licenças compatíveis (referência rápida)
 

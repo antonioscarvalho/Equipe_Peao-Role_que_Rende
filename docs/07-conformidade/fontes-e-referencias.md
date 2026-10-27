@@ -87,3 +87,13 @@ Levantamento realizado em 27/10/2026 para o Hackathon Rolê que Rende – BBDW 2
 Principais pontos anotados:
 
 - _a preencher_
+
+## Mercado de tecnologia (motivação da stack)
+
+Usado em [stack e motivação](../04-tecnico/stack-e-motivacao.md). Acesso em 27/10/2026.
+
+| Dado / afirmação | Fonte | Link | Verificado |
+|---|---|---|---|
+| Uso por tecnologia (todos os respondentes): JavaScript 66%, TypeScript 43,6%, Go 16,4%, Node.js 48,7%, React 44,7%, Fastify 2,9%, PostgreSQL 55,6%, MySQL 40,5%, Supabase 6% (banco) e 5,4% (plataforma), Cloud Firestore 5,7%, Vite 25,4%, Webpack 18,4%, Cloudflare 20,1%, Firebase 13,1%, Vercel 10,6%, Netlify 5,9% | Stack Overflow Developer Survey 2025, seção Technology | [survey.stackoverflow.co](https://survey.stackoverflow.co/2025/technology) | ✅ |
+| Vite com 84% de uso e 98% de satisfação entre ferramentas de build; Webpack com 87% de uso e 26% de satisfação | State of JavaScript 2025, Build Tools (números via InfoQ) | [stateofjs.com](https://2025.stateofjs.com/en-US/libraries/build-tools/) · [InfoQ](https://www.infoq.com/news/2026/03/state-of-js-survey-2025) | 🔎 conferir na página oficial |
+| A documentação do React Native recomenda um framework, como o Expo, para app novo | React Native, Get Started | [reactnative.dev](https://reactnative.dev/docs/environment-setup) | ✅ |
