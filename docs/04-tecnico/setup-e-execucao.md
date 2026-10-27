@@ -12,8 +12,8 @@
 ## Instalação
 
 ```bash
-git clone https://github.com/antonioscarvalho/Equipe_Peao-Role_que_Rende.git
-cd Equipe_Peao-Role_que_Rende
+git clone https://github.com/antonioscarvalho/equipepeao.git
+cd equipepeao
 # TODO: passos de instalação
 ```
 
