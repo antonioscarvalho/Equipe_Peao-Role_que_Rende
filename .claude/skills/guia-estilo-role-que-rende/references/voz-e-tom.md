@@ -24,17 +24,24 @@
 - CTAs de 1–2 palavras: **Jogar**, **Seguir**, **Baixe**, **Saiba mais**, **Quero ser parceiro**.
 
 ## Exemplos para o projeto (tema: sair das apostas)
+
+> **O guia da equipe [docs/03-design/conteudo-e-tom-de-voz.md](../../../../docs/03-design/conteudo-e-tom-de-voz.md) prevalece.** Este arquivo só traz o "sotaque" do Rolê que Rende (leve, papo reto) para cima daquelas regras. Em caso de dúvida, siga o doc da equipe.
+
 | Situação | Assim ✅ | Não assim ❌ |
 |---|---|---|
-| Boas-vindas | "Bora retomar o controle da grana? Um passo de cada vez." | "Bem-vindo ao programa de reabilitação." |
-| Vontade de apostar | "Bateu a vontade? Respira. Vamos passar por isso juntos em 5 minutos." | "Você não pode apostar." |
-| Recaída | "Rolou. Acontece. O que importa é o próximo passo." | "Você falhou na sua meta." |
-| Meta atingida | "7 dias no controle! Isso rende 💛" | "Parabéns, prêmio desbloqueado!" (soa como aposta) |
-| Orçamento | "Bora ver pra onde a grana tá indo?" | "Análise de fluxo de caixa pessoal." |
+| Boas-vindas | "Bora construir uma vida sem apostas? Um passo de cada vez." | "Bem-vindo ao programa de reabilitação." |
+| Vontade de apostar | "Bateu a vontade? Respira. Vamos passar por esse momento juntos." | "Você não pode apostar." |
+| Dia difícil | "Teve um dia difícil? Tudo bem. Bora retomar o caminho." | "Você falhou na sua meta." / "Recaiu de novo." |
+| Meta atingida | "7 dias no controle da sua grana. Isso rende!" | "Parabéns, prêmio desbloqueado!" (soa como aposta) |
+| Orçamento | "Bora ver os compromissos financeiros que dá pra reorganizar?" | "Você está cheio de dívidas." |
 | Ajuda | "Falar com alguém ajuda. Quer ver onde encontrar apoio?" | "Procure tratamento." |
+
+Os exemplos acima são sugestões de estilo. Todo texto do produto passa por revisão humana antes de entrar.
 
 ## Regras obrigatórias (edital, Seção 8.4)
 - Nunca promover, incentivar ou mostrar apostas como algo atraente, nem indiretamente.
-- Nunca estigmatizar: evite "viciado", "jogador compulsivo", "fraco". Prefira "pessoa que quer parar de apostar", "quem está nessa jornada".
-- Nada de linguagem de cassino: "jackpot", "sorte grande", "aposte", "giro grátis", "dobrar".
-- Falar de dinheiro sem culpa e sem terrorismo.
+- Nunca estigmatizar. Use o vocabulário do [guia da equipe](../../../../docs/03-design/conteudo-e-tom-de-voz.md): "pessoa que enfrenta problemas com apostas" em vez de "viciado" ou "apostador compulsivo"; "teve um dia difícil / retomou o caminho" em vez de "fracassou" ou "recaiu".
+- Nunca usar linguagem de cassino, nem como piada: "ganhe", "aposte", "jackpot", "sorte grande", "giro grátis", "dobrar".
+- Falar de dinheiro sem culpa e sem terrorismo: "compromissos financeiros a reorganizar", não "dívida" com tom de culpa.
+- Não prometer "cura" nem resultado garantido. A solução apoia; tratamento é com especialistas.
+- Afirmação sobre saúde, finanças ou lei só com fonte em [fontes e referências](../../../../docs/07-conformidade/fontes-e-referencias.md).

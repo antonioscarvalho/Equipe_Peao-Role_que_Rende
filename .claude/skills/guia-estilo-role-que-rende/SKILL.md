@@ -10,6 +10,14 @@ Fontes da extração (outubro/2026):
 - Manual de Aplicação de Marca / Identidade Visual 2025 (PDF oficial, 23 páginas): https://www.bb.com.br/docs/portal/direc/BB-ROLE-QUE-RENDE-MANUAL-IDV.pdf
 - Canais: Instagram `@rolequerende`, quiz em https://rolequerende.bb.com.br/, jogo no Roblox ("Rolê Que Rende BB")
 
+## Docs da equipe que prevalecem sobre este guia
+
+Este skill cuida do **visual e do "sotaque"** do Rolê que Rende. Para o resto, leia e siga primeiro:
+- [docs/03-design/conteudo-e-tom-de-voz.md](../../../docs/03-design/conteudo-e-tom-de-voz.md): vocabulário sem estigma (tema sensível de apostas).
+- [docs/03-design/acessibilidade.md](../../../docs/03-design/acessibilidade.md): metas de acessibilidade (bônus de até 5%).
+- [docs/07-conformidade/regras-de-conteudo.md](../../../docs/07-conformidade/regras-de-conteudo.md) e [resumo do edital](../../../docs/01-hackathon/resumo-do-edital.md): Seção 8.4.
+- Ao usar fontes, imagens ou ícones de terceiros, rode `/registrar-asset`. Ao gerar arte ou texto com IA, rode `/registrar-uso-ia`.
+
 ## A identidade em uma frase
 
 **Amarelo vibrante + azuis do BB + rosa e roxo, pinceladas à mão, ícones dentro de círculos e um texto que fala como gente jovem: leve, direto, sem "financês".**
