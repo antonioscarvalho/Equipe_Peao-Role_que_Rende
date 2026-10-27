@@ -59,6 +59,10 @@ Esta pasta reúne tudo o que a equipe decide, constrói e entrega durante o Game
 - [Contexto brasileiro (inclui MP 1.394/2026)](pesquisa/04-contexto-brasil.md)
 - [Saúde digital](pesquisa/05-saude-digital.md)
 
+### Revisões por módulo (Fase 4)
+- [SOS](revisoes/sos.md)
+- [Protocolo de crise](revisoes/crise.md)
+
 ### 07 · Conformidade
 - [Declaração de uso de IA](07-conformidade/declaracao-de-uso-de-ia.md) ⚠️ obrigatória
 - [Licenças e assets de terceiros](07-conformidade/licencas-e-assets.md) ⚠️ obrigatória

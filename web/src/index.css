@@ -1,40 +1,343 @@
 @import '../../.claude/skills/guia-estilo-role-que-rende/assets/tokens.css';
 
+/* Fontes do sistema: o build não carrega nada de CDN (precisa abrir offline). */
 :root {
-  font-family: system-ui, sans-serif;
+  font-family: var(--rqr-font-texto);
   color-scheme: light;
+  --alvo-toque: 48px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  display: grid;
-  place-items: center;
-  background: var(--rqr-amarelo);
-  color: var(--rqr-azul-escuro);
+  background: var(--rqr-fundo);
+  color: var(--rqr-texto);
+  font-size: var(--rqr-fs-body);
+  line-height: var(--rqr-lh-corpo);
 }
 
-.inicio {
-  padding: 24px 16px;
-  text-align: center;
+h1 {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-h3);
+  line-height: var(--rqr-lh-titulo);
+  margin: 0;
 }
 
-.inicio h1 {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  margin: 0 0 8px;
+h1:focus {
+  outline: none;
 }
 
-.estado {
+:focus-visible {
+  outline: 3px solid var(--rqr-foco);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Topo: marca e a saída para a crise, sempre visível */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
-  gap: 24px;
-  justify-content: center;
-  margin-top: 24px;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--rqr-esp-1);
+  padding: var(--rqr-esp-1) 16px;
+  background: var(--rqr-fundo-escuro);
+  color: var(--rqr-texto-inverso);
 }
 
-.estado dt {
+.topo button {
+  min-height: var(--alvo-toque);
+  font: inherit;
+  cursor: pointer;
+}
+
+.topo__marca {
+  background: none;
+  border: 0;
+  color: inherit;
+  font-weight: 700;
+  font-family: var(--rqr-font-titulo);
+}
+
+.topo__ajuda {
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  border: 0;
+  border-radius: var(--rqr-raio-pilula);
+  padding: 0 var(--rqr-esp-2);
   font-weight: 700;
 }
 
-.estado dd {
+.conteudo {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--rqr-esp-3) 16px var(--rqr-esp-5);
+}
+
+.tela {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-2);
+}
+
+.tela__lead {
+  font-size: var(--rqr-fs-lead);
   margin: 0;
+}
+
+.tela--inicio {
+  min-height: 60dvh;
+  justify-content: center;
+}
+
+.tela--crise {
+  background: var(--rqr-fundo-conteudo);
+  border-radius: var(--rqr-raio-card);
+  padding: var(--rqr-esp-3) var(--rqr-esp-2);
+}
+
+/* Botões */
+.botao {
+  min-height: var(--alvo-toque);
+  padding: 12px var(--rqr-esp-2);
+  border-radius: var(--rqr-raio-pilula);
+  border: 2px solid var(--rqr-azul-escuro);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--rqr-dur-rapida);
+}
+
+.botao--principal {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+  box-shadow: var(--rqr-sombra-solida);
+}
+
+.botao--secundario {
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+}
+
+.botao--alerta {
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  border-style: dashed;
+}
+
+.botao--grande {
+  min-height: 120px;
+  font-size: var(--rqr-fs-h3);
+  border-radius: var(--rqr-raio-card);
+}
+
+.botao:active {
+  transform: translateY(2px);
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rqr-esp-1);
+}
+
+.linha > * {
+  flex: 1 1 160px;
+}
+
+.pilha {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+}
+
+/* Régua 0–10 */
+.regua {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.regua__rotulo {
+  font-weight: 700;
+  margin-bottom: var(--rqr-esp-1);
+}
+
+.regua__niveis {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--alvo-toque), 1fr));
+  gap: 8px;
+}
+
+.regua__nivel {
+  min-height: var(--alvo-toque);
+  border-radius: 12px;
+  border: 2px solid var(--rqr-azul-escuro);
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.regua__nivel[aria-pressed='true'] {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+}
+
+.regua__legenda {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--rqr-fs-small);
+  margin-top: 4px;
+}
+
+/* Onda (respiração) */
+.onda {
+  display: grid;
+  justify-items: center;
+  gap: var(--rqr-esp-1);
+  text-align: center;
+}
+
+.onda__circulo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--rqr-azul-claro);
+  border: 4px solid var(--rqr-azul-escuro);
+  animation: respirar 10s ease-in-out infinite;
+}
+
+@keyframes respirar {
+  0%,
+  100% {
+    transform: scale(0.7);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.onda__frase {
+  font-size: var(--rqr-fs-lead);
+  font-weight: 700;
+  margin: 0;
+  min-height: 3em;
+}
+
+.onda__tempo {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Cartões */
+.cartao {
+  background: var(--rqr-fundo-conteudo);
+  border: 2px solid var(--rqr-azul-escuro);
+  border-radius: var(--rqr-raio-card);
+  padding: var(--rqr-esp-2);
+}
+
+.cartao p {
+  margin: 0 0 8px;
+}
+
+.cartao__titulo,
+.cartao__pensamento {
+  font-weight: 700;
+}
+
+.cartao__validacao {
+  color: var(--rqr-texto-suave);
+}
+
+.cartao__perguntas {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.motivo {
+  margin: 0;
+  font-size: var(--rqr-fs-lead);
+  font-weight: 700;
+}
+
+.lista-acoes {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.resultado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+  font-weight: 700;
+}
+
+.resultado p {
+  margin: 0;
+}
+
+/* Telefones */
+.telefone {
+  display: flex;
+  flex-direction: column;
+  min-height: var(--alvo-toque);
+  justify-content: center;
+  padding: 12px var(--rqr-esp-2);
+  border-radius: var(--rqr-raio-card);
+  border: 2px solid var(--rqr-azul-escuro);
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  text-decoration: none;
+}
+
+.telefone--destaque {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+}
+
+.telefone__rotulo {
+  font-weight: 700;
+  font-size: var(--rqr-fs-lead);
+}
+
+.telefone__descricao {
+  font-size: var(--rqr-fs-small);
+}
+
+.aviso,
+.nota {
+  margin: 0;
+  font-size: var(--rqr-fs-small);
+}
+
+.aviso {
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
