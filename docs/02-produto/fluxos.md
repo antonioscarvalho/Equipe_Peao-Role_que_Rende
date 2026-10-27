@@ -82,7 +82,7 @@ Check-in (1 toque, opcional, no INÍCIO):  "Como foi hoje?"  [Não apostei] [Apo
   1. "Obrigado por registrar. Isso não apaga o que você já construiu."
   2. "O que aconteceu antes?" → chips de gatilho (+ livre)
   3. "O que dá pra ajustar no seu plano?" → [Editar meu plano] [Agora não]
-  4. Volta ao INÍCIO mostrando o TOTAL de dias sem apostar no mês (nunca "você voltou ao dia 0")
+  4. Volta ao INÍCIO mostrando o TOTAL de dias sem apostar desde o início (nunca "você voltou ao dia 0")
   → se a pessoa marcar "Tô mal com isso" ──────────────────────────────────────► F3 CRISE
 ```
 
@@ -135,7 +135,8 @@ Skills: `prevencao-recaida`, `design-etico-saude-digital`.
 Skills: `design-etico-saude-digital`, `controle-estimulos-financas`.
 
 ```
-· Dias sem apostar no mês (total) + sequência atual em texto pequeno e neutro
+· Total de dias sem apostar desde o início (número principal) + dias no mês e sequência atual em texto pequeno e neutro
+  (revisão de 27/10/2026: assim o número principal não "cai" na virada do mês — spec 004, CA-4)
 · Dinheiro preservado: estimativa semanal × semanas → "≈ R$ 600 — dá pra conta de luz" (sempre "estimativa")
 · Guardião muda de forma em marcos anunciados (7, 30, 90 dias); depois de um lapso, acolhe e não "piora"
 · Sem sons, confete, prêmio, ranking ou item colecionável
