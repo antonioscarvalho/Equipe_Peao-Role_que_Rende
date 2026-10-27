@@ -1,4 +1,4 @@
-# Spec 004 — Plano de Prevenção de Recaída (Planos Se/Então) e Círculo de Confiança
+# Spec 005 — Plano de Prevenção de Recaída (Planos Se/Então) e Círculo de Confiança
 
 - **Estado:** ✅ aprovada
 - **Autor(es):** Ian Costa Guimarães
@@ -31,7 +31,7 @@ A força de vontade individual isolada é insuficiente para resistir a gatilhos 
 
 - **CA-1:** Tela de seleção de gatilhos frequentes com chips de seleção (dia do pagamento, solidão, briga, tédio, bebida, jogo na TV) e opção de texto livre.
 - **CA-2:** Construtor intuitivo de até 5 planos do tipo *"Se [gatilho], então [ação alternativa]"*, sugerindo ações saudáveis de descompressão (caminhada, ligar para alguém, ouvir música).
-- **CA-3:** Os planos cadastrados são automaticamente disponibilizados como opções práticas de escolha na etapa de desfecho do Botão SOS (Spec 002).
+- **CA-3:** Os planos cadastrados são automaticamente disponibilizados como opções práticas de escolha na etapa de desfecho do Botão SOS (Spec 003).
 - **CA-4:** Módulo "Círculo de Confiança" permite registrar nome e telefone de até 3 contatos de apoio, com armazenamento 100% local no dispositivo (LGPD estrita).
 - **CA-5:** Botão "Chamar apoio" gera link pré-preenchido para WhatsApp/SMS com mensagem respeitosa (*"Estou com vontade de apostar, pode conversar comigo agora?"*), exigindo sempre a confirmação e o envio voluntário pelo próprio usuário.
 - **CA-6:** Fluxo integrado para edição e ajuste rápido dos planos Se/Então após o registro de um lapso no check-in diário.

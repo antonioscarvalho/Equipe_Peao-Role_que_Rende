@@ -1,4 +1,4 @@
-# Spec 005 — Protocolo de Crise, Hub de Apoio Especializado e Guia de Bloqueio
+# Spec 006 — Protocolo de Crise, Hub de Apoio Especializado e Guia de Bloqueio
 
 - **Estado:** ✅ aprovada
 - **Autor(es):** Ian Costa Guimarães

@@ -1,4 +1,4 @@
-# Spec 001 — Onboarding "Seu Motivo" e Companheiro Guardião
+# Spec 002 — Onboarding "Seu Motivo" e Companheiro Guardião
 
 - **Estado:** ✅ aprovada
 - **Autor(es):** Ian Costa Guimarães

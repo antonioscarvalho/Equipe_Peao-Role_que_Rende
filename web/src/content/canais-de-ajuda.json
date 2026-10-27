@@ -1,0 +1,44 @@
+{
+  "_comentario": "Canais de ajuda exibidos na crise e no Hub. Só aparecem itens com status 'confirmado'. Ver docs/04-tecnico/privacidade-e-dados-locais.md, seção 5.",
+  "canais": [
+    {
+      "id": "cvv",
+      "nome": "CVV — Centro de Valorização da Vida",
+      "rotulo": "Ligar pro CVV · 188",
+      "telefone": "188",
+      "descricao": "Gratuito, 24 horas. Voluntários prontos pra conversar.",
+      "url": "https://cvv.org.br",
+      "status": "confirmado",
+      "verificado_em": "2026-10-27",
+      "fonte": "https://cvv.org.br"
+    },
+    {
+      "id": "samu",
+      "nome": "SAMU",
+      "rotulo": "SAMU · 192",
+      "telefone": "192",
+      "descricao": "Se você corre risco agora.",
+      "status": "confirmado",
+      "verificado_em": "2026-10-27",
+      "fonte": "Serviço público nacional de urgência (número 192)"
+    },
+    {
+      "id": "caps",
+      "nome": "UBS ou CAPS (SUS)",
+      "rotulo": "Procure a UBS ou o CAPS da sua cidade",
+      "descricao": "O atendimento é gratuito. A unidade de saúde perto de você pode te acolher e encaminhar.",
+      "status": "confirmado",
+      "verificado_em": "2026-10-27",
+      "fonte": "docs/pesquisa/04-contexto-brasil.md, seção 4"
+    },
+    {
+      "id": "teleatendimento-sus",
+      "nome": "Teleatendimento do SUS para apostas",
+      "rotulo": "Teleatendimento pelo Meu SUS Digital",
+      "descricao": "Atendimento por vídeo depois de um autoteste.",
+      "status": "conferir",
+      "verificado_em": null,
+      "fonte": "Só imprensa até agora — ver docs/pesquisa/04-contexto-brasil.md"
+    }
+  ]
+}

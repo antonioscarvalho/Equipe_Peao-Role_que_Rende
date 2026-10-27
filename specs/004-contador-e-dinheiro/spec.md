@@ -1,4 +1,4 @@
-# Spec 003 — Check-in Diário, Contador de Dias, Dinheiro Preservado e Simulação Open Finance
+# Spec 004 — Check-in Diário, Contador de Dias, Dinheiro Preservado e Simulação Open Finance
 
 - **Estado:** ✅ aprovada
 - **Autor(es):** Ian Costa Guimarães

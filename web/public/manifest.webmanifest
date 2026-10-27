@@ -1,0 +1,12 @@
+{
+  "name": "Guardião",
+  "short_name": "Guardião",
+  "description": "Apoio pra atravessar a vontade de apostar e encontrar ajuda.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FCFC30",
+  "theme_color": "#3333BD",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -1,0 +1,64 @@
+{
+  "_comentario": "Textos do SOS (fluxo F2) e cards 'Pare e examine'. REVISÃO CLÍNICA PENDENTE. Fonte dos textos: docs/02-produto/microcopy.md.",
+  "revisaoClinica": "pendente",
+  "duracaoOndaSegundos": 600,
+  "frasesOnda": [
+    "A vontade sobe, chega no pico e passa.",
+    "Você não precisa decidir nada agora.",
+    "Só observa: onde a vontade aparece no corpo?",
+    "Espera esse tempo terminar antes de decidir."
+  ],
+  "validacaoCard": "Faz sentido pensar isso. Bora olhar com calma?",
+  "cards": [
+    {
+      "id": "recuperar",
+      "titulo": "Recuperar o que perdi",
+      "pensamento": "Se eu apostar mais uma vez, recupero o que perdi.",
+      "perguntas": [
+        "Quantas vezes essa tentativa já fez a conta crescer?",
+        "O que você diria pra um amigo pensando isso?"
+      ]
+    },
+    {
+      "id": "habilidade",
+      "titulo": "Eu entendo do jogo",
+      "pensamento": "Eu manjo de futebol, sei analisar.",
+      "perguntas": [
+        "Se fosse habilidade, por que a casa sempre sai ganhando no longo prazo?",
+        "Seus palpites certos pagaram os errados?"
+      ]
+    },
+    {
+      "id": "agora-vai",
+      "titulo": "Agora vai",
+      "pensamento": "Perdeu 5 seguidas, agora vai ganhar.",
+      "perguntas": ["A próxima partida sabe o que aconteceu antes?"]
+    },
+    {
+      "id": "quase",
+      "titulo": "Quase deu",
+      "pensamento": "Faltou um gol, quase ganhei!",
+      "perguntas": ["Quase ganhar é perder. Quem ganha quando você sente isso?"]
+    },
+    {
+      "id": "diversao",
+      "titulo": "Só diversão",
+      "pensamento": "É só diversão, aposto pouco.",
+      "perguntas": ["Quanto somou no mês?", "Quem mais sabe disso?"]
+    },
+    {
+      "id": "unica-saida",
+      "titulo": "Única saída",
+      "pensamento": "É o único jeito de pagar as contas.",
+      "perguntas": [
+        "Que outras saídas existem, mesmo difíceis?",
+        "Quer ver onde pedir ajuda com as contas?"
+      ]
+    }
+  ],
+  "acoes": [
+    "Sair de perto do celular por 10 minutos",
+    "Beber um copo d'água e andar um pouco",
+    "Mandar mensagem pra alguém de confiança"
+  ]
+}

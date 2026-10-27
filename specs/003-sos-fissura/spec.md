@@ -1,4 +1,4 @@
-# Spec 002 — Botão SOS de Fissura: Urge Surfing e Cards "Pare e Examine"
+# Spec 003 — Botão SOS de Fissura: Urge Surfing e Cards "Pare e Examine"
 
 - **Estado:** ✅ aprovada
 - **Autor(es):** Ian Costa Guimarães
