@@ -75,7 +75,8 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 10 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) com busca na web | Documentação / Pesquisa | Documentar a motivação da stack com dados de mercado e criar uma skill por tecnologia | Documento de stack, decisões técnicas e 7 skills; números conferidos na Stack Overflow 2025 e no State of JS 2025 | _pendente_ | `docs/04-tecnico/**`, `docs/07-conformidade/{licencas-e-assets,fontes-e-referencias}.md`, `.claude/skills/{web-react-vite,mobile-expo,ui-ux-designer,supabase,postgresql,deploy-vercel,backend-customizado}/` |
 | 11 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Documentação / Conteúdo do produto | Fase 3: arquitetura de privacidade, fluxos e microcopy, com base nas skills clínicas, éticas e de estilo | Fluxos de 10 telas, textos de interface e regras de dados locais | _pendente: revisão humana e clínica (textos 🩺)_ | `docs/02-produto/fluxos.md`, `docs/02-produto/microcopy.md`, `docs/04-tecnico/privacidade-e-dados-locais.md` |
 | 12 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Geração de código | Fase 4, spec 001: base do app web, SOS de fissura e protocolo de crise, com testes, service worker e revisões | Código em `web/src/` (telas, componentes, conteúdo JSON, repositório IndexedDB), 85 testes, `sw.js` e manifest, spec/plano/tarefas e revisões | _pendente: revisão humana e clínica_ | `web/**`, `specs/001-base-sos-crise/**`, `docs/revisoes/**` |
-| 13 | | | | | | | | |
+| 13 | 2026-10-27 | Ian Costa Guimarães | Antigravity (Gemini 3.8 Flash) | Documentação / Definição de tema | Elaboração e estruturação das 5 especificações técnicas do MVP (Specs 002 a 006 (renumeradas de 001–005)) e backlog com critérios de aceite verificáveis | Specs em specs/002 a 006, specs/README.md e docs/02-produto/escopo-e-backlog.md | _pendente_ | `specs/**`, `docs/02-produto/escopo-e-backlog.md` |
+| 14 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 
