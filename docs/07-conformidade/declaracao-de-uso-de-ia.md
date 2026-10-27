@@ -73,7 +73,8 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 8 | 2026-10-27 | Antonio Carvalho | Claude Code (Opus 5.5) | Definição de tema e conceito | Fase 2: matriz conceito → funcionalidade, MoSCoW e MVP, com base na pesquisa, nas skills e na visão do produto | Matriz com 18 funcionalidades, ajustes propostos à visão e MVP de 10 itens | _pendente_ | `docs/02-produto/matriz-conceito-funcionalidade.md` |
 | 9 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) | Geração de código | Esqueleto do backend em Fastify para a Vercel, com Repository e Retry pattern e testes | Estrutura em `backend/` e skill `arquiteto-de-software` | _pendente_ | `backend/**`, `.claude/skills/arquiteto-de-software/` |
 | 10 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) com busca na web | Documentação / Pesquisa | Documentar a motivação da stack com dados de mercado e criar uma skill por tecnologia | Documento de stack, decisões técnicas e 7 skills; números conferidos na Stack Overflow 2025 e no State of JS 2025 | _pendente_ | `docs/04-tecnico/**`, `docs/07-conformidade/{licencas-e-assets,fontes-e-referencias}.md`, `.claude/skills/{web-react-vite,mobile-expo,ui-ux-designer,supabase,postgresql,deploy-vercel,backend-customizado}/` |
-| 11 | | | | | | | | |
+| 11 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) com busca na web | Pesquisa / Documentação | Pesquisar, revisar e instalar skills de terceiros (ideias, mercado, pitch, revisão de código) e testar se todas as skills do projeto são chamadas automaticamente | 17 skills de terceiros com licença MIT/Apache; gatilhos em português nas descrições de `supabase` e `critique-product` | _pendente_ | `.claude/skills/**`, `.claude/README.md`, `docs/07-conformidade/licencas-e-assets.md` |
+| 12 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 
