@@ -1,0 +1,22 @@
+{
+  "revisaoClinica": "pendente",
+  "fontes": ["skill prevencao-recaida (Marlatt & Gordon)"],
+  "gatilhos": [
+    "Dia do pagamento",
+    "Jogo passando na TV",
+    "Propaganda ou influenciador",
+    "Grupo de palpites",
+    "Ficar sozinho(a) à noite",
+    "Tédio",
+    "Raiva ou briga",
+    "Ansiedade",
+    "Bebida",
+    "Dívida apertando",
+    "Ver alguém ganhando"
+  ],
+  "exemplosSeEntao": [
+    { "se": "o salário cair", "entao": "vou pagar as contas primeiro e deixar o resto com alguém de confiança" },
+    { "se": "der vontade durante o jogo", "entao": "vou abrir o SOS e esperar a onda passar" },
+    { "se": "eu ficar sozinho(a) à noite", "entao": "vou ligar para alguém do meu círculo" }
+  ]
+}

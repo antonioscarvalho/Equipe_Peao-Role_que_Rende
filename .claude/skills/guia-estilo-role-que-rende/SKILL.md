@@ -31,7 +31,22 @@ Este skill cuida do **visual e do "sotaque"** do Rolê que Rende. Para o resto, 
 5. **Grafismos de pincel seco** (setas curvas, arcos, bolinhas, triângulos, asteriscos) espalhados nas bordas, nunca por cima do texto. Ícones sempre **dentro de um shape circular** com textura de pincel. Ver [references/grafismos-e-icones.md](references/grafismos-e-icones.md).
 6. **Logo é imagem, nunca recriada em texto.** Respeitar a área de proteção (altura da moeda), não distorcer, não adicionar/remover elementos, não aplicar sem contraste. Ver [references/marca-e-logo.md](references/marca-e-logo.md).
 7. **Tom de voz**: "papo reto", informal, 2ª pessoa, gírias leves ("grana", "rolê", "tá on"), frases curtas, sem jargão financeiro. Ver [references/voz-e-tom.md](references/voz-e-tom.md).
-8. **Movimento com energia, mas acessível**: animações curtas e elásticas ("pop", pincelada que se desenha, moeda que gira) e sempre respeitar `prefers-reduced-motion`. Ver [references/animacoes.md](references/animacoes.md).
+8. **Movimento curto e calmo**: interface entre 150 e 250 ms, respiração lenta só como exercício, e sempre respeitar `prefers-reduced-motion`. Ver [references/animacoes.md](references/animacoes.md).
+9. **No produto (Guardião), use o modo calmo** (seção abaixo). A energia da marca serve a peças de divulgação; o app é usado por pessoas em sofrimento.
+
+## Modo calmo (obrigatório no app Guardião)
+
+A skill `design-etico-saude-digital` pede um app "calmo, previsível, sem luzes nem sons de vitória". Por isso, no produto:
+
+| Na marca (divulgação) | No app (modo calmo) |
+|---|---|
+| Fundo amarelo, grafismos de pincel nas bordas | Fundo branco ou `#F7F7FB`; amarelo só no botão SOS e em `#FFF7B5` nos destaques |
+| Efeito "pop" com overshoot, moeda girando | Transições de 150–250 ms sem overshoot; **sem moeda girando** (lembra cassino e recompensa) |
+| Muitos grafismos por tela | Nenhum grafismo nas telas de SOS e de crise; no resto, no máximo um, parado |
+| Texto escalonado com palavras em bold itálico | Pode, nos títulos; corpo sempre simples e alinhado à esquerda |
+| Celebração de conquista | Feedback discreto em texto ("Você manteve o que tinha decidido") |
+
+Implementação de referência: `prototipos/guardiao-maykon/src/theme/app.css` (importa `assets/tokens.css` pelo alias `@guia`).
 
 ## Paleta oficial (resumo)
 

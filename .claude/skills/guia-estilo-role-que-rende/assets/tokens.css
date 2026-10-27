@@ -78,8 +78,8 @@
 
   /* ---------- Movimento ---------- */
   --rqr-dur-rapida: 150ms;
-  --rqr-dur-base: 300ms;
-  --rqr-dur-media: 450ms;
+  --rqr-dur-base: 200ms;
+  --rqr-dur-media: 250ms;
   --rqr-dur-lenta: 600ms;
   --rqr-ease-padrao: cubic-bezier(.2, .8, .2, 1);
   --rqr-ease-pop: cubic-bezier(.34, 1.56, .64, 1);
@@ -130,6 +130,7 @@
   from { transform: translateY(-6px) rotate(var(--rqr-rot, 0deg)); }
   to { transform: translateY(6px) rotate(calc(var(--rqr-rot, 0deg) + 3deg)); }
 }
+/* rqr-moeda: NÃO usar no app Guardião (modo calmo). Só peça de divulgação aprovada. */
 @keyframes rqr-moeda {
   0% { transform: translateY(0) rotateY(0); }
   40% { transform: translateY(-14px) rotateY(180deg); }
