@@ -4,6 +4,7 @@ import { Bichinho } from "../Bichinho";
 import { tocar } from "../sons";
 import { CORES_ROUPA, corDe } from "../personalizacao/aparencia";
 import { useAparenciaVisivel } from "../personalizacao";
+import { DURACAO_PARTIDA_MS, FOLHA_ALTA_A_CADA, FOLHA_A_CADA_PX, quadroMs } from "../partida";
 import "./carrinho.css";
 
 /**
@@ -11,10 +12,11 @@ import "./carrinho.css";
  * Controles: segurar os pedais da tela, setas ← → / A D, ou espaço para acelerar.
  * No ar, acelerar inclina o carrinho para trás e frear inclina para frente.
  * Regras do tema: ninguém se machuca. Se o carrinho virar, cai na grama macia e tenta de novo.
- * Coleta folhas (hábitos), não moedas. Sem combustível, vidas, compra nem "última chance".
+ * Coleta folhas (hábitos), não moedas, em lugares previsíveis. Sem combustível, vidas, compra nem "última chance".
+ * A partida dura no máximo 3 minutos (ver partida.ts).
  */
 
-type Estado = "inicio" | "jogando" | "virou";
+type Estado = "inicio" | "jogando" | "virou" | "tempo";
 type Folha = { x: number; y: number; pega: boolean };
 
 const BICHO = 50;
@@ -64,7 +66,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({
     w: 360, h: 600, base: 400, x: 0, y: 0, vel: 0, vx: 0, vy: 0, ang: 0, rel: 0, angVel: 0, noChao: true,
-    camY: 0, giroRoda: 0, folhas: [] as Folha[], proxFolha: 600, folhasPegas: 0, maisLonge: 0,
+    camY: 0, giroRoda: 0, folhas: [] as Folha[], proxFolha: 600, folhasCriadas: 0, folhasPegas: 0, maisLonge: 0, tempo: 0,
     gas: false, freio: false, teclas: { gas: false, freio: false },
   });
 
@@ -74,7 +76,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     g.w = caixa.clientWidth; g.h = caixa.clientHeight; g.base = g.h * 0.62;
     g.x = 120; g.y = terreno(g.x, g.base); g.vel = 0; g.vx = 0; g.vy = 0;
     g.ang = 0; g.rel = 0; g.angVel = 0; g.noChao = true; g.camY = g.y - g.h * 0.62;
-    g.folhas = []; g.proxFolha = 500; g.folhasPegas = 0; g.maisLonge = 0;
+    g.folhas = []; g.proxFolha = 500; g.folhasCriadas = 0; g.folhasPegas = 0; g.maisLonge = 0; g.tempo = 0;
     setMetros(0); setFolhas(0); setAviso(""); setEstado("jogando");
   }, []);
 
@@ -122,6 +124,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
 
     const passo = (agora: number) => {
       const dt = Math.min(2, (agora - ultimo) / (1000 / 60));
+      g.tempo += quadroMs(agora, ultimo);
       ultimo = agora;
       // Se a área do jogo mudou de tamanho (fonte carregou, girou o celular), refaz o canvas.
       const caixa = caixaRef.current;
@@ -179,15 +182,16 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
       }
       g.giroRoda += (g.noChao ? g.vel : g.vx) * dt / RODA;
 
-      // Folhas: algumas no chão, outras no alto (para pegar no pulo).
+      // Folhas em ritmo fixo: a maioria no chão, uma em cada 3 no alto (para pegar no pulo).
       while (g.proxFolha < g.x + g.w * 1.5) {
-        const alto = Math.random() < 0.35 ? 70 : 26;
+        g.folhasCriadas++;
+        const alto = g.folhasCriadas % FOLHA_ALTA_A_CADA === 0 ? 70 : 26;
         g.folhas.push({ x: g.proxFolha, y: terreno(g.proxFolha, g.base) - alto, pega: false });
-        g.proxFolha += 180 + Math.random() * 320;
+        g.proxFolha += FOLHA_A_CADA_PX;
       }
       const cx = g.x, cy = g.y - ALTURA_CARRO;
       for (const f of g.folhas) {
-        if (!f.pega && Math.hypot(f.x - cx, f.y - cy) < 42) { f.pega = true; g.folhasPegas++; setFolhas(g.folhasPegas); tocar("moeda"); }
+        if (!f.pega && Math.hypot(f.x - cx, f.y - cy) < 42) { f.pega = true; g.folhasPegas++; setFolhas(g.folhasPegas); tocar("folha"); }
       }
       g.folhas = g.folhas.filter((f) => !f.pega && f.x > g.x - g.w);
 
@@ -268,6 +272,15 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         el.style.transform = `translate(${tx}px, ${ty}px) rotate(${g.ang}rad) translate(-50%, -100%)`;
       }
 
+      // 3 minutos: termina com calma.
+      if (g.tempo >= DURACAO_PARTIDA_MS) {
+        const final = g.maisLonge;
+        setRecorde((r) => { const novo = Math.max(r, final); localStorage.setItem(CHAVE_RECORDE, String(novo)); return novo; });
+        setAviso(`3 minutos de rolê! Você andou ${final} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
+        setEstado("tempo");
+        return;
+      }
+
       id = requestAnimationFrame(passo);
     };
 
@@ -332,6 +345,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
               <li><b>Computador:</b> → acelera, ← freia (ou A / D)</li>
               <li>Acelerar empina o carrinho e frear abaixa o bico, no chão e no ar. Equilibre pra não tombar e caia de rodas no chão!</li>
               <li>Pegue as folhas 🍃 no caminho</li>
+              <li>Cada partida dura até 3 minutos.</li>
             </ul>
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Começar</button>
             {recorde > 0 && <small>Seu recorde: {recorde} m</small>}
@@ -345,6 +359,17 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
             {novoRecorde ? <p className="pulo__recorde">Seu rolê mais longo até agora!</p> : <small>Seu recorde: {recorde} m</small>}
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Dirigir de novo</button>
             <button className="link" onClick={aoFechar}>Voltar pro meu rolê</button>
+          </div>
+        )}
+
+        {estado === "tempo" && (
+          <div className="pulo__painel rqr-pop">
+            <Bichinho humor="feliz" nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={90} reduzir={reduzir} aparencia={aparencia} />
+            <p className="pulo__chamada">3 minutos de rolê!</p>
+            <p className="pulo__resultado"><b>{metros} m</b> de rolê · 🍃 {folhas} folhas</p>
+            <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai estacionar.</p>
+            <button className="rqr-botao" onClick={aoFechar}>Voltar pro meu rolê</button>
+            <button className="link" onClick={() => { tocar("clique"); iniciar(); }}>Dirigir mais uma</button>
           </div>
         )}
       </div>

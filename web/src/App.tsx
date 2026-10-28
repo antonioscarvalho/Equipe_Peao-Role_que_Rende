@@ -42,7 +42,8 @@ export default function App() {
   const [humor, setHumor] = useState<Humor>("calmo");
   const [protegido, setProtegido] = useState(1240);
   const [crise, setCrise] = useState(false);
-  const [jogo, setJogo] = useState(false);
+  // "crise": aberto pelo "Deu vontade", com convite de 3 minutos pra onda passar.
+  const [jogo, setJogo] = useState<false | "inicio" | "crise">(false);
   const [moedaKey, setMoedaKey] = useState(0);
   const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
@@ -174,7 +175,7 @@ export default function App() {
           {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
         </section>
 
-        <button className="rqr-botao jogo-botao" onClick={() => setJogo(true)}>
+        <button className="rqr-botao jogo-botao" onClick={() => setJogo("inicio")}>
           Jogar: Pulo do Bichinho
         </button>
         <BotaoCarrinho reduzir={reduzir} />
@@ -186,8 +187,10 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir} />}
-      {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir} />}
+      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
+        chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
+      {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}
+        aoJogar={() => { setCrise(false); setJogo("crise"); }} />}
     </div>
   );
 }
