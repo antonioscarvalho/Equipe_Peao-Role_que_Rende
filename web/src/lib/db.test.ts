@@ -2,14 +2,14 @@ import { openDB } from 'idb'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { abrirBanco, apagarBanco, NOME_BANCO, VERSAO_BANCO } from './db'
 
-describe('banco guardiao (versão 3)', () => {
+describe('banco guardiao (versão 4)', () => {
   beforeEach(() => apagarBanco())
 
   it('banco novo nasce com todas as stores', async () => {
     const db = await abrirBanco()
     expect(db.version).toBe(VERSAO_BANCO)
     expect([...db.objectStoreNames].sort()).toEqual(
-      ['checkins', 'circulo', 'configuracao', 'episodiosSos', 'planos', 'prevencao'].sort(),
+      ['checkins', 'circulo', 'configuracao', 'episodiosSos', 'perfil', 'planos', 'prevencao'].sort(),
     )
   })
 
@@ -47,5 +47,26 @@ describe('banco guardiao (versão 3)', () => {
     expect(db.objectStoreNames.contains('checkins')).toBe(true)
     expect(db.objectStoreNames.contains('configuracao')).toBe(true)
     expect(db.objectStoreNames.contains('planos')).toBe(true)
+  })
+
+  it('quem vem da versão 3 (spec 005) não perde a aparência nem o plano e ganha a store do perfil', async () => {
+    const v3 = await openDB(NOME_BANCO, 3, {
+      upgrade(db) {
+        db.createObjectStore('episodiosSos', { keyPath: 'id' }).createIndex('porInicio', 'inicio')
+        db.createObjectStore('checkins', { keyPath: 'data' })
+        db.createObjectStore('configuracao')
+        db.createObjectStore('prevencao')
+        db.createObjectStore('planos', { keyPath: 'id' }).createIndex('porCriacao', 'criadoEm')
+        db.createObjectStore('circulo', { keyPath: 'id' }).createIndex('porCriacao', 'criadoEm')
+      },
+    })
+    await v3.put('configuracao', { cor: 'menta' }, 'aparencia')
+    await v3.put('planos', { id: 'p1', se: 'tédio', entao: 'caminhar', criadoEm: 'x', atualizadoEm: 'x' })
+    v3.close()
+
+    const db = await abrirBanco()
+    expect(await db.get('configuracao', 'aparencia')).toEqual({ cor: 'menta' })
+    expect(await db.get('planos', 'p1')).toMatchObject({ entao: 'caminhar' })
+    expect(db.objectStoreNames.contains('perfil')).toBe(true)
   })
 })

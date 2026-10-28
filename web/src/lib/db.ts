@@ -61,11 +61,13 @@ interface GuardiaoDB extends DBSchema {
   prevencao: { key: 'gatilhos'; value: GatilhosPessoa }
   planos: { key: string; value: PlanoSeEntao; indexes: { porCriacao: string } }
   circulo: { key: string; value: ContatoCirculo; indexes: { porCriacao: string } }
+  // Perfil: 'dados' (nome e cenário) e 'foto' (bytes). O formato é validado na leitura (domain/perfil).
+  perfil: { key: 'dados' | 'foto'; value: Record<string, unknown> }
 }
 
 export const NOME_BANCO = 'guardiao'
 const NOME = NOME_BANCO
-export const VERSAO_BANCO = 3
+export const VERSAO_BANCO = 4
 
 let conexao: Promise<IDBPDatabase<GuardiaoDB>> | null = null
 
@@ -88,6 +90,10 @@ export function abrirBanco(): Promise<IDBPDatabase<GuardiaoDB>> {
         if (!existe('prevencao')) db.createObjectStore('prevencao')
         if (!existe('planos')) db.createObjectStore('planos', { keyPath: 'id' }).createIndex('porCriacao', 'criadoEm')
         if (!existe('circulo')) db.createObjectStore('circulo', { keyPath: 'id' }).createIndex('porCriacao', 'criadoEm')
+      }
+      // Versão 4 = perfil (nome, foto, cenário).
+      if (versaoAnterior < 4) {
+        if (!existe('perfil')) db.createObjectStore('perfil')
       }
     },
   })
