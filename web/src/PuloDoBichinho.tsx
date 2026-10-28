@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { tocar } from "./sons";
+import { useAparenciaVisivel } from "./personalizacao";
+import { BotaoTema } from "./BotaoTema";
+import { DURACAO_PARTIDA_MS, FOLHA_A_CADA_PLATAFORMAS, quadroMs } from "./partida";
 
 /**
  * "Pulo do Bichinho": mini jogo de pulo infinito (estilo Sky Jump).
  * Controles: inclinar o celular (giroscópio), setas/A-D no teclado, ou segurar o lado esquerdo/direito da tela.
  * Regras do tema: o bichinho nunca morre. Ao cair, ele pousa na grama e pode tentar de novo.
- * Coleta folhas (hábitos), não moedas. Sem vidas, sem compra, sem "última chance".
+ * Coleta folhas (hábitos), não moedas, em lugares previsíveis. Sem vidas, sem compra, sem "última chance".
+ * A partida dura no máximo 3 minutos (ver partida.ts).
  */
 
 type Tipo = "normal" | "move" | "nuvem" | "mola";
@@ -22,11 +26,13 @@ const PULO_MOLA = -19;
 const VEL_MAX_X = 7;
 const CHAVE_RECORDE = "rqr-pulo-recorde";
 
-type Estado = "inicio" | "jogando" | "caiu";
+type Estado = "inicio" | "jogando" | "caiu" | "tempo";
 
 function aleatorio(a: number, b: number) { return a + Math.random() * (b - a); }
 
-export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; reduzir: boolean }) {
+/** `chamada` troca o convite do início (o "Deu vontade" abre o jogo com "3 minutos para a onda passar"). */
+export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () => void; reduzir: boolean; chamada?: string }) {
+  const aparencia = useAparenciaVisivel();
   const caixaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bichoRef = useRef<HTMLDivElement>(null);
@@ -43,7 +49,7 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   const jogo = useRef({
     w: 360, h: 640, x: 0, y: 0, vx: 0, vy: 0, olhaDireita: true,
     plats: [] as Plataforma[], folhas: [] as Folha[], altura: 0, maisAlta: 0,
-    folhasPegas: 0, inclinacao: 0, teclas: { e: false, d: false }, toque: 0,
+    folhasPegas: 0, inclinacao: 0, teclas: { e: false, d: false }, toque: 0, criadas: 0, tempo: 0,
   });
 
   const gerarPlataforma = (y: number, altura: number): Plataforma => {
@@ -77,7 +83,7 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
       g.plats.push(p);
     }
     g.x = g.w / 2 - BICHO / 2; g.y = g.h - 40 - BICHO; g.vx = 0; g.vy = PULO;
-    g.altura = 0; g.maisAlta = 0; g.folhasPegas = 0;
+    g.altura = 0; g.maisAlta = 0; g.folhasPegas = 0; g.criadas = 0; g.tempo = 0;
     setPontos(0); setFolhas(0); setAviso(""); setEstado("jogando");
   }, []);
 
@@ -135,7 +141,7 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     const C = {
       contorno: cor("--rqr-azul-escuro"), normal: cor("--rqr-verde-agro"), move: cor("--rqr-azul"),
       nuvem: cor("--rqr-branco"), mola: cor("--rqr-rosa-escuro"), folha: cor("--rqr-verde-agro"),
-      ceu1: cor("--rqr-azul-claro"), ceu2: cor("--rqr-amarelo-claro"),
+      ceu1: cor("--rqr-ceu-topo"), ceu2: cor("--rqr-ceu-base"),
     };
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const g = jogo.current;
@@ -175,6 +181,7 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     const passo = (agora: number) => {
       // dt normalizado para 60 fps; limita para não "teletransportar" após travadas.
       const dt = Math.min(2, (agora - ultimo) / (1000 / 60));
+      g.tempo += quadroMs(agora, ultimo);
       ultimo = agora;
 
       // Controle horizontal: inclinação, teclado ou toque.
@@ -235,14 +242,19 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         topo -= espaco;
         const p = gerarPlataforma(topo, g.altura);
         g.plats.push(p);
-        if (Math.random() < 0.18 && p.tipo !== "nuvem") g.folhas.push({ x: p.x + p.w / 2, y: p.y - 34, pega: false });
+        g.criadas++;
+        if (g.criadas % FOLHA_A_CADA_PLATAFORMAS === 0) {
+          // A plataforma da folha nunca é nuvem, para a folha não ficar no ar.
+          if (p.tipo === "nuvem") p.tipo = "normal";
+          g.folhas.push({ x: p.x + p.w / 2, y: p.y - 34, pega: false });
+        }
       }
 
       // Coleta de folhas.
       const cx = g.x + BICHO / 2, cy = g.y + BICHO / 2;
       for (const f of g.folhas) {
         if (!f.pega && Math.hypot(f.x - cx, f.y - cy) < BICHO * 0.6) {
-          f.pega = true; g.folhasPegas++; setFolhas(g.folhasPegas); tocar("moeda");
+          f.pega = true; g.folhasPegas++; setFolhas(g.folhasPegas); tocar("folha");
         }
       }
 
@@ -263,16 +275,25 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         el.style.transform = `translate(${g.x}px, ${g.y}px) scaleX(${g.olhaDireita ? 1 : -1}) scaleY(${estica})`;
       }
 
-      // Caiu: pousa na grama. Nunca morre.
-      if (g.y > g.h) {
+      const encerrar = (fim: "caiu" | "tempo", aviso: string) => {
         const final = g.maisAlta;
         setRecorde((r) => {
           const novo = Math.max(r, final);
           localStorage.setItem(CHAVE_RECORDE, String(novo));
           return novo;
         });
-        setAviso(`Ufa, caiu na grama macia! Você subiu ${final} metros e pegou ${g.folhasPegas} folhas.`);
-        setEstado("caiu");
+        setAviso(aviso);
+        setEstado(fim);
+      };
+
+      // Caiu: pousa na grama. Nunca morre.
+      if (g.y > g.h) {
+        encerrar("caiu", `Ufa, caiu na grama macia! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas.`);
+        return;
+      }
+      // 3 minutos: termina com calma, sem cortar no meio de uma queda.
+      if (g.tempo >= DURACAO_PARTIDA_MS) {
+        encerrar("tempo", `3 minutos de rolê! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
         return;
       }
       id = requestAnimationFrame(passo);
@@ -302,6 +323,7 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
+        <BotaoTema compacto />
         <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo">×</button>
       </div>
 
@@ -309,18 +331,19 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         onPointerDown={tocarTela} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar}>
         <canvas ref={canvasRef} className="pulo__canvas" aria-hidden="true" />
         <div ref={bichoRef} className="pulo__bicho" style={{ width: BICHO, height: BICHO }} aria-hidden="true">
-          <Bichinho humor={estado === "caiu" ? "cansado" : "calmo"} nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={BICHO} reduzir />
+          <Bichinho humor={estado === "caiu" ? "cansado" : "calmo"} nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={BICHO} reduzir aparencia={aparencia} />
         </div>
 
         {estado === "inicio" && (
           <div className="pulo__painel rqr-escalonado">
-            <Bichinho humor="feliz" nivel={1} tamanho={110} reduzir={reduzir} />
-            <p className="pulo__chamada">Ajude o bichinho a subir até as nuvens!</p>
+            <Bichinho humor="feliz" nivel={1} tamanho={110} reduzir={reduzir} aparencia={aparencia} />
+            <p className="pulo__chamada">{chamada ?? "Ajude o bichinho a subir até as nuvens!"}</p>
             <ul className="pulo__dicas">
               <li><b>Celular:</b> incline para os lados</li>
               <li><b>Computador:</b> setas ← → ou A / D</li>
               <li><b>Ou:</b> segure o lado esquerdo ou direito da tela</li>
               <li>Nuvem branca some depois de um pulo. Mola rosa joga lá pro alto. Pegue as folhas 🍃</li>
+              <li>Cada partida dura até 3 minutos.</li>
             </ul>
             <button className="rqr-botao" onClick={comecar}>Começar</button>
             {recorde > 0 && <small>Seu recorde: {recorde} m</small>}
@@ -334,6 +357,17 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
             {novoRecorde ? <p className="pulo__recorde">Seu melhor pulo até agora!</p> : <small>Seu recorde: {recorde} m</small>}
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Pular de novo</button>
             <button className="link" onClick={aoFechar}>Voltar pro meu rolê</button>
+          </div>
+        )}
+
+        {estado === "tempo" && (
+          <div className="pulo__painel rqr-pop">
+            <Bichinho humor="feliz" nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={90} reduzir={reduzir} aparencia={aparencia} />
+            <p className="pulo__chamada">3 minutos de rolê!</p>
+            <p className="pulo__resultado"><b>{pontos} m</b> de altura · 🍃 {folhas} folhas</p>
+            <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai descansar.</p>
+            <button className="rqr-botao" onClick={aoFechar}>Voltar pro meu rolê</button>
+            <button className="link" onClick={() => { tocar("clique"); iniciar(); }}>Jogar mais uma</button>
           </div>
         )}
       </div>

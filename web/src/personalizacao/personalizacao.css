@@ -1,0 +1,80 @@
+/* Spec 009: personalização do bichinho. Tudo isolado aqui para não mexer em styles.css. */
+
+/* Cor escolhida. Duas classes para vencer as cores por humor de styles.css sem editá-lo.
+   Os humores não trocam a cor da pessoa; "cansado" só esfria (skill criar-personagem). */
+.bicho.bicho--personalizado { --corpo: var(--corpo-base); }
+.bicho.bicho--personalizado.bicho--cansado {
+  --corpo: color-mix(in srgb, var(--corpo-base) 55%, var(--rqr-roxo-claro));
+}
+
+/* Atalho na cena da tela inicial */
+.botao-personalizar {
+  position: absolute; top: 60px; right: 10px; z-index: 3;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border: 3px solid var(--rqr-borda); border-radius: 50%;
+  box-shadow: 0 3px 0 var(--rqr-sombra-cor);
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
+}
+.botao-personalizar:hover { transform: translateY(-2px) rotate(-8deg); }
+.botao-personalizar:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--rqr-sombra-cor); }
+.botao-personalizar:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+
+/* Tela */
+/* Sem rolagem: a tela cabe na altura do aparelho e as categorias ficam em abas. */
+.palco:has(.personalizar) {
+  padding-block: 12px; height: 100dvh; overflow: hidden;
+  grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr);
+}
+.celular.personalizar {
+  justify-self: center; width: min(400px, 100%); min-width: 0; height: 100%; max-height: 760px;
+  padding: 16px; gap: 10px; overflow: hidden;
+}
+.personalizar__topo { display: flex; justify-content: space-between; align-items: center; }
+.personalizar__voltar { margin: 0; }
+.personalizar__acoes { display: flex; align-items: center; gap: 8px; }
+.personalizar__pronto { padding: 6px 18px; min-height: 40px; font-size: 15px; }
+.personalizar__titulo.topo__titulo { font-size: 20px; margin: 0; }
+.personalizar__abas { display: flex; gap: 4px; padding: 4px; background: var(--rqr-fundo-destaque);
+  border: 3px solid var(--rqr-borda); border-radius: 99px; }
+.personalizar__aba { flex: 1; min-height: 40px; border: 0; border-radius: 99px; background: none;
+  font: inherit; font-weight: 800; font-size: 12px; color: var(--rqr-texto); cursor: pointer; padding: 0 4px; }
+.personalizar__aba.is-on { background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); }
+.personalizar__aba:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 2px; }
+.personalizar__painel { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.personalizar h1:focus { outline: none; }
+.personalizar__previa {
+  position: relative; flex: none; display: grid; justify-items: center; padding: 6px 8px 8px;
+  background: linear-gradient(180deg, var(--rqr-cena-topo), var(--rqr-cena-base) 90%);
+  border: 3px solid var(--rqr-borda); border-radius: var(--rqr-raio-card);
+}
+.personalizar__original {
+  position: absolute; top: 8px; right: 8px; padding: 4px 10px; min-height: 32px;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); border: 2px solid var(--rqr-borda);
+  border-radius: 99px; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer;
+}
+.personalizar__original:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 2px; }
+.personalizar__marco { margin: 0; font-size: 12px; text-align: center; }
+.personalizar__grupo { border: 0; padding: 0; margin: 0; min-width: 0; }
+.personalizar__grupo legend { font-weight: 800; margin-bottom: 8px; }
+.personalizar__opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.amostra, .opcao-item {
+  position: relative; display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; min-width: 48px; min-height: 44px; padding: 4px 10px;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border: 3px solid var(--rqr-borda); border-radius: 16px;
+  font-weight: 700; font-size: var(--rqr-fs-small); cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
+}
+/* O rádio continua acessível (teclado e leitor de tela), só sai da frente visualmente. */
+.amostra input, .opcao-item input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: inherit; }
+.amostra:has(input:checked), .opcao-item:has(input:checked) { background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); }
+.amostra:has(input:focus-visible), .opcao-item:has(input:focus-visible) { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+.amostra:hover, .opcao-item:not(.is-bloqueado):hover { transform: translateY(-2px); }
+.amostra { padding: 6px; border-radius: 50%; }
+.amostra__cor { width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--rqr-azul-escuro); }
+.amostra:has(input:checked) .amostra__cor { border-color: var(--rqr-ativo-texto); }
+.opcao-item.is-bloqueado { border-style: dashed; color: var(--rqr-texto-suave); cursor: not-allowed; }
+
+.reduzir-animacoes .botao-personalizar, .reduzir-animacoes .amostra, .reduzir-animacoes .opcao-item { transition: none; }

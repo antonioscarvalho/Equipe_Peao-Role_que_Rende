@@ -95,6 +95,6 @@ Resumo — detalhes, medidas e o mapa de seções em [references/componentes-web
 
 ## Limitações da extração
 
-- As fontes **BancoDoBrasil Títulos/Textos são proprietárias** (aparecem embutidas no manual). Se não tiver os arquivos, use os fallbacks indicados em [references/tipografia.md](references/tipografia.md).
+- As fontes **BancoDoBrasil Títulos/Textos são proprietárias** e não estão no repositório. As substitutas livres **Nunito Sans** (títulos) e **Roboto** (textos) estão em [assets/fontes/](assets/fontes/) (OFL 1.1) e já entram por `assets/tokens.css`: quem importa o `tokens.css` recebe as fontes, **offline e sem CDN**. Detalhes em [references/tipografia.md](references/tipografia.md).
 - O site oficial **não tem animações próprias** além de transições de 0,3s e do carrossel do banner. O sistema de animação em [references/animacoes.md](references/animacoes.md) é uma **proposta derivada da identidade** (pinceladas, moeda, "estar ON"), marcada como tal.
 - Partes do texto do manual são desenhadas como vetor e não puderam ser lidas na íntegra (ex.: descrição completa dos grafismos e da versão reduzida). O resumo aqui vem do texto legível + análise visual dos mockups.

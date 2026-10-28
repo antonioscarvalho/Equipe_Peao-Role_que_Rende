@@ -4,7 +4,7 @@
 
 ## Conceito em uma frase
 
-_a definir_
+O Broto caiu de um meteoro no nosso bairro, e a pessoa se recupera junto com ele: cada joguinho acende uma luz e conta um capítulo da história. Ver [narrativa do Broto](narrativa-broto.md).
 
 ## Loop principal
 

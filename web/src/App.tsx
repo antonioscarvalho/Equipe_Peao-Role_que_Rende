@@ -6,9 +6,13 @@ import { Respiracao } from "./Respiracao";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
+import { AjudaAgora } from "./AjudaAgora";
 import { PuloDoBichinho } from "./PuloDoBichinho";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
+import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
+import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
+import { BotaoTema } from "./BotaoTema";
 
 type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
 
@@ -40,7 +44,8 @@ export default function App() {
   const [humor, setHumor] = useState<Humor>("calmo");
   const [protegido, setProtegido] = useState(1240);
   const [crise, setCrise] = useState(false);
-  const [jogo, setJogo] = useState(false);
+  // "crise": aberto pelo "Deu vontade", com convite de 3 minutos pra onda passar.
+  const [jogo, setJogo] = useState<false | "inicio" | "crise">(false);
   const [moedaKey, setMoedaKey] = useState(0);
   const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
@@ -50,6 +55,7 @@ export default function App() {
   // Sons das missões ligados por padrão; o interruptor desliga.
   // A respiração (SOS) continua sem som por padrão, conforme spec 003 CA-3.
   const [sons, setSons] = useState(true);
+  const aparencia = useAparenciaVisivel();
 
   useEffect(() => { ligarSons(sons); }, [sons]);
 
@@ -102,12 +108,14 @@ export default function App() {
             <span className="interruptor__trilho" aria-hidden="true" />
             <span className="interruptor__texto">Sons</span>
           </label>
+          <BotaoTema />
           </div>
         </header>
 
         <section className="cena" aria-label="Seu bichinho">
           <div className="balao" key={humor}>{falas[humor]}</div>
-          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} />
+          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} />
+          <BotaoPersonalizar />
           <Bairro construidas={construidas} />
           {moedaKey > 0 && humor === "feliz" && (
             <div className="cena__brilho" key={moedaKey}>
@@ -170,9 +178,10 @@ export default function App() {
           {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
         </section>
 
-        <button className="rqr-botao jogo-botao" onClick={() => setJogo(true)}>
+        <button className="rqr-botao jogo-botao" onClick={() => setJogo("inicio")}>
           Jogar: Pulo do Bichinho
         </button>
+        <BotaoCarrinho reduzir={reduzir} />
 
         <button className="sos rqr-anim-on" onClick={() => setCrise(true)}>
           <Icone nome="wind" tamanho={28} /> Deu vontade
@@ -181,8 +190,11 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir} />}
-      {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir} />}
+      <AjudaAgora />
+      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
+        chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
+      {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}
+        aoJogar={() => { setCrise(false); setJogo("crise"); }} />}
     </div>
   );
 }

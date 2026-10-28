@@ -4,37 +4,43 @@
 
 ## Pré-requisitos
 
-- Node 22 ou mais novo (o `web/` declara `engines`). No Node 20 os testes nem começam: o `undici`, que o jsdom puxa, usa uma função de compressão que só existe a partir do 22
-- Docker, para rodar o Supabase local (`npx supabase start`)
-- Celular com o app **Expo Go**, para testar o mobile
+- Node 20 ou mais novo
+- Navegador Chrome, Edge ou Firefox (para o giroscópio do Pulo do Bichinho no celular, HTTPS local — ver abaixo)
+- Não precisa de Docker, Supabase nem chave de API para o protótipo atual
 - Stack e motivação em [stack e motivação](stack-e-motivacao.md)
 
 ## Instalação
 
 ```bash
 git clone https://github.com/antonioscarvalho/equipepeao.git
-cd equipepeao
-# TODO: passos de instalação
+cd equipepeao/web
+npm ci
 ```
 
 ## Variáveis de ambiente
 
-```bash
-cp .env.example .env
-# preencher as chaves (ver docs/04-tecnico/integracoes-externas.md)
-```
+O protótipo atual não usa variáveis de ambiente.
 
 ## Rodar em desenvolvimento
 
 ```bash
-# TODO
+cd web
+npm run dev          # http://localhost:5180 (também aceita acesso pela rede local)
+npm run certs        # uma vez: gera certificado local em web/certs (OpenSSL)
+npm run dev:https    # https://localhost:5443 — necessário para o giroscópio no celular
 ```
+
+> Desde 28/10/2026 o `web/` publicado é a antiga prova visual (bichinho, missões, "Deu vontade", Pulo do Bichinho, personalização). O app anterior (SOS completo, check-in, plano, Círculo, testes) está em `lixo/web-antigo/` (`cd lixo/web-antigo && npm install && npm run dev`).
 
 ## Gerar build
 
 ```bash
-# TODO
+cd web
+npm run build        # checa os tipos e gera web/dist
+npm run preview      # serve o build em http://localhost:4180
 ```
+
+As fontes (Nunito Sans e Roboto) vêm do guia de estilo (`.claude/skills/guia-estilo-role-que-rende/assets/fontes/`) e entram no build: o app abre **sem internet**, sem Google Fonts.
 
 ## Demo offline (plano B)
 
@@ -48,4 +54,6 @@ A internet do evento pode falhar. Antes da etapa eliminatória:
 
 | Problema | Solução |
 |---|---|
-| _a definir_ | _a definir_ |
+| `npm run dev` dá 403 nas fontes | O `web/vite.config.ts` libera a pasta `assets` do guia em `server.fs.allow`; se mudar o caminho do guia, atualize ali |
+| Giroscópio não funciona no celular | Use `npm run dev:https` e aceite o certificado local no navegador do celular |
+| `npm ci` lento ou bloqueado na rede corporativa | Na rede com Zscaler: `export NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem` |
