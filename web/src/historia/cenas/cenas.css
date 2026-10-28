@@ -33,6 +33,9 @@
 .cena--amanhecer .cena__plataforma { animation: cena-plataforma var(--rqr-dur-lenta) var(--rqr-ease-padrao) both; }
 @keyframes cena-plataforma { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
+.cena__casa { fill: var(--rqr-roxo); stroke: var(--rqr-azul-escuro); stroke-width: 3; stroke-linejoin: round; }
+.cena__janela { fill: var(--rqr-azul-escuro); stroke: var(--rqr-azul-escuro); stroke-width: 2; transition: fill var(--rqr-dur-lenta) 1.2s; }
+.cena__janela.is-acesa { fill: var(--rqr-amarelo); }
 .cena__grama { fill: var(--rqr-verde-agro); stroke: var(--rqr-azul-escuro); stroke-width: 4; }
 .cena__cratera { fill: var(--rqr-azul-escuro); opacity: .55; }
 .cena__fumaca circle { fill: var(--rqr-branco); opacity: .55; animation: cena-fumaca 6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }

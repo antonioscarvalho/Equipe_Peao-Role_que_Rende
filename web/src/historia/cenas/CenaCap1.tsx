@@ -7,7 +7,9 @@ import "./cenas.css";
  * - "De onde você veio?": a Vila Estrela acende e chega mais perto.
  * - "Por que você caiu?": a nave sem combustível e o caminho da queda.
  * - "Você tá machucado?": a régua da altura que ele já subiu.
- * - Lição: amanhece e aparecem plataformas, uma de cada vez, até o céu.
+ * - Lição: amanhece, aparecem plataformas, uma de cada vez, até o céu, e a primeira janela do bairro acende.
+ *   Isso planta a promessa "a família vai achar o Broto" sem fala nova
+ *   (docs/03-design/historia-broto/continuity/promises/familia-acha-o-broto.md).
  * Desenho próprio da equipe em SVG (sem asset de terceiros). Cores só por tokens.
  */
 const ESTRELAS: [number, number, number][] = [
@@ -16,11 +18,11 @@ const ESTRELAS: [number, number, number][] = [
 ];
 
 export function rotuloCenaCap1({ etapa, pergunta }: PropsCena["momento"]) {
-  if (etapa === "licao") return "Amanhece na praça. Plataformas sobem, uma de cada vez, da grama até o céu.";
+  if (etapa === "licao") return "Amanhece na praça. Plataformas sobem, uma de cada vez, da grama até o céu. Uma janela do bairro acende.";
   if (etapa === "perguntas" && pergunta === 0) return "Lá no alto brilha a Vila Estrela, um asteroide pequenininho com casinhas.";
   if (etapa === "perguntas" && pergunta === 1) return "A nave da família, sem combustível, perto da Vila Estrela. Uma linha tracejada mostra a queda até a cratera.";
   if (etapa === "perguntas" && pergunta === 2) return "Uma régua vai da grama até o alto e marca a altura que o Broto já subiu.";
-  return "Noite na praça. O Broto está ao lado da cratera onde caiu. Lá no alto, a Vila Estrela.";
+  return "Noite na praça. As casas do bairro estão apagadas. O Broto está ao lado da cratera onde caiu. Lá no alto, a Vila Estrela.";
 }
 
 export function CenaCap1({ momento }: PropsCena) {
@@ -76,6 +78,17 @@ export function CenaCap1({ momento }: PropsCena) {
       <g className="cena__plataformas">
         {[[250, 470], [190, 400], [250, 330], [200, 260], [260, 190]].map(([x, y], i) => (
           <rect key={i} x={x} y={y} width="72" height="14" rx="7" className="cena__plataforma" style={{ animationDelay: `${i * 0.25}s` }} />
+        ))}
+      </g>
+
+      {/* O bairro em volta da praça, apagado. Na lição, a primeira janela acende. */}
+      <g className="cena__bairro">
+        {[[188, 488, 54, 56], [252, 470, 62, 72], [324, 492, 58, 52]].map(([x, y, w, h], i) => (
+          <g key={i}>
+            <path d={`M${x} ${y} l${w / 2} -${h * 0.45} l${w / 2} ${h * 0.45} v${h} h-${w}z`} className="cena__casa" />
+            <rect x={x + w / 2 - 9} y={y + h * 0.25} width="18" height="18" rx="3"
+              className={`cena__janela ${amanhecer && i === 1 ? "is-acesa" : ""}`} />
+          </g>
         ))}
       </g>
 

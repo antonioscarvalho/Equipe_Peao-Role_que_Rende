@@ -44,7 +44,7 @@ export function Queda({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean 
       <div className="queda__ceu" aria-hidden="true">
         <span className="queda__rastro" />
         <div className="queda__broto">
-          <Bichinho humor={pousou ? "cansado" : "feliz"} nivel={1} tamanho={84} reduzir aparencia={aparencia} />
+          <Bichinho humor={pousou ? "cansado" : "calmo"} nivel={1} tamanho={84} reduzir aparencia={aparencia} />
         </div>
         {pousou && <span className="queda__poeira"><i /><i /><i /><i /></span>}
       </div>

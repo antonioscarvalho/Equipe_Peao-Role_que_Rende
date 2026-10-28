@@ -16,7 +16,7 @@ import "./historia.css";
  * - Opção com `abreCrise` abre o protocolo de crise (o mesmo painel do "Preciso de ajuda agora").
  */
 /** Fala de transição da base, igual para todos os capítulos. REVISÃO CLÍNICA PENDENTE. */
-const CONVITE_PERGUNTAS = "Quer me perguntar alguma coisa? Pode escolher, ou seguir.";
+const CONVITE_PERGUNTAS = "Pode me perguntar o que quiser. Ou a gente segue.";
 
 type Etapa = "abertura" | "perguntas" | "broto" | "oferta" | "licao";
 
