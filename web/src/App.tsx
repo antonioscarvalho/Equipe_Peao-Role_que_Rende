@@ -75,6 +75,7 @@ export default function App() {
   const aparencia = useAparenciaVisivel();
 
   useEffect(() => { ligarSons(sons); }, [sons]);
+  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Guardião`; }, [aba]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
