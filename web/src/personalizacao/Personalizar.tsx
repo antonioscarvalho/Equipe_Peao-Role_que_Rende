@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { Bichinho } from "../Bichinho";
 import {
   APARENCIA_PADRAO, CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS,
@@ -15,9 +15,20 @@ type Props = { aoVoltar: () => void; dias?: number };
  * Tela de personalização do bichinho (spec 009). Tudo é livre, menos os 3 itens de marco
  * (7, 30, 90 dias), que aparecem desde já com quantos dias faltam. Sem loja, moeda ou sorteio.
  */
+type Aba = "corpo" | "roupa" | "cabeca" | "rosto" | "peito";
+const ABAS: { id: Aba; rotulo: string }[] = [
+  { id: "corpo", rotulo: "Corpo" },
+  { id: "roupa", rotulo: "Roupa" },
+  { id: "cabeca", rotulo: "Cabeça" },
+  { id: "rosto", rotulo: "Rosto" },
+  { id: "peito", rotulo: "Peito" },
+];
+
 export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) {
   const { aparencia, mudar } = useAparencia();
+  const [aba, setAba] = useState<Aba>("corpo");
   const titulo = useRef<HTMLHeadingElement>(null);
+  const abasRef = useRef<(HTMLButtonElement | null)[]>([]);
   const visivel = aparenciaVisivel(aparencia, dias);
   const proximo = proximoMarco(dias);
   // O app guarda a preferência na classe do <html>; respeitamos sem depender do estado dele.
@@ -26,41 +37,67 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
 
   useEffect(() => { titulo.current?.focus(); window.scrollTo(0, 0); }, []);
 
+  // Setas e Home/End trocam de aba (padrão WAI-ARIA de abas).
+  const teclas = (e: KeyboardEvent<HTMLDivElement>) => {
+    const i = ABAS.findIndex((x) => x.id === aba);
+    const prox = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: ABAS.length - 1 }[e.key];
+    if (prox === undefined) return;
+    e.preventDefault();
+    const j = (prox + ABAS.length) % ABAS.length;
+    setAba(ABAS[j].id);
+    abasRef.current[j]?.focus();
+  };
+
   return (
     <div className="palco">
       <main className="celular personalizar" aria-labelledby="personalizar-titulo">
-        <button className="link personalizar__voltar" onClick={aoVoltar}>← Voltar</button>
-        <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo">
-          Deixe o bichinho com a sua cara
-        </h1>
-        <p className="personalizar__nota">Tudo aqui é livre. Mude quando quiser; fica salvo só neste aparelho.</p>
+        <div className="personalizar__topo">
+          <button className="link personalizar__voltar" onClick={aoVoltar}>← Voltar</button>
+          <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo">
+            Deixe o bichinho com a sua cara
+          </h1>
+        </div>
 
         <div className="personalizar__previa">
-          <Bichinho humor="calmo" nivel={3} tamanho={180} reduzir={reduzir} aparencia={visivel} />
+          <Bichinho humor="calmo" nivel={3} tamanho={150} reduzir={reduzir} aparencia={visivel} />
         </div>
 
         {proximo && (
           <p className="personalizar__marco" role="status">
-            Próximo marco: <strong>{proximo.item.nome}</strong> com {plural(proximo.item.marco ?? 0)} sem apostar.
-            Faltam {plural(proximo.faltam)}.
+            Próximo marco: <strong>{proximo.item.nome}</strong> com {plural(proximo.item.marco ?? 0)}. Faltam {plural(proximo.faltam)}.
           </p>
         )}
 
-        <fieldset className="personalizar__grupo">
-          <legend>Cor do corpo</legend>
-          <Cores nome="cor" opcoes={CORES} valor={aparencia.cor} aoMudar={(cor) => mudar({ cor })} />
-        </fieldset>
+        <div className="personalizar__abas" role="tablist" aria-label="O que personalizar" onKeyDown={teclas}>
+          {ABAS.map((x, i) => (
+            <button key={x.id} ref={(el) => { abasRef.current[i] = el; }} role="tab" id={`aba-${x.id}`}
+              aria-selected={aba === x.id} aria-controls={`painel-${x.id}`} tabIndex={aba === x.id ? 0 : -1}
+              className={`personalizar__aba ${aba === x.id ? "is-on" : ""}`} onClick={() => setAba(x.id)}>
+              {x.rotulo}
+            </button>
+          ))}
+        </div>
 
-        <Itens titulo="Roupa" nome="roupa" opcoes={ROUPAS} valor={aparencia.roupa} dias={dias} aoMudar={(roupa) => mudar({ roupa })} />
-
-        <fieldset className="personalizar__grupo">
-          <legend>Cor da roupa e dos acessórios</legend>
-          <Cores nome="corRoupa" opcoes={CORES_ROUPA} valor={aparencia.corRoupa} aoMudar={(corRoupa) => mudar({ corRoupa })} />
-        </fieldset>
-
-        <Itens titulo="Cabeça" nome="cabeca" opcoes={CABECA} valor={aparencia.cabeca} dias={dias} aoMudar={(cabeca) => mudar({ cabeca })} />
-        <Itens titulo="Rosto" nome="rosto" opcoes={ROSTO} valor={aparencia.rosto} dias={dias} aoMudar={(rosto) => mudar({ rosto })} />
-        <Itens titulo="Peito" nome="peito" opcoes={PEITO} valor={aparencia.peito} dias={dias} aoMudar={(peito) => mudar({ peito })} />
+        <div className="personalizar__painel" role="tabpanel" id={`painel-${aba}`} aria-labelledby={`aba-${aba}`}>
+          {aba === "corpo" && (
+            <fieldset className="personalizar__grupo">
+              <legend>Cor do corpo</legend>
+              <Cores nome="cor" opcoes={CORES} valor={aparencia.cor} aoMudar={(cor) => mudar({ cor })} />
+            </fieldset>
+          )}
+          {aba === "roupa" && (
+            <>
+              <Itens titulo="Roupa" nome="roupa" opcoes={ROUPAS} valor={aparencia.roupa} dias={dias} aoMudar={(roupa) => mudar({ roupa })} />
+              <fieldset className="personalizar__grupo">
+                <legend>Cor da roupa e dos acessórios</legend>
+                <Cores nome="corRoupa" opcoes={CORES_ROUPA} valor={aparencia.corRoupa} aoMudar={(corRoupa) => mudar({ corRoupa })} />
+              </fieldset>
+            </>
+          )}
+          {aba === "cabeca" && <Itens titulo="Cabeça" nome="cabeca" opcoes={CABECA} valor={aparencia.cabeca} dias={dias} aoMudar={(cabeca) => mudar({ cabeca })} />}
+          {aba === "rosto" && <Itens titulo="Rosto" nome="rosto" opcoes={ROSTO} valor={aparencia.rosto} dias={dias} aoMudar={(rosto) => mudar({ rosto })} />}
+          {aba === "peito" && <Itens titulo="Peito" nome="peito" opcoes={PEITO} valor={aparencia.peito} dias={dias} aoMudar={(peito) => mudar({ peito })} />}
+        </div>
 
         <div className="personalizar__acoes">
           <button className="link" onClick={() => mudar({ ...APARENCIA_PADRAO })}>Voltar ao visual original</button>
@@ -77,10 +114,10 @@ function Cores({ nome, opcoes, valor, aoMudar }: CoresProps) {
   return (
     <div className="personalizar__opcoes">
       {opcoes.map((c) => (
-        <label key={c.id} className="amostra">
+        <label key={c.id} className="amostra" title={c.nome}>
           <input type="radio" name={nome} value={c.id} checked={valor === c.id} onChange={() => aoMudar(c.id)} />
           <span className="amostra__cor" style={{ background: c.valor }} aria-hidden="true" />
-          <span className="amostra__nome">{c.nome}</span>
+          <span className="sr-only">{c.nome}</span>
         </label>
       ))}
     </div>
@@ -105,7 +142,7 @@ function Itens({ titulo, nome, opcoes, valor, dias, aoMudar }: ItensProps) {
                 disabled={!livre} aria-describedby={livre ? undefined : idDica} onChange={() => aoMudar(item.id)} />
               <span>{item.nome}</span>
               {!livre && (
-                <span id={idDica} className="opcao-item__dica">
+                <span id={idDica} className="sr-only">
                   Com {plural(item.marco ?? 0)} · faltam {plural(diasQueFaltam(item, dias))}
                 </span>
               )}

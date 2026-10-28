@@ -21,17 +21,29 @@
 .botao-personalizar:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
 
 /* Tela */
-.personalizar { padding-bottom: 28px; }
+/* Sem rolagem: a tela cabe na altura do aparelho e as categorias ficam em abas. */
+.palco:has(.personalizar) { padding-block: 12px; height: 100dvh; overflow: hidden; }
+.personalizar {
+  height: min(100%, 760px); padding: 16px 18px; gap: 10px; overflow: hidden;
+}
+.personalizar__topo { display: grid; gap: 2px; }
+.personalizar__topo .topo__titulo { font-size: 22px; margin: 0; }
+.personalizar__abas { display: flex; gap: 4px; padding: 4px; background: var(--rqr-amarelo-claro);
+  border: 3px solid var(--rqr-azul-escuro); border-radius: 99px; }
+.personalizar__aba { flex: 1; min-height: 40px; border: 0; border-radius: 99px; background: none;
+  font: inherit; font-weight: 800; font-size: 13px; color: var(--rqr-azul-escuro); cursor: pointer; padding: 0 4px; }
+.personalizar__aba.is-on { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); }
+.personalizar__aba:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 2px; }
+.personalizar__painel { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; }
 .personalizar h1:focus { outline: none; }
 .personalizar__voltar { align-self: flex-start; }
-.personalizar__nota { margin: 0; color: var(--rqr-texto-suave); }
 .personalizar__previa {
-  display: grid; place-items: center; padding: 12px 0;
+  display: grid; place-items: center; padding: 6px 0; flex: none;
   background: linear-gradient(180deg, var(--rqr-amarelo-claro), var(--rqr-amarelo) 90%);
   border: 3px solid var(--rqr-azul-escuro); border-radius: var(--rqr-raio-card);
 }
 .personalizar__marco {
-  margin: 0; padding: 10px 14px; background: var(--rqr-amarelo-claro);
+  margin: 0; padding: 6px 12px; font-size: 13px; background: var(--rqr-amarelo-claro);
   border: 2px dashed var(--rqr-azul-escuro); border-radius: 14px;
 }
 .personalizar__grupo { border: 0; padding: 0; margin: 0; min-width: 0; }
@@ -52,9 +64,9 @@
 .amostra:has(input:checked), .opcao-item:has(input:checked) { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); }
 .amostra:has(input:focus-visible), .opcao-item:has(input:focus-visible) { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
 .amostra:hover, .opcao-item:not(.is-bloqueado):hover { transform: translateY(-2px); }
-.amostra__cor { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--rqr-azul-escuro); }
+.amostra { padding: 6px; border-radius: 50%; }
+.amostra__cor { width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--rqr-azul-escuro); }
 .amostra:has(input:checked) .amostra__cor { border-color: var(--rqr-amarelo); }
 .opcao-item.is-bloqueado { border-style: dashed; color: var(--rqr-texto-suave); cursor: not-allowed; }
-.opcao-item__dica { font-weight: 400; font-size: 12px; }
 
 .reduzir-animacoes .botao-personalizar, .reduzir-animacoes .amostra, .reduzir-animacoes .opcao-item { transition: none; }
