@@ -1,0 +1,58 @@
+/* História do Broto: mapa dos capítulos e diálogo. Só tokens de tokens.css. */
+.historia, .historia-dialogo {
+  position: fixed; inset: 0; display: grid; scroll-padding: 24px; place-items: center; padding: 24px 16px;
+  overflow-y: auto; background: var(--rqr-fundo); color: var(--rqr-texto);
+}
+.historia { z-index: 30; }
+.historia-dialogo { z-index: 45; background: rgb(17 18 20 / .55); }
+
+.historia__caixa, .historia-dialogo__caixa {
+  position: relative; display: grid; gap: 16px; width: min(460px, 100%);
+  padding: 24px 20px; border: 3px solid var(--rqr-borda); border-radius: 24px;
+  background: var(--rqr-fundo-conteudo); box-shadow: 6px 6px 0 var(--rqr-sombra-cor);
+}
+.historia__titulo, .historia-dialogo__titulo {
+  margin: 0; padding-right: 52px; font-family: var(--rqr-font-titulo); font-size: 1.5rem; font-weight: 900; color: var(--rqr-texto);
+}
+.historia__fechar {
+  position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%;
+  border: 3px solid var(--rqr-borda); background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  font-size: 1.625rem; line-height: 1; cursor: pointer;
+}
+.historia__aviso { margin: 0; font-size: var(--rqr-fs-lead); font-weight: 700; }
+
+.historia__mapa { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.historia-cap {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px;
+  padding: 10px 16px; border: 3px solid var(--rqr-borda); border-radius: 16px;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font: inherit; font-weight: 800; text-align: left; cursor: pointer;
+}
+.historia-cap:disabled { cursor: default; border-style: dashed; background: var(--rqr-fundo-suave); }
+.historia-cap.is-ok { background: var(--rqr-fundo-destaque); }
+.historia-cap__estado { flex: none; font-size: var(--rqr-fs-small); font-weight: 700; color: var(--rqr-texto-suave); }
+
+.historia-dialogo__cena { display: grid; justify-items: center; gap: 12px; }
+.historia-fala {
+  margin: 0; width: 100%; min-height: 4.5em; padding: 14px 16px; border: 3px solid var(--rqr-borda); border-radius: 18px;
+  background: var(--rqr-fundo-destaque); color: var(--rqr-texto); font-size: var(--rqr-fs-body); line-height: 1.45;
+}
+.historia-fala__quem { font-weight: 900; }
+.historia-fala__cursor {
+  display: inline-block; width: .5em; height: 1em; margin-left: 2px; vertical-align: -2px;
+  background: var(--rqr-texto); opacity: .5;
+}
+
+.historia-dialogo__acoes { display: grid; gap: 10px; }
+.historia-opcao {
+  min-height: 48px; padding: 10px 16px; border: 3px solid var(--rqr-borda); border-radius: 16px;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font: inherit; font-weight: 800; text-align: left; cursor: pointer;
+}
+.historia-opcao[aria-pressed="true"] { background: var(--rqr-fundo-destaque); }
+.historia-opcao--leve { font-weight: 700; border-style: dashed; }
+.historia-agora-nao {
+  min-height: 44px; background: none; border: 0; color: var(--rqr-texto);
+  font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer;
+}
+.historia-nota { color: var(--rqr-texto-suave); font-size: var(--rqr-fs-small); }
+
+.historia :focus-visible, .historia-dialogo :focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
