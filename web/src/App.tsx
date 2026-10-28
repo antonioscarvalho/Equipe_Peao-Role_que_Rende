@@ -40,7 +40,22 @@ const falas: Record<Humor, string> = {
   apoio: "Respira comigo.",
 };
 
+type Aba = "role" | "missoes" | "jogos" | "ajustes";
+const TITULOS_ABA: Record<Aba, string> = { role: "Seu rolê de hoje", missoes: "Missões do dia", jogos: "Jogos", ajustes: "Ajustes" };
+
+function BotaoAba({ aba, atual, mudar, icone, rotulo }: { aba: Aba; atual: Aba; mudar: (a: Aba) => void; icone: NomeIcone; rotulo: string }) {
+  const ativa = aba === atual;
+  return (
+    <button className={`tabbar__item ${ativa ? "is-active" : ""}`} aria-current={ativa ? "page" : undefined}
+      onClick={() => { mudar(aba); tocar("clique"); }}>
+      <Icone nome={icone} tamanho={22} />
+      <span>{rotulo}</span>
+    </button>
+  );
+}
+
 export default function App() {
+  const [aba, setAba] = useState<Aba>("role");
   const [feitas, setFeitas] = useState<number[]>([]);
   const [humor, setHumor] = useState<Humor>("calmo");
   const [protegido, setProtegido] = useState(1240);
@@ -97,98 +112,122 @@ export default function App() {
         <header className="topo">
           <div>
             <p className="topo__oi">Oi, Lucas</p>
-            <h1 className="topo__titulo"><span className="rqr-realce rqr-anim-marca-texto">Seu rolê</span> de hoje</h1>
+            <h1 className="topo__titulo">{TITULOS_ABA[aba]}</h1>
           </div>
-          <div className="interruptores">
-          <label className="interruptor">
-            <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
-            <span className="interruptor__trilho" aria-hidden="true" />
-            <span className="interruptor__texto">Reduzir animações</span>
-          </label>
-          <label className="interruptor">
-            <input type="checkbox" checked={sons} onChange={(e) => { setSons(e.target.checked); if (e.target.checked) { ligarSons(true); tocar("clique"); } }} />
-            <span className="interruptor__trilho" aria-hidden="true" />
-            <span className="interruptor__texto">Sons</span>
-          </label>
-          <BotaoTema />
-          </div>
+          <BotaoTema compacto />
         </header>
 
-        <section className="cena" aria-label="Seu bichinho">
-          <div className="balao" key={humor}>{falas[humor]}</div>
-          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} />
-          <BotaoPersonalizar />
-          <Bairro construidas={construidas} />
-          {moedaKey > 0 && humor === "feliz" && (
-            <div className="cena__brilho" key={moedaKey}>
-              <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
+        {aba === "role" && (
+          <>
+            <section className="cena" aria-label="Seu bichinho">
+              <div className="balao" key={humor}>{falas[humor]}</div>
+              <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} />
+              <BotaoPersonalizar />
+              <Bairro construidas={construidas} />
+              {moedaKey > 0 && humor === "feliz" && (
+                <div className="cena__brilho" key={moedaKey}>
+                  <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
+                </div>
+              )}
+            </section>
+            <section className="cards">
+              <article className="rqr-card mini mini--linha">
+                <span className="mini__icone mini__icone--lottie" style={{ background: "var(--rqr-verde-claro)" }}>
+                  <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
+                </span>
+                <div>
+                  <p className="mini__rotulo">Dias de cuidado</p>
+                  <p className="mini__valor">12 dias</p>
+                </div>
+              </article>
+              <article className="rqr-card mini mini--linha">
+                <span className="mini__icone mini__icone--moeda" key={moedaKey}>
+                  <span className={moedaKey ? "moeda rqr-anim-moeda" : "moeda"} aria-hidden="true">R$</span>
+                </span>
+                <div>
+                  <p className="mini__rotulo">Protegido</p>
+                  <p className="mini__valor"><Contador valor={protegido} reduzir={reduzir} /></p>
+                </div>
+              </article>
+            </section>
+            <button className="atalho-missoes" onClick={() => setAba("missoes")}>
+              <Icone nome="listChecks" /> {nivel} de {missoes.length} missões feitas hoje <span aria-hidden="true">›</span>
+            </button>
+          </>
+        )}
+
+        {aba === "missoes" && (
+          <section aria-labelledby="missoes-titulo" className="aba-missoes">
+            <div className="secao">
+              <h2 id="missoes-titulo" className="sr-only">Missões do dia</h2>
+              <span className="progresso" aria-label={`${nivel} de ${missoes.length} missões`}>
+                <span style={{ transform: `scaleX(${nivel / missoes.length})` }} />
+              </span>
+              <span className="secao__conta">{nivel}/{missoes.length}</span>
             </div>
-          )}
-        </section>
+            <ul className="missoes rqr-escalonado">
+              {missoes.map((m) => {
+                const ok = feitas.includes(m.id);
+                return (
+                  <li key={m.id}>
+                    <button className={`missao ${ok ? "is-ok" : ""}`} onClick={() => concluir(m)} aria-pressed={ok}>
+                      <span className="missao__icone"><Icone nome={ok ? "check" : m.icone} /></span>
+                      <span className="missao__texto">{m.texto}</span>
+                      <span className="missao__valor">+ R$ {m.valor}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mini__nota">Cada missão reconstrói um pedaço do bairro. Dia difícil não zera nada.</p>
+            {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
+          </section>
+        )}
 
-        <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
-          {humores.map((h) => (
-            <button key={h.id} className={`chip ${humor === h.id ? "is-on" : ""}`}
-              aria-pressed={humor === h.id} onClick={() => setHumor(h.id)}>{h.rotulo}</button>
-          ))}
-        </div>
+        {aba === "jogos" && (
+          <section className="aba-jogos" aria-label="Jogos">
+            <button className="rqr-botao jogo-botao" onClick={() => setHistoria(true)}>História do Broto</button>
+            <button className="rqr-botao jogo-botao" onClick={() => setJogo("inicio")}>Jogar: Pulo do Bichinho</button>
+            <BotaoCarrinho reduzir={reduzir} />
+            <p className="mini__nota">Partidas de até 3 minutos. Sem moeda, sem vidas, sem perder.</p>
+          </section>
+        )}
 
-        <section className="cards rqr-escalonado">
-          <article className="rqr-card mini">
-            <span className="mini__icone mini__icone--lottie" style={{ background: "var(--rqr-verde-claro)" }}>
-              <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
-            </span>
-            <div>
-              <p className="mini__rotulo">Dias de cuidado</p>
-              <p className="mini__valor">12 dias</p>
-              <p className="mini__nota">Dia difícil não zera nada.</p>
+        {aba === "ajustes" && (
+          <section className="aba-ajustes" aria-label="Ajustes">
+            <div className="interruptores">
+              <label className="interruptor">
+                <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
+                <span className="interruptor__trilho" aria-hidden="true" />
+                <span className="interruptor__texto">Reduzir animações</span>
+              </label>
+              <label className="interruptor">
+                <input type="checkbox" checked={sons} onChange={(e) => { setSons(e.target.checked); if (e.target.checked) { ligarSons(true); tocar("clique"); } }} />
+                <span className="interruptor__trilho" aria-hidden="true" />
+                <span className="interruptor__texto">Sons</span>
+              </label>
+              <BotaoTema />
             </div>
-          </article>
-          <article className="rqr-card mini">
-            <span className="mini__icone mini__icone--moeda" key={moedaKey}>
-              <span className={moedaKey ? "moeda rqr-anim-moeda" : "moeda"} aria-hidden="true">R$</span>
-            </span>
-            <div>
-              <p className="mini__rotulo">Dinheiro protegido</p>
-              <p className="mini__valor"><Contador valor={protegido} reduzir={reduzir} /></p>
-              <p className="mini__nota">Estimativa do que deixou de ir pra apostas.</p>
+            <h2 className="aba-ajustes__titulo">Humor do bichinho (demonstração)</h2>
+            <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
+              {humores.map((h) => (
+                <button key={h.id} className={`chip ${humor === h.id ? "is-on" : ""}`}
+                  aria-pressed={humor === h.id} onClick={() => setHumor(h.id)}>{h.rotulo}</button>
+              ))}
             </div>
-          </article>
-        </section>
+          </section>
+        )}
 
-        <section aria-labelledby="missoes-titulo">
-          <div className="secao">
-            <h2 id="missoes-titulo">Missões do dia</h2>
-            <span className="progresso" aria-label={`${nivel} de ${missoes.length} missões`}>
-              <span style={{ transform: `scaleX(${nivel / missoes.length})` }} />
-            </span>
-          </div>
-          <ul className="missoes rqr-escalonado">
-            {missoes.map((m) => {
-              const ok = feitas.includes(m.id);
-              return (
-                <li key={m.id}>
-                  <button className={`missao ${ok ? "is-ok" : ""}`} onClick={() => concluir(m)} aria-pressed={ok}>
-                    <span className="missao__icone"><Icone nome={ok ? "check" : m.icone} /></span>
-                    <span className="missao__texto">{m.texto}</span>
-                    <span className="missao__valor">+ R$ {m.valor}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-          {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
-        </section>
-
-        <button className="rqr-botao jogo-botao" onClick={() => setJogo("inicio")}>
-          Jogar: Pulo do Bichinho
-        </button>
-        <BotaoCarrinho reduzir={reduzir} />
-        <button className="rqr-botao jogo-botao" onClick={() => setHistoria(true)}>História do Broto</button>
-
-        <button className="sos rqr-anim-on" onClick={() => setCrise(true)}>
-          <Icone nome="wind" tamanho={28} /> Deu vontade
-        </button>
+        <nav className="tabbar" aria-label="Navegação principal">
+          <BotaoAba aba="role" atual={aba} mudar={setAba} icone="house" rotulo="Rolê" />
+          <BotaoAba aba="missoes" atual={aba} mudar={setAba} icone="listChecks" rotulo="Missões" />
+          <button className="tabbar__sos" onClick={() => setCrise(true)}>
+            <span className="tabbar__sos-circulo rqr-anim-on"><Icone nome="wind" tamanho={24} /></span>
+            <span>Deu vontade</span>
+          </button>
+          <BotaoAba aba="jogos" atual={aba} mudar={setAba} icone="gamepad" rotulo="Jogos" />
+          <BotaoAba aba="ajustes" atual={aba} mudar={setAba} icone="settings" rotulo="Ajustes" />
+        </nav>
 
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
