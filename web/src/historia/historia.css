@@ -31,43 +31,7 @@
 .historia-cap.is-ok { background: var(--rqr-fundo-destaque); }
 .historia-cap__estado { flex: none; font-size: var(--rqr-fs-small); font-weight: 700; color: var(--rqr-texto-suave); }
 
-/* Diálogo: palco com a cena do capítulo em cima, painel das escolhas embaixo. */
-.historia-dialogo { display: flex; flex-direction: column; place-items: stretch; padding: 0; background: var(--rqr-azul-escuro); overflow: hidden; }
-.historia-dialogo__palco { position: relative; flex: 1 1 auto; min-height: 300px; overflow: hidden; display: flex; flex-direction: column; align-items: center; padding: 16px 16px 0; }
-.historia-dialogo__ceu { position: absolute; inset: 0; background: linear-gradient(var(--rqr-azul-escuro), var(--rqr-roxo)); }
-.historia-dialogo__titulo {
-  position: relative; padding: 6px 14px; border: 3px solid var(--rqr-borda); border-radius: 999px;
-  background: var(--rqr-fundo-conteudo); font-size: 1.125rem;
-}
-.historia-dialogo__cena {
-  position: relative; flex: 1; width: min(460px, 100%); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-  padding-bottom: clamp(8px, 6%, 48px);
-}
 
-/* Balão de fala com a ponta apontando para o Broto. */
-.historia-balao {
-  position: relative; display: grid; width: 100%; margin-bottom: 18px; padding: 14px 18px;
-  border: 3px solid var(--rqr-borda); border-radius: 22px; background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
-  box-shadow: 4px 4px 0 var(--rqr-sombra-cor);
-  animation: historia-balao var(--rqr-dur-media) var(--rqr-ease-padrao) both;
-}
-.historia-balao::before, .historia-balao::after {
-  content: ""; position: absolute; left: 50%; translate: -50% 0; width: 0; height: 0; border: solid transparent;
-}
-.historia-balao::before { top: 100%; border-width: 16px 14px 0; border-top-color: var(--rqr-borda); }
-.historia-balao::after { top: calc(100% - 1px); border-width: 11px 10px 0; border-top-color: var(--rqr-fundo-conteudo); }
-.historia-balao__texto { grid-area: 1 / 1; margin: 0; font-size: var(--rqr-fs-body); line-height: 1.45; }
-.historia-balao__molde { visibility: hidden; }
-@keyframes historia-balao { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .historia-balao { animation: none; } }
-.historia-dialogo__broto { position: relative; }
-
-.historia-dialogo__painel {
-  position: relative; display: grid; gap: 12px; width: min(460px, 100%); max-height: 55vh; overflow-y: auto; margin: 0 auto;
-  padding: 16px 16px max(16px, env(safe-area-inset-bottom)); border: 3px solid var(--rqr-borda); border-bottom: 0;
-  border-radius: 24px 24px 0 0; background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
-}
-.historia-dialogo__acoes { display: grid; gap: 10px; }
 .historia-opcao {
   min-height: 48px; padding: 10px 16px; border: 3px solid var(--rqr-borda); border-radius: 16px;
   background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font: inherit; font-weight: 800; text-align: left; cursor: pointer;
@@ -87,3 +51,72 @@
   justify-self: start; min-height: 44px; padding: 0 4px; background: none; border: 0; color: var(--rqr-texto);
   font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer;
 }
+
+/* ---------- Diálogo estilo RPG (Persona / Stardew Valley) ----------
+   A cena ocupa a tela inteira; a caixa de texto é compacta, embaixo; as escolhas são uma
+   lista curta à direita, acima da caixa. Botões de controle ficam pequenos no topo. */
+.historia-dialogo { display: block; padding: 0; background: var(--rqr-azul-escuro); overflow: hidden;
+  animation: historia-entra var(--rqr-dur-lenta) var(--rqr-ease-padrao) both; }
+@keyframes historia-entra { from { opacity: 0; } to { opacity: 1; } }
+.historia-dialogo__palco { position: absolute; inset: 0; }
+.historia-dialogo__ceu { position: absolute; inset: 0; background: linear-gradient(var(--rqr-azul-escuro), var(--rqr-roxo)); }
+/* O Broto fica na cena, perto da cratera, como personagem do cenário. */
+.historia-dialogo__broto { position: absolute; left: calc(30% - 60px); bottom: 21%; transition: transform var(--rqr-dur-lenta) var(--rqr-ease-padrao); }
+
+.historia-dialogo__topo {
+  position: absolute; top: max(10px, env(safe-area-inset-top)); left: 10px; right: 10px; display: flex; align-items: center; gap: 8px;
+}
+.historia-dialogo__titulo {
+  margin: 0 auto 0 0; padding: 4px 12px; border-radius: 999px; font-size: .875rem; font-weight: 800;
+  background: rgb(17 18 20 / .55); color: var(--rqr-branco); border: 0;
+}
+.historia-topo__botao {
+  min-height: 44px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--rqr-branco);
+  background: rgb(17 18 20 / .55); color: var(--rqr-branco); font: inherit; font-size: .875rem; font-weight: 800; cursor: pointer;
+}
+.historia-topo__botao--ajuda { border-color: var(--rqr-amarelo); color: var(--rqr-amarelo); }
+
+.historia-dialogo__acoes {
+  position: absolute; right: 12px; bottom: calc(150px + env(safe-area-inset-bottom)); display: grid; gap: 6px;
+  width: min(300px, calc(100% - 24px)); max-height: 45vh; overflow-y: auto; justify-items: stretch;
+}
+.historia-dialogo__acoes:empty { display: none; }
+.historia-dialogo .historia-opcao {
+  min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 2px solid var(--rqr-borda);
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font-size: .9375rem; box-shadow: 3px 3px 0 var(--rqr-sombra-cor);
+  animation: historia-opcao var(--rqr-dur-media) var(--rqr-ease-padrao) both;
+}
+.historia-dialogo .historia-opcao:nth-child(2) { animation-delay: 40ms; } .historia-dialogo .historia-opcao:nth-child(3) { animation-delay: 80ms; }
+.historia-dialogo .historia-opcao:nth-child(4) { animation-delay: 120ms; } .historia-dialogo .historia-opcao:nth-child(n+5) { animation-delay: 160ms; }
+@keyframes historia-opcao { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+.historia-opcao--seguir { font-weight: 900; }
+
+.historia-caixa {
+  position: absolute; left: 50%; translate: -50% 0; bottom: max(10px, env(safe-area-inset-bottom)); width: min(640px, calc(100% - 20px));
+  display: grid; gap: 4px; padding: 18px 16px 8px; border: 3px solid var(--rqr-borda); border-radius: 16px;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); box-shadow: 4px 4px 0 var(--rqr-sombra-cor);
+}
+.historia-caixa__nome {
+  position: absolute; top: -16px; left: 14px; padding: 2px 14px; border-radius: 10px; border: 3px solid var(--rqr-borda);
+  background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); font-family: var(--rqr-font-titulo); font-weight: 900; font-size: .9375rem;
+}
+.historia-caixa__fala { display: grid; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; min-height: 3em; }
+.historia-caixa__fala > span { grid-area: 1 / 1; }
+.historia-balao__texto { margin: 0; font-size: var(--rqr-fs-body); line-height: 1.45; }
+.historia-balao__molde { visibility: hidden; }
+.historia-caixa__seguir {
+  justify-self: end; min-height: 44px; padding: 0 10px; border: 0; background: none; color: var(--rqr-texto);
+  font: inherit; font-weight: 900; cursor: pointer;
+}
+.historia-caixa .historia-nota { font-size: .75rem; }
+
+/* Perguntas do questionário (nome, motivos) dentro da lista de escolhas. */
+.especial { display: grid; gap: 6px; padding: 10px; border: 2px solid var(--rqr-borda); border-radius: 12px; background: var(--rqr-fundo-conteudo); }
+.especial__rotulo { font-weight: 800; font-size: .875rem; }
+.especial__campo { min-height: 44px; padding: 0 12px; border: 2px solid var(--rqr-borda); border-radius: 10px; font: inherit; background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); }
+.especial__erro { margin: 0; color: var(--rqr-texto); font-weight: 800; }
+.especial__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.especial .chip { min-height: 44px; }
+.especial .historia-opcao { box-shadow: none; animation: none; }
+@media (prefers-reduced-motion: reduce) { .historia-dialogo, .historia-dialogo .historia-opcao { animation: none; } }
+@media (min-width: 900px) { .historia-dialogo__acoes { right: calc(50% - 320px); } }

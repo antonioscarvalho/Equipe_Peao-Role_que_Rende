@@ -51,6 +51,10 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const [sensor, setSensor] = useState<"desconhecido" | "ok" | "sem">("desconhecido");
   const [graus, setGraus] = useState<number | null>(null);
   const [aviso, setAviso] = useState("");
+  // Na história, fechar também segue para a conversa levando as folhas pegas (não existe derrota).
+  const fechar = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
+  const fecharRef = useRef(fechar);
+  fecharRef.current = fechar;
 
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({
@@ -124,7 +128,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
       const t = jogo.current.teclas;
       if (["ArrowLeft", "a", "A"].includes(e.key)) t.e = v;
       if (["ArrowRight", "d", "D"].includes(e.key)) t.d = v;
-      if (e.key === "Escape" && v) aoFechar();
+      if (e.key === "Escape" && v) fecharRef.current();
     };
     const desce = (e: KeyboardEvent) => tecla(e, true);
     const sobe = (e: KeyboardEvent) => tecla(e, false);
@@ -136,7 +140,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
       window.removeEventListener("keydown", desce);
       window.removeEventListener("keyup", sobe);
     };
-  }, [aoFechar]);
+  }, []);
 
   // Laço principal do jogo.
   useEffect(() => {
@@ -335,7 +339,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo">×</button>
+        <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo">×</button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"

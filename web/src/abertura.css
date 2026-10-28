@@ -1,0 +1,44 @@
+/* Abertura do app. Herói: o rosto do Broto (pop com leve overshoot); secundário: anel e poeira de luz;
+   ambiente: o fundo que clareia. Saída: tudo some junto (fade 400 ms). */
+.abertura {
+  position: fixed; inset: 0; z-index: 90; display: grid; place-content: center; justify-items: center; gap: 10px;
+  background: radial-gradient(circle at 50% 42%, var(--rqr-roxo), var(--rqr-azul-escuro) 70%); color: var(--rqr-branco);
+  animation: abertura-sai 400ms ease-in 2.2s forwards; cursor: pointer;
+}
+@keyframes abertura-sai { to { opacity: 0; } }
+.abertura__logo { position: relative; width: 190px; height: 190px; display: grid; place-items: center; }
+.abertura__anel {
+  position: absolute; inset: 0; border-radius: 50%; background: var(--rqr-amarelo); border: 5px solid var(--rqr-azul-escuro);
+  box-shadow: 0 8px 0 rgb(0 0 0 / .25); animation: abertura-anel 520ms cubic-bezier(.34, 1.56, .64, 1) both;
+}
+@keyframes abertura-anel { from { transform: scale(0); } to { transform: scale(1); } }
+.abertura__rosto { position: relative; margin-top: 30px; animation: abertura-rosto 640ms cubic-bezier(.34, 1.56, .64, 1) 220ms both; }
+@keyframes abertura-rosto { from { opacity: 0; transform: translateY(40px) scale(.7); } to { opacity: 1; transform: none; } }
+.abertura__poeira {
+  position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px; border-radius: 50%; background: var(--rqr-amarelo-claro);
+  opacity: 0; animation: abertura-poeira 1.4s ease-out calc(500ms + var(--i) * 70ms) both;
+  --ang: calc(var(--i) * 45deg);
+}
+@keyframes abertura-poeira {
+  0% { opacity: 0; transform: rotate(var(--ang)) translateX(60px) scale(.4); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(calc(var(--ang) + 40deg)) translateX(118px) scale(1); }
+}
+.abertura__nome {
+  margin: 14px 0 0; font-family: var(--rqr-font-titulo); font-size: 2.5rem; font-weight: 900; color: var(--rqr-amarelo);
+  animation: abertura-texto 500ms var(--rqr-ease-padrao) 700ms both;
+}
+.abertura__frase { margin: 0; font-weight: 700; animation: abertura-texto 500ms var(--rqr-ease-padrao) 900ms both; }
+@keyframes abertura-texto { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.abertura__pular {
+  position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); min-height: 44px; padding: 0 16px;
+  border-radius: 999px; border: 2px solid var(--rqr-amarelo); background: transparent; color: var(--rqr-amarelo); font: inherit; font-weight: 800; cursor: pointer;
+}
+.abertura__pular:focus-visible { outline: 3px solid var(--rqr-branco); outline-offset: 3px; }
+.abertura--parada, .abertura--parada * { animation: none !important; }
+.abertura--parada .abertura__poeira { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .abertura, .abertura * { animation: none !important; }
+  .abertura__poeira { display: none; }
+}
+.abertura { cursor: default; }

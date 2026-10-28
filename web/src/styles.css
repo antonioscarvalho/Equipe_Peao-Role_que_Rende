@@ -355,3 +355,6 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
   padding: calc(64px + env(safe-area-inset-top, 0px)) max(18px, calc((100% - 560px) / 2)) 0;
 }
 .tabbar { margin: auto calc(-1 * max(18px, calc((100vw - 560px) / 2))) 0; border-radius: 0; padding-inline: max(8px, calc((100vw - 560px) / 2)); }
+
+.seu-motivo { margin: 0; padding: 8px 14px; border-left: 4px solid var(--rqr-borda); background: var(--rqr-fundo-destaque); border-radius: 8px; }
+.seu-motivo::first-letter { text-transform: uppercase; }

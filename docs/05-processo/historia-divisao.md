@@ -57,6 +57,12 @@ interface Capitulo {
 }
 ```
 
+Campos opcionais acrescentados pela base (28/10, avisar no grupo):
+
+- `antesDoJogo?: Passo[]` e `depoisDoJogo?: Passo[]`: roteiro de falas do Broto. Um `Passo` tem `fala`, e opcionalmente `cena` (momento da arte de fundo), `humor` e `opcoes` (`{ rotulo, resposta?, abreCrise? }`). Toda opção volta ao mesmo caminho. Em pergunta sobre a pessoa, inclua "Prefiro não dizer".
+- Em `capitulos/index.ts`, a entrada aceita `cena` (arte de fundo, ver `historia/cenas/tipos.ts`) e `abertura` (animação curta antes da conversa).
+- A conversa é no formato de RPG: a cena ocupa a tela, a caixa de texto é pequena embaixo e as escolhas ficam à direita.
+
 ### Formato de um jogo
 
 ```ts

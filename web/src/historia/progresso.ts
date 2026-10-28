@@ -10,7 +10,10 @@ const CHAVE = "rqr:historia";
 
 export const ORDEM: readonly IdCapitulo[] = ["cap1", "cap2", "cap3", "cap4", "cap5", "cap6", "epilogo"];
 
-type Gravado = { concluidos: IdCapitulo[]; avisoVisto: boolean };
+/** Em que parte o capítulo parou, para não recomeçar 15 minutos do zero. Não guarda respostas. */
+export type Parte = "jogo" | "depois";
+
+type Gravado = { concluidos: IdCapitulo[]; avisoVisto: boolean; partes: Partial<Record<IdCapitulo, Parte>> };
 
 function ler(): Gravado {
   try {
@@ -18,9 +21,14 @@ function ler(): Gravado {
     const concluidos = Array.isArray(bruto?.concluidos)
       ? ORDEM.filter((id) => bruto!.concluidos!.includes(id))
       : [];
-    return { concluidos, avisoVisto: bruto?.avisoVisto === true };
+    const partes: Gravado["partes"] = {};
+    for (const id of ORDEM) {
+      const p = (bruto?.partes as Record<string, unknown> | undefined)?.[id];
+      if (p === "jogo" || p === "depois") partes[id] = p;
+    }
+    return { concluidos, avisoVisto: bruto?.avisoVisto === true, partes };
   } catch {
-    return { concluidos: [], avisoVisto: false };
+    return { concluidos: [], avisoVisto: false, partes: {} };
   }
 }
 
@@ -38,7 +46,19 @@ export function capitulosConcluidos(): IdCapitulo[] {
 
 export function concluirCapitulo(id: IdCapitulo) {
   const g = ler();
-  if (!g.concluidos.includes(id)) gravar({ ...g, concluidos: [...g.concluidos, id] });
+  const partes = { ...g.partes };
+  delete partes[id];
+  gravar({ ...g, partes, concluidos: g.concluidos.includes(id) ? g.concluidos : [...g.concluidos, id] });
+}
+
+/** Onde retomar um capítulo em andamento. `undefined` = do começo. */
+export function parteDoCapitulo(id: IdCapitulo): Parte | undefined {
+  return ler().partes[id];
+}
+
+export function marcarParte(id: IdCapitulo, parte: Parte) {
+  const g = ler();
+  gravar({ ...g, partes: { ...g.partes, [id]: parte } });
 }
 
 /** cap1 sempre; os outros quando o anterior na ORDEM estiver concluído. */

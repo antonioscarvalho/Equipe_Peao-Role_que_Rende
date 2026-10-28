@@ -9,9 +9,12 @@ import { Confete } from "./Confete";
 import { AjudaAgora } from "./AjudaAgora";
 import { PuloDoBichinho } from "./jogos/pulo/PuloDoBichinho";
 import { Historia } from "./historia/Historia";
+import { Abertura } from "./Abertura";
+import { capitulosConcluidos } from "./historia/progresso";
+import { apagarConhecer, refletirMotivos, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
-import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
+import { BotaoPersonalizar, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
 
@@ -40,6 +43,8 @@ const falas: Record<Humor, string> = {
   apoio: "Respira comigo.",
 };
 
+const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
+
 type Aba = "role" | "missoes" | "jogos" | "ajustes";
 const TITULOS_ABA: Record<Aba, string> = { role: "Seu rolê de hoje", missoes: "Missões do dia", jogos: "Jogos", ajustes: "Ajustes" };
 
@@ -62,7 +67,11 @@ export default function App() {
   const [crise, setCrise] = useState(false);
   // "crise": aberto pelo "Deu vontade", com convite de 3 minutos pra onda passar.
   const [jogo, setJogo] = useState<false | "inicio" | "crise">(false);
-  const [historia, setHistoria] = useState(false);
+  // false = fechada; true = mapa; "cap1" = primeiro acesso, direto no capítulo 1.
+  const [historia, setHistoria] = useState<boolean | "cap1">(false);
+  const [abrindo, setAbrindo] = useState(true);
+  const conhecer = useConhecer();
+  const { perfil } = usePerfil();
   const [moedaKey, setMoedaKey] = useState(0);
   const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
@@ -112,7 +121,7 @@ export default function App() {
       <main className="celular" aria-label="Prova visual do app">
         <header className="topo">
           <div>
-            <p className="topo__oi">Oi, Lucas</p>
+            <p className="topo__oi">{perfil.nome ? `Oi, ${perfil.nome}` : "Oi!"}</p>
             <h1 className="topo__titulo">{TITULOS_ABA[aba]}</h1>
           </div>
           <BotaoTema compacto />
@@ -151,6 +160,9 @@ export default function App() {
                 </div>
               </article>
             </section>
+            {conhecer?.motivos.length ? (
+              <p className="seu-motivo"><b>Seu motivo:</b> {refletirMotivos(conhecer.motivos)}</p>
+            ) : null}
             <button className="atalho-missoes" onClick={() => setAba("missoes")}>
               <Icone nome="listChecks" /> {nivel} de {missoes.length} missões feitas hoje <span aria-hidden="true">›</span>
             </button>
@@ -209,6 +221,11 @@ export default function App() {
               </label>
               <BotaoTema />
             </div>
+            {conhecer && (
+              <button className="link" onClick={() => { apagarConhecer(); setAviso("O que você contou ao Broto foi apagado."); }}>
+                Apagar o que contei ao Broto
+              </button>
+            )}
             <h2 className="aba-ajustes__titulo">Humor do bichinho (demonstração)</h2>
             <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
               {humores.map((h) => (
@@ -233,7 +250,15 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} />}
+      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined} />}
+      {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
+        setAbrindo(false);
+        // Primeiro acesso: o capítulo 1 apresenta o Broto e o app conhece a pessoa.
+        if (!capitulosConcluidos().includes("cap1") && !localStorage.getItem(CHAVE_PRIMEIRO_ACESSO)) {
+          try { localStorage.setItem(CHAVE_PRIMEIRO_ACESSO, "1"); } catch { /* modo privado */ }
+          setHistoria("cap1");
+        }
+      }} />}
       {/* Na história o botão flutuante sai; ela tem o próprio link de ajuda (Historia/Dialogo). */}
       {!historia && <AjudaAgora />}
       {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
