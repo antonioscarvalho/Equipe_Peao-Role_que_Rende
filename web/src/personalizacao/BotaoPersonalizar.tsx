@@ -15,7 +15,8 @@ export function BotaoPersonalizar() {
   };
   return (
     <a className="botao-personalizar" href={HASH_PERSONALIZAR} onClick={abrir}
-      aria-label="Personalizar bichinho" title="Personalizar bichinho">
+      aria-label="Personalizar bichinho" title="Personalizar bichinho"
+      data-vlibras-gloss="PERSONALIZAR BICHINHO">
       <svg width={22} height={22} viewBox="0 0 24 24" aria-hidden="true" focusable="false"
         dangerouslySetInnerHTML={{ __html: PALETA }} />
     </a>
