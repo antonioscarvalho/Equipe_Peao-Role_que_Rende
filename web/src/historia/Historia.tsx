@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Dialogo } from "./Dialogo";
 import { Queda } from "./Queda";
+import { PainelCrise } from "../AjudaAgora";
 import { capitulos, TITULOS } from "./capitulos";
 import { ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, marcarAvisoVisto } from "./progresso";
 import { useModal } from "./useModal";
@@ -20,12 +21,15 @@ export function Historia({ aoFechar, reduzir }: { aoFechar: () => void; reduzir:
   const [tela, setTela] = useState<Tela>({ tipo: "mapa" });
   const [feitos, setFeitos] = useState(capitulosConcluidos);
   const [anuncio, setAnuncio] = useState("");
+  const [crise, setCrise] = useState(false);
+  const botaoAjuda = useRef<HTMLButtonElement>(null);
+  const fecharCrise = useCallback(() => { setCrise(false); botaoAjuda.current?.focus(); }, []);
   // Toda entrada na história começa com o Broto caindo do espaço.
   const [intro, setIntro] = useState(true);
   const fimIntro = useCallback(() => setIntro(false), []);
 
   const titulo = useRef<HTMLHeadingElement>(null);
-  useModal(caixa, aoFechar, tela.tipo === "mapa" && !intro);
+  useModal(caixa, aoFechar, tela.tipo === "mapa" && !intro && !crise);
 
   // Ao abrir e ao voltar ao mapa: se o foco se perdeu (o jogo saiu da tela), traz para o título.
   useEffect(() => {
@@ -88,9 +92,11 @@ export function Historia({ aoFechar, reduzir }: { aoFechar: () => void; reduzir:
             })}
           </ul>
         )}
+        <button ref={botaoAjuda} className="historia-ajuda" onClick={() => setCrise(true)}>Preciso de ajuda agora</button>
         <small className="historia-nota">O Broto é um apoio, não um terapeuta.</small>
         <p className="sr-only" aria-live="polite">{anuncio}</p>
-      </div>
+        {crise && <PainelCrise aoFechar={fecharCrise} />}
+    </div>
     </div>
 
       {Jogo && <Jogo reduzir={reduzir} aoFechar={abrirDialogo} aoTerminar={abrirDialogo} />}

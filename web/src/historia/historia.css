@@ -81,3 +81,9 @@
 .historia-nota { color: var(--rqr-texto-suave); font-size: var(--rqr-fs-small); }
 
 .historia :focus-visible, .historia-dialogo :focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+
+/* Ajuda humana a 1 toque dentro da história (substitui o botão flutuante, que cobria a cena). */
+.historia-ajuda {
+  justify-self: start; min-height: 44px; padding: 0 4px; background: none; border: 0; color: var(--rqr-texto);
+  font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer;
+}

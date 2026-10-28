@@ -150,6 +150,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta, cen
           <button className="historia-agora-nao" onClick={aoFechar}>Agora não</button>
         </div>
 
+        <button className="historia-ajuda" onClick={() => setCrise(true)}>Preciso de ajuda agora</button>
         <small className="historia-nota">O Broto é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
         </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}

@@ -194,7 +194,8 @@ export default function App() {
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
       {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} />}
-      <AjudaAgora />
+      {/* Na história o botão flutuante sai; ela tem o próprio link de ajuda (Historia/Dialogo). */}
+      {!historia && <AjudaAgora />}
       {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
         chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
       {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}
