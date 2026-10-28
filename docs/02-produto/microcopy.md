@@ -42,7 +42,7 @@
 |---|---|
 | Botão SOS | **Bateu a vontade?** |
 | Seu motivo | Seu motivo: "{motivo}" |
-| Contador | **{n} dias sem apostar este mês** · sequência atual: {m} dias |
+| Contador | **{n} dias sem apostar** desde {data_inicio} · {n_mes} neste mês · sequência atual: {m} dias |
 | Dinheiro | Grana preservada (estimativa): **≈ R$ {valor}** — {meta} |
 | Check-in | Como foi hoje? **Não apostei** · **Apostei** |
 | Ajuda fixa | **Preciso de ajuda agora** |
@@ -102,7 +102,7 @@ Validação antes do questionamento (sempre no topo do card): *"Faz sentido pens
 | Apostei · 1 | **Obrigado por registrar.** Isso não apaga o que você já construiu. |
 | Apostei · 2 | O que aconteceu antes? (dia do pagamento · jogo na TV · tédio · briga · solidão · bebida · notificação · outro) |
 | Apostei · 3 | **O que dá pra ajustar no seu plano?** Editar meu plano · Agora não |
-| Apostei · 4 | Este mês você já tem **{n} dias sem apostar**. Bora retomar o caminho? |
+| Apostei · 4 | Você já tem **{n} dias sem apostar**. Bora retomar o caminho? |
 | Opção | Tô mal com isso → leva para a crise |
 
 ## F5 · Plano
@@ -138,7 +138,7 @@ Validação antes do questionamento (sempre no topo do card): *"Faz sentido pens
 |---|---|
 | Título | **Seu Círculo de Confiança** |
 | Explicação | Até 3 pessoas pra chamar quando apertar. Os contatos ficam só neste celular. |
-| Mensagem 1 | Tô com vontade de apostar, pode falar comigo? |
+| Mensagem 1 | Tô com vontade de apostar, pode falar comigo? (mensagem padrão da spec 005, CA-5) |
 | Mensagem 2 | Hoje tá difícil, me liga quando puder? |
 | Botão | Enviar pelo meu WhatsApp |
 | Nota | A gente nunca manda mensagem sozinho. |
