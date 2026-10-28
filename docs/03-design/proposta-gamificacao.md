@@ -79,6 +79,7 @@
 ## P12 · Nome do Guardião (Could)
 - **Por quê:** posse leve, sem coleção (Chou 4).
 - **O quê:** campo opcional para dar nome ao Guardião; o nome aparece nas frases.
+- **Decidido em 28/10:** entra na **tela 2 do questionário** (personalização), junto com o catálogo de roupas e acessórios que já existe ([questionario-onboarding.md](../02-produto/questionario-onboarding.md)).
 
 ## P13 · Domínio: precisar menos do app (Could · próximos passos)
 - **Por quê:** a jornada termina em domínio (Kim), e o objetivo é o da pessoa (Burke).

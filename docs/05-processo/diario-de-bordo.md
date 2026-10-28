@@ -57,6 +57,11 @@
 **O que aconteceu:** proposta de questionário em [questionario-onboarding.md](../02-produto/questionario-onboarding.md): entrada em 5 telas (limites e 18+, motivo, importância e confiança, meta e primeiro passo, sonho com o dinheiro e gasto em faixas), blocos opcionais "Me conta mais" (gatilhos, balança, apoio, tipo de aposta, ajuda, finanças, carta, nome do Guardião) e acompanhamento semanal. Base: Kim, Chou, Burke, Werbach, McGonigal, Schell e as skills clínicas. Nada implementado.
 **Próximos passos:** a equipe aprova; revisar specs 002 e 004 e criar a spec do "Me conta mais"; revisão clínica dos textos 🩺.
 
+### 2026-10-28 — Decisões sobre o questionário
+**Quem:** Maykon Júnio (decisões), com apoio de IA para registrar
+**O que foi decidido:** entrada em **6 telas**, com a **personalização do Guardião logo no início** (tela 2: tudo o que já existe no catálogo do Atyrson + nome opcional; itens novos só nos marcos anunciados; só roupas neutras); motivo com opções + texto; réguas de importância e confiança; meta com primeiro passo; gasto em faixas + digitar; sonho com valor e barra; menor de 18 acolhido e orientado; PIN como convite; "Me conta mais" a partir do 2º dia com 4 blocos; check-in semanal com pergunta de segurança opcional. Detalhes em [questionario-onboarding.md](../02-produto/questionario-onboarding.md).
+**Próximos passos:** revisar a spec 002 (6 telas) e a 004; criar a spec do "Me conta mais" e do check-in semanal; revisão clínica.
+
 _—_
 
 ## Dia 3 — 29/10/2026

@@ -4,6 +4,25 @@
 > **Pedido:** um formulário no início para a pessoa dizer **por que** quer ficar longe das apostas, **quem ela é**, **qual meta tem** (economizar para uma viagem, pagar dívida…) e o que a motiva.
 > ⚠️ **REVISÃO CLÍNICA PENDENTE** nos textos marcados com 🩺.
 
+## Decisões de 28/10/2026 (Maykon Júnio)
+
+| Ponto | Decisão |
+|---|---|
+| Telas de entrada | **6 telas**: as 5 propostas **+ personalização do Guardião logo no início** (tela 2). A spec 002 (≤ 5 telas) precisa ser revisada |
+| Motivo | Opções + texto livre "com suas palavras" |
+| Réguas | Importância **e** confiança (0–10), com as perguntas de seguimento |
+| Meta | Parar / Diminuir primeiro / Ainda não sei **+ primeiro passo opcional** |
+| Gasto semanal | **Faixas + opção de digitar** + "prefiro não dizer" |
+| Sonho | Valor opcional **e barra de progresso** (sempre "estimativa") |
+| Menor de 18 anos | Acolhe e orienta (adulto de confiança, UBS, CVV 188), **não segue** o questionário e o botão de ajuda continua |
+| PIN | Convite opcional na última tela (configuração da spec 008) |
+| Personalização | **Tudo o que já existe** no app (cores do corpo e da roupa, roupas, cabeça, rosto, peito — catálogo do Atyrson em `web/src/domain/aparencia.ts`) **+ nome opcional** |
+| Itens novos | **Um item em cada marco anunciado** (cachecol aos 7 dias, flor aos 30, estrela aos 90), como já está implementado; nada de loja, moeda ou sorteio |
+| Limites da roupa | **Só roupas neutras**: sem escudo de clube, patrocinador, fichas, cartas, roleta ou "sorte" |
+| "Me conta mais" | A partir do **2º dia, um bloco por vez**, sempre com "Agora não" |
+| Blocos mantidos | Gatilhos, horários e balança · Apoio e ajuda já buscada · Tipo de aposta e dívidas · Carta para daqui a 30 dias (o nome do Guardião foi para a tela 2) |
+| Acompanhamento | **Check-in semanal com pergunta de segurança opcional** 🩺 |
+
 ## 1. De onde vem cada decisão
 
 | Fonte | O que ela diz | Como entra no questionário |
@@ -24,12 +43,13 @@
 ## 2. Visão geral
 
 ```
-ENTRADA (≤ 5 telas, ~2 minutos, tudo pode pular menos a tela 1)
+ENTRADA (6 telas, ~2–3 minutos, tudo pode pular menos a tela 1)
  1 Boas-vindas, limites, 18+ e privacidade
- 2 Por que você quer ficar longe das apostas?        → "Seu motivo"
- 3 Quão importante é? Quão confiante você está?        → réguas 0–10
- 4 O que faz sentido agora? (parar · diminuir · ainda não sei) + primeiro passo
- 5 Seu sonho com esse dinheiro + quanto costumava apostar → "Seu sonho" e estimativa
+ 2 Conheça seu Guardião: cor, roupa, acessórios e nome  → personalização
+ 3 Por que você quer ficar longe das apostas?        → "Seu motivo"
+ 4 Quão importante é? Quão confiante você está?        → réguas 0–10
+ 5 O que faz sentido agora? (parar · diminuir · ainda não sei) + primeiro passo
+ 6 Seu sonho com esse dinheiro + quanto costumava apostar + PIN → "Seu sonho" e estimativa
  → INÍCIO (o motivo e o sonho já aparecem)
 
 ME CONTA MAIS (opcional, oferecido a partir do 2º dia, um bloco por vez)
@@ -40,14 +60,13 @@ ME CONTA MAIS (opcional, oferecido a partir do 2º dia, um bloco por vez)
  E Ajuda que você já buscou       → hub de apoio
  F Compromissos financeiros       → orientação sobre dívidas
  G Carta para você daqui a 30 dias
- H Nome do seu Guardião
 
 ACOMPANHAMENTO
  · Check-in semanal (confiança 0–10, motivo de volta, pergunta de segurança opcional)
  · Marcos de 7, 30 e 90 dias (pergunta de reflexão)
 ```
 
-## 3. Entrada (≤ 5 telas)
+## 3. Entrada (6 telas)
 
 ### Tela 1 · Boas-vindas, limites e privacidade (obrigatória)
 | Campo | Texto para a pessoa | Tipo | Por quê |
@@ -60,7 +79,23 @@ ACOMPANHAMENTO
 | Consentimento | ☐ Entendi e quero guardar minhas respostas neste celular. | caixa | LGPD art. 11 (dado de saúde) |
 | Sempre | **Preciso de ajuda agora** (fixo) | botão | spec 001, CA-2 |
 
-### Tela 2 · Por que você quer ficar longe das apostas? (pode pular)
+### Tela 2 · Conheça seu Guardião (pode pular)
+Usa o catálogo e o componente de personalização que já existem no app (`web/src/domain/aparencia.ts`, `web/src/app/personalizar/Personalizar.tsx`, feitos por Atyrson Souto).
+
+| Campo | Texto | Tipo | Por quê |
+|---|---|---|---|
+| Título | **Esse é o seu Guardião. Ele vai te acompanhar e nunca vai te julgar.** | — | Apresenta o personagem (spec 002, CA-5) |
+| Cor | Escolha a cor: Azul-céu · Rosa · Menta · Lilás · Baunilha · Verde-água | escolha única | Chou 3 (escolha) e 4 (posse leve); só tons com contraste ≥ 3:1 |
+| Roupa | Sem roupa · Camiseta · Moletom · Jardineira (+ cor da roupa: Rosa-forte · Azul · Roxo · Amarelo · Branco) | escolha | idem |
+| Cabeça | Nada · Boné · Gorro · Laço · Fones | escolha | idem |
+| Rosto | Nada · Óculos redondos · Óculos escuros | escolha | idem |
+| Peito | Nada · Broche de coração | escolha | idem |
+| Itens de marco | 🔒 Cachecol (7 dias) · 🔒 Flor no broto (30 dias) · 🔒 Estrela dos 90 dias — aparecem com "faltam N dias" | anunciado | Recompensa previsível (Schell; spec 002, CA-9); um lapso não tira nada (CA-10) |
+| Nome | Quer dar um nome pro seu Guardião? (ex.: Tonho, Luz) *(opcional)* | texto curto | Chou 4; frases viram "O {nome} continua aqui" |
+| Regra | Só roupas neutras: sem escudo de clube, patrocinador, fichas, cartas, roleta ou "sorte" | — | Edital 8.4; skill `criar-personagem` |
+| Depois | Dá pra mudar tudo quando quiser, em "Personalizar". | texto | Autonomia |
+
+### Tela 3 · Por que você quer ficar longe das apostas? (pode pular)
 | Campo | Texto | Tipo | Usado em |
 |---|---|---|---|
 | Pergunta | **O que te trouxe aqui hoje?** | — | EM: pergunta aberta |
@@ -68,7 +103,7 @@ ACOMPANHAMENTO
 | Com suas palavras | Se quiser, conta com suas palavras por que isso importa pra você. | texto livre (até 200 caracteres) | Frase exibida no SOS (Chou 1: sentido) |
 | Reflexão | Você escreveu: "{texto}". Guarda isso — vai aparecer quando a vontade apertar. | devolutiva | EM: reflexão |
 
-### Tela 3 · Importância e confiança (pode pular)
+### Tela 4 · Importância e confiança (pode pular)
 | Campo | Texto | Tipo | Usado em |
 |---|---|---|---|
 | Importância | **Quão importante é mudar sua relação com as apostas agora?** (0 = nada · 10 = muito) | régua 0–10 | Base para o check-in semanal |
@@ -77,7 +112,7 @@ ACOMPANHAMENTO
 | Seguimento | O que faria essa nota subir um ponto? *(se quiser)* | texto livre | EM; vira sugestão de primeiro passo |
 | Se importância ≤ 3 | Tudo bem. Muita gente sente as duas coisas ao mesmo tempo. O app fica aqui pra quando fizer sentido. | devolutiva | Tom para quem ainda não decidiu |
 
-### Tela 4 · Meta e primeiro passo (pode pular)
+### Tela 5 · Meta e primeiro passo (pode pular)
 | Campo | Texto | Tipo | Usado em |
 |---|---|---|---|
 | Meta | **O que faz sentido pra você neste momento?** **Parar de apostar** · **Diminuir primeiro** · **Ainda não sei** | escolha única | Tom do app; nada é forçado (spec 002, CA-7) |
@@ -85,7 +120,7 @@ ACOMPANHAMENTO
 | Primeiro passo | Qual seria um primeiro passo pequeno? **Não apostar até domingo** · **Até o fim do mês** · **Até o próximo pagamento** · **Escolher uma data** · **Agora não** | escolha + data | Primeiro marco pessoal (anunciado; Schell, recompensa previsível) |
 | Nota 🩺 | Se puder, conversa sobre essa meta com um profissional de saúde. | texto | `entrevista-motivacional` |
 
-### Tela 5 · Seu sonho com esse dinheiro (pode pular)
+### Tela 6 · Seu sonho com esse dinheiro (pode pular)
 | Campo | Texto | Tipo | Usado em |
 |---|---|---|---|
 | Sonho | **Pra onde você quer levar o dinheiro que deixar de apostar?** | — | Chou 1 e 4 (sentido e posse, sem moeda) |
@@ -94,12 +129,12 @@ ACOMPANHAMENTO
 | Quanto custa | Quanto custa esse sonho, mais ou menos? *(se souber)* | valor (R$) | Barra "≈ R$ 300 de R$ 1.200 (estimativa)" |
 | Gasto semanal | **Quanto você costumava apostar por semana?** Até R$ 20 · R$ 20–50 · R$ 50–100 · R$ 100–200 · R$ 200–500 · Mais de R$ 500 · Prefiro digitar · Prefiro não dizer | faixas | Estimativa do dinheiro preservado (spec 004); faixas evitam constrangimento ([instrumentos](../pesquisa/03-instrumentos.md)) |
 | Explicação | É só pra estimar quanto você preserva. Fica só neste celular. | texto | `controle-estimulos-financas` |
-| PIN | Quer proteger o app com uma senha de 4 números? **Proteger** · **Agora não** | opcional | spec 008 |
-| Fim | **Pronto.** Seu motivo e seu sonho já estão na tela inicial. | — | Valor na primeira sessão (Kim) |
+| PIN | Quer proteger o app com uma senha de 4 números? **Proteger** · **Agora não** | opcional (decidido: entra aqui) | spec 008 |
+| Fim | **Pronto.** Seu Guardião, seu motivo e seu sonho já estão na tela inicial. | — | Valor na primeira sessão (Kim) |
 
 ## 4. "Me conta mais" (opcional, depois)
 
-Oferecido a partir do 2º dia, como um cartão no início ("Quer me contar mais sobre você? Leva 1 minuto."), **um bloco por vez**, sempre com **Agora não**. Kim: perfil progressivo, sem cansar na entrada.
+Oferecido a partir do 2º dia, como um cartão no início ("Quer me contar mais sobre você? Leva 1 minuto."), **um bloco por vez**, sempre com **Agora não**. Kim: perfil progressivo, sem cansar na entrada. **Decidido em 28/10:** ficam os blocos A a G; o nome do Guardião passou para a tela 2.
 
 | Bloco | Pergunta | Tipo | Usado em | Base |
 |---|---|---|---|---|
@@ -111,7 +146,6 @@ Oferecido a partir do 2º dia, como um cartão no início ("Quer me contar mais 
 | E · Ajuda | Você já procurou algum apoio? Psicólogo(a) · UBS ou CAPS · Jogadores Anônimos · CVV · Ainda não · Prefiro não dizer | chips | Destacar o que falta no hub de apoio (spec 006) | `seguranca-e-crise` (ponte para ajuda) |
 | F · Finanças | Você tem compromissos financeiros que quer reorganizar? Sim · Não · Prefiro não dizer → se sim: Cartão · Empréstimo · Dinheiro de amigo ou família · Contas atrasadas · Outro | chips | Orientação: Defensoria, Procon, renegociação (nunca crédito) | `controle-estimulos-financas` |
 | G · Carta | Escreve uma mensagem pra você mesmo(a) daqui a 30 dias. *(se quiser)* | texto livre | Mostrada no marco de 30 dias | EM (carta para o eu do futuro) |
-| H · Guardião | Quer dar um nome pro seu Guardião? | texto curto | Frases do Guardião (proposta P12) | Chou 4 (posse leve) |
 
 ## 5. Acompanhamento
 
@@ -140,11 +174,11 @@ Oferecido a partir do 2º dia, como um cartão no início ("Quer me contar mais 
 
 | Resposta | Tela | Como |
 |---|---|---|
-| Motivo (tela 2) | Início e SOS | "Seu motivo: …" (hoje o SOS tem essa etapa, mas nada a alimenta) |
-| Importância e confiança (tela 3) | Check-in semanal | Comparação só consigo mesmo |
-| Meta e primeiro passo (tela 4) | Início | "Seu primeiro passo: não apostar até domingo" + marco pessoal |
-| Sonho e valor (tela 5) | Card de dinheiro | "≈ R$ 300 preservados para a viagem (estimativa)" |
-| Gasto semanal (tela 5) | Card de dinheiro | Base da estimativa (spec 004, CA-5) |
+| Motivo (tela 3) | Início e SOS | "Seu motivo: …" (hoje o SOS tem essa etapa, mas nada a alimenta) |
+| Importância e confiança (tela 4) | Check-in semanal | Comparação só consigo mesmo |
+| Meta e primeiro passo (tela 5) | Início | "Seu primeiro passo: não apostar até domingo" + marco pessoal |
+| Sonho e valor (tela 6) | Card de dinheiro | "≈ R$ 300 preservados para a viagem (estimativa)" |
+| Gasto semanal (tela 6) | Card de dinheiro | Base da estimativa (spec 004, CA-5) |
 | Gatilhos e horários (A) | Plano Se/Então; padrões | Sugestões de plano |
 | Balança (B) | SOS | Lembrete do que a aposta custa |
 | Apoio (C) | SOS, crise, Círculo | Botões de ligar e mandar mensagem |
@@ -152,11 +186,11 @@ Oferecido a partir do 2º dia, como um cartão no início ("Quer me contar mais 
 | Ajuda (E) | Hub de apoio | Destaque para o que ainda não foi tentado |
 | Finanças (F) | Dinheiro | Orientação de renegociação |
 | Carta (G) | Marco de 30 dias | Mensagem da própria pessoa |
-| Nome (H) | Guardião | "O {nome} continua aqui." |
+| Personalização e nome (tela 2) | Início, SOS, marcos | O Guardião como a pessoa escolheu; "O {nome} continua aqui." |
 
 ## 8. O que muda nas specs, se for aprovado
 
-- **Spec 002:** acrescentar a régua de **confiança** (tela 3), o **primeiro passo** (tela 4) e a **tela 5** (sonho e gasto em faixas), mantendo 5 telas; mover a privacidade para a tela 1.
+- **Spec 002:** passar de "≤ 5 telas" para **6 telas**; acrescentar a **personalização** (tela 2, com o catálogo existente e o nome), a régua de **confiança** (tela 4), o **primeiro passo** (tela 5) e a **tela 6** (sonho e gasto em faixas, PIN opcional); mover a privacidade para a tela 1.
 - **Spec 004:** o gasto semanal pode vir do onboarding (faixas) além do card de dinheiro; acrescentar o **valor do sonho** e a barra de progresso (sempre "estimativa").
 - **Nova spec:** "Me conta mais" (blocos A–H) e check-in semanal.
 - **Microcopy:** incorporar os textos deste documento; os 🩺 passam por revisão clínica.
