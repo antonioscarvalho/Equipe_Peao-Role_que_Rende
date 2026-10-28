@@ -1,10 +1,10 @@
 # Spec 007 — Demonstração de Open Finance com dados sintéticos
 
-- **Estado:** 📝 rascunho (criada na revisão de 27/10/2026, a partir do antigo CA-6 da spec 004)
+- **Estado:** ✅ implementada (com suíte completa de testes no app web)
 - **Autor(es):** Maykon Júnio (com apoio de IA), a partir do texto de Ian Costa Guimarães
 - **Aprovada por:** _—_ em _aaaa-mm-dd_
 - **Prioridade:** Must (decisão de Maykon Júnio em 27/10/2026: o Open Finance é um dos diferenciais do produto e do pitch)
-- **Responsável:** _a definir_
+- **Responsável:** Ian Costa Guimarães
 - **Issue:** [#15](https://github.com/antonioscarvalho/equipepeao/issues/15)
 
 ## 1. Contexto e problema
