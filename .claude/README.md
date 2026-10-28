@@ -49,6 +49,7 @@ Durante todo o fluxo:
 | [`criar-personagem`](skills/criar-personagem/SKILL.md) | 🟢 base pronta | Atyrson Souto | Cria ou evolui o bichinho virtual: ficha, estados (calmo, feliz, orgulhoso, cansado, apoio), SVG animável e prompts de ilustração no estilo pincel seco. Regra: nunca morre nem culpa |
 | [`animar-componente`](skills/animar-componente/SKILL.md) | 🟢 base pronta | Atyrson Souto | Aplica o catálogo de animações `rqr-*` (CSS ou Lottie) com reduzir-movimento e acessibilidade; proíbe visual de cassino |
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
+| [`orquestrar-branches`](skills/orquestrar-branches/SKILL.md) | 🟢 base pronta | Danillo Meira | Mapa de quem está mexendo em quê: aponta dois devs na mesma spec, no mesmo arquivo ou em conflito real, antes de virar retrabalho. Rodar antes de começar tarefa e antes de PR |
 
 ### Skills de stack
 

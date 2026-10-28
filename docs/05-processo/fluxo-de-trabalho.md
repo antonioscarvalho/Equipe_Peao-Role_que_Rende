@@ -16,6 +16,8 @@ fix/y  ─┼─► development ──► main (marcos e entrega final)
 docs/z ─┘
 ```
 
+Antes de criar branch ou começar tarefa, confira se ninguém já está nela: `node .claude/skills/orquestrar-branches/scripts/mapa-branches.mjs --spec NNN` (ou `/orquestrar-branches`). Quem começa uma spec põe o nome em "Responsável" no [índice das specs](../../specs/README.md) antes do código.
+
 ## Commits
 
 Padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/), em português:
