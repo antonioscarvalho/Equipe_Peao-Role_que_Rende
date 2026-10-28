@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { checkins } from '@/lib/checkins'
 import { apagarBanco } from '@/lib/db'
 import { Checkin } from './Checkin'
@@ -12,7 +12,12 @@ function renderizar() {
 }
 
 describe('Pós-lapso', () => {
-  beforeEach(() => apagarBanco())
+  beforeEach(async () => {
+    // O check-in grava com o relógio real; fixa só o Date em "hoje" para o teste não depender do dia em que roda.
+    vi.useFakeTimers({ toFake: ['Date'], now: new Date(2026, 9, 27, 21) })
+    await apagarBanco()
+  })
+  afterEach(() => vi.useRealTimers())
 
   it('CA-3 e CA-4: agradece, pergunta o gatilho, o plano e mostra o total desde o início', async () => {
     await checkins.registrar(false, undefined, new Date(2026, 9, 25, 21))
