@@ -253,7 +253,7 @@ export function Dinheiro({ aoVoltar, aoAbrirCheckin, hoje }: DinheiroProps) {
         <Cartao titulo="Demonstração com Open Finance">
           <p>
             No futuro, com o Open Finance, você poderá acompanhar sua estimativa de forma automática e integrada à sua
-            conta com total segurança.
+            conta com total segurança. Por enquanto, tudo funciona no modo manual.
           </p>
           <Botao variante="secundario" onClick={() => setModoDemo('confirmando')}>
             {demo.botaoAbrir}
