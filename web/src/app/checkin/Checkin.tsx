@@ -77,7 +77,7 @@ export function Checkin({ aoPedirAjuda, aoTerminar, hoje }: CheckinProps) {
       {passo === 'retomar' && (
         <>
           <h1 id="checkin-titulo" ref={titulo} tabIndex={-1}>
-            {textos.retomar.replace('{n}', String(progresso.diasSemApostar))}
+            {textos.retomar.replace('{n} dias', progresso.totalSemApostar === 1 ? '1 dia' : `${progresso.totalSemApostar} dias`)}
           </h1>
           <Botao onClick={aoTerminar}>{textos.voltar}</Botao>
         </>

@@ -3,7 +3,8 @@ import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
 import { Contador } from '@/components/Contador'
 import { conteudoCheckin } from '@/content/conteudo'
-import { nomeDoMes } from '@/domain/datas'
+import { dataPorExtenso } from '@/domain/datas'
+import { formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
 
 interface InicioProps {
@@ -16,7 +17,7 @@ interface InicioProps {
 
 /** Tela inicial: o SOS continua sendo a ação principal; o check-in vem logo abaixo (fluxo F4). */
 export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, hoje }: InicioProps) {
-  const { estado, progresso, registroDeHoje, registrar, hoje: dia } = useProgresso(hoje)
+  const { estado, progresso, registroDeHoje, gastoSemanal, meta, registrar, hoje: dia } = useProgresso(hoje)
   const [anotado, setAnotado] = useState(false)
 
   const naoApostei = () => {
@@ -52,10 +53,23 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, hoje }: InicioP
         {estado === 'carregando' ? (
           <div className="esqueleto esqueleto--contador" role="status" aria-label="Carregando seus registros" />
         ) : (
-          <Contador dias={progresso.diasSemApostar} mes={nomeDoMes(dia)} diasSemRegistro={progresso.diasSemRegistro} />
+          <Contador
+            dias={progresso.totalSemApostar}
+            desde={progresso.inicio && dataPorExtenso(progresso.inicio, dia)}
+            noMes={progresso.diasSemApostarNoMes}
+            sequencia={progresso.sequenciaAtual}
+            diasSemRegistro={progresso.diasSemRegistroNoMes}
+          />
+        )}
+        {/* CA-6: sem gasto informado, o card convida em vez de mostrar R$ 0. */}
+        {estado === 'pronto' && progresso.dinheiroPreservado !== null && (
+          <p className="checkin__dinheiro">
+            Grana preservada (estimativa): <strong>≈ {formatarReais(progresso.dinheiroPreservado)}</strong>
+            {meta && ` — ${meta}`}
+          </p>
         )}
         <Botao variante="secundario" onClick={aoAbrirDinheiro}>
-          Ver dinheiro preservado
+          {gastoSemanal === null ? 'Quer ver quanto você preservou?' : 'Ver dinheiro preservado'}
         </Botao>
       </Cartao>
 

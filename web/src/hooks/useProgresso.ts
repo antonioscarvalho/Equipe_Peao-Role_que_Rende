@@ -1,29 +1,29 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dataLocal } from '@/domain/datas'
-import { progressoDoMes } from '@/domain/progresso'
+import { progresso as calcular } from '@/domain/progresso'
 import { checkins } from '@/lib/checkins'
 import { configuracao } from '@/lib/configuracao'
-import type { Checkin } from '@/lib/db'
+import type { Checkin, ConfiguracaoFinancas } from '@/lib/db'
 
 type Estado = 'carregando' | 'pronto'
 
 /**
- * Check-ins e estimativa de gasto do aparelho, já convertidos no progresso do mês.
+ * Check-ins, estimativa de gasto e meta do aparelho, já convertidos no progresso.
  * Gravar é melhor esforço, como no SOS: se o IndexedDB falhar (modo anônimo), a tela
  * mostra o registro mesmo assim e ele só não sobrevive ao recarregar.
  */
 export function useProgresso(hoje: string = dataLocal()) {
   const [estado, setEstado] = useState<Estado>('carregando')
   const [lista, setLista] = useState<Checkin[]>([])
-  const [gastoSemanal, setGastoSemanal] = useState<number | null>(null)
+  const [financas, setFinancas] = useState<ConfiguracaoFinancas>({ gastoSemanalEstimado: null, meta: null })
 
   useEffect(() => {
     let ativo = true
     Promise.all([checkins.listar(), configuracao.lerFinancas()])
-      .then(([salvos, financas]) => {
+      .then(([salvos, lidas]) => {
         if (!ativo) return
         setLista(salvos)
-        setGastoSemanal(financas.gastoSemanalEstimado)
+        setFinancas(lidas)
       })
       .catch(() => undefined)
       .finally(() => ativo && setEstado('pronto'))
@@ -46,13 +46,14 @@ export function useProgresso(hoje: string = dataLocal()) {
     [hoje],
   )
 
-  const salvarGastoSemanal = useCallback((valor: number | null) => {
-    setGastoSemanal(valor)
-    configuracao.salvarFinancas({ gastoSemanalEstimado: valor }).catch(() => undefined)
+  const salvarFinancas = useCallback((novas: ConfiguracaoFinancas) => {
+    setFinancas(novas)
+    configuracao.salvarFinancas(novas).catch(() => undefined)
   }, [])
 
-  const progresso = useMemo(() => progressoDoMes(hoje, lista, gastoSemanal), [hoje, lista, gastoSemanal])
+  const gastoSemanal = financas.gastoSemanalEstimado
+  const progresso = useMemo(() => calcular(hoje, lista, gastoSemanal), [hoje, lista, gastoSemanal])
   const registroDeHoje = lista.find((c) => c.data === hoje) ?? null
 
-  return { estado, hoje, progresso, registroDeHoje, gastoSemanal, registrar, salvarGastoSemanal }
+  return { estado, hoje, progresso, registroDeHoje, gastoSemanal, meta: financas.meta, registrar, salvarFinancas }
 }

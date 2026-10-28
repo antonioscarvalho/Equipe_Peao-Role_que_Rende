@@ -60,7 +60,7 @@ describe('App', () => {
 
   it('spec 004: o dinheiro preservado abre a partir do início', async () => {
     render(<App />)
-    await userEvent.click(screen.getByRole('button', { name: 'Ver dinheiro preservado' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Quer ver quanto você preservou?' }))
     expect(window.location.pathname).toBe('/dinheiro')
     expect(screen.getByRole('heading', { name: 'Dinheiro preservado' })).toBeInTheDocument()
   })

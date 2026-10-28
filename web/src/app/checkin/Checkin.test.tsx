@@ -14,7 +14,7 @@ function renderizar() {
 describe('Pós-lapso', () => {
   beforeEach(() => apagarBanco())
 
-  it('CA-3 e CA-4: agradece, pergunta o gatilho, o plano e mostra o total do mês', async () => {
+  it('CA-3 e CA-4: agradece, pergunta o gatilho, o plano e mostra o total desde o início', async () => {
     await checkins.registrar(false, undefined, new Date(2026, 9, 25, 21))
     await checkins.registrar(false, undefined, new Date(2026, 9, 26, 21))
     const { aoTerminar } = renderizar()
@@ -31,7 +31,7 @@ describe('Pós-lapso', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Agora não' }))
 
     expect(
-      await screen.findByRole('heading', { name: 'Este mês você já tem 2 dias sem apostar. Bora retomar o caminho?' }),
+      await screen.findByRole('heading', { name: 'Você já tem 2 dias sem apostar. Bora retomar o caminho?' }),
     ).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Voltar pro início' }))
     expect(aoTerminar).toHaveBeenCalled()

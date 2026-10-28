@@ -1,12 +1,13 @@
 import { abrirBanco, type ConfiguracaoFinancas } from './db'
 
-const PADRAO: ConfiguracaoFinancas = { gastoSemanalEstimado: null }
+const PADRAO: ConfiguracaoFinancas = { gastoSemanalEstimado: null, meta: null }
 
-/** Estimativa de gasto informada pela pessoa. Fica só no aparelho. */
+/** Estimativa de gasto e meta informadas pela pessoa. Ficam só no aparelho. */
 export const configuracao = {
   async lerFinancas(): Promise<ConfiguracaoFinancas> {
     const db = await abrirBanco()
-    return (await db.get('configuracao', 'financas')) ?? PADRAO
+    // Quem gravou antes da meta existir tem só o gasto.
+    return { ...PADRAO, ...(await db.get('configuracao', 'financas')) }
   },
 
   async salvarFinancas(financas: ConfiguracaoFinancas): Promise<void> {

@@ -17,6 +17,7 @@ Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` 
 | T007 | Tela do dinheiro preservado: estimativa de gasto e troca reais ⇄ metas | CA-5, CA-7 | `app/dinheiro/`, `content/metas.json` | T005 | | Danillo (IA) | ✅ |
 | T008 | Simulação de Open Finance: extrato sintético, domínio e painel | CA-6 | `domain/openFinance.ts`, `content/open-finance-demo.json`, `app/dinheiro/` | T007 | | Danillo (IA) | ✅ |
 | T009 | Acessibilidade: leitura completa do contador e do valor, foco, `role="status"`, conferência nos tokens | todos | telas da 004 | T006, T007, T008 | | Danillo (IA) | 🟨 por teste; falta conferir à mão com leitor de tela |
+| T011 | Ajuste à revisão de 27/10: total desde o início como número principal, mês e sequência em texto pequeno, dinheiro sobre o total, convite e meta da pessoa | CA-4, CA-5, CA-6 | `domain/progresso.ts`, `datas.ts`, `components/Contador.tsx`, `app/inicio/`, `app/dinheiro/`, `lib/configuracao.ts` + testes | T005, T007 | | Danillo (IA) | ✅ |
 | T010 | Conformidade: checklists de segurança e design ético, fontes das metas, registros de IA e assets | todos | `docs/07-conformidade/*`, `docs/revisoes/` | todas | | Danillo | 🟨 falta conferir os valores das metas na fonte |
 
 ## Critério de pronto por tarefa
@@ -30,6 +31,7 @@ Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` 
 - **T007:** sem estimativa, a tela pede o valor; com estimativa, mostra a estimativa e a troca reais ⇄ metas funciona; valor inválido mostra erro em texto.
 - **T008:** o painel diz "Simulação" e "dados de exemplo"; nenhum nome de marca real no JSON; o modo manual não depende do painel.
 - **T009:** navegação completa só por teclado e com leitor de tela nas três telas.
+- **T011:** testes cobrem a virada do mês sem mudar o total, a sequência (até ontem, dia em branco, "Apostei" hoje), o dinheiro sobre o total, o convite sem gasto, a meta opcional e editável e a leitura do registro gravado antes da meta.
 - **T010:** checklists preenchidos em `docs/revisoes/004-*.md`; declaração de uso de IA atualizada.
 
 ## Divisão sugerida

@@ -1,15 +1,19 @@
-import { diasDecorridosNoMes, mesmoMes, type DataLocal } from './datas'
+import { diasDecorridosNoMes, mesmoMes, somarDias, type DataLocal } from './datas'
 
 export interface RegistroDoDia {
   data: DataLocal
   apostou: boolean
 }
 
-export interface ProgressoDoMes {
-  /** Dias do mês registrados como "Não apostei". Um lapso nunca apaga os outros. */
-  diasSemApostar: number
-  diasComAposta: number
-  diasSemRegistro: number
+export interface Progresso {
+  /** Dias registrados como "Não apostei" desde o primeiro registro. Um lapso e a virada do mês nunca apagam (CA-4). */
+  totalSemApostar: number
+  /** Data do primeiro registro; null enquanto não há nenhum. */
+  inicio: DataLocal | null
+  diasSemApostarNoMes: number
+  diasSemRegistroNoMes: number
+  /** Dias seguidos de "Não apostei" terminando hoje ou ontem, para não cair antes do check-in de hoje. */
+  sequenciaAtual: number
   /** Estimativa em reais; null quando a pessoa ainda não informou quanto gastava. */
   dinheiroPreservado: number | null
 }
@@ -18,25 +22,35 @@ export interface ProgressoDoMes {
  * Conta só o que a pessoa afirmou (decisão 1 do plano 004): dia sem registro não vira
  * "dia sem apostar". Dois registros no mesmo dia valem como um, e o último prevalece.
  */
-export function progressoDoMes(
-  hoje: DataLocal,
-  registros: RegistroDoDia[],
-  gastoSemanalEstimado: number | null,
-): ProgressoDoMes {
+export function progresso(hoje: DataLocal, registros: RegistroDoDia[], gastoSemanalEstimado: number | null): Progresso {
   const porDia = new Map<DataLocal, boolean>()
   for (const r of registros) {
-    if (mesmoMes(r.data, hoje) && r.data <= hoje) porDia.set(r.data, r.apostou)
+    if (r.data <= hoje) porDia.set(r.data, r.apostou)
   }
 
-  const diasComAposta = [...porDia.values()].filter(Boolean).length
-  const diasSemApostar = porDia.size - diasComAposta
+  const dias = [...porDia.keys()].sort()
+  const semApostar = dias.filter((d) => !porDia.get(d))
+  const doMes = dias.filter((d) => mesmoMes(d, hoje))
 
   return {
-    diasSemApostar,
-    diasComAposta,
-    diasSemRegistro: diasDecorridosNoMes(hoje) - porDia.size,
-    dinheiroPreservado: dinheiroPreservado(gastoSemanalEstimado, diasSemApostar),
+    totalSemApostar: semApostar.length,
+    inicio: dias[0] ?? null,
+    diasSemApostarNoMes: doMes.filter((d) => !porDia.get(d)).length,
+    diasSemRegistroNoMes: diasDecorridosNoMes(hoje) - doMes.length,
+    sequenciaAtual: sequencia(hoje, porDia),
+    dinheiroPreservado: dinheiroPreservado(gastoSemanalEstimado, semApostar.length),
   }
+}
+
+function sequencia(hoje: DataLocal, porDia: Map<DataLocal, boolean>): number {
+  if (porDia.get(hoje) === true) return 0
+  let dia = porDia.has(hoje) ? hoje : somarDias(hoje, -1)
+  let n = 0
+  while (porDia.get(dia) === false) {
+    n++
+    dia = somarDias(dia, -1)
+  }
+  return n
 }
 
 export function dinheiroPreservado(gastoSemanalEstimado: number | null, diasSemApostar: number): number | null {

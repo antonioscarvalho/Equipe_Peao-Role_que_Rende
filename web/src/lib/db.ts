@@ -20,6 +20,8 @@ export interface Checkin {
 
 export interface ConfiguracaoFinancas {
   gastoSemanalEstimado: number | null
+  /** Para onde a pessoa quer levar o dinheiro, nas palavras dela ("conta de luz"). */
+  meta: string | null
 }
 
 interface GuardiaoDB extends DBSchema {

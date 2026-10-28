@@ -1,5 +1,5 @@
 /**
- * Dinheiro preservado e simulação de Open Finance (spec 004, CA-5 a CA-7).
+ * Dinheiro preservado (spec 004, CA-5 e CA-6) e simulação de Open Finance (spec 007, ainda por ajustar).
  * Skills: controle-estimulos-financas · design-etico-saude-digital.
  * O valor é sempre estimativa, a partir do que a pessoa informou (CDC); nada vem de conta real.
  */
@@ -8,7 +8,7 @@ import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
 import { metasConfirmadas } from '@/content/conteudo'
 import demo from '@/content/open-finance-demo.json'
-import { nomeDoMes } from '@/domain/datas'
+import { dataPorExtenso, nomeDoMes } from '@/domain/datas'
 import { analisarExtrato } from '@/domain/openFinance'
 import { emMetas, formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
@@ -26,9 +26,10 @@ function lerValor(texto: string): number | null {
 }
 
 export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
-  const { estado, progresso, gastoSemanal, salvarGastoSemanal, hoje: dia } = useProgresso(hoje)
+  const { estado, progresso, gastoSemanal, meta, salvarFinancas, hoje: dia } = useProgresso(hoje)
   const [editando, setEditando] = useState(false)
   const [texto, setTexto] = useState('')
+  const [textoMeta, setTextoMeta] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [visao, setVisao] = useState<'reais' | 'metas'>('reais')
   const [simulacaoAberta, setSimulacaoAberta] = useState(false)
@@ -36,7 +37,7 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
 
   useEffect(() => titulo.current?.focus(), [])
 
-  const mes = nomeDoMes(dia)
+  const desde = progresso.inicio && dataPorExtenso(progresso.inicio, dia)
   const pedindoValor = estado === 'pronto' && (gastoSemanal === null || editando)
 
   const salvar = (evento: FormEvent) => {
@@ -48,7 +49,7 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
     }
     setErro(null)
     setEditando(false)
-    salvarGastoSemanal(valor)
+    salvarFinancas({ gastoSemanalEstimado: valor, meta: textoMeta.trim() || null })
   }
 
   const valor = progresso.dinheiroPreservado
@@ -67,6 +68,7 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
 
       {pedindoValor && (
         <form className="pilha" onSubmit={salvar} noValidate>
+          {gastoSemanal === null && <p className="tela__lead">Quer ver quanto você preservou?</p>}
           <label htmlFor="gasto-semanal">Quanto você costumava gastar com apostas por semana?</label>
           <p className="nota" id="gasto-dica">
             É só para a estimativa. O valor fica guardado neste celular.
@@ -86,6 +88,19 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
               {erro}
             </p>
           )}
+          <label htmlFor="meta">Pra onde você quer levar esse dinheiro?</label>
+          <p className="nota" id="meta-dica">
+            Se quiser. Por exemplo: conta de luz, compras da semana.
+          </p>
+          <input
+            id="meta"
+            className="campo"
+            autoComplete="off"
+            maxLength={60}
+            value={textoMeta}
+            onChange={(e) => setTextoMeta(e.target.value)}
+            aria-describedby="meta-dica"
+          />
           <Botao type="submit">Salvar</Botao>
         </form>
       )}
@@ -105,8 +120,9 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
 
           {visao === 'reais' || metasConfirmadas.length === 0 ? (
             <p className="valor">
-              <span className="valor__rotulo">Estimativa de dinheiro preservado em {mes}</span>
-              <span className="valor__numero">{formatarReais(valor)}</span>
+              <span className="valor__rotulo">Estimativa de dinheiro preservado{desde && ` desde ${desde}`}</span>
+              <span className="valor__numero">≈ {formatarReais(valor)}</span>
+              {meta && <span>Sua meta: {meta}</span>}
             </p>
           ) : (
             <ul className="metas">
@@ -121,16 +137,17 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
 
           <p className="nota">
             Conta feita com o que você informou: {formatarReais(gastoSemanal ?? 0)} por semana, em{' '}
-            {progresso.diasSemApostar} {progresso.diasSemApostar === 1 ? 'dia' : 'dias'} sem apostar.
+            {progresso.totalSemApostar} {progresso.totalSemApostar === 1 ? 'dia' : 'dias'} sem apostar.
           </p>
           <Botao
             variante="secundario"
             onClick={() => {
               setTexto(String(gastoSemanal ?? '').replace('.', ','))
+              setTextoMeta(meta ?? '')
               setEditando(true)
             }}
           >
-            Mudar o valor por semana
+            Mudar o valor ou a meta
           </Botao>
         </>
       )}

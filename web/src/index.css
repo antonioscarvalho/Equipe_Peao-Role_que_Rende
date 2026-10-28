@@ -394,6 +394,10 @@ h1:focus {
   font-weight: 700;
 }
 
+.checkin__dinheiro {
+  margin: 0;
+}
+
 .checkin__resposta:empty {
   margin: 0;
 }
@@ -411,6 +415,10 @@ h1:focus {
 
 .contador__frase {
   font-weight: 700;
+}
+
+.contador__detalhe {
+  font-size: var(--rqr-fs-small);
 }
 
 .valor {

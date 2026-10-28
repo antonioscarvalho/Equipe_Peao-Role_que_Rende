@@ -84,6 +84,8 @@ INÍCIO
 
 ## 5. Decisões (confirmadas em 2026-10-27)
 
+> **Revisão de 27/10/2026 (spec 004 revisada):** a decisão 1 continua valendo, mas a contagem deixou de ser do mês: o número principal é o total desde o primeiro registro, e o mês e a sequência atual aparecem em texto pequeno. A sequência conta os dias seguidos de "Não apostei" até hoje ou até ontem, e some da tela quando é zero, para não soar como placar perdido. A decisão 2 passou a multiplicar pelo total. A meta é texto livre da pessoa, opcional, gravado junto com o gasto. Tarefa T011.
+
 1. **O que conta como "dia sem apostar".** A spec diz "total de dias sem apostar no mês corrente", e o check-in é opcional. Há dois jeitos de contar:
    - **(a) Só os dias registrados como "Não apostei"** _(recomendado)_. O número é sempre algo que a pessoa afirmou, e o app não inventa dado. A tela mostra "{n} dias sem apostar" e, embaixo, quantos dias do mês ainda não têm registro, sem cobrança.
    - **(b) Dias do mês até hoje menos os dias com "Apostei"**, como no protótipo do Maykon. O número fica mais alto e anima mais, mas conta como sem aposta um dia que a pessoa nunca registrou.

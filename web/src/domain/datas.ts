@@ -25,3 +25,15 @@ export function nomeDoMes(dia: DataLocal): string {
   const [ano, mes] = dia.split('-').map(Number)
   return new Date(ano, mes - 1, 1).toLocaleDateString('pt-BR', { month: 'long' })
 }
+
+export function somarDias(dia: DataLocal, n: number): DataLocal {
+  const [ano, mes, d] = dia.split('-').map(Number)
+  return dataLocal(new Date(ano, mes - 1, d + n))
+}
+
+/** "27 de outubro"; o ano só entra quando não é o de referência. */
+export function dataPorExtenso(dia: DataLocal, referencia: DataLocal): string {
+  const [ano, mes, d] = dia.split('-').map(Number)
+  const texto = new Date(ano, mes - 1, d).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })
+  return dia.slice(0, 4) === referencia.slice(0, 4) ? texto : `${texto} de ${ano}`
+}

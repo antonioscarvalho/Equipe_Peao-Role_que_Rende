@@ -18,17 +18,30 @@ const reais = (texto: string) => new RegExp(`^${texto.replace('R$ ', 'R\\$\\s')}
 describe('Dinheiro preservado', () => {
   beforeEach(() => apagarBanco())
 
-  it('CA-5 e CA-7: sem estimativa, pergunta o valor em vez de chutar, e calcula depois', async () => {
-    for (const dia of [20, 21, 22, 23, 24, 25, 26]) await checkins.registrar(false, undefined, new Date(2026, 9, dia, 21))
+  it('CA-5 e CA-6: sem estimativa, convida e pergunta em vez de chutar, e calcula sobre o total', async () => {
+    for (const dia of [28, 29, 30]) await checkins.registrar(false, undefined, new Date(2026, 8, dia, 21))
+    for (const dia of [20, 21, 22, 23]) await checkins.registrar(false, undefined, new Date(2026, 9, dia, 21))
     renderizar()
 
-    const campo = await screen.findByLabelText('Quanto você costumava gastar com apostas por semana?')
-    await userEvent.type(campo, '70')
+    expect(await screen.findByText('Quer ver quanto você preservou?')).toBeInTheDocument()
+    await userEvent.type(screen.getByLabelText('Quanto você costumava gastar com apostas por semana?'), '70')
+    await userEvent.type(screen.getByLabelText('Pra onde você quer levar esse dinheiro?'), ' conta de luz ')
     await userEvent.click(screen.getByRole('button', { name: 'Salvar' }))
 
-    expect(screen.getByText('Estimativa de dinheiro preservado em outubro')).toBeInTheDocument()
-    expect(screen.getByText(reais('R$ 70'))).toBeInTheDocument()
-    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 70 })
+    expect(screen.getByText('Estimativa de dinheiro preservado desde 28 de setembro')).toBeInTheDocument()
+    expect(screen.getByText(reais('≈ R$ 70'))).toBeInTheDocument()
+    expect(screen.getByText('Sua meta: conta de luz')).toBeInTheDocument()
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 70, meta: 'conta de luz' })
+  })
+
+  it('CA-6: a meta é opcional e dá para mudar depois', async () => {
+    await configuracao.salvarFinancas({ gastoSemanalEstimado: 70, meta: null })
+    renderizar()
+    await userEvent.click(await screen.findByRole('button', { name: 'Mudar o valor ou a meta' }))
+    expect(screen.queryByText('Quer ver quanto você preservou?')).not.toBeInTheDocument()
+    await userEvent.type(screen.getByLabelText('Pra onde você quer levar esse dinheiro?'), 'botijão')
+    await userEvent.click(screen.getByRole('button', { name: 'Salvar' }))
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 70, meta: 'botijão' })
   })
 
   it('valor inválido mostra o erro em texto e não salva', async () => {
@@ -39,20 +52,20 @@ describe('Dinheiro preservado', () => {
 
     expect(screen.getByText(/Digite um valor em reais maior que zero/)).toBeInTheDocument()
     expect(campo).toHaveAttribute('aria-invalid', 'true')
-    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: null })
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: null, meta: null })
   })
 
   it('aceita vírgula como separador decimal', async () => {
     renderizar()
-    await userEvent.type(await screen.findByRole('textbox'), '120,50')
+    await userEvent.type(await screen.findByLabelText('Quanto você costumava gastar com apostas por semana?'), '120,50')
     await userEvent.click(screen.getByRole('button', { name: 'Salvar' }))
-    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 120.5 })
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 120.5, meta: null })
   })
 
   it('sem meta conferida na fonte, não oferece a visão em coisas do dia a dia', async () => {
-    await configuracao.salvarFinancas({ gastoSemanalEstimado: 70 })
+    await configuracao.salvarFinancas({ gastoSemanalEstimado: 70, meta: null })
     renderizar()
-    await screen.findByText('Estimativa de dinheiro preservado em outubro')
+    await screen.findByText('Estimativa de dinheiro preservado')
     expect(screen.queryByRole('button', { name: 'Em coisas do dia a dia' })).not.toBeInTheDocument()
   })
 

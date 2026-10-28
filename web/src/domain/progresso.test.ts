@@ -1,45 +1,76 @@
 import { describe, expect, it } from 'vitest'
-import { dataLocal, inicioDoMes } from './datas'
-import { dinheiroPreservado, emMetas, progressoDoMes, type RegistroDoDia } from './progresso'
+import { dataLocal, dataPorExtenso, inicioDoMes, somarDias } from './datas'
+import { dinheiroPreservado, emMetas, progresso, type RegistroDoDia } from './progresso'
 
 const nao = (data: string): RegistroDoDia => ({ data, apostou: false })
 const sim = (data: string): RegistroDoDia => ({ data, apostou: true })
 
-describe('progressoDoMes', () => {
-  it('mês sem registro: zero dias sem apostar e todos os dias sem registro', () => {
-    expect(progressoDoMes('2026-10-27', [], null)).toEqual({
-      diasSemApostar: 0,
-      diasComAposta: 0,
-      diasSemRegistro: 27,
+describe('progresso', () => {
+  it('sem registro: zero dias, sem data de início e todos os dias do mês sem registro', () => {
+    expect(progresso('2026-10-27', [], null)).toEqual({
+      totalSemApostar: 0,
+      inicio: null,
+      diasSemApostarNoMes: 0,
+      diasSemRegistroNoMes: 27,
+      sequenciaAtual: 0,
       dinheiroPreservado: null,
     })
   })
 
-  it('CA-4: um lapso no meio do mês não zera o total', () => {
+  it('CA-4: um lapso não zera o total', () => {
     const registros = [nao('2026-10-01'), nao('2026-10-02'), nao('2026-10-03'), sim('2026-10-04'), nao('2026-10-05')]
-    const p = progressoDoMes('2026-10-05', registros, null)
-    expect(p.diasSemApostar).toBe(4)
-    expect(p.diasComAposta).toBe(1)
+    const p = progresso('2026-10-05', registros, null)
+    expect(p.totalSemApostar).toBe(4)
+    expect(p.inicio).toBe('2026-10-01')
+  })
+
+  it('CA-4: a virada do mês não muda o número principal', () => {
+    const p = progresso('2026-11-01', [nao('2026-10-30'), nao('2026-10-31'), nao('2026-11-01')], null)
+    expect(p.totalSemApostar).toBe(3)
+    expect(p.diasSemApostarNoMes).toBe(1)
+    expect(p.inicio).toBe('2026-10-30')
   })
 
   it('só conta o que foi registrado: dia em branco não vira dia sem apostar', () => {
-    const p = progressoDoMes('2026-10-10', [nao('2026-10-01'), nao('2026-10-08')], null)
-    expect(p.diasSemApostar).toBe(2)
-    expect(p.diasSemRegistro).toBe(8)
-  })
-
-  it('na virada do mês o contador recomeça, sem levar o mês anterior', () => {
-    const p = progressoDoMes('2026-11-01', [nao('2026-10-30'), nao('2026-10-31'), nao('2026-11-01')], null)
-    expect(p.diasSemApostar).toBe(1)
+    const p = progresso('2026-10-10', [nao('2026-10-01'), nao('2026-10-08')], null)
+    expect(p.totalSemApostar).toBe(2)
+    expect(p.diasSemRegistroNoMes).toBe(8)
   })
 
   it('dois registros no mesmo dia valem como um, e o último prevalece', () => {
-    const p = progressoDoMes('2026-10-02', [nao('2026-10-02'), sim('2026-10-02')], null)
-    expect(p).toMatchObject({ diasSemApostar: 0, diasComAposta: 1 })
+    expect(progresso('2026-10-02', [nao('2026-10-02'), sim('2026-10-02')], null).totalSemApostar).toBe(0)
   })
 
   it('ignora registro com data futura', () => {
-    expect(progressoDoMes('2026-10-02', [nao('2026-10-03')], null).diasSemApostar).toBe(0)
+    expect(progresso('2026-10-02', [nao('2026-10-03')], null)).toMatchObject({ totalSemApostar: 0, inicio: null })
+  })
+
+  describe('sequência atual', () => {
+    it('conta os dias seguidos até hoje', () => {
+      expect(progresso('2026-10-03', [nao('2026-10-01'), nao('2026-10-02'), nao('2026-10-03')], null).sequenciaAtual).toBe(3)
+    })
+
+    it('não cai antes do check-in de hoje', () => {
+      expect(progresso('2026-10-03', [nao('2026-10-01'), nao('2026-10-02')], null).sequenciaAtual).toBe(2)
+    })
+
+    it('um dia em branco no meio interrompe', () => {
+      expect(progresso('2026-10-04', [nao('2026-10-01'), nao('2026-10-03'), nao('2026-10-04')], null).sequenciaAtual).toBe(2)
+    })
+
+    it('"Apostei" hoje deixa a sequência em zero, mas o total fica', () => {
+      const p = progresso('2026-10-03', [nao('2026-10-01'), nao('2026-10-02'), sim('2026-10-03')], null)
+      expect(p).toMatchObject({ sequenciaAtual: 0, totalSemApostar: 2 })
+    })
+
+    it('atravessa a virada do mês', () => {
+      expect(progresso('2026-11-01', [nao('2026-10-31'), nao('2026-11-01')], null).sequenciaAtual).toBe(2)
+    })
+  })
+
+  it('CA-5: o dinheiro é calculado sobre o total, não sobre o mês', () => {
+    const p = progresso('2026-11-01', [nao('2026-10-30'), nao('2026-10-31'), nao('2026-11-01')], 70)
+    expect(p.dinheiroPreservado).toBe(30)
   })
 })
 
@@ -74,5 +105,15 @@ describe('datas', () => {
 
   it('início do mês', () => {
     expect(inicioDoMes('2026-10-27')).toBe('2026-10-01')
+  })
+
+  it('soma dias atravessando mês e ano', () => {
+    expect(somarDias('2026-11-01', -1)).toBe('2026-10-31')
+    expect(somarDias('2026-12-31', 1)).toBe('2027-01-01')
+  })
+
+  it('data por extenso, com o ano só quando é outro', () => {
+    expect(dataPorExtenso('2026-10-27', '2026-11-03')).toBe('27 de outubro')
+    expect(dataPorExtenso('2025-12-30', '2026-01-02')).toBe('30 de dezembro de 2025')
   })
 })

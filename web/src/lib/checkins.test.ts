@@ -21,10 +21,16 @@ describe('check-in e configuração (IndexedDB local)', () => {
     expect(salvo.gatilhos).toBeUndefined()
   })
 
-  it('a estimativa de gasto começa vazia e é guardada', async () => {
-    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: null })
-    await configuracao.salvarFinancas({ gastoSemanalEstimado: 150 })
-    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 150 })
+  it('a estimativa de gasto e a meta começam vazias e são guardadas', async () => {
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: null, meta: null })
+    await configuracao.salvarFinancas({ gastoSemanalEstimado: 150, meta: 'conta de luz' })
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 150, meta: 'conta de luz' })
+  })
+
+  it('o que foi gravado antes da meta existir continua valendo', async () => {
+    const db = await abrirBanco()
+    await db.put('configuracao', { gastoSemanalEstimado: 150 } as never, 'financas')
+    expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 150, meta: null })
   })
 
   it('subir o banco da versão 1 para a 2 não apaga os episódios do SOS', async () => {
