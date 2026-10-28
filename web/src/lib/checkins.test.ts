@@ -16,6 +16,20 @@ describe('check-in e configuração (IndexedDB local)', () => {
     ])
   })
 
+  it('o humor fica no registro do dia, sobrevive a registrar de novo e pode ser tirado', async () => {
+    const dia = new Date(2026, 9, 27, 21)
+    await checkins.registrarHumor(4, dia)
+    expect(await checkins.listar()).toEqual([])
+
+    await checkins.registrar(false, undefined, dia)
+    await checkins.registrarHumor(4, dia)
+    await checkins.registrar(true, ['tédio'], dia)
+    expect((await checkins.listar())[0]).toMatchObject({ apostou: true, humor: 4 })
+
+    await checkins.registrarHumor(null, dia)
+    expect((await checkins.listar())[0]).not.toHaveProperty('humor')
+  })
+
   it('não guarda gatilho quando a pessoa não apostou', async () => {
     const salvo = await checkins.registrar(false, ['tédio'])
     expect(salvo.gatilhos).toBeUndefined()

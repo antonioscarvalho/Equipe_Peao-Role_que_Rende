@@ -73,6 +73,22 @@ describe('Início · check-in diário', () => {
     expect(screen.getByRole('button', { name: 'Ver dinheiro preservado' })).toBeInTheDocument()
   })
 
+  it('CA-1: o humor é opcional, aparece depois do registro e guarda um só', async () => {
+    renderizar()
+    await screen.findByText('0 dias sem apostar')
+    expect(screen.queryByRole('group', { name: 'Como você está se sentindo?' })).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Não apostei' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Mal' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Bem' }))
+    expect(screen.getByRole('button', { name: 'Bem' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Mal' })).toHaveAttribute('aria-pressed', 'false')
+    await waitFor(async () => expect((await checkins.listar())[0]).toMatchObject({ humor: 4 }))
+
+    await userEvent.click(screen.getByRole('button', { name: 'Bem' }))
+    await waitFor(async () => expect((await checkins.listar())[0]).not.toHaveProperty('humor'))
+  })
+
   it('o SOS continua a 1 toque', async () => {
     const { aoAbrirSos } = renderizar()
     await userEvent.click(screen.getByRole('button', { name: 'Bateu a vontade?' }))

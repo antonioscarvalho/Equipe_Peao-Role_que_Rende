@@ -40,8 +40,25 @@ export function useProgresso(hoje: string = dataLocal()) {
         ...(apostou && gatilhos?.length ? { gatilhos } : {}),
         registradoEm: new Date().toISOString(),
       }
-      setLista((atual) => [...atual.filter((c) => c.data !== hoje), local])
+      setLista((atual) => {
+        const humor = atual.find((c) => c.data === hoje)?.humor
+        return [...atual.filter((c) => c.data !== hoje), humor === undefined ? local : { ...local, humor }]
+      })
       checkins.registrar(apostou, gatilhos).catch(() => undefined)
+    },
+    [hoje],
+  )
+
+  const registrarHumor = useCallback(
+    (humor: number | null) => {
+      setLista((atual) =>
+        atual.map((c) => {
+          if (c.data !== hoje) return c
+          const { humor: _anterior, ...semHumor } = c
+          return humor === null ? semHumor : { ...semHumor, humor }
+        }),
+      )
+      checkins.registrarHumor(humor).catch(() => undefined)
     },
     [hoje],
   )
@@ -55,5 +72,5 @@ export function useProgresso(hoje: string = dataLocal()) {
   const progresso = useMemo(() => calcular(hoje, lista, gastoSemanal), [hoje, lista, gastoSemanal])
   const registroDeHoje = lista.find((c) => c.data === hoje) ?? null
 
-  return { estado, hoje, progresso, registroDeHoje, gastoSemanal, meta: financas.meta, registrar, salvarFinancas }
+  return { estado, hoje, progresso, registroDeHoje, gastoSemanal, meta: financas.meta, registrar, registrarHumor, salvarFinancas }
 }

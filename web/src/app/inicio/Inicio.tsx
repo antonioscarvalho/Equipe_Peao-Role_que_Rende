@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
+import { Chips } from '@/components/Chips'
 import { Contador } from '@/components/Contador'
 import { conteudoCheckin } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
@@ -15,14 +16,22 @@ interface InicioProps {
   hoje?: string
 }
 
+const humor = conteudoCheckin.humor
+
 /** Tela inicial: o SOS continua sendo a ação principal; o check-in vem logo abaixo (fluxo F4). */
 export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, hoje }: InicioProps) {
-  const { estado, progresso, registroDeHoje, gastoSemanal, meta, registrar, hoje: dia } = useProgresso(hoje)
+  const { estado, progresso, registroDeHoje, gastoSemanal, meta, registrar, registrarHumor, hoje: dia } = useProgresso(hoje)
   const [anotado, setAnotado] = useState(false)
 
   const naoApostei = () => {
     registrar(false)
     setAnotado(true)
+  }
+
+  // Um humor só: o chip recém-tocado substitui o anterior, e tocar no marcado desmarca.
+  const escolherHumor = (marcados: string[]) => {
+    const novo = marcados.find((m) => m !== humor.opcoes[(registroDeHoje?.humor ?? 0) - 1])
+    registrarHumor(novo ? humor.opcoes.indexOf(novo) + 1 : null)
   }
 
   const apostei = () => {
@@ -50,6 +59,15 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, hoje }: InicioP
         <p role="status" className="checkin__resposta">
           {anotado ? conteudoCheckin.respostaNaoApostei : ''}
         </p>
+        {registroDeHoje && (
+          <Chips
+            legenda={humor.legenda}
+            dica={humor.dica}
+            opcoes={humor.opcoes}
+            selecionados={registroDeHoje.humor ? [humor.opcoes[registroDeHoje.humor - 1]] : []}
+            aoMudar={escolherHumor}
+          />
+        )}
         {estado === 'carregando' ? (
           <div className="esqueleto esqueleto--contador" role="status" aria-label="Carregando seus registros" />
         ) : (

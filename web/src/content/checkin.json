@@ -17,5 +17,10 @@
     "voltar": "Voltar pro início",
     "proximo": "Próximo"
   },
+  "humor": {
+    "legenda": "Como você está se sentindo?",
+    "dica": "Se quiser. Dá pra pular.",
+    "opcoes": ["Muito mal", "Mal", "Mais ou menos", "Bem", "Muito bem"]
+  },
   "gatilhos": ["dia do pagamento", "jogo na TV", "tédio", "briga", "solidão", "bebida", "notificação", "outro"]
 }

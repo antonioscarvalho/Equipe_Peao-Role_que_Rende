@@ -18,6 +18,7 @@ Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` 
 | T008 | Simulação de Open Finance: extrato sintético, domínio e painel | CA-6 | `domain/openFinance.ts`, `content/open-finance-demo.json`, `app/dinheiro/` | T007 | | Danillo (IA) | ✅ |
 | T009 | Acessibilidade: leitura completa do contador e do valor, foco, `role="status"`, conferência nos tokens | todos | telas da 004 | T006, T007, T008 | | Danillo (IA) | 🟨 por teste; falta conferir à mão com leitor de tela |
 | T011 | Ajuste à revisão de 27/10: total desde o início como número principal, mês e sequência em texto pequeno, dinheiro sobre o total, convite e meta da pessoa | CA-4, CA-5, CA-6 | `domain/progresso.ts`, `datas.ts`, `components/Contador.tsx`, `app/inicio/`, `app/dinheiro/`, `lib/configuracao.ts` + testes | T005, T007 | | Danillo (IA) | ✅ |
+| T012 | Humor opcional depois do registro (um só, 5 níveis, texto do protótipo do Maykon) e teste de guarda do CA-7 | CA-1, CA-7 | `content/checkin.json`, `lib/checkins.ts`, `hooks/useProgresso.ts`, `app/inicio/`, `app/dinheiro/sem-notificacao.test.ts` | T011 | | Danillo (IA) | ✅ |
 | T010 | Conformidade: checklists de segurança e design ético, fontes das metas, registros de IA e assets | todos | `docs/07-conformidade/*`, `docs/revisoes/` | todas | | Danillo | 🟨 falta conferir os valores das metas na fonte |
 
 ## Critério de pronto por tarefa
@@ -32,6 +33,7 @@ Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` 
 - **T008:** o painel diz "Simulação" e "dados de exemplo"; nenhum nome de marca real no JSON; o modo manual não depende do painel.
 - **T009:** navegação completa só por teclado e com leitor de tela nas três telas.
 - **T011:** testes cobrem a virada do mês sem mudar o total, a sequência (até ontem, dia em branco, "Apostei" hoje), o dinheiro sobre o total, o convite sem gasto, a meta opcional e editável e a leitura do registro gravado antes da meta.
+- **T012:** o humor só aparece depois do registro, guarda um nível só, sobrevive a registrar de novo no mesmo dia e pode ser desmarcado; o teste do CA-7 reprova qualquer uso da API de notificação no app e no service worker.
 - **T010:** checklists preenchidos em `docs/revisoes/004-*.md`; declaração de uso de IA atualizada.
 
 ## Divisão sugerida
