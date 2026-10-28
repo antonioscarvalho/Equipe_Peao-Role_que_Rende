@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Botao } from '@/components/Botao'
 import { Chips } from '@/components/Chips'
 import { conteudoCheckin } from '@/content/conteudo'
+import { textoSugereRisco } from '@/domain/risco'
 import { useProgresso } from '@/hooks/useProgresso'
 
 type Passo = 'agradecimento' | 'gatilho' | 'plano' | 'retomar'
@@ -24,13 +25,14 @@ export function Checkin({ aoPedirAjuda, aoTerminar, hoje }: CheckinProps) {
   const { progresso, registrar } = useProgresso(hoje)
   const [passo, setPasso] = useState<Passo>('agradecimento')
   const [gatilhos, setGatilhos] = useState<string[]>([])
+  const [relato, setRelato] = useState('')
   const titulo = useRef<HTMLHeadingElement>(null)
 
   // A cada passo o foco vai para o título, para o leitor de tela anunciar a troca.
   useEffect(() => titulo.current?.focus(), [passo])
 
   const depoisDoGatilho = () => {
-    if (gatilhos.length) registrar(true, gatilhos)
+    if (gatilhos.length || relato.trim()) registrar(true, { gatilhos, relato })
     setPasso('plano')
   }
 
@@ -58,6 +60,28 @@ export function Checkin({ aoPedirAjuda, aoTerminar, hoje }: CheckinProps) {
             selecionados={gatilhos}
             aoMudar={setGatilhos}
           />
+          <label htmlFor="relato">{textos.perguntaRelato}</label>
+          <p className="nota" id="relato-dica">
+            {textos.dicaRelato}
+          </p>
+          <textarea
+            id="relato"
+            className="campo"
+            rows={3}
+            maxLength={500}
+            value={relato}
+            onChange={(e) => setRelato(e.target.value)}
+            aria-describedby="relato-dica"
+          />
+          {/* Só oferece: o "Próximo" continua valendo e nada é anotado como risco. */}
+          {textoSugereRisco(relato, conteudoCheckin.sinaisDeRisco) && (
+            <div className="aviso" role="status">
+              <p>{textos.ofertaAjuda}</p>
+              <Botao variante="alerta" onClick={aoPedirAjuda}>
+                {textos.botaoAjuda}
+              </Botao>
+            </div>
+          )}
           <Botao onClick={depoisDoGatilho}>{textos.proximo}</Botao>
         </>
       )}

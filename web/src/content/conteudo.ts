@@ -2,6 +2,7 @@ import canaisJson from './canais-de-ajuda.json'
 import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
+import dinheiroJson from './dinheiro.json'
 
 export interface CanalDeAjuda {
   id: string
@@ -52,6 +53,8 @@ interface MetaJson {
   status: 'confirmado' | 'conferir'
   verificado_em: string | null
   fonte: string
+  /** Versão curta da fonte, mostrada na tela junto do valor. */
+  rotuloFonte?: string
   link: string
 }
 
@@ -63,3 +66,10 @@ export interface Meta extends MetaJson {
 export const metasConfirmadas: Meta[] = (metasJson.metas as MetaJson[]).filter(
   (m): m is Meta => m.status === 'confirmado' && typeof m.valorReferencia === 'number' && m.valorReferencia > 0,
 )
+
+export const conteudoDinheiro = dinheiroJson
+
+/** Troca cada {chave} do texto pelo valor; chave sem valor fica como está, para o erro aparecer no teste. */
+export function preencher(texto: string, valores: Record<string, string | number>): string {
+  return texto.replace(/\{(\w+)\}/g, (inteiro, chave: string) => (chave in valores ? String(valores[chave]) : inteiro))
+}

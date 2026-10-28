@@ -10,7 +10,7 @@ describe('check-in e configuração (IndexedDB local)', () => {
 
   it('dois check-ins no mesmo dia guardam só o último', async () => {
     await checkins.registrar(false, undefined, new Date(2026, 9, 27, 9))
-    await checkins.registrar(true, ['tédio'], new Date(2026, 9, 27, 22))
+    await checkins.registrar(true, { gatilhos: ['tédio'] }, new Date(2026, 9, 27, 22))
     expect(await checkins.listar()).toEqual([
       expect.objectContaining({ data: '2026-10-27', apostou: true, gatilhos: ['tédio'] }),
     ])
@@ -23,7 +23,7 @@ describe('check-in e configuração (IndexedDB local)', () => {
 
     await checkins.registrar(false, undefined, dia)
     await checkins.registrarHumor(4, dia)
-    await checkins.registrar(true, ['tédio'], dia)
+    await checkins.registrar(true, { gatilhos: ['tédio'] }, dia)
     expect((await checkins.listar())[0]).toMatchObject({ apostou: true, humor: 4 })
 
     await checkins.registrarHumor(null, dia)
@@ -31,8 +31,15 @@ describe('check-in e configuração (IndexedDB local)', () => {
   })
 
   it('não guarda gatilho quando a pessoa não apostou', async () => {
-    const salvo = await checkins.registrar(false, ['tédio'])
+    const salvo = await checkins.registrar(false, { gatilhos: ['tédio'], relato: 'nada' })
     expect(salvo.gatilhos).toBeUndefined()
+    expect(salvo.relato).toBeUndefined()
+  })
+
+  it('guarda o relato do lapso sem espaços nas pontas, e não guarda relato em branco', async () => {
+    const dia = new Date(2026, 9, 27, 21)
+    expect((await checkins.registrar(true, { relato: '  recebi o salário  ' }, dia)).relato).toBe('recebi o salário')
+    expect(await checkins.registrar(true, { relato: '   ' }, dia)).not.toHaveProperty('relato')
   })
 
   it('a estimativa de gasto e a meta começam vazias e são guardadas', async () => {

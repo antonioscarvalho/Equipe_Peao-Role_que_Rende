@@ -11,3 +11,4 @@ Antes de criar uma peça, procure aqui (skill `ui-ux-designer`). Peça nova é g
 | `Chips` | Seleção múltipla de opções curtas (gatilhos, motivos), cada uma um botão com `aria-pressed` | `legenda`, `opcoes`, `selecionados`, `aoMudar`, `dica` |
 | `Cartao` | Bloco com título e conteúdo, que entra na hierarquia de títulos da tela | `titulo`, `nivel` (2 ou 3), `children` |
 | `Contador` | Número grande com a frase inteira para o leitor de tela, detalhe do mês e da sequência em texto pequeno; mostra sem cobrança os dias sem registro | `dias`, `desde`, `noMes`, `sequencia`, `diasSemRegistro` |
+| `Aproximado` | Prefixo "≈" de valor estimado, lido como "cerca de" pelo leitor de tela | — |

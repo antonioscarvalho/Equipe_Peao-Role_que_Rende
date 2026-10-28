@@ -3,7 +3,8 @@ import canaisJson from './canais-de-ajuda.json'
 import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
-import { canaisDeAjuda, canal, metasConfirmadas } from './conteudo'
+import dinheiroJson from './dinheiro.json'
+import { canaisDeAjuda, canal, metasConfirmadas, preencher } from './conteudo'
 
 // Vocabulário vedado pelo guia de tom de voz e pela Seção 8.4 do edital.
 const PROIBIDAS = [
@@ -35,7 +36,7 @@ function textos(valor: unknown): string[] {
 }
 
 describe('conteúdo do app', () => {
-  it.each(textos([canaisJson, sosJson, checkinJson, metasJson]))('não usa vocabulário vedado: %s', (texto) => {
+  it.each(textos([canaisJson, sosJson, checkinJson, metasJson, dinheiroJson]))('não usa vocabulário vedado: %s', (texto) => {
     for (const padrao of PROIBIDAS) expect(texto).not.toMatch(padrao)
   })
 
@@ -67,5 +68,12 @@ describe('metas do dinheiro preservado', () => {
     }
     const naoConferidas = metasJson.metas.filter((m) => m.status !== 'confirmado').map((m) => m.id)
     expect(metasConfirmadas.some((m) => naoConferidas.includes(m.id))).toBe(false)
+  })
+})
+
+describe('preencher', () => {
+  it('troca cada {chave} e deixa visível a que ficou sem valor', () => {
+    expect(preencher('Dá pra pagar {n} {coisa}', { n: 2, coisa: 'botijões de gás' })).toBe('Dá pra pagar 2 botijões de gás')
+    expect(preencher('Sua meta: {meta}', {})).toBe('Sua meta: {meta}')
   })
 })

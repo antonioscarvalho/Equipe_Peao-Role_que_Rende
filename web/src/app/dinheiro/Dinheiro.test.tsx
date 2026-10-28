@@ -13,7 +13,7 @@ function renderizar() {
 }
 
 // O toLocaleString põe um espaço não separável entre "R$" e o número.
-const reais = (texto: string) => new RegExp(`^${texto.replace('R$ ', 'R\\$\\s')}$`)
+const reais = (texto: string) => new RegExp(texto.replace('R$ ', 'R\\$\\s'))
 
 describe('Dinheiro preservado', () => {
   beforeEach(() => apagarBanco())
@@ -29,7 +29,8 @@ describe('Dinheiro preservado', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Salvar' }))
 
     expect(screen.getByText('Estimativa de dinheiro preservado desde 28 de setembro')).toBeInTheDocument()
-    expect(screen.getByText(reais('≈ R$ 70'))).toBeInTheDocument()
+    // O "≈" é só visual; quem usa leitor de tela ouve "cerca de".
+    expect(document.querySelector('.valor__numero')).toHaveTextContent(reais('≈ cerca de R$ 70'))
     expect(screen.getByText('Sua meta: conta de luz')).toBeInTheDocument()
     expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 70, meta: 'conta de luz' })
   })
@@ -62,10 +63,25 @@ describe('Dinheiro preservado', () => {
     expect(await configuracao.lerFinancas()).toEqual({ gastoSemanalEstimado: 120.5, meta: null })
   })
 
-  it('sem meta conferida na fonte, não oferece a visão em coisas do dia a dia', async () => {
-    await configuracao.salvarFinancas({ gastoSemanalEstimado: 70, meta: null })
+  it('CA-5: a visão em coisas do dia a dia diz "estimativa", mostra a fonte e só usa meta conferida', async () => {
+    for (const dia of [20, 21, 22, 23, 24, 25, 26]) await checkins.registrar(false, undefined, new Date(2026, 9, dia, 21))
+    await configuracao.salvarFinancas({ gastoSemanalEstimado: 700, meta: null })
     renderizar()
-    await screen.findByText('Estimativa de dinheiro preservado')
-    expect(screen.queryByRole('button', { name: 'Em coisas do dia a dia' })).not.toBeInTheDocument()
+    await userEvent.click(await screen.findByRole('button', { name: 'Em coisas do dia a dia' }))
+
+    expect(screen.getByText('Estimativa em coisas do dia a dia, desde 20 de outubro')).toBeInTheDocument()
+    expect(screen.getByText('Dá pra pagar 6 botijões de gás')).toBeInTheDocument()
+    expect(screen.getByText('Dá pra pagar 3 semanas de compras')).toBeInTheDocument()
+    expect(screen.getByText(/Valores de referência: .*ANP.*DIEESE/)).toBeInTheDocument()
+    // A conta de luz ainda não tem fonte oficial conferida.
+    expect(screen.queryByText(/conta de luz|contas de luz/)).not.toBeInTheDocument()
+  })
+
+  it('uma meta só no singular quando cabe uma vez', async () => {
+    for (const dia of [24, 25, 26]) await checkins.registrar(false, undefined, new Date(2026, 9, dia, 21))
+    await configuracao.salvarFinancas({ gastoSemanalEstimado: 450, meta: null })
+    renderizar()
+    await userEvent.click(await screen.findByRole('button', { name: 'Em coisas do dia a dia' }))
+    expect(screen.getByText('Dá pra pagar 1 semana de compras')).toBeInTheDocument()
   })
 })
