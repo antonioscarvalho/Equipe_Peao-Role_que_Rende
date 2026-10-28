@@ -74,3 +74,11 @@ export function emMetas<T extends MetaTangivel>(valor: number, metas: T[]): { me
 export function formatarReais(valor: number): string {
   return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 }
+
+/** Estágio de crescimento do Guardião em marcos anunciados: 7, 30 e 90 dias (Spec 002). */
+export function estagioGuardiao(diasSemApostar: number): 0 | 1 | 2 | 3 {
+  if (diasSemApostar >= 90) return 3
+  if (diasSemApostar >= 30) return 2
+  if (diasSemApostar >= 7) return 1
+  return 0
+}

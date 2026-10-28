@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
+import { tocar } from "./sons";
 
 const fases = [
   { nome: "Inspire", seg: 4, classe: "inspira" },
@@ -14,6 +15,8 @@ const CICLOS = 3;
 /** Momento de crise: respiração guiada 4-4-6 com o bichinho. Apoio complementar, com canais reais de ajuda. */
 export function Respiracao({ aoFechar, reduzir }: { aoFechar: () => void; reduzir: boolean }) {
   const [ciclo, setCiclo] = useState(0);
+  // Spec 003 CA-3: sem som por padrão no momento de crise; a pessoa pode ligar aqui.
+  const [comSom, setComSom] = useState(false);
   const [fase, setFase] = useState(0);
   const [resta, setResta] = useState<number>(fases[0].seg);
   const terminou = ciclo >= CICLOS;
@@ -39,6 +42,15 @@ export function Respiracao({ aoFechar, reduzir }: { aoFechar: () => void; reduzi
     return () => window.removeEventListener("keydown", esc);
   }, [aoFechar]);
 
+  // Tom calmo marcando o ritmo, só se a pessoa ligou os sons. "Segure" fica em silêncio.
+  useEffect(() => {
+    if (terminou) return;
+    const c = fases[fase].classe;
+    if (!comSom) return;
+    if (c === "inspira") tocar("inspira");
+    if (c === "expira") tocar("expira");
+  }, [fase, ciclo, terminou, comSom]);
+
   const f = fases[fase];
 
   return (
@@ -50,8 +62,11 @@ export function Respiracao({ aoFechar, reduzir }: { aoFechar: () => void; reduzi
           <div className={`onda onda--${montado ? f.classe : "expira"}`} style={{ ["--dur" as string]: `${f.seg}s` }}>
             <span className="onda__anel onda__anel--1" />
             <span className="onda__anel onda__anel--2" />
-            <div className="onda__centro"><Bichinho humor="apoio" nivel={1} tamanho={150} /></div>
+            <div className="onda__centro"><Bichinho humor="apoio" nivel={1} tamanho={150} reduzir={reduzir} /></div>
           </div>
+          <button className="link" onClick={() => setComSom((v) => !v)} aria-pressed={comSom}>
+            {comSom ? "Desligar som da respiração" : "Ligar som da respiração"}
+          </button>
           <p className="crise__fase" aria-live="polite">{f.nome} <b>{resta}</b></p>
           <div className="crise__ciclos" aria-label={`Ciclo ${ciclo + 1} de ${CICLOS}`}>
             {Array.from({ length: CICLOS }, (_, i) => <span key={i} className={i < ciclo ? "ok" : i === ciclo ? "agora" : ""} />)}
@@ -60,7 +75,7 @@ export function Respiracao({ aoFechar, reduzir }: { aoFechar: () => void; reduzi
       ) : (
         <div className="crise__fim rqr-escalonado">
           <div className="crise__alivio">
-            <Bichinho humor="feliz" nivel={2} tamanho={130} />
+            <Bichinho humor="feliz" nivel={2} tamanho={130} reduzir={reduzir} />
             <Animacao nome="aliviado" tamanho={84} reduzir={reduzir} rotulo="Rosto aliviado" />
           </div>
           <h2 id="crise-titulo" className="crise__titulo">Você atravessou essa onda.</h2>

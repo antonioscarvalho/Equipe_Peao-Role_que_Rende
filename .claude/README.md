@@ -51,6 +51,7 @@ Durante todo o fluxo:
 | [`gamificacao-etica`](skills/gamificacao-etica/SKILL.md) | 🟢 base pronta | Maykon Júnio | Projeta e audita gamificação com Werbach (DMC e 6D), Chou (Octalysis), Kim, Schell, Adams, McGonigal e Burke, filtrada para quem quer parar de apostar: catálogo do que pode e do que é proibido, e checklist de auditoria |
 | [`pitch-gamificacao`](skills/pitch-gamificacao/SKILL.md) | 🟢 base pronta | Maykon Júnio | Frase, slide, demonstração e respostas à Banca sobre a gamificação ("isso não vicia?") |
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
+| [`orquestrar-branches`](skills/orquestrar-branches/SKILL.md) | 🟢 base pronta | Danillo Meira | Mapa de quem está mexendo em quê: aponta dois devs na mesma spec, no mesmo arquivo ou em conflito real, antes de virar retrabalho. Rodar antes de começar tarefa e antes de PR |
 
 ### Skills de stack
 
