@@ -193,6 +193,7 @@ Regras (skill `design-etico-saude-digital`): partidas de cerca de 3 minutos com 
 
 ## Ferramentas do projeto
 
+- **Bíblia da história:** [`historia-broto/`](historia-broto/story.md), projeto das skills de história (`interactive-fiction`, `character-management`, `worldbuilding`, `revision-continuity` e outras). Guarda personagens, lugares, promessas entre capítulos e o mapa de escolhas. Os textos de fala continuam valendo **aqui**. Rode `node .claude/skills/story-maintenance/scripts/story.js check docs/03-design/historia-broto` depois de mexer.
 - **Skills:** `entrevista-motivacional` (diálogos), `tcc-reestruturacao-cognitiva` (lições), `prevencao-recaida` (capítulos 1, 5 e 6), `controle-estimulos-financas` (capítulo 3), `seguranca-e-crise` e `conformidade-legal-br` (revisão de tudo), `criar-personagem`, `animar-componente` e `sonorizar-componente` (arte e som).
 - **MCPs:**
   - **iconify:** ícones Lucide para lâmpadas, estrelas e antena.
