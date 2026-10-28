@@ -64,6 +64,11 @@
 
 _—_
 
+### 2026-10-28 — Correções no `web/` novo e documentação
+**Quem:** Maykon Júnio (com apoio de IA, ver declaração)
+**O que aconteceu:** depois que a prova visual virou o `web/` publicado, o app ficou sem o botão "Preciso de ajuda agora" (só havia o CVV no fim da respiração). Recolocado em todas as telas (CVV 188, SAMU 192, UBS/CAPS, offline). Fontes passaram a vir do guia de estilo (sem Google Fonts) e a autoexclusão ganhou aviso de situação não confirmada. Setup, índice das specs e auditoria atualizados.
+**Decisão pendente da equipe:** o que volta de `lixo/web-antigo/` (SOS com cards, check-in pós-lapso, contador, plano, Círculo) e se o Pulo do Bichinho continua no momento da vontade.
+
 ## Dia 3 — 29/10/2026
 
 _—_

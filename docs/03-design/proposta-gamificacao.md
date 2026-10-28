@@ -4,6 +4,8 @@
 > **Decisão vigente:** as missões do dia, o dinheiro preservado, a moeda e o confete que já estão no app **ficam como estão** (Maykon Júnio, 28/10/2026). Esta proposta só **acrescenta** o que falta; não remove nada.
 > Antes de implementar: a equipe escolhe os itens, cada um vira spec ou tarefa (fluxo SDD) e o responsável confirma.
 
+> **Atualização de 28/10 (tarde):** com a troca do `web/` pela prova visual, **P2 já está atendido** pela personalização (spec 009), e **P5, P6 e P7** se referem a telas que foram para `lixo/web-antigo/` — só valem se elas voltarem. Ver a [reauditoria](auditoria-gamificacao.md).
+
 ## Resumo
 
 | # | Proposta | Prioridade | Esforço | Spec / onde | Responsável sugerido |

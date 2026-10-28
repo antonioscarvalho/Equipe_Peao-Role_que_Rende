@@ -6,6 +6,7 @@ import { Respiracao } from "./Respiracao";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
+import { AjudaAgora } from "./AjudaAgora";
 import { PuloDoBichinho } from "./PuloDoBichinho";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
@@ -189,6 +190,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
+      <AjudaAgora />
       {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
         chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
       {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}
