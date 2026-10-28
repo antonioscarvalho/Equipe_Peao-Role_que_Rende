@@ -1,10 +1,13 @@
 import { useState } from 'react'
+import { Animacao } from '@/components/Animacao'
 import { Aproximado } from '@/components/Aproximado'
+import { Bairro } from '@/components/Bairro'
+import { Bichinho, type Humor } from '@/components/Bichinho'
 import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
 import { Chips } from '@/components/Chips'
 import { Contador } from '@/components/Contador'
-import { Guardiao } from '@/components/Guardiao'
+import { Icone } from '@/components/Icone'
 import { conteudoCheckin, conteudoDinheiro, conteudoPrevencao } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
 import { estagioGuardiao, formatarReais } from '@/domain/progresso'
@@ -18,12 +21,21 @@ interface InicioProps {
   aoAbrirCirculo: () => void
   /** Os testes passam um dia fixo; no app vale o dia de hoje do aparelho. */
   hoje?: string
+  reduzir?: boolean
 }
 
 const humor = conteudoCheckin.humor
 
+const falas: Record<Humor, string> = {
+  calmo: 'Bora cuidar do nosso rolê hoje?',
+  feliz: 'Boa! Cada passo conta.',
+  orgulhoso: 'Olha quanto você já protegeu!',
+  cansado: 'Dia difícil acontece. Tô aqui, nada do que construímos sumiu.',
+  apoio: 'Respira comigo.',
+}
+
 /** Tela inicial: o SOS continua sendo a ação principal; o check-in vem logo abaixo (fluxo F4). */
-export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, aoAbrirCirculo, hoje }: InicioProps) {
+export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, aoAbrirCirculo, hoje, reduzir = false }: InicioProps) {
   const { estado, progresso, registroDeHoje, gastoSemanal, meta, registrar, registrarHumor, hoje: dia } = useProgresso(hoje)
   const [anotado, setAnotado] = useState(false)
 
@@ -43,11 +55,65 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, a
     aoApostar()
   }
 
+  const humorBicho: Humor = (() => {
+    if (anotado) return 'feliz'
+    if (registroDeHoje?.apostou === true) return 'cansado'
+    if (progresso.sequenciaAtual >= 7) return 'orgulhoso'
+    return 'calmo'
+  })()
+
+  const nivel = estagioGuardiao(progresso.totalSemApostar)
+  const construidas = Math.min(6, Math.max(1, Math.min(6, progresso.diasSemApostarNoMes)))
+
   return (
     <section className="tela tela--inicio" aria-labelledby="inicio-titulo">
       <h1 id="inicio-titulo">Bora construir uma vida sem apostas? Um passo de cada vez.</h1>
+
+      {/* Cena Viva do Bichinho e Bairro reconstruído */}
+      <section className="cena" aria-label="Seu bichinho">
+        <div className="balao" key={humorBicho}>
+          {falas[humorBicho]}
+        </div>
+        <Bichinho humor={humorBicho} nivel={nivel} tamanho={160} />
+        <Bairro construidas={construidas} />
+        {anotado && (
+          <div className="cena__brilho">
+            <Animacao nome="brilho" tamanho={110} repetir={false} reduzir={reduzir} />
+          </div>
+        )}
+      </section>
+
+      {/* Cards de Resumo Rápido */}
+      <div className="cards-mini">
+        <div className="card-mini">
+          <span className="card-mini__icone card-mini__icone--broto">
+            <Animacao nome="broto" tamanho={26} reduzir={reduzir} />
+          </span>
+          <div>
+            <p className="card-mini__rotulo">Dias de cuidado</p>
+            <p className="card-mini__valor">
+              {progresso.totalSemApostar} {progresso.totalSemApostar === 1 ? 'dia' : 'dias'}
+            </p>
+            <p className="card-mini__nota">Dia difícil não zera nada.</p>
+          </div>
+        </div>
+
+        <button type="button" className="card-mini" onClick={aoAbrirDinheiro}>
+          <span className="card-mini__icone card-mini__icone--moeda">
+            <span className="moeda-badge" aria-hidden="true">R$</span>
+          </span>
+          <div>
+            <p className="card-mini__rotulo">Dinheiro protegido</p>
+            <p className="card-mini__valor">
+              {progresso.dinheiroPreservado !== null ? formatarReais(progresso.dinheiroPreservado) : 'Calcular'}
+            </p>
+            <p className="card-mini__nota">Ver Open Finance →</p>
+          </div>
+        </button>
+      </div>
+
       <Botao grande onClick={aoAbrirSos} className="botao--sos">
-        Bateu a vontade?
+        <Icone nome="wind" tamanho={26} /> Bateu a vontade?
       </Botao>
 
       <Cartao titulo={conteudoCheckin.pergunta}>
@@ -76,11 +142,6 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, a
           <div className="esqueleto esqueleto--contador" role="status" aria-label="Carregando seus registros" />
         ) : (
           <div className="jornada">
-            <Guardiao
-              estagio={estagioGuardiao(progresso.totalSemApostar)}
-              humor={registroDeHoje?.apostou ? 'acolhendo' : 'tranquilo'}
-              tamanho={110}
-            />
             <div className="jornada__info">
               <Contador
                 dias={progresso.totalSemApostar}

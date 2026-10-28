@@ -765,3 +765,717 @@ a.botao {
     transition: none !important;
   }
 }
+
+/* ==========================================================
+   PROVA VISUAL — Palco, Celular, Bichinho, Bairro e Animações
+   ========================================================== */
+
+/* ---------- Palco e Celular (Moldura Rolê que Rende) ---------- */
+.palco {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 12px;
+  position: relative;
+  overflow-x: hidden;
+  background: var(--rqr-amarelo);
+}
+
+.celular {
+  position: relative;
+  z-index: 1;
+  width: min(440px, 100%);
+  min-height: 85dvh;
+  background: var(--cor-fundo, var(--rqr-branco));
+  border: 4px solid var(--rqr-azul-escuro);
+  border-radius: 36px;
+  box-shadow: 0 10px 0 var(--rqr-azul-escuro);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: rqr-pop var(--rqr-dur-lenta) var(--rqr-ease-pop) both;
+}
+
+@media (max-width: 480px) {
+  .palco {
+    padding: 0;
+    align-items: stretch;
+  }
+  .celular {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: 100dvh;
+  }
+}
+
+/* ---------- Topo / Header ---------- */
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--rqr-esp-1);
+  padding: 12px 16px;
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+  border-bottom: 3px solid var(--rqr-azul-escuro);
+}
+
+.topo__marca {
+  background: none;
+  border: 0;
+  color: var(--rqr-amarelo);
+  font-size: 20px;
+  font-weight: 900;
+  font-family: var(--rqr-font-titulo);
+  cursor: pointer;
+  letter-spacing: -0.5px;
+}
+
+.topo__ajuda {
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  border: 2px solid var(--rqr-azul-escuro);
+  border-radius: var(--rqr-raio-pilula);
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--rqr-azul-escuro);
+  transition: transform var(--rqr-dur-rapida);
+}
+
+.topo__ajuda:hover {
+  transform: translateY(-1px);
+}
+
+/* Interruptor Acessibilidade (Reduzir Animações) */
+.interruptor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+  max-width: 70px;
+  color: var(--rqr-branco);
+}
+
+.interruptor input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.interruptor__trilho {
+  width: 36px;
+  height: 20px;
+  border-radius: 99px;
+  background: var(--rqr-cinza-700);
+  border: 2px solid var(--rqr-branco);
+  position: relative;
+  transition: background var(--rqr-dur-base);
+}
+
+.interruptor__trilho::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--rqr-amarelo);
+  transition: transform var(--rqr-dur-base) var(--rqr-ease-pop);
+}
+
+.interruptor input:checked + .interruptor__trilho {
+  background: var(--rqr-azul-claro);
+}
+
+.interruptor input:checked + .interruptor__trilho::after {
+  transform: translateX(16px);
+}
+
+.interruptor__texto {
+  font-size: 9px;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+/* ---------- Cena do Bichinho e Bairro ---------- */
+.cena {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  background: linear-gradient(180deg, var(--rqr-amarelo-claro), var(--rqr-amarelo) 70%);
+  border: 3px solid var(--rqr-azul-escuro);
+  border-radius: 28px;
+  padding: 42px 10px 0;
+  overflow: hidden;
+  margin-bottom: var(--rqr-esp-2);
+}
+
+.balao {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 2;
+  background: var(--rqr-branco);
+  border: 3px solid var(--rqr-azul-escuro);
+  border-radius: 16px;
+  padding: 6px 14px;
+  font-weight: 800;
+  font-size: 13px;
+  white-space: nowrap;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--rqr-azul-escuro);
+  box-shadow: 0 3px 0 var(--rqr-azul-escuro);
+  animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop) both;
+}
+
+.bairro {
+  width: 100%;
+  margin-top: -24px;
+  display: block;
+}
+
+.bairro__chao {
+  fill: var(--rqr-verde-agro);
+}
+
+.bairro__peca {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scale(0);
+  opacity: 0;
+  transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop), opacity var(--rqr-dur-base);
+}
+
+.bairro__peca.is-on {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.bairro__vaga {
+  fill: none;
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 2;
+  stroke-dasharray: 4 4;
+  opacity: 0.35;
+}
+
+/* ---------- Bichinho Mascote SVG ---------- */
+.bicho {
+  position: relative;
+  z-index: 1;
+  --corpo: var(--rqr-azul-claro);
+}
+
+.bicho svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.bicho__corpo {
+  fill: var(--corpo);
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 6;
+  stroke-linejoin: round;
+  transition: fill var(--rqr-dur-lenta);
+}
+
+.bicho__braco path {
+  fill: var(--corpo);
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 6;
+  stroke-linejoin: round;
+  transition: fill var(--rqr-dur-lenta);
+}
+
+.bicho__braco {
+  transform-box: fill-box;
+  transition: transform var(--rqr-dur-media) var(--rqr-ease-pop);
+}
+
+.bicho__braco--e {
+  transform-origin: 100% 40%;
+}
+
+.bicho__braco--d {
+  transform-origin: 0% 40%;
+}
+
+.bicho__sombra {
+  fill: var(--rqr-azul-escuro);
+  opacity: 0.18;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.bicho__corpo-grupo {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+.olho ellipse,
+.olho__luz {
+  fill: var(--rqr-azul-escuro);
+}
+
+.olho__luz {
+  fill: #fff;
+}
+
+.olho path,
+.boca {
+  fill: none;
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.boca--aberta {
+  fill: var(--rqr-rosa-escuro);
+  stroke-width: 4;
+}
+
+.bochecha {
+  fill: var(--rqr-rosa-escuro);
+  opacity: 0.55;
+}
+
+.olho,
+.boca {
+  opacity: 0;
+  transition: opacity var(--rqr-dur-rapida);
+}
+
+.olho--aberto {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.bicho__broto path {
+  fill: none;
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.bicho__broto .folha {
+  fill: var(--rqr-verde-agro);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform: scale(0);
+  transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop);
+}
+
+.folha--1 {
+  transform-origin: 100% 100%;
+}
+
+.folha--2 {
+  transform-origin: 0% 100%;
+}
+
+.bicho__broto .flor {
+  fill: var(--rqr-rosa-escuro);
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0);
+  transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop) 120ms;
+}
+
+.bicho__broto[data-nivel="1"] .folha--1,
+.bicho__broto[data-nivel="2"] .folha,
+.bicho__broto[data-nivel="3"] .folha {
+  transform: scale(1);
+}
+
+.bicho__broto[data-nivel="3"] .flor {
+  transform: scale(1);
+}
+
+/* calmo: respira + pisca */
+.bicho--calmo .olho--aberto,
+.bicho--calmo .boca--sorriso,
+.bicho--apoio .olho--aberto,
+.bicho--apoio .boca--sorriso {
+  opacity: 1;
+}
+
+.bicho--calmo .bicho__corpo-grupo {
+  animation: respirar 4s ease-in-out infinite;
+}
+
+.bicho--calmo .olho--aberto,
+.bicho--apoio .olho--aberto {
+  animation: piscar 5s infinite;
+}
+
+/* feliz: pula */
+.bicho--feliz {
+  --corpo: var(--rqr-azul-claro);
+}
+
+.bicho--feliz .olho--feliz,
+.bicho--feliz .boca--aberta {
+  opacity: 1;
+}
+
+.bicho--feliz .bicho__corpo-grupo {
+  animation: pular 700ms var(--rqr-ease-pop) infinite;
+}
+
+.bicho--feliz .bicho__sombra {
+  animation: sombra 700ms var(--rqr-ease-pop) infinite;
+}
+
+.bicho--feliz .bicho__braco--e {
+  transform: rotate(40deg);
+}
+
+.bicho--feliz .bicho__braco--d {
+  transform: rotate(-40deg);
+}
+
+/* orgulhoso: cresce e brilha */
+.bicho--orgulhoso {
+  --corpo: var(--rqr-rosa-claro);
+}
+
+.bicho--orgulhoso .olho--feliz,
+.bicho--orgulhoso .boca--sorriso {
+  opacity: 1;
+}
+
+.bicho--orgulhoso .bicho__corpo-grupo {
+  animation: orgulho 1.6s var(--rqr-ease-padrao) infinite alternate;
+}
+
+.bicho--orgulhoso .bicho__braco--e {
+  transform: rotate(-20deg);
+}
+
+.bicho--orgulhoso .bicho__braco--d {
+  transform: rotate(20deg);
+}
+
+/* cansado */
+.bicho--cansado {
+  --corpo: var(--rqr-roxo-claro);
+}
+
+.bicho--cansado .olho--cansado,
+.bicho--cansado .boca--reta {
+  opacity: 1;
+}
+
+.bicho--cansado .bicho__corpo-grupo {
+  animation: balancar 3.5s ease-in-out infinite;
+}
+
+.bicho--cansado .bicho__braco--e {
+  transform: rotate(-12deg);
+}
+
+.bicho--cansado .bicho__braco--d {
+  transform: rotate(12deg);
+}
+
+/* apoio */
+.bicho--apoio .bicho__braco--e {
+  transform: rotate(-35deg);
+}
+
+.bicho--apoio .bicho__braco--d {
+  transform: rotate(35deg);
+}
+
+@keyframes respirar {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.04, 0.97); }
+}
+
+@keyframes piscar {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+@keyframes pular {
+  0%, 100% { transform: translateY(0) scale(1.04, 0.94); }
+  45% { transform: translateY(-20px) scale(0.96, 1.05); }
+}
+
+@keyframes sombra {
+  0%, 100% { transform: scale(1); opacity: 0.2; }
+  45% { transform: scale(0.7); opacity: 0.1; }
+}
+
+@keyframes orgulho {
+  from { transform: scale(1); }
+  to { transform: scale(1.06) translateY(-4px); }
+}
+
+@keyframes balancar {
+  0%, 100% { transform: rotate(-2deg) scale(0.96, 0.92); }
+  50% { transform: rotate(2deg) scale(0.96, 0.92); }
+}
+
+/* ---------- Cards Mini (Status) ---------- */
+.cards-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: var(--rqr-esp-2);
+}
+
+.card-mini {
+  padding: 12px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--rqr-branco);
+  border: 3px solid var(--rqr-azul-escuro);
+  box-shadow: 0 4px 0 var(--rqr-azul-escuro);
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-mini p {
+  margin: 0;
+}
+
+.card-mini__icone {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--rqr-azul-escuro);
+  perspective: 300px;
+}
+
+.card-mini__icone--moeda {
+  background: var(--rqr-amarelo-claro);
+}
+
+.card-mini__icone--broto {
+  background: var(--rqr-verde-claro);
+}
+
+.moeda-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--rqr-ouro-sombra);
+  background: radial-gradient(circle at 35% 30%, var(--rqr-ouro-luz), var(--rqr-ouro) 70%);
+  border: 2px solid var(--rqr-ouro-sombra);
+}
+
+.card-mini__rotulo {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rqr-cinza-900);
+}
+
+.card-mini__valor {
+  font-size: 18px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: var(--rqr-azul-escuro);
+}
+
+.card-mini__nota {
+  font-size: 11px;
+  color: var(--rqr-cinza-700);
+}
+
+/* ---------- Botão SOS Estilizado ---------- */
+.botao--sos {
+  min-height: 56px;
+  background: var(--rqr-azul-escuro) !important;
+  color: var(--rqr-amarelo) !important;
+  border: 3px solid var(--rqr-azul-escuro) !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  box-shadow: 0 6px 0 var(--rqr-azul) !important;
+  border-radius: 99px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop), box-shadow var(--rqr-dur-rapida) !important;
+}
+
+.botao--sos:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0 var(--rqr-azul) !important;
+}
+
+.botao--sos:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--rqr-azul) !important;
+}
+
+/* ---------- Respiração / Onda Concêntrica ---------- */
+.onda {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: var(--rqr-esp-2) auto;
+  display: grid;
+  place-items: center;
+}
+
+.onda__anel {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid var(--rqr-azul-claro);
+  transition: transform var(--dur, 4s) ease-in-out, opacity var(--dur, 4s);
+}
+
+.onda__anel--2 {
+  border-color: var(--rqr-amarelo);
+  border-style: dashed;
+  inset: 24px;
+}
+
+.onda__centro {
+  position: relative;
+  z-index: 2;
+  transition: transform var(--dur, 4s) ease-in-out;
+}
+
+.onda--inspira .onda__anel,
+.onda--segura .onda__anel {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+.onda--inspira .onda__centro,
+.onda--segura .onda__centro {
+  transform: scale(1.15);
+}
+
+.onda--expira .onda__anel {
+  transform: scale(0.65);
+  opacity: 0.5;
+}
+
+.onda--expira .onda__centro {
+  transform: scale(0.9);
+}
+
+.onda--segura .onda__anel--2 {
+  animation: girar 4s linear;
+}
+
+/* ---------- Grafismos Decorativos Rolê que Rende ---------- */
+.decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.g {
+  position: absolute;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.g--seta {
+  width: 140px;
+  top: 4%;
+  left: 3%;
+  stroke: var(--rqr-azul);
+  stroke-width: 8;
+  --rqr-rot: -8deg;
+}
+
+.g--anel {
+  width: 70px;
+  top: 10%;
+  right: 5%;
+  stroke: var(--rqr-roxo);
+  stroke-width: 9;
+  animation-duration: 6s;
+}
+
+.g--flor {
+  width: 60px;
+  bottom: 12%;
+  left: 6%;
+  stroke: var(--rqr-azul-claro);
+  stroke-width: 8;
+  --rqr-rot: 12deg;
+  animation-duration: 4.5s;
+}
+
+.g--arco {
+  width: 120px;
+  bottom: 4%;
+  right: 5%;
+  stroke: var(--rqr-rosa-escuro);
+  stroke-width: 10;
+  animation-duration: 5.5s;
+}
+
+.g--tri {
+  width: 60px;
+  top: 48%;
+  right: 3%;
+  stroke: var(--rqr-azul-escuro);
+  stroke-width: 6;
+  --rqr-rot: 15deg;
+}
+
+@media (max-width: 768px) {
+  .g--seta,
+  .g--tri,
+  .g--flor {
+    display: none;
+  }
+}
+
+/* ---------- Reduzir Animações ---------- */
+.reduzir-animacoes *,
+.reduzir-animacoes *::before,
+.reduzir-animacoes *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: 1ms !important;
+  transition-delay: 0ms !important;
+}
+
+.cena__brilho {
+  position: absolute;
+  top: 25%;
+  right: 10%;
+  z-index: 3;
+  pointer-events: none;
+}
