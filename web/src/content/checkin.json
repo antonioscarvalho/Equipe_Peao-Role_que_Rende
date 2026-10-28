@@ -1,5 +1,5 @@
 {
-  "_comentario": "Textos do check-in e do pós-lapso (fluxo F4). Fonte: docs/02-produto/microcopy.md. REVISÃO CLÍNICA PENDENTE.",
+  "_comentario": "Textos do check-in e do pós-lapso (fluxo F4). Fonte: docs/02-produto/microcopy.md. REVISÃO CLÍNICA PENDENTE. Os sinais de risco vêm do protótipo do Maykon (skill seguranca-e-crise) e só oferecem ajuda.",
   "revisaoClinica": "pendente",
   "pergunta": "Como foi hoje?",
   "naoApostei": "Não apostei",
@@ -15,12 +15,41 @@
     "retomar": "Você já tem {n} dias sem apostar. Bora retomar o caminho?",
     "toMal": "Tô mal com isso",
     "voltar": "Voltar pro início",
-    "proximo": "Próximo"
+    "proximo": "Próximo",
+    "perguntaRelato": "Quer contar com suas palavras?",
+    "dicaRelato": "Se quiser. Fica só neste celular.",
+    "ofertaAjuda": "Parece que está pesado. Você não precisa passar por isso sozinho(a).",
+    "botaoAjuda": "Falar com alguém agora"
   },
   "humor": {
     "legenda": "Como você está se sentindo?",
     "dica": "Se quiser. Dá pra pular.",
-    "opcoes": ["Muito mal", "Mal", "Mais ou menos", "Bem", "Muito bem"]
+    "opcoes": [
+      "Muito mal",
+      "Mal",
+      "Mais ou menos",
+      "Bem",
+      "Muito bem"
+    ]
   },
-  "gatilhos": ["dia do pagamento", "jogo na TV", "tédio", "briga", "solidão", "bebida", "notificação", "outro"]
+  "gatilhos": [
+    "dia do pagamento",
+    "jogo na TV",
+    "tédio",
+    "briga",
+    "solidão",
+    "bebida",
+    "notificação",
+    "outro"
+  ],
+  "sinaisDeRisco": [
+    "me matar",
+    "morrer",
+    "suicid",
+    "não aguento mais",
+    "sem saída",
+    "acabar com tudo",
+    "me machucar",
+    "agiota"
+  ]
 }

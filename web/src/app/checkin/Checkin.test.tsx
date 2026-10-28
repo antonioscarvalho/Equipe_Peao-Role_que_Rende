@@ -42,6 +42,30 @@ describe('Pós-lapso', () => {
     })
   })
 
+  it('CA-3: o relato livre é opcional e fica no registro do dia', async () => {
+    renderizar()
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    await userEvent.type(screen.getByLabelText('Quer contar com suas palavras?'), 'recebi o salário e fiquei sozinho')
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    await waitFor(async () =>
+      expect((await checkins.listar())[0]).toMatchObject({ apostou: true, relato: 'recebi o salário e fiquei sozinho' }),
+    )
+  })
+
+  it('relato com sinal de risco oferece ajuda, sem impedir de seguir', async () => {
+    const { aoPedirAjuda } = renderizar()
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    expect(screen.queryByRole('button', { name: 'Falar com alguém agora' })).not.toBeInTheDocument()
+
+    await userEvent.type(screen.getByLabelText('Quer contar com suas palavras?'), 'não aguento mais')
+    expect(screen.getByRole('status')).toHaveTextContent('Você não precisa passar por isso sozinho(a).')
+    await userEvent.click(screen.getByRole('button', { name: 'Falar com alguém agora' }))
+    expect(aoPedirAjuda).toHaveBeenCalled()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    expect(screen.getByRole('heading', { name: 'O que dá pra ajustar no seu plano?' })).toBeInTheDocument()
+  })
+
   it('pular o gatilho não grava gatilho nenhum', async () => {
     renderizar()
     await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))

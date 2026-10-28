@@ -1,13 +1,29 @@
 import { dataLocal } from '@/domain/datas'
 import { abrirBanco, type Checkin } from './db'
 
+/** O que a pessoa conta depois de um lapso; tudo opcional (spec 004, CA-3). */
+export interface DetalhesLapso {
+  gatilhos?: string[]
+  relato?: string
+}
+
+/** Só existe quando apostou, e só com o que foi de fato preenchido. */
+export function detalhesDoLapso(apostou: boolean, detalhes?: DetalhesLapso): Pick<Checkin, 'gatilhos' | 'relato'> {
+  if (!apostou || !detalhes) return {}
+  const relato = detalhes.relato?.trim()
+  return {
+    ...(detalhes.gatilhos?.length ? { gatilhos: detalhes.gatilhos } : {}),
+    ...(relato ? { relato } : {}),
+  }
+}
+
 /** Repositório local do check-in diário. Nada sai do aparelho. */
 export const checkins = {
-  async registrar(apostou: boolean, gatilhos?: string[], quando: Date = new Date()): Promise<Checkin> {
+  async registrar(apostou: boolean, detalhes?: DetalhesLapso, quando: Date = new Date()): Promise<Checkin> {
     const checkin: Checkin = {
       data: dataLocal(quando),
       apostou,
-      ...(apostou && gatilhos?.length ? { gatilhos } : {}),
+      ...detalhesDoLapso(apostou, detalhes),
       registradoEm: quando.toISOString(),
     }
     const db = await abrirBanco()

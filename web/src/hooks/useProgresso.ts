@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { dataLocal } from '@/domain/datas'
 import { progresso as calcular } from '@/domain/progresso'
-import { checkins } from '@/lib/checkins'
+import { checkins, detalhesDoLapso, type DetalhesLapso } from '@/lib/checkins'
 import { configuracao } from '@/lib/configuracao'
 import type { Checkin, ConfiguracaoFinancas } from '@/lib/db'
 
@@ -33,18 +33,18 @@ export function useProgresso(hoje: string = dataLocal()) {
   }, [])
 
   const registrar = useCallback(
-    (apostou: boolean, gatilhos?: string[]) => {
+    (apostou: boolean, detalhes?: DetalhesLapso) => {
       const local: Checkin = {
         data: hoje,
         apostou,
-        ...(apostou && gatilhos?.length ? { gatilhos } : {}),
+        ...detalhesDoLapso(apostou, detalhes),
         registradoEm: new Date().toISOString(),
       }
       setLista((atual) => {
         const humor = atual.find((c) => c.data === hoje)?.humor
         return [...atual.filter((c) => c.data !== hoje), humor === undefined ? local : { ...local, humor }]
       })
-      checkins.registrar(apostou, gatilhos).catch(() => undefined)
+      checkins.registrar(apostou, detalhes).catch(() => undefined)
     },
     [hoje],
   )

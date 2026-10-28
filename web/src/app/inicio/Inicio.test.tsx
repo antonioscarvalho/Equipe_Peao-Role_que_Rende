@@ -69,7 +69,7 @@ describe('Início · check-in diário', () => {
     await configuracao.salvarFinancas({ gastoSemanalEstimado: 70, meta: 'conta de luz' })
     renderizar()
     const linha = await screen.findByText(/Grana preservada \(estimativa\)/)
-    expect(linha).toHaveTextContent(/≈ R\$\s70 — conta de luz/)
+    expect(linha).toHaveTextContent(/≈ cerca de R\$\s70 — conta de luz/)
     expect(screen.getByRole('button', { name: 'Ver dinheiro preservado' })).toBeInTheDocument()
   })
 
