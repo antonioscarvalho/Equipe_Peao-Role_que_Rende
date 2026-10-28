@@ -1,0 +1,60 @@
+/* Spec 009: personalização do bichinho. Tudo isolado aqui para não mexer em styles.css. */
+
+/* Cor escolhida. Duas classes para vencer as cores por humor de styles.css sem editá-lo.
+   Os humores não trocam a cor da pessoa; "cansado" só esfria (skill criar-personagem). */
+.bicho.bicho--personalizado { --corpo: var(--corpo-base); }
+.bicho.bicho--personalizado.bicho--cansado {
+  --corpo: color-mix(in srgb, var(--corpo-base) 55%, var(--rqr-roxo-claro));
+}
+
+/* Atalho na cena da tela inicial */
+.botao-personalizar {
+  position: absolute; top: 60px; right: 10px; z-index: 3;
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: var(--rqr-branco); color: var(--rqr-azul-escuro);
+  border: 3px solid var(--rqr-azul-escuro); border-radius: 50%;
+  box-shadow: 0 3px 0 var(--rqr-azul-escuro);
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
+}
+.botao-personalizar:hover { transform: translateY(-2px) rotate(-8deg); }
+.botao-personalizar:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--rqr-azul-escuro); }
+.botao-personalizar:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+
+/* Tela */
+.personalizar { padding-bottom: 28px; }
+.personalizar h1:focus { outline: none; }
+.personalizar__voltar { align-self: flex-start; }
+.personalizar__nota { margin: 0; color: var(--rqr-texto-suave); }
+.personalizar__previa {
+  display: grid; place-items: center; padding: 12px 0;
+  background: linear-gradient(180deg, var(--rqr-amarelo-claro), var(--rqr-amarelo) 90%);
+  border: 3px solid var(--rqr-azul-escuro); border-radius: var(--rqr-raio-card);
+}
+.personalizar__marco {
+  margin: 0; padding: 10px 14px; background: var(--rqr-amarelo-claro);
+  border: 2px dashed var(--rqr-azul-escuro); border-radius: 14px;
+}
+.personalizar__grupo { border: 0; padding: 0; margin: 0; min-width: 0; }
+.personalizar__grupo legend { font-weight: 800; margin-bottom: 8px; }
+.personalizar__opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.personalizar__acoes { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+.amostra, .opcao-item {
+  position: relative; display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; min-width: 48px; min-height: 48px; padding: 6px 12px;
+  background: var(--rqr-branco); color: var(--rqr-azul-escuro);
+  border: 3px solid var(--rqr-azul-escuro); border-radius: 16px;
+  font-weight: 700; font-size: var(--rqr-fs-small); cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
+}
+/* O rádio continua acessível (teclado e leitor de tela), só sai da frente visualmente. */
+.amostra input, .opcao-item input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: inherit; }
+.amostra:has(input:checked), .opcao-item:has(input:checked) { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); }
+.amostra:has(input:focus-visible), .opcao-item:has(input:focus-visible) { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+.amostra:hover, .opcao-item:not(.is-bloqueado):hover { transform: translateY(-2px); }
+.amostra__cor { width: 28px; height: 28px; border-radius: 50%; border: 3px solid var(--rqr-azul-escuro); }
+.amostra:has(input:checked) .amostra__cor { border-color: var(--rqr-amarelo); }
+.opcao-item.is-bloqueado { border-style: dashed; color: var(--rqr-texto-suave); cursor: not-allowed; }
+.opcao-item__dica { font-weight: 400; font-size: 12px; }
+
+.reduzir-animacoes .botao-personalizar, .reduzir-animacoes .amostra, .reduzir-animacoes .opcao-item { transition: none; }

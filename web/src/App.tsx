@@ -9,6 +9,7 @@ import { Confete } from "./Confete";
 import { PuloDoBichinho } from "./PuloDoBichinho";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
+import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
 
 type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
 
@@ -50,6 +51,7 @@ export default function App() {
   // Sons das missões ligados por padrão; o interruptor desliga.
   // A respiração (SOS) continua sem som por padrão, conforme spec 003 CA-3.
   const [sons, setSons] = useState(true);
+  const aparencia = useAparenciaVisivel();
 
   useEffect(() => { ligarSons(sons); }, [sons]);
 
@@ -107,7 +109,8 @@ export default function App() {
 
         <section className="cena" aria-label="Seu bichinho">
           <div className="balao" key={humor}>{falas[humor]}</div>
-          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} />
+          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} />
+          <BotaoPersonalizar />
           <Bairro construidas={construidas} />
           {moedaKey > 0 && humor === "feliz" && (
             <div className="cena__brilho" key={moedaKey}>
