@@ -10,7 +10,7 @@ description: Cria ou evolui o bichinho virtual (mascote) do app, com ficha, esta
 ## Antes de começar
 1. Leia `.claude/skills/guia-estilo-role-que-rende/references/cores.md`, `grafismos-e-icones.md` e `animacoes.md`.
 2. Leia `.claude/skills/design-etico-saude-digital/SKILL.md` e `.claude/skills/prevencao-recaida/SKILL.md`, se existirem.
-3. Veja a referência viva em `prototipos/prova-visual/` (componente `Bichinho`).
+3. Veja a referência viva em `web/` (componente `Bichinho`).
 
 ## Regras do personagem (não negociáveis)
 - **Nunca morre, nunca adoece de forma grave, nunca "culpa" o usuário.** Na recaída ele fica cansado ou cabisbaixo e se recupera com cuidado. Isso segue o pilar "acolher sem julgar" do edital.

@@ -1,16 +1,15 @@
-/// <reference types="vitest/config" />
-import react from '@vitejs/plugin-react'
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { existsSync, readFileSync } from "node:fs";
 
-// https://vite.dev/config/
+// `npm run dev:https` usa o certificado local de ./certs (gerado por `npm run certs`).
+// O giroscópio do celular só funciona em HTTPS.
+const https = process.env.HTTPS === "1" && existsSync("certs/cert.pem")
+  ? { key: readFileSync("certs/key.pem"), cert: readFileSync("certs/cert.pem") }
+  : undefined;
+
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
-  },
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-  },
-})
+  server: { host: true, port: https ? 5443 : 5180, strictPort: true, https },
+  preview: { host: true, port: 4180, strictPort: true },
+});
