@@ -1,8 +1,8 @@
 # Plano 005 — Prevenção de Recaída (Planos Se/Então) e Círculo de Confiança
 
 - **Spec:** [spec.md](spec.md)
-- **Estado:** 🗺️ rascunho — aguarda revisão humana
-- **Aprovado por:** _—_ em _aaaa-mm-dd_
+- **Estado:** ✅ aprovado
+- **Aprovado por:** Atyrson Souto em 2026-10-27
 - **Autor:** Atyrson Souto (com apoio de IA)
 
 ## 1. Abordagem

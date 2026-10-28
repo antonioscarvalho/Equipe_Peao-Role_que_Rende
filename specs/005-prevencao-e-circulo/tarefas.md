@@ -1,7 +1,7 @@
 # Tarefas 005 — Prevenção de Recaída (Planos Se/Então) e Círculo de Confiança
 
 - **Spec:** [spec.md](spec.md) · **Plano:** [plano.md](plano.md)
-- **Estado:** 📋 rascunho — vale depois que o plano for aprovado
+- **Estado:** 📋 valendo (plano aprovado em 2026-10-27)
 
 Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` pode ser feita em paralelo
 
