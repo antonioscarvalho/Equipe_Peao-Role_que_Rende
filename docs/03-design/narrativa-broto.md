@@ -212,6 +212,19 @@ Regras (skill `design-etico-saude-digital`): partidas de cerca de 3 minutos com 
 - Gíria leve ("bora", "rolê", "tamo junto"), sem caricatura. Testar com pessoas do público antes da entrega.
 - O Broto é apoio, não terapeuta. O app diz isso.
 
+## Responsáveis
+
+| Capítulo | Responsável |
+|---|---|
+| Base (diálogo e progresso) + Cap. 1, A Queda | Atyrson |
+| Cap. 2, O Cometa da Sorte | Maykon |
+| Cap. 3, As Luzes da Casa | Ian |
+| Cap. 4, O Segredo | Danillo |
+| Cap. 5, O Sinal + Epílogo + integração | Antonio |
+| Cap. 6, Dia Nublado | Danillo |
+
+Contrato técnico, pastas, branches e prioridade em [divisão da história](../05-processo/historia-divisao.md).
+
 ## Próximos passos
 
 1. Revisão clínica dos diálogos.
