@@ -66,6 +66,8 @@ Detalhes em [integrações externas](../04-tecnico/integracoes-externas.md).
 |---|---|---|
 | Vercel (plano Hobby) | https://vercel.com/legal/terms | Hospedagem do web; o Hobby é para uso pessoal e não comercial |
 | Supabase (plano Free) | https://supabase.com/terms | Backend e banco; projeto pausa após uma semana sem uso |
+| WhatsApp "Click to Chat" (`https://wa.me/<número>?text=`) | https://www.whatsapp.com/legal/terms-of-service · formato: https://faq.whatsapp.com/general/chats/how-to-use-click-to-chat/ (conferido em 27/10/2026) | Link público, sem API, chave ou SDK. O botão "Enviar pelo meu WhatsApp" do Círculo de Confiança (spec 005) só abre o WhatsApp da própria pessoa com a mensagem pronta; nada passa pelo nosso servidor. Não usa logo do WhatsApp |
+| Esquema `sms:` (RFC 5724) | padrão aberto | Botão "Enviar por SMS" do Círculo; abre o app de SMS do aparelho |
 
 ## Licenças compatíveis (referência rápida)
 

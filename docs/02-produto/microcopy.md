@@ -42,9 +42,14 @@
 |---|---|
 | Botão SOS | **Bateu a vontade?** |
 | Seu motivo | Seu motivo: "{motivo}" |
-| Contador | **{n} dias sem apostar este mês** · sequência atual: {m} dias |
+| Contador | **{n} dias sem apostar** desde {data_inicio} · {n_mes} neste mês · sequência atual: {m} dias |
 | Dinheiro | Grana preservada (estimativa): **≈ R$ {valor}** — {meta} |
 | Check-in | Como foi hoje? **Não apostei** · **Apostei** |
+| Humor (depois do registro) | Como você está se sentindo? *Se quiser. Dá pra pular.* Muito mal · Mal · Mais ou menos · Bem · Muito bem |
+| Dinheiro · convite (sem gasto informado) | **Quer ver quanto você preservou?** |
+| Dinheiro · campos | Quanto você costumava gastar com apostas por semana? *É só para a estimativa. O valor fica guardado neste celular.* · Pra onde você quer levar esse dinheiro? *Se quiser. Por exemplo: conta de luz, compras da semana.* |
+| Dinheiro · metas | Estimativa em coisas do dia a dia · Dá pra pagar **{n} {coisa}** · Valores de referência: {fonte} |
+| Dinheiro · editar | Sua meta: {meta} · **Mudar o valor ou a meta** |
 | Ajuda fixa | **Preciso de ajuda agora** |
 
 ## F2 · SOS 🩺
@@ -101,8 +106,10 @@ Validação antes do questionamento (sempre no topo do card): *"Faz sentido pens
 | Não apostei | Anotado. |
 | Apostei · 1 | **Obrigado por registrar.** Isso não apaga o que você já construiu. |
 | Apostei · 2 | O que aconteceu antes? (dia do pagamento · jogo na TV · tédio · briga · solidão · bebida · notificação · outro) |
+| Apostei · 2 · livre | Quer contar com suas palavras? *Se quiser. Fica só neste celular.* |
+| Apostei · 2 · sinal de risco no texto | Parece que está pesado. Você não precisa passar por isso sozinho(a). **Falar com alguém agora** → leva para a crise (só oferece; nunca bloqueia) |
 | Apostei · 3 | **O que dá pra ajustar no seu plano?** Editar meu plano · Agora não |
-| Apostei · 4 | Este mês você já tem **{n} dias sem apostar**. Bora retomar o caminho? |
+| Apostei · 4 | Você já tem **{n} dias sem apostar**. Bora retomar o caminho? |
 | Opção | Tô mal com isso → leva para a crise |
 
 ## F5 · Plano
@@ -138,7 +145,7 @@ Validação antes do questionamento (sempre no topo do card): *"Faz sentido pens
 |---|---|
 | Título | **Seu Círculo de Confiança** |
 | Explicação | Até 3 pessoas pra chamar quando apertar. Os contatos ficam só neste celular. |
-| Mensagem 1 | Tô com vontade de apostar, pode falar comigo? |
+| Mensagem 1 | Tô com vontade de apostar, pode falar comigo? (mensagem padrão da spec 005, CA-5) |
 | Mensagem 2 | Hoje tá difícil, me liga quando puder? |
 | Botão | Enviar pelo meu WhatsApp |
 | Nota | A gente nunca manda mensagem sozinho. |

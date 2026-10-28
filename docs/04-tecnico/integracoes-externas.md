@@ -13,7 +13,9 @@
 
 | # | Serviço / API | Finalidade | Dados enviados | Autenticação | Termos / licença | Usa IA? | Status |
 |---|---|---|---|---|---|---|---|
-| 1 | _a definir_ | _a definir_ | _a definir_ | _a definir_ | _link_ | sim/não | ⬜ |
+| 1 | WhatsApp "Click to Chat" (`wa.me`) | Spec 005: a pessoa abre a conversa com alguém do Círculo de Confiança com a mensagem pronta | Nenhum pelo app. Quando a **própria pessoa** toca no link, o WhatsApp recebe o número do contato e o texto da mensagem | Nenhuma (link público) | https://www.whatsapp.com/legal/terms-of-service | não | ✅ |
+
+**Checklist do item 1 (`wa.me`):** termos permitem link público ✅ · nenhum dado vai para o nosso servidor; na demo, só o contato fictício `(61) 90000-0000` ✅ · sem chave de API ➖ · `.env.example` ➖ · fallback: botão de SMS ao lado e, no notebook, o WhatsApp Web ✅ · sem IA ➖
 
 ## Checklist por integração
 

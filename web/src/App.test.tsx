@@ -47,4 +47,43 @@ describe('App', () => {
     render(<App />)
     expect(screen.getByRole('button', { name: 'Bateu a vontade?' })).toBeInTheDocument()
   })
+
+  it('spec 005: "Seu plano" e "Seu Círculo" abrem pelo início, sem dado na URL, com a ajuda no topo', async () => {
+    render(<App />)
+    await userEvent.click(screen.getByRole('button', { name: 'Seu plano' }))
+    expect(screen.getByRole('heading', { level: 1, name: 'Seu plano pros momentos difíceis' })).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/plano')
+    expect(window.location.search).toBe('')
+    expect(screen.getByRole('button', { name: 'Preciso de ajuda agora' })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Guardião' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Seu Círculo' }))
+    expect(screen.getByRole('heading', { level: 1, name: 'Seu Círculo de Confiança' })).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/circulo')
+    expect(window.location.search).toBe('')
+    expect(screen.getByRole('button', { name: 'Preciso de ajuda agora' })).toBeInTheDocument()
+  })
+
+  it('spec 005: /plano e /circulo abrem direto pela URL', () => {
+    window.history.replaceState(null, '', '/circulo')
+    render(<App />)
+    expect(screen.getByRole('heading', { level: 1, name: 'Seu Círculo de Confiança' })).toBeInTheDocument()
+  })
+
+  it('spec 004: "Apostei" no início leva ao pós-lapso, e de lá à crise', async () => {
+    render(<App />)
+    await userEvent.click(screen.getByRole('button', { name: 'Apostei' }))
+    expect(window.location.pathname).toBe('/checkin')
+    expect(screen.getByRole('heading', { name: 'Obrigado por registrar.' })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Tô mal com isso' }))
+    expect(screen.getByRole('heading', { name: /momento muito difícil/ })).toBeInTheDocument()
+  })
+
+  it('spec 004: o dinheiro preservado abre a partir do início', async () => {
+    render(<App />)
+    await userEvent.click(await screen.findByRole('button', { name: 'Quer ver quanto você preservou?' }))
+    expect(window.location.pathname).toBe('/dinheiro')
+    expect(screen.getByRole('heading', { name: 'Dinheiro preservado' })).toBeInTheDocument()
+  })
 })

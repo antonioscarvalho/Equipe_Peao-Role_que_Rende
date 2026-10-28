@@ -24,6 +24,7 @@ A Equipe Peão declara que usou ferramentas de Inteligência Artificial **como a
 |---|---|---|---|---|
 | Claude Code | Anthropic | Claude Opus 5.5 (`claude-opus-5-5`) | CLI no terminal | https://www.anthropic.com/legal |
 | Antigravity | Google DeepMind | Gemini 3.8 Flash | IDE / Assistente de código | https://ai.google.dev/terms |
+| Kiro CLI | Amazon Web Services | Claude Opus 5.5 | CLI no terminal | https://kiro.dev/license/ |
 | _a preencher_ | | | | |
 
 ## 3. Finalidades do uso
@@ -34,9 +35,9 @@ Marque todas as que se aplicam e detalhe no registro (seção 4).
 |---|---|---|
 | **Geração de documentação** (README, docs, guias) | ✅ | Estrutura e textos iniciais do README e da pasta `docs/`, com base no edital |
 | **Definição de tema e conceito** (brainstorm de ideias, narrativa, mecânicas) | ✅ | Análise crítica do conceito frente aos requisitos do edital e refinamento da visão do Guardião + Open Finance |
-| **Geração de código** (funcionalidades, correções, testes) | ✅ | Backend inicial (Danillo) e app web: base, SOS e crise (spec 001) |
+| **Geração de código** (funcionalidades, correções, testes) | ✅ | Backend inicial (Danillo) e app web: base, SOS e crise (spec 001); plano Se/Então e Círculo de Confiança (spec 005) |
 | **Conexão com APIs externas** (código de integração, ou IA como API dentro do produto) | ⬜ | _a preencher_ |
-| **Conteúdo do produto** (textos, diálogos, mensagens ao usuário) | ⬜ | _a preencher_ |
+| **Conteúdo do produto** (textos, diálogos, mensagens ao usuário) | ✅ | Textos de interface da spec 005 (`prevencao.json`), derivados do microcopy; revisão clínica pendente |
 | **Arte e assets visuais** (imagens, ícones, sprites) | ⬜ | _a preencher_ |
 | **Áudio** (música, efeitos, voz/TTS) | ⬜ | _a preencher_ |
 | **Pitch** (roteiro, slides, revisão de texto) | ⬜ | _a preencher_ |
@@ -78,7 +79,11 @@ Uma linha por uso relevante. Atualize **na hora**, não no fim.
 | 13 | 2026-10-27 | Ian Costa Guimarães | Antigravity (Gemini 3.8 Flash) | Documentação / Definição de tema | Elaboração e estruturação das 5 especificações técnicas do MVP (Specs 002 a 006 (renumeradas de 001–005)) e backlog com critérios de aceite verificáveis | Specs em specs/002 a 006, specs/README.md e docs/02-produto/escopo-e-backlog.md | _pendente_ | `specs/**`, `docs/02-produto/escopo-e-backlog.md` |
 | 14 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) com busca na web | Pesquisa / Documentação | Pesquisar, revisar e instalar skills de terceiros (ideias, mercado, pitch, revisão de código) e testar se todas as skills do projeto são chamadas automaticamente | 17 skills de terceiros com licença MIT/Apache; gatilhos em português nas descrições de `supabase` e `critique-product` | _pendente_ | `.claude/skills/**`, `.claude/README.md`, `docs/07-conformidade/licencas-e-assets.md` |
 | 15 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) | Geração de código / Conteúdo do produto / Arte / Documentação | Protótipo paralelo do MVP do Guardião; rascunhos de documentos; personagem Guardião em SVG; modo calmo do guia de estilo | Protótipo em `prototipos/guardiao-maykon/` (26 testes), propostas de documentos, ajustes no guia de estilo | _pendente_ (textos clínicos também pendentes de psicólogo) | `prototipos/guardiao-maykon/**`, `.claude/skills/guia-estilo-role-que-rende/**` |
-| 16 | | | | | | | | |
+| 16 | 2026-10-27 | Maykon Júnio | Claude Code (Opus 5.5) | Documentação / Definição de tema | Revisar as specs 001–006 e os requisitos; corrigir as 002–006, criar as specs 007 e 008, atualizar as issues e a documentação de produto | Specs 002–006 corrigidas (fontes, critérios verificáveis, lacunas, dependências) e marcadas para reaprovação; specs 007 (Open Finance, Must, só dados sintéticos) e 008 (configurações, privacidade e acessibilidade); issues #4, #5, #7, #8 e #9 renumeradas e #15 e #16 criadas; personas, fluxos, microcopy, visão, backlog e índice atualizados. Decisões de persona, contador, Open Finance e responsável da 008 tomadas por Maykon Júnio | _pendente_ (reaprovação das specs pela equipe) | `specs/**`, `docs/02-produto/**` |
+| 17 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) | Geração de código / Documentação | Plano, tarefas e implementação da spec 004: check-in diário, pós-lapso, contador do mês, dinheiro preservado e simulação de Open Finance com extrato sintético (depois da revisão de 27/10: contador pelo total, meta, humor opcional; a simulação saiu para a branch `feat/007-open-finance-demo`) | Código em `web/src/`, testes, plano e revisão; textos tirados de `docs/02-produto/microcopy.md` | Decisões do plano aprovadas por Danillo Meira; revisão clínica _pendente_ | `specs/004-contador-e-dinheiro/`, `web/src/**`, `docs/revisoes/checkin-e-dinheiro.md` |
+| 18 | 2026-10-27 | Danillo Meira | Claude Code (Opus 5.5) com busca na web | Pesquisa / Geração de código / Documentação | Revalidar a spec 004 contra o código, conferir na fonte os valores das metas (ANP e DIEESE) e fechar as lacunas: texto livre do pós-lapso, "estimativa" na visão em metas, leitura acessível de "≈", modo demo | Valores das metas conferidos nos PDFs oficiais; código, testes e conferência no navegador; revisão atualizada | Danillo Meira; revisão clínica _pendente_ | `web/src/**`, `docs/07-conformidade/fontes-e-referencias.md`, `docs/revisoes/checkin-e-dinheiro.md`, `docs/02-produto/microcopy.md` |
+| 19 | 2026-10-27 | Atyrson Souto | Kiro CLI (Claude Opus 5.5) | Geração de código / Conteúdo do produto / Documentação | Implementar a spec 005 (tarefas T001–T009, T011 e T012): banco versão 3, repositórios de planos e Círculo, links de WhatsApp/SMS, telas "Seu plano" e "Seu Círculo", ações do plano no SOS, testes e revisão de conformidade | Código em `web/src/` (telas, componentes, domínio, repositórios IndexedDB), textos de interface em `prevencao.json` a partir do microcopy, testes e o checklist em `docs/revisoes/prevencao-e-circulo.md` | _pendente_: revisão humana de Atyrson Souto e revisão clínica dos textos | `web/src/**`, `specs/005-prevencao-e-circulo/tarefas.md`, `docs/revisoes/prevencao-e-circulo.md`, `docs/07-conformidade/**`, `docs/04-tecnico/integracoes-externas.md` |
+| 20 | | | | | | | | |
 
 ## 5. Componentes sem uso de IA
 

@@ -31,6 +31,18 @@
 | Banco Central do Brasil — Cidadania Financeira | Orçamento, gestão de dívidas, crédito consciente | https://www.bcb.gov.br | ✅ |
 | Consumidor.gov.br | Renegociação de débitos e mediação de conflitos | https://www.consumidor.gov.br | ✅ |
 
+## Valores de referência das metas (spec 004)
+
+Mostrados na tela do dinheiro preservado como "coisas do dia a dia". Conferidos no documento original, não em agregador.
+
+| Fonte | Valor usado | Link | Verificado |
+|---|---|---|---|
+| ANP — Síntese Semanal de Preços dos Combustíveis nº 43/2026 (semana de 18 a 24/10/2026) | Botijão de gás (GLP P-13): R$ 114,98, preço médio de revenda no Brasil | https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/arq-sintese-semanal/2026/sintese-precos-43.pdf | ✅ 2026-10-27 |
+| Conab/DIEESE — Pesquisa Nacional da Cesta Básica, setembro de 2026 (divulgada em 09/10/2026), Tabela 1 | Semana de compras: R$ 188,23 = média simples das 27 capitais (R$ 752,91) ÷ 4. O DIEESE não publica média nacional; a média é cálculo da equipe | https://www.dieese.org.br/analisecestabasica/2026/202609cestabasica.pdf | ✅ 2026-10-27 |
+| ANEEL — tarifas residenciais | Conta de luz: **não usada**. A ANEEL publica tarifa por kWh sem impostos nem bandeira, não o valor de uma conta típica; a meta fica fora da tela até haver fonte para a conta | https://www.gov.br/aneel | ⬜ |
+
+Atualizar antes do pitch: a ANP publica toda semana e o DIEESE todo mês. Os valores ficam em `web/src/content/metas.json`.
+
 ## Identidade visual
 
 | Fonte | Tema | Link | Verificado |

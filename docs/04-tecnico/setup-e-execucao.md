@@ -4,7 +4,7 @@
 
 ## Pré-requisitos
 
-- Node 20 ou mais novo
+- Node 22 ou mais novo (o `web/` declara `engines`). No Node 20 os testes nem começam: o `undici`, que o jsdom puxa, usa uma função de compressão que só existe a partir do 22
 - Docker, para rodar o Supabase local (`npx supabase start`)
 - Celular com o app **Expo Go**, para testar o mobile
 - Stack e motivação em [stack e motivação](stack-e-motivacao.md)

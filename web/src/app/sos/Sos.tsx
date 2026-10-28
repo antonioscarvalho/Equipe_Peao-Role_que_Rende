@@ -8,6 +8,7 @@
  * REVISÃO CLÍNICA PENDENTE dos textos (web/src/content/sos.json).
  */
 import { useCallback, useState } from 'react'
+import { AcoesDoPlano } from '@/components/AcoesDoPlano'
 import { Botao } from '@/components/Botao'
 import { LinkTelefone } from '@/components/LinkTelefone'
 import { ReguaVontade } from '@/components/ReguaVontade'
@@ -117,11 +118,7 @@ export function Sos({ motivo, aoPedirAjuda, aoTerminar, duracaoOnda = conteudoSo
       {passo === 'acoes' && (
         <>
           <h1 id="sos-titulo">O que dá pra fazer agora?</h1>
-          <ul className="lista-acoes">
-            {conteudoSos.acoes.map((acao) => (
-              <li key={acao}>{acao}</li>
-            ))}
-          </ul>
+          <AcoesDoPlano acoes={conteudoSos.acoes} />
           <Botao onClick={() => setPasso('depois')}>Próximo</Botao>
         </>
       )}

@@ -1,13 +1,20 @@
 # Spec 003 — Botão SOS de Fissura: Urge Surfing e Cards "Pare e Examine"
 
-- **Estado:** ✅ aprovada
-- **Autor(es):** Ian Costa Guimarães
-- **Aprovada por:** Equipe Peão em 2026-10-27
+- **Estado:** ✅ aprovada (Equipe Peão, 27/10/2026) · 🔄 **alterada pela revisão de 27/10/2026 — aguarda reaprovação**
+- **Autor(es):** Ian Costa Guimarães · revisão: Maykon Júnio (com apoio de IA)
+- **Aprovada por:** Equipe Peão em 2026-10-27 · reaprovação: _—_
 - **Prioridade:** Must
+- **Issue:** [#5](https://github.com/antonioscarvalho/equipepeao/issues/5) · **Fluxo:** [F2](../../docs/02-produto/fluxos.md)
+
+> **O que mudou na revisão:** o contexto deixou de citar dopamina e um tempo fixo sem fonte; a spec agora diz **o que acrescenta à 001** (seção 1.1); critérios "sereno" viraram regras verificáveis; estado vazio quando não há plano nem contatos (CA-7); cards em ordem previsível (CA-4); sem som por padrão.
 
 ## 1. Contexto e problema
 
-A fissura (vontade intensa e impulsiva de apostar) atua neurobiologicamente em formato de onda: sobe rápido, atinge um pico desconfortável de dopamina/ansiedade e diminui progressivamente em 10 a 15 minutos. Quando a pessoa está no ápice da onda, a capacidade de julgamento crítico diminui, favorecendo distorções como a "ilusão de controle" e o *chasing* (tentativa de recuperar dinheiro perdido). É necessário um mecanismo imediato de 1 toque, offline, para acolher a onda (técnica de *urge surfing*) e desarmar distorções cognitivas.
+A vontade de apostar (fissura) costuma vir como uma onda: sobe, chega a um pico e passa, em geral em minutos (modelo de Prevenção de Recaída de Marlatt e técnica de *urge surfing* — skill `prevencao-recaida`). No pico, distorções como a "ilusão de controle" e o *chasing* (tentar recuperar o que perdeu) ficam mais fortes. Mindfulness tem efeito moderado sobre a fissura (g ≈ 0,69, evidência tentativa) e a correção de crenças sobre o acaso reduz o jogo (ECR de Ladouceur, 2001) — ver [pesquisa](../../docs/pesquisa/02-intervencoes.md). É preciso um apoio de 1 toque, offline, para atravessar a onda e examinar essas distorções.
+
+### 1.1 Relação com a spec 001
+
+A [spec 001](../001-base-sos-crise/spec.md) já implementou o SOS básico: régua 0–10, timer com respiração que pode ser pulado, "Seu motivo" (se houver), um card "Pare e examine", régua final e oferta de CVV com vontade ≥ 9 ou "Não tô aguentando". **Esta spec acrescenta:** o atalho no topo (CA-1), o motivo vindo do onboarding (002), a sequência previsível de cards (CA-4), as ações do plano Se/Então e do Círculo de Confiança da [spec 005](../005-prevencao-e-circulo/spec.md) (CA-5), o estado vazio (CA-7) e as regras de calma do timer (CA-3).
 
 ## 2. Pilar do desafio
 
@@ -18,51 +25,52 @@ A fissura (vontade intensa e impulsiva de apostar) atua neurobiologicamente em f
 
 ## 3. Persona e cenário
 
-- **Persona:** Marcos ou familiares enfrentando momento agudo de crise impulsiva.
-- **Cenário:** É domingo à tarde ou dia de pagamento; Marcos sente o impulso incontrolável de abrir um site de apostas no celular. Ele clica no botão SOS flutuante para não apostar.
+- **Persona:** **Marcos** ([personas](../../docs/02-produto/publico-e-personas.md)).
+- **Cenário:** domingo à tarde ou dia de pagamento; Marcos sente o impulso de abrir um site de apostas e toca no SOS para não apostar.
 
 ## 4. Histórias de usuário
 
-- Como pessoa enfrentando uma fissura intensa, quero acionar um botão SOS com apenas 1 clique em qualquer lugar do aplicativo, para ter apoio imediato antes de ceder ao impulso.
-- Como pessoa ansiosa no pico da vontade, quero um exercício guiado de respiração com cronômetro sereno, para que meu corpo relaxe e a onda da fissura diminua.
-- Como pessoa tentada a apostar para recuperar perdas, quero ler cards reflexivos com perguntas socráticas, para desconstruir a ilusão de que vou "ganhar de volta".
-- Como usuário em sofrimento severo, quero uma saída de emergência para o Ligue 188 caso sinta que não vou aguentar sozinho.
+- Como **Marcos**, quero acionar o SOS com 1 toque, de qualquer lugar do app, para ter apoio antes de ceder ao impulso.
+- Como **Marcos**, no pico da vontade, quero uma respiração guiada com um timer calmo, para a onda baixar.
+- Como **Marcos**, tentado a apostar para recuperar perdas, quero cards com perguntas que me façam pensar, sem sermão.
+- Como **Marcos**, se eu sentir que não vou aguentar sozinho, quero uma saída direta para o CVV 188.
 
 ## 5. Critérios de aceite
 
-- **CA-1:** O botão SOS está presente e fixado na tela inicial e no menu superior, abrindo em menos de 500ms e funcionando 100% offline.
-- **CA-2:** A primeira tela do SOS pergunta a intensidade da vontade (escala de 0 a 10) e inclui a opção explícita *"Não tô aguentando"*, que transfere imediatamente para a tela do Protocolo de Crise (CVV 188).
-- **CA-3:** O fluxo de *urge surfing* apresenta cronômetro sereno (10 a 15 min), frases curtas de ancoragem (*"A vontade sobe, chega no pico e passa"*) e respiração diafragmática guiada com opção de pular.
-- **CA-4:** Apresenta o "Seu Motivo" configurado no onboarding e pelo menos um card da série "Pare e Examine" com perguntas reflexivas sem tom moralista.
-- **CA-5:** A etapa de encerramento sugere alternativas de ação: [Ver meu plano Se/Então], [Falar com alguém do Círculo] ou [Sair para caminhar].
-- **CA-6:** Ao final, o sistema afere novamente a fissura (0 a 10) e mostra a evolução de alívio (*"Começou em 8, agora tá em 4"*), salvando os registros apenas localmente.
+- **CA-1:** Dado qualquer tela do app, então o SOS está a **1 toque** (botão grande na tela inicial e atalho no topo) e abre sem internet.
+- **CA-2:** Dado a primeira tela do SOS, então há a régua de vontade (0 a 10) e a opção **"Não tô aguentando"**, que leva direto ao protocolo de crise (CVV 188).
+- **CA-3:** Dado o timer de *urge surfing* (10 ou 15 minutos, à escolha), então: não há som por padrão, não há cor vermelha nem contagem com tom de urgência, a única animação é a da respiração (ciclo de pelo menos 4 s), há frases curtas de ancoragem (*"A vontade sobe, chega no pico e passa"*) e o botão **Pular** está sempre visível.
+- **CA-4:** Dado o passo de reflexão, então aparece o "Seu motivo" do onboarding (se houver) e **um** card "Pare e examine"; os cards seguem uma **ordem fixa** (o próximo SOS mostra o card seguinte), nunca sorteada.
+- **CA-5:** Dado o passo de ação, então o app mostra os planos Se/Então e os contatos do Círculo de Confiança (spec 005), além de "Sair para caminhar".
+- **CA-6:** Dado o fim do SOS, quando a pessoa marca a vontade de novo (0 a 10), então o app mostra a mudança (*"Começou em 8, agora tá em 4"*) e guarda o par antes/depois **só no aparelho**.
+- **CA-7:** Dado que a pessoa ainda não tem plano nem contatos, quando chega ao passo de ação, então o app mostra o convite **"Montar meu plano depois"** e o botão **"Ligar pro CVV · 188"**, sem bloquear o fim do SOS.
 
 ## 6. Acessibilidade
 
-- Suporte completo a `prefers-reduced-motion` no cronômetro e nas animações de respiração.
-- Contraste visual elevado com a paleta oficial (amarelo `#FCFC30`, azul-escuro `#3333BD`).
-- Sons sutis e suaves com opção de silenciamento total.
-- Compatibilidade integral com leitores de tela.
+- `prefers-reduced-motion` e a opção "Reduzir animações" ([spec 008](../008-configuracoes-privacidade-acessibilidade/spec.md)) param a animação da respiração; o texto "Inspire / Solte" continua.
+- Contraste pela paleta oficial (azul-escuro `#3333BD` sobre amarelo `#FCFC30` = 8,1:1).
+- Sons, se existirem, são opcionais e começam desligados.
+- Leitor de tela: o tempo restante não é anunciado a cada segundo, só em marcos.
 
 ## 7. Conteúdo e mensagens
 
-- Conforme `docs/02-produto/microcopy.md` (Fluxo F2).
-- Zero julgamentos: *"Respire fundo. A fissura é como uma onda no mar: desconfortável, mas ela sempre passa."*
+- [Microcopy](../../docs/02-produto/microcopy.md), seção F2 (textos 🩺 com revisão clínica pendente).
+- *"Respire fundo. A vontade é como uma onda: incomoda, mas passa."*
 
 ## 8. Fora do escopo
 
-- Minigames rápidos com elementos de sorte, pontuação, moedas ou efeitos estridentes de vitória.
-- Chatbot automatizado com inteligência artificial fingindo ser terapeuta.
-- Exigência de conexão de rede ou autenticação para liberar o socorro.
+- Minigames, elementos de sorte, pontuação, moedas ou efeitos de vitória.
+- Chatbot de IA fingindo ser terapeuta.
+- Exigir internet ou login para o SOS.
 
 ## 9. Conformidade com o edital (Seção 8.4)
 
-- [x] Não promove nem simula apostas (ou, se simula, é educativo e explícito)
+- [x] Não promove nem simula apostas
 - [x] Sem dinheiro real, criptoativos ou itens de valor monetário
 - [x] Sem marcas proibidas
 - [x] Linguagem sem estigma
-- [x] Informações sensíveis com fonte
-- [x] Só dados sintéticos ou públicos
+- [x] Informações sensíveis com fonte (seção 1, ver pesquisa)
+- [x] Só dados sintéticos ou do próprio usuário, no aparelho
 
 ## 10. Dúvidas em aberto
 

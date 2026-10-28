@@ -333,6 +333,291 @@ h1:focus {
   font-weight: 700;
 }
 
+/* Spec 004: check-in, contador e dinheiro preservado */
+.cartao > .cartao__titulo {
+  margin: 0 0 var(--rqr-esp-1);
+  font-size: var(--rqr-fs-lead);
+}
+
+.cartao > * + * {
+  margin-top: var(--rqr-esp-1);
+}
+
+.botao--secundario[aria-pressed='true'] {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+}
+
+.chips {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.chips__legenda {
+  font-weight: 700;
+  padding: 0;
+}
+
+.chips__dica {
+  margin: 4px 0 0;
+  font-size: var(--rqr-fs-small);
+  color: var(--rqr-texto-suave);
+}
+
+.chips__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--rqr-esp-1);
+}
+
+.chip {
+  min-height: var(--alvo-toque);
+  padding: 8px var(--rqr-esp-2);
+  border-radius: var(--rqr-raio-pilula);
+  border: 2px solid var(--rqr-azul-escuro);
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  font: inherit;
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+  font-weight: 700;
+}
+
+/* O estado marcado não depende só da cor (spec 004, seção 6). */
+.chip[aria-pressed='true']::before {
+  /* Visto desenhado em CSS: não depende de a fonte ter o glifo, e o leitor não o lê
+     (o aria-pressed já anuncia o estado). */
+  content: '';
+  display: inline-block;
+  width: 0.35em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  border: solid currentColor;
+  border-width: 0 0.15em 0.15em 0;
+  transform: translateY(-0.1em) rotate(45deg);
+}
+
+.checkin__resposta {
+  min-height: 1.5em;
+  font-weight: 700;
+}
+
+.checkin__dinheiro,
+.valor__meta {
+  margin: 0;
+}
+
+.checkin__resposta:empty {
+  margin: 0;
+}
+
+.contador p {
+  margin: 0;
+}
+
+.contador__numero {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-h1);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.contador__frase {
+  font-weight: 700;
+}
+
+.contador__detalhe {
+  font-size: var(--rqr-fs-small);
+}
+
+.valor {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.valor__numero {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-h1);
+  font-weight: 700;
+}
+
+.metas {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: var(--rqr-fs-lead);
+  font-weight: 700;
+}
+
+.campo {
+  min-height: var(--alvo-toque);
+  padding: 8px 12px;
+  border: 2px solid var(--rqr-azul-escuro);
+  border-radius: 12px;
+  background: var(--rqr-branco);
+  color: var(--rqr-texto);
+  font: inherit;
+}
+
+/* Sem token de erro na paleta: o erro é texto em negrito com borda tracejada, nunca só cor. */
+.campo[aria-invalid='true'] {
+  border-style: dashed;
+}
+
+.campo__erro {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Esqueleto com a forma do que vem: bloco do contador e do valor. */
+.esqueleto {
+  border-radius: 12px;
+  background: var(--rqr-cinza-100);
+  animation: esqueleto-brilho 1.2s var(--rqr-ease-padrao) infinite alternate;
+}
+
+.esqueleto--contador {
+  height: 96px;
+  width: 60%;
+}
+
+.esqueleto--valor {
+  height: 72px;
+  width: 50%;
+}
+
+@keyframes esqueleto-brilho {
+  to {
+    opacity: 0.5;
+  }
+}
+
+/* Spec 005: formulários e cartões do plano e do Círculo. .grupo-campo envolve rótulo, dica, campo e erro. */
+h2 {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-lead);
+  margin: var(--rqr-esp-1) 0 0;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-2);
+}
+
+.grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grupo-campo label {
+  font-weight: 700;
+}
+
+.grupo-campo input,
+.grupo-campo select {
+  min-height: var(--alvo-toque);
+  padding: 8px 12px;
+  border: 2px solid var(--rqr-azul-escuro);
+  border-radius: 8px;
+  background: var(--rqr-branco);
+  color: var(--rqr-texto);
+  font: inherit;
+}
+
+.grupo-campo input[aria-invalid='true'] {
+  border-width: 3px;
+}
+
+.grupo-campo .campo__erro::before {
+  content: '⚠ ';
+}
+
+.grupo-campo__dica {
+  margin: 0;
+  font-size: var(--rqr-fs-small);
+  color: var(--rqr-texto-suave);
+}
+
+.lista-cartoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+}
+
+.cartao--item p {
+  margin: 0 0 var(--rqr-esp-1);
+}
+
+/* Link com cara de botão (envio pelo WhatsApp/SMS) */
+a.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.grupo-campo--opcoes {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.grupo-campo--opcoes legend {
+  font-weight: 700;
+  padding: 0;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--alvo-toque);
+  cursor: pointer;
+}
+
+.opcao input {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--rqr-azul-escuro);
+}
+
+.cartao--item h2 {
+  margin: 0;
+}
+
+.nota--fixa {
+  font-weight: 700;
+}
+
+.acoes-do-plano,
+.acoes-do-plano section,
+.acoes-do-plano__convite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+}
+
+.acoes-do-plano p {
+  margin: 0;
+}
+
+.acoes-do-plano__nome {
+  font-weight: 700;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -340,4 +625,33 @@ h1:focus {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Pausas pra cabeça: visual calmo, sem animação de vitória. */
+.pausa__pedido {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.pausa__pontos {
+  display: flex;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pausa__ponto {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+}
+
+.pausa__ponto--feito {
+  background: currentColor;
+}
+
+.pausa__resumo {
+  padding-left: 1.25rem;
 }

@@ -1,0 +1,38 @@
+{
+  "_comentario": "Metas tangíveis para o dinheiro preservado. Só aparecem na tela com status 'confirmado', valor e data de verificação (decisão 3 do plano 004). Cada fonte está registrada em docs/07-conformidade/fontes-e-referencias.md.",
+  "metas": [
+    {
+      "id": "botijao",
+      "nome": "botijão de gás",
+      "plural": "botijões de gás",
+      "valorReferencia": 114.98,
+      "status": "confirmado",
+      "verificado_em": "2026-10-27",
+      "fonte": "ANP, Síntese Semanal de Preços dos Combustíveis nº 43/2026: preço médio de revenda do GLP P-13 no Brasil, semana de 18 a 24/10/2026",
+      "link": "https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/arq-sintese-semanal/2026/sintese-precos-43.pdf",
+      "rotuloFonte": "preço médio do botijão de 13 kg, ANP, outubro de 2026"
+    },
+    {
+      "id": "luz",
+      "nome": "conta de luz",
+      "plural": "contas de luz",
+      "valorReferencia": null,
+      "status": "conferir",
+      "verificado_em": null,
+      "fonte": "ANEEL, tarifa média residencial (consumo típico a definir)",
+      "link": "https://www.gov.br/aneel",
+      "pendencia": "A ANEEL publica tarifa por kWh sem impostos nem bandeira, não o valor de uma conta típica. Falta uma fonte oficial para a conta (consumo e tributos) antes de confirmar."
+    },
+    {
+      "id": "compras",
+      "nome": "semana de compras",
+      "plural": "semanas de compras",
+      "valorReferencia": 188.23,
+      "status": "confirmado",
+      "verificado_em": "2026-10-27",
+      "fonte": "Conab/DIEESE, Pesquisa Nacional da Cesta Básica de Alimentos, setembro de 2026 (divulgada em 09/10/2026): média simples das 27 capitais, R$ 752,91, dividida por 4",
+      "link": "https://www.dieese.org.br/analisecestabasica/2026/202609cestabasica.pdf",
+      "rotuloFonte": "cesta básica, média das 27 capitais ÷ 4, DIEESE, setembro de 2026"
+    }
+  ]
+}

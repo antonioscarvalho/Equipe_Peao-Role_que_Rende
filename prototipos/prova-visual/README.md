@@ -1,6 +1,6 @@
 # Prova visual — bichinho, missões e respiração
 
-Protótipo para validar animações e visual no estilo do Rolê que Rende. Serve de referência para as skills `criar-personagem` e `animar-componente`.
+Protótipo para validar animações e visual no estilo do Rolê que Rende. Serve de referência para as skills `criar-personagem`, `animar-componente` e `sonorizar-componente`.
 
 ## Rodar
 ```bash
@@ -18,6 +18,7 @@ export NODE_EXTRA_CA_CERTS=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 - **Missões**: concluir faz a moeda girar, o "dinheiro protegido" subir, o bairro crescer e brotar folha no bichinho.
 - **Deu vontade** (`src/Respiracao.tsx`): respiração 4-4-6 e atalhos para CVV 188 e autoexclusão gov.br.
 - **Reduzir animações**: interruptor no topo, também respeita `prefers-reduced-motion`.
+- **Sons** (`src/sons.ts`): sintetizados com Web Audio, ligados por padrão nas missões (interruptor "Sons" no topo desliga); na respiração começam desligados. Missão concluída toca acorde, moeda e folha em sequência; a respiração tem tons calmos na inspiração e expiração. Ver skill `sonorizar-componente`.
 - Animações em CSS/SVG com os tokens `rqr-*` do `guia-estilo-role-que-rende` e três Lottie de teste.
 
 ## Dados e créditos
