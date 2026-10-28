@@ -128,4 +128,27 @@ describe('Seu plano', () => {
     expect(aoAbrirCirculo).toHaveBeenCalled()
     expect(aoVoltar).toHaveBeenCalled()
   })
+
+  it('acessibilidade: cria um plano só pelo teclado', async () => {
+    renderizar()
+    await screen.findByRole('group', { name: 'O que costuma trazer a vontade?' })
+    const novo = screen.getByRole('button', { name: 'Novo plano' })
+    novo.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(titulo()).toHaveFocus()
+
+    await userEvent.tab()
+    expect(screen.getByLabelText('Se…')).toHaveFocus()
+    await userEvent.keyboard('bater a solidão')
+    await userEvent.tab()
+    expect(screen.getByLabelText('Então eu vou…')).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'caminhar 10 minutos' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(screen.getByLabelText('Então eu vou…')).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+
+    expect(await screen.findByText('Se bater a solidão, então eu vou caminhar 10 minutos.')).toBeInTheDocument()
+    expect(titulo()).toHaveFocus()
+  })
 })

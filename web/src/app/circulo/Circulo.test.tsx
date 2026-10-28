@@ -124,4 +124,26 @@ describe('Seu Círculo de Confiança', () => {
     expect(aoAbrirPlano).toHaveBeenCalled()
     expect(aoVoltar).toHaveBeenCalled()
   })
+
+  it('acessibilidade: adiciona uma pessoa só pelo teclado e chega ao link de envio', async () => {
+    renderizar()
+    const adicionar = await screen.findByRole('button', { name: 'Adicionar pessoa' })
+    adicionar.focus()
+    await userEvent.keyboard('{Enter}')
+    expect(titulo()).toHaveFocus()
+
+    await userEvent.tab()
+    expect(screen.getByLabelText('Nome ou apelido')).toHaveFocus()
+    await userEvent.keyboard('Irmão (exemplo)')
+    await userEvent.tab()
+    expect(screen.getByLabelText('Telefone com DDD')).toHaveFocus()
+    await userEvent.keyboard('61900000000{Enter}')
+
+    await screen.findByRole('heading', { level: 2, name: 'Irmão (exemplo)' })
+    expect(titulo()).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('radio', { name: /Tô com vontade/ })).toHaveFocus()
+    await userEvent.tab()
+    expect(screen.getByRole('link', { name: /WhatsApp para Irmão/ })).toHaveFocus()
+  })
 })
