@@ -485,6 +485,22 @@ a.botao {
   font-weight: 700;
 }
 
+.acoes-do-plano,
+.acoes-do-plano section,
+.acoes-do-plano__convite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+}
+
+.acoes-do-plano p {
+  margin: 0;
+}
+
+.acoes-do-plano__nome {
+  font-weight: 700;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
