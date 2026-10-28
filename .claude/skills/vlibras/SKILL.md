@@ -99,7 +99,9 @@ Só durante a partida: as instruções e o resultado continuam com a bolha, porq
 
 A bolha ocupa a faixa de 40 px à direita, na metade da altura, e no celular o avatar aberto cobre quase metade da tela (abaixo de 640 px ele trava a rolagem do `body` no modo expandido). Não ponha controle fixo nessa faixa. O "Preciso de ajuda agora" fica no topo à esquerda, de propósito.
 
-A bolha não se abre na faixa "Acessível com VLibras" no hover nem no foco: `vlibras.ts` põe um `<style>` dentro do shadow DOM do carregador (`#vlibras-access` fixo em 40 px, `#vlibras-popup` escondido). Se uma versão nova trocar esses ids, a faixa volta sem quebrar nada; confira ao atualizar. A janela do avatar **não** foi reduzida: o tamanho do sinal importa para quem lê Libras. Se um dia for preciso, ela aceita `--widget-width` e `--player-height` no `#vlibras-app-root`, e a pessoa já pode arrastá-la pela barra azul.
+A bolha fica a 20% de opacidade até receber o mouse ou o foco, e não se abre na faixa "Acessível com VLibras": `vlibras.ts` põe um `<style>` dentro do shadow DOM do carregador (`#vlibras-access` fixo em 40 px, `#vlibras-popup` escondido). Parada, ela não tem o contraste de 3:1 da WCAG 1.4.11; foi decisão de produto, e quem procura a acha pelo mouse, pelo Tab ou pelo toque. Se uma versão nova trocar esses ids, a bolha volta ao padrão sem quebrar nada; confira ao atualizar.
+
+A janela do avatar é menor que a do widget: 220 × 240 px de player no celular e 240 × 260 a partir de 640 px (o padrão é 260 × 328 e 300 × 380), por `--widget-width` e `--player-height` no `#vlibras-app-root`, em `styles.css`. **Não desça a largura**: abaixo disso o botão Fechar sai da barra (medido). A altura pode descer mais que a largura sem cortar os braços do avatar. O botão de expandir do próprio widget continua levando ao tamanho grande, e a janela pode ser arrastada pela barra azul.
 
 ### 9. Offline e privacidade
 

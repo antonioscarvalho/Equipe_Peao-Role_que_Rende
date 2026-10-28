@@ -48,13 +48,19 @@ export function carregarVLibras() {
 /**
  * No hover e no foco a bolha se abre numa faixa de 200 px com a imagem "Acessível com VLibras",
  * por cima do conteúdo. A faixa só repete o que o aria-label do botão já diz, então fica
- * fechada. O estilo entra no shadow DOM (aberto) do carregador, que o CSS da página não alcança;
+ * fechada. Parada, ela fica quase transparente e só aparece inteira com o mouse em cima ou com
+ * foco (pedido do produto: a 20% ela não tem o contraste de 3:1 da WCAG 1.4.11 até ser
+ * selecionada). O estilo entra no shadow DOM (aberto) do carregador, que o CSS da página não alcança;
  * se uma versão nova mudar os ids, a regra só deixa de valer e a faixa volta.
  */
 function discreta(raiz: ShadowRoot) {
   const estilo = document.createElement("style");
-  estilo.textContent =
-    "#vlibras-access { width: 40px !important; } #vlibras-popup { display: none !important; }";
+  estilo.textContent = `
+    #vlibras-access { width: 40px !important; opacity: 0.2; transition: opacity 0.2s ease !important; }
+    #vlibras-access:hover, #vlibras-access:focus-within { opacity: 1; }
+    #vlibras-popup { display: none !important; }
+    @media (prefers-reduced-motion: reduce) { #vlibras-access { transition: none !important; } }
+  `;
   raiz.appendChild(estilo);
 }
 
