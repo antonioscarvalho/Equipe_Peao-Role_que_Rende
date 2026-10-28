@@ -47,6 +47,11 @@
 **O que aconteceu:** skills `gamificacao-etica` e `pitch-gamificacao` criadas a partir de 7 livros (Werbach, Chou, Kim, Schell, Adams, McGonigal, Burke) e auditoria de todo o projeto ([auditoria](../03-design/auditoria-gamificacao.md)): o app oficial está de acordo; a prova visual e as skills `animar-componente` e `criar-personagem` usam moeda girando e "+R$" por missão (🔴); o SOS sorteia o card e o PR #20 não anuncia o próximo marco (🟡).
 **Próximos passos:** corrigir os 🔴 antes de reaproveitar a prova visual; ajustar o PR #20; preencher o game design com os 6D.
 
+### 2026-10-28 — Decisão: manter missões e dinheiro; proposta do que falta
+**Quem:** Maykon Júnio (com apoio de IA, ver declaração)
+**O que foi decidido:** com o merge do PR #20, as missões do dia com "+R$", a moeda e o confete foram para a tela inicial do app oficial. Decisão: **ficam como estão**. O risco de leitura pela Seção 8.4 ("mecânicas de recompensa") ficou registrado na [auditoria](../03-design/auditoria-gamificacao.md).
+**Próximos passos:** a equipe escolhe itens da [proposta de gamificação](../03-design/proposta-gamificacao.md) (P1 "Seu motivo" e P2 "próximo marco" são Must); nada foi implementado.
+
 _—_
 
 ## Dia 3 — 29/10/2026

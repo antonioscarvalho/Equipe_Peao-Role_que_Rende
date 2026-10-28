@@ -4,6 +4,18 @@
 > Escopo: app oficial na `development` (commit `cec0e6a`), PR #20 (spec 007 + Guardião), `prototipos/prova-visual`, specs 001–008 e as skills `criar-personagem` e `animar-componente`.
 > Classificação: 🔴 bloqueia (fere o edital ou o design ético) · 🟡 ajustar · 🟢 de acordo.
 
+## Atualização de 28/10/2026 (tarde) — decisão da equipe
+
+- Com o merge do PR #20, as **missões diárias com "+R$", a moeda girando e o confete** da prova visual passaram para a **tela inicial do app oficial** (`web/src/app/inicio/Inicio.tsx`), junto com sons (desligados por padrão) e a skill `sonorizar-componente`.
+- **Decisão de Maykon Júnio (28/10/2026): missões e dinheiro ficam como estão.** Os achados 1 a 5 e os novos 18 e 19 abaixo passam de "corrigir" para **"mantido por decisão"**, com o risco registrado.
+- **Risco que fica registrado:** o edital (Seção 8.4) proíbe "mecânicas de sorte, recompensa ou aposta, exceto com finalidade educativa explícita" e "itens com valor monetário". O texto não cita missões, confete ou moeda; a leitura é da Banca. Sugestão: confirmar por escrito com a organização se celebração sem valor real e sem sorte conta como "mecânica de recompensa".
+- O que **falta** (sem implementar nada agora) virou proposta em [proposta-gamificacao.md](proposta-gamificacao.md).
+
+| # | Onde | Achado | Princípio | Classe | Situação |
+|---|---|---|---|---|---|
+| 18 | `web/src/app/inicio/Inicio.tsx` | Missões do dia com "+R$", moeda girando, brilho e confete na tela inicial do app oficial | Edital 8.4 (leitura possível: "mecânica de recompensa"); spec 004 CA-2 ("sem confete"); `design-etico-saude-digital` | 🔴 | **Mantido por decisão** (28/10) |
+| 19 | Skill `sonorizar-componente` | Sons de missão e "conquista" ao fechar as missões do dia; no app, desligados por padrão | `design-etico-saude-digital` (sem som de vitória); Adams (celebração que escala) | 🟡 | **Mantido por decisão** (28/10); no app o padrão é desligado ✅ |
+
 ## Resumo
 
 O **app oficial está de acordo** na essência: progresso que um lapso não apaga, pós-lapso sem punição, sem pontos, moedas, ranking ou prazo. Os problemas estão na **prova visual** e em **duas skills** que mandam usar a moeda girando, além de ajustes menores no SOS e no PR #20.
@@ -41,7 +53,7 @@ fim do dia ──► "Como foi hoje?" ──► Não apostei: "Anotado." ──�
 ```
 
 ## Próximos passos
-- [ ] Corrigir 1–5 antes de qualquer reaproveitamento da prova visual ou das skills no app (Atyrson)
+- [x] ~~Corrigir 1–5~~ — **mantido por decisão** de 28/10 (ver atualização no topo)
 - [ ] Corrigir 6 e 9 no app (responsáveis das specs 003 e 004)
-- [ ] Ajustar 7 e 8 no PR #20 antes do merge (Ian)
+- [ ] Ajustar 7 e 8 (o PR #20 já entrou; virou proposta — ver [proposta-gamificacao.md](proposta-gamificacao.md))
 - [ ] Preencher o game design com os 6D (Atyrson, Game Design)
