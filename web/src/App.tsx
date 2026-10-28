@@ -8,6 +8,7 @@ import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
 import { AjudaAgora } from "./AjudaAgora";
 import { PuloDoBichinho } from "./jogos/pulo/PuloDoBichinho";
+import { Historia } from "./historia/Historia";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
 import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
@@ -46,6 +47,7 @@ export default function App() {
   const [crise, setCrise] = useState(false);
   // "crise": aberto pelo "Deu vontade", com convite de 3 minutos pra onda passar.
   const [jogo, setJogo] = useState<false | "inicio" | "crise">(false);
+  const [historia, setHistoria] = useState(false);
   const [moedaKey, setMoedaKey] = useState(0);
   const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
@@ -182,6 +184,7 @@ export default function App() {
           Jogar: Pulo do Bichinho
         </button>
         <BotaoCarrinho reduzir={reduzir} />
+        <button className="rqr-botao jogo-botao" onClick={() => setHistoria(true)}>História do Broto</button>
 
         <button className="sos rqr-anim-on" onClick={() => setCrise(true)}>
           <Icone nome="wind" tamanho={28} /> Deu vontade
@@ -190,6 +193,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
+      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} />}
       <AjudaAgora />
       {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
         chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
