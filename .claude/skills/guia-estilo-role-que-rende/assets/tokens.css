@@ -2,6 +2,9 @@
    Fonte: Manual IDV 2025 + bb.com.br/site/role-que-rende
    Animações (seção "Movimento") são proposta derivada da identidade. */
 
+/* Fontes livres locais (Nunito Sans e Roboto, OFL): funcionam offline. */
+@import './fontes/fontes.css';
+
 :root {
   /* ---------- Paleta oficial ---------- */
   --rqr-amarelo: #FCFC30;
