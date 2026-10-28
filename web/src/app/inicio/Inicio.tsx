@@ -3,7 +3,8 @@ import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
 import { Chips } from '@/components/Chips'
 import { Contador } from '@/components/Contador'
-import { conteudoCheckin, conteudoPrevencao } from '@/content/conteudo'
+import { Aproximado } from '@/components/Aproximado'
+import { conteudoCheckin, conteudoDinheiro, conteudoPrevencao } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
 import { formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
@@ -84,12 +85,15 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, a
         {/* CA-6: sem gasto informado, o card convida em vez de mostrar R$ 0. */}
         {estado === 'pronto' && progresso.dinheiroPreservado !== null && (
           <p className="checkin__dinheiro">
-            Grana preservada (estimativa): <strong>≈ {formatarReais(progresso.dinheiroPreservado)}</strong>
+            {conteudoDinheiro.resumoInicio} <strong>
+              <Aproximado />
+              {formatarReais(progresso.dinheiroPreservado)}
+            </strong>
             {meta && ` — ${meta}`}
           </p>
         )}
         <Botao variante="secundario" onClick={aoAbrirDinheiro}>
-          {gastoSemanal === null ? 'Quer ver quanto você preservou?' : 'Ver dinheiro preservado'}
+          {gastoSemanal === null ? conteudoDinheiro.convite : conteudoDinheiro.verDinheiro}
         </Botao>
       </Cartao>
 

@@ -389,12 +389,27 @@ h1:focus {
   font-weight: 700;
 }
 
+/* O estado marcado não depende só da cor (spec 004, seção 6). */
+.chip[aria-pressed='true']::before {
+  /* Visto desenhado em CSS: não depende de a fonte ter o glifo, e o leitor não o lê
+     (o aria-pressed já anuncia o estado). */
+  content: '';
+  display: inline-block;
+  width: 0.35em;
+  height: 0.7em;
+  margin-right: 0.5em;
+  border: solid currentColor;
+  border-width: 0 0.15em 0.15em 0;
+  transform: translateY(-0.1em) rotate(45deg);
+}
+
 .checkin__resposta {
   min-height: 1.5em;
   font-weight: 700;
 }
 
-.checkin__dinheiro {
+.checkin__dinheiro,
+.valor__meta {
   margin: 0;
 }
 

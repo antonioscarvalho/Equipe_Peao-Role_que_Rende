@@ -3,6 +3,7 @@ import prevencaoJson from './prevencao.json'
 import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
+import dinheiroJson from './dinheiro.json'
 
 export interface CanalDeAjuda {
   id: string
@@ -53,6 +54,8 @@ interface MetaJson {
   status: 'confirmado' | 'conferir'
   verificado_em: string | null
   fonte: string
+  /** Versão curta da fonte, mostrada na tela junto do valor. */
+  rotuloFonte?: string
   link: string
 }
 
@@ -67,7 +70,9 @@ export const metasConfirmadas: Meta[] = (metasJson.metas as MetaJson[]).filter(
 /** Textos do plano Se/Então (F5) e do Círculo de Confiança (F8). */
 export const conteudoPrevencao = prevencaoJson
 
-/** Troca {chave} pelos valores. Ex.: preencher('Se {se}', { se: 'tédio' }). */
-export function preencher(modelo: string, valores: Record<string, string>): string {
-  return modelo.replace(/\{(\w+)\}/g, (trecho, chave: string) => valores[chave] ?? trecho)
+export const conteudoDinheiro = dinheiroJson
+
+/** Troca cada {chave} do texto pelo valor; chave sem valor fica como está, para o erro aparecer no teste. */
+export function preencher(texto: string, valores: Record<string, string | number>): string {
+  return texto.replace(/\{(\w+)\}/g, (inteiro, chave: string) => (chave in valores ? String(valores[chave]) : inteiro))
 }

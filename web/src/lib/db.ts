@@ -15,6 +15,8 @@ export interface Checkin {
   apostou: boolean
   /** Só quando apostou. A spec 005 lê daqui para montar o plano Se/Então. */
   gatilhos?: string[]
+  /** Só quando apostou: o que a pessoa contou com as palavras dela. Nunca sai do aparelho. */
+  relato?: string
   /** 1 (muito mal) a 5 (muito bem); opcional, marcado depois do registro (CA-1). */
   humor?: number
   registradoEm: string

@@ -4,8 +4,9 @@
  * O valor é sempre estimativa, a partir do que a pessoa informou (CDC); nada vem de conta real.
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { Aproximado } from '@/components/Aproximado'
 import { Botao } from '@/components/Botao'
-import { metasConfirmadas } from '@/content/conteudo'
+import { conteudoDinheiro as t, metasConfirmadas, preencher } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
 import { emMetas, formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
@@ -33,14 +34,14 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
 
   useEffect(() => titulo.current?.focus(), [])
 
-  const desde = progresso.inicio && dataPorExtenso(progresso.inicio, dia)
+  const desde = progresso.inicio && preencher(t.desde, { data: dataPorExtenso(progresso.inicio, dia) })
   const pedindoValor = estado === 'pronto' && (gastoSemanal === null || editando)
 
   const salvar = (evento: FormEvent) => {
     evento.preventDefault()
     const valor = lerValor(texto)
     if (valor === null) {
-      setErro('Digite um valor em reais maior que zero, por exemplo 50 ou 120,50.')
+      setErro(t.erroGasto)
       return
     }
     setErro(null)
@@ -54,19 +55,19 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
   return (
     <section className="tela tela--dinheiro" aria-labelledby="dinheiro-titulo">
       <h1 id="dinheiro-titulo" ref={titulo} tabIndex={-1}>
-        Dinheiro preservado
+        {t.titulo}
       </h1>
 
       {estado === 'carregando' && (
-        <div className="esqueleto esqueleto--valor" role="status" aria-label="Carregando sua estimativa" />
+        <div className="esqueleto esqueleto--valor" role="status" aria-label={t.carregando} />
       )}
 
       {pedindoValor && (
         <form className="pilha" onSubmit={salvar} noValidate>
-          {gastoSemanal === null && <p className="tela__lead">Quer ver quanto você preservou?</p>}
-          <label htmlFor="gasto-semanal">Quanto você costumava gastar com apostas por semana?</label>
+          {gastoSemanal === null && <p className="tela__lead">{t.convite}</p>}
+          <label htmlFor="gasto-semanal">{t.campoGasto}</label>
           <p className="nota" id="gasto-dica">
-            É só para a estimativa. O valor fica guardado neste celular.
+            {t.dicaGasto}
           </p>
           <input
             id="gasto-semanal"
@@ -83,9 +84,9 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
               {erro}
             </p>
           )}
-          <label htmlFor="meta">Pra onde você quer levar esse dinheiro?</label>
+          <label htmlFor="meta">{t.campoMeta}</label>
           <p className="nota" id="meta-dica">
-            Se quiser. Por exemplo: conta de luz, compras da semana.
+            {t.dicaMeta}
           </p>
           <input
             id="meta"
@@ -96,43 +97,58 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
             onChange={(e) => setTextoMeta(e.target.value)}
             aria-describedby="meta-dica"
           />
-          <Botao type="submit">Salvar</Botao>
+          <Botao type="submit">{t.salvar}</Botao>
         </form>
       )}
 
       {estado === 'pronto' && !pedindoValor && valor !== null && (
         <>
           {metasConfirmadas.length > 0 && (
-            <div className="linha" role="group" aria-label="Mostrar em">
+            <div className="linha" role="group" aria-label={t.mostrarEm}>
               <Botao variante="secundario" aria-pressed={visao === 'reais'} onClick={() => setVisao('reais')}>
-                Em reais
+                {t.emReais}
               </Botao>
               <Botao variante="secundario" aria-pressed={visao === 'metas'} onClick={() => setVisao('metas')}>
-                Em coisas do dia a dia
+                {t.emCoisas}
               </Botao>
             </div>
           )}
 
+          {/* CA-5: a palavra "estimativa" vale para as duas visões, não só para a de reais. */}
           {visao === 'reais' || metasConfirmadas.length === 0 ? (
             <p className="valor">
-              <span className="valor__rotulo">Estimativa de dinheiro preservado{desde && ` desde ${desde}`}</span>
-              <span className="valor__numero">≈ {formatarReais(valor)}</span>
-              {meta && <span>Sua meta: {meta}</span>}
+              <span className="valor__rotulo">{[t.rotuloReais, desde].filter(Boolean).join(' ')}</span>
+              <span className="valor__numero">
+                <Aproximado />
+                {formatarReais(valor)}
+              </span>
             </p>
           ) : (
-            <ul className="metas">
-              {metas.length === 0 && <li>Ainda não dá uma meta inteira. Cada dia conta.</li>}
-              {metas.map(({ meta, quantidade }) => (
-                <li key={meta.id}>
-                  Isso dá {quantidade} {quantidade === 1 ? meta.nome : meta.plural}
-                </li>
-              ))}
-            </ul>
+            <div className="valor">
+              <span className="valor__rotulo">{[t.rotuloCoisas, desde].filter(Boolean).join(', ')}</span>
+              <ul className="metas">
+                {metas.length === 0 && <li>{t.nenhumaMetaInteira}</li>}
+                {metas.map(({ meta: referencia, quantidade }) => (
+                  <li key={referencia.id}>
+                    {preencher(t.daPraPagar, {
+                      n: quantidade,
+                      coisa: quantidade === 1 ? referencia.nome : referencia.plural,
+                    })}
+                  </li>
+                ))}
+              </ul>
+              <p className="nota">
+                {preencher(t.referencias, { fontes: metasConfirmadas.map((m) => m.rotuloFonte ?? m.fonte).join('; ') })}
+              </p>
+            </div>
           )}
+          {meta && <p className="valor__meta">{preencher(t.suaMeta, { meta })}</p>}
 
           <p className="nota">
-            Conta feita com o que você informou: {formatarReais(gastoSemanal ?? 0)} por semana, em{' '}
-            {progresso.totalSemApostar} {progresso.totalSemApostar === 1 ? 'dia' : 'dias'} sem apostar.
+            {preencher(t.conta, {
+              valor: formatarReais(gastoSemanal ?? 0),
+              dias: `${progresso.totalSemApostar} ${progresso.totalSemApostar === 1 ? 'dia' : 'dias'}`,
+            })}
           </p>
           <Botao
             variante="secundario"
@@ -142,13 +158,13 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
               setEditando(true)
             }}
           >
-            Mudar o valor ou a meta
+            {t.mudar}
           </Botao>
         </>
       )}
 
       <Botao variante="secundario" onClick={aoVoltar}>
-        Voltar pro início
+        {t.voltar}
       </Botao>
     </section>
   )

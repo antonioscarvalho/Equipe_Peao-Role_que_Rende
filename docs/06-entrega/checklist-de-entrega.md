@@ -19,6 +19,7 @@
 ## Qualidade
 
 - [ ] Fluxo da demo testado do começo ao fim pelo menos três vezes
+- [ ] Abrir o app com `?demo` antes de apresentar: carrega check-ins e estimativa **sintéticos**, para o contador não aparecer em 0 (troca os check-ins do aparelho; os episódios do SOS ficam)
 - [ ] Recursos de acessibilidade funcionando e prontos para demonstrar
 - [ ] Vídeo da demo gravado (plano B)
 - [ ] README e [setup](../04-tecnico/setup-e-execucao.md) atualizados
