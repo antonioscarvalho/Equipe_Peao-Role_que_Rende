@@ -21,7 +21,13 @@ const BICHO = 50;
 const RODA = 11;
 /** Distância do ponto de contato com o chão até o topo da carroceria. */
 const ALTURA_CARRO = 34;
-const GRAVIDADE = 0.35;
+/** Gravidade baixa (como no Pou): o carrinho decola fácil e é preciso equilibrar. */
+const GRAVIDADE = 0.22;
+/** Quanto o pedal gira o carrinho no chão (empina/abaixa o bico) e no ar. */
+const TORQUE_CHAO = 0.004;
+const TORQUE_AR = 0.006;
+/** Força que traz o carrinho de volta às quatro rodas enquanto não passou do ponto de tombar. */
+const ENDIREITAR = 0.012;
 const VEL_MAX = 12;
 const VEL_RE = -3;
 const CHAVE_RECORDE = "rqr-carrinho-recorde";
@@ -57,7 +63,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
 
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({
-    w: 360, h: 600, base: 400, x: 0, y: 0, vel: 0, vx: 0, vy: 0, ang: 0, angVel: 0, noChao: true,
+    w: 360, h: 600, base: 400, x: 0, y: 0, vel: 0, vx: 0, vy: 0, ang: 0, rel: 0, angVel: 0, noChao: true,
     camY: 0, giroRoda: 0, folhas: [] as Folha[], proxFolha: 600, folhasPegas: 0, maisLonge: 0,
     gas: false, freio: false, teclas: { gas: false, freio: false },
   });
@@ -67,7 +73,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     const caixa = caixaRef.current!;
     g.w = caixa.clientWidth; g.h = caixa.clientHeight; g.base = g.h * 0.62;
     g.x = 120; g.y = terreno(g.x, g.base); g.vel = 0; g.vx = 0; g.vy = 0;
-    g.ang = 0; g.angVel = 0; g.noChao = true; g.camY = g.y - g.h * 0.62;
+    g.ang = 0; g.rel = 0; g.angVel = 0; g.noChao = true; g.camY = g.y - g.h * 0.62;
     g.folhas = []; g.proxFolha = 500; g.folhasPegas = 0; g.maisLonge = 0;
     setMetros(0); setFolhas(0); setAviso(""); setEstado("jogando");
   }, []);
@@ -134,34 +140,43 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         if (freio) acel -= g.vel > 0 ? 0.3 : 0.08;
         g.vel = Math.max(VEL_RE, Math.min(VEL_MAX, g.vel + acel * dt));
         g.vx = g.vel * Math.cos(th); g.vy = g.vel * Math.sin(th);
+        // Inclinação em relação ao chão: acelerar empina, frear abaixa o bico.
+        // Até ~63° o peso puxa de volta; passou disso, o peso ajuda a tombar.
+        if (gas) g.angVel -= TORQUE_CHAO * dt;
+        if (freio) g.angVel += TORQUE_CHAO * 0.8 * dt;
+        g.angVel -= Math.sin(g.rel) * ENDIREITAR * (Math.abs(g.rel) < 1.1 ? 1 : -1) * dt;
+        g.angVel *= Math.pow(0.94, dt);
+        g.rel += g.angVel * dt;
+        // Bico no chão: as rodas da frente seguram (só freando ele afunda um pouco).
+        if (g.rel > 0.05 && !freio) { g.rel = 0.05; g.angVel = Math.min(0, g.angVel); }
+        if (Math.abs(g.rel) > 1.6) { virou(); return; }
         const nx = g.x + g.vx * dt;
         const chao = terreno(nx, g.base);
         // Se o chão "foge" mais rápido do que a gravidade puxa, ele decola (topo do morro).
         if (chao - (g.y + g.vy * dt) > GRAVIDADE * dt && g.vel > 3) {
-          g.noChao = false; g.angVel = 0;
+          g.noChao = false; g.ang = th + g.rel;
           g.x = nx; g.y += g.vy * dt;
         } else {
           g.x = nx; g.y = chao;
-          g.ang += normalizar(th - g.ang) * Math.min(1, 0.35 * dt);
+          g.ang = th + g.rel;
         }
       } else {
         g.vy += GRAVIDADE * dt;
         g.x += g.vx * dt; g.y += g.vy * dt;
-        if (gas) g.angVel -= 0.0035 * dt;
-        if (freio) g.angVel += 0.0035 * dt;
-        g.angVel *= 0.99;
+        if (gas) g.angVel -= TORQUE_AR * dt;
+        if (freio) g.angVel += TORQUE_AR * dt;
+        g.angVel *= Math.pow(0.995, dt);
         g.ang += g.angVel * dt;
         const chao = terreno(g.x, g.base);
         if (g.y >= chao) {
           const th = inclinacaoEm(g.x, g.base);
           g.y = chao; g.noChao = true;
-          if (Math.abs(normalizar(g.ang - th)) > 1.5) { virou(); return; }
+          g.rel = normalizar(g.ang - th); g.angVel *= 0.4;
+          if (Math.abs(g.rel) > 1.3) { virou(); return; }
           g.vel = Math.max(VEL_RE, g.vx * Math.cos(th) + g.vy * Math.sin(th));
           tocar("pulo");
         }
       }
-      // De cabeça pra baixo no chão também conta como virar.
-      if (g.noChao && Math.abs(normalizar(g.ang)) > 2.2) { virou(); return; }
       g.giroRoda += (g.noChao ? g.vel : g.vx) * dt / RODA;
 
       // Folhas: algumas no chão, outras no alto (para pegar no pulo).
@@ -315,7 +330,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
             <ul className="pulo__dicas">
               <li><b>Celular:</b> segure os pedais Acelerar e Freio</li>
               <li><b>Computador:</b> → acelera, ← freia (ou A / D)</li>
-              <li>No ar, acelerar inclina pra trás e frear inclina pra frente. Caia de rodas no chão!</li>
+              <li>Acelerar empina o carrinho e frear abaixa o bico, no chão e no ar. Equilibre pra não tombar e caia de rodas no chão!</li>
               <li>Pegue as folhas 🍃 no caminho</li>
             </ul>
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Começar</button>
