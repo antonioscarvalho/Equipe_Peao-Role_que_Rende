@@ -248,3 +248,35 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .confete { display: none; } }
 .reduzir-animacoes .confete { display: none; }
+
+/* ---------- Mini jogo: Pulo do Bichinho ---------- */
+.jogo-botao { width: 100%; margin-top: 14px; }
+.pulo {
+  position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column;
+  background: var(--rqr-azul-escuro); color: var(--rqr-azul-escuro);
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+.pulo__topo {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: var(--rqr-amarelo); border-bottom: 3px solid var(--rqr-azul-escuro);
+}
+.pulo__titulo { margin: 0; font-size: 18px; flex: 1; }
+.pulo__placar { font-weight: 800; background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 99px; padding: 2px 12px; }
+.pulo__fechar { position: static; }
+.pulo__mundo {
+  position: relative; flex: 1; width: 100%; max-width: 480px; margin: 0 auto; overflow: hidden;
+  touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer;
+}
+.pulo__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.pulo__bicho { position: absolute; left: 0; top: 0; transform-origin: 50% 100%; will-change: transform; pointer-events: none; }
+.pulo__painel {
+  position: absolute; inset: 50% 16px auto; translate: 0 -50%; z-index: 2;
+  display: grid; justify-items: center; gap: 10px; text-align: center;
+  background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 24px; padding: 18px;
+  box-shadow: 0 6px 0 var(--rqr-azul-escuro); cursor: default;
+}
+.pulo__chamada { margin: 0; font-weight: 800; font-size: 20px; }
+.pulo__dicas { margin: 0; padding: 0; list-style: none; font-size: 14px; display: grid; gap: 4px; }
+.pulo__resultado { margin: 0; font-size: 18px; }
+.pulo__recorde { margin: 0; font-weight: 800; color: var(--rqr-rosa-escuro); }
+.pulo__nota { margin: 0; padding: 6px 12px; font-size: 12px; text-align: center; color: var(--rqr-amarelo); }

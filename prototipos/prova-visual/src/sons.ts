@@ -6,7 +6,7 @@
  * - Som de recompensa só em missões (esforço). Na respiração, apenas tons calmos de ritmo.
  */
 
-export type NomeSom = "missao" | "moeda" | "folha" | "inspira" | "expira" | "clique" | "conquista";
+export type NomeSom = "missao" | "moeda" | "folha" | "inspira" | "expira" | "clique" | "conquista" | "pulo";
 
 let ctx: AudioContext | null = null;
 
@@ -83,6 +83,8 @@ const receitas: Record<NomeSom, Nota[]> = {
     { freq: 2093.0, inicio: 0.62, dur: 0.6, volume: 0.015, ataque: 0.1 },
     { freq: 2637.02, inicio: 0.8, dur: 0.6, volume: 0.012, ataque: 0.1 },
   ],
+  // Pulo do mini jogo: "boing" curto e baixinho (toca muito, então bem discreto).
+  pulo: [{ freq: 330, freqFim: 520, inicio: 0, dur: 0.12, volume: 0.035, ataque: 0.01 }],
   clique: [{ freq: 660, inicio: 0, dur: 0.05, volume: 0.04, tipo: "triangle" }],
 };
 

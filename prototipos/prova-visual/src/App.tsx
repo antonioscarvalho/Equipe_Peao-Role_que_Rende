@@ -6,6 +6,7 @@ import { Respiracao } from "./Respiracao";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
+import { PuloDoBichinho } from "./PuloDoBichinho";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
 
@@ -39,6 +40,7 @@ export default function App() {
   const [humor, setHumor] = useState<Humor>("calmo");
   const [protegido, setProtegido] = useState(1240);
   const [crise, setCrise] = useState(false);
+  const [jogo, setJogo] = useState(false);
   const [moedaKey, setMoedaKey] = useState(0);
   const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
@@ -168,6 +170,10 @@ export default function App() {
           {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
         </section>
 
+        <button className="rqr-botao jogo-botao" onClick={() => setJogo(true)}>
+          Jogar: Pulo do Bichinho
+        </button>
+
         <button className="sos rqr-anim-on" onClick={() => setCrise(true)}>
           <Icone nome="wind" tamanho={28} /> Deu vontade
         </button>
@@ -175,6 +181,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
+      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir} />}
       {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir} />}
     </div>
   );
