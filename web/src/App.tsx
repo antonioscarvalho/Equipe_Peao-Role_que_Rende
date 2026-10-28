@@ -10,6 +10,7 @@ import { PuloDoBichinho } from "./PuloDoBichinho";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
 import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
+import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
 
 type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
 
@@ -176,6 +177,7 @@ export default function App() {
         <button className="rqr-botao jogo-botao" onClick={() => setJogo(true)}>
           Jogar: Pulo do Bichinho
         </button>
+        <BotaoCarrinho reduzir={reduzir} />
 
         <button className="sos rqr-anim-on" onClick={() => setCrise(true)}>
           <Icone nome="wind" tamanho={28} /> Deu vontade

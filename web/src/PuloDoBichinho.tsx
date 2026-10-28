@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { tocar } from "./sons";
+import { useAparenciaVisivel } from "./personalizacao";
 
 /**
  * "Pulo do Bichinho": mini jogo de pulo infinito (estilo Sky Jump).
@@ -27,6 +28,7 @@ type Estado = "inicio" | "jogando" | "caiu";
 function aleatorio(a: number, b: number) { return a + Math.random() * (b - a); }
 
 export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; reduzir: boolean }) {
+  const aparencia = useAparenciaVisivel();
   const caixaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bichoRef = useRef<HTMLDivElement>(null);
@@ -309,12 +311,12 @@ export function PuloDoBichinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         onPointerDown={tocarTela} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar}>
         <canvas ref={canvasRef} className="pulo__canvas" aria-hidden="true" />
         <div ref={bichoRef} className="pulo__bicho" style={{ width: BICHO, height: BICHO }} aria-hidden="true">
-          <Bichinho humor={estado === "caiu" ? "cansado" : "calmo"} nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={BICHO} reduzir />
+          <Bichinho humor={estado === "caiu" ? "cansado" : "calmo"} nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={BICHO} reduzir aparencia={aparencia} />
         </div>
 
         {estado === "inicio" && (
           <div className="pulo__painel rqr-escalonado">
-            <Bichinho humor="feliz" nivel={1} tamanho={110} reduzir={reduzir} />
+            <Bichinho humor="feliz" nivel={1} tamanho={110} reduzir={reduzir} aparencia={aparencia} />
             <p className="pulo__chamada">Ajude o bichinho a subir até as nuvens!</p>
             <ul className="pulo__dicas">
               <li><b>Celular:</b> incline para os lados</li>
