@@ -2,6 +2,7 @@
 
 > Vale até **5% de bônus** na nota final, se o recurso for implementado **e demonstrado** no pitch.
 > Os recursos desta tabela são especificados na [spec 008](../../specs/008-configuracoes-privacidade-acessibilidade/spec.md) (responsável: Maykon Júnio).
+> **Como verificar:** skill [`acessibilidade-wcag`](../../.claude/skills/acessibilidade-wcag/SKILL.md) (WCAG 2.2 AA + AAA promovidos, scripts `auditar.mjs` e `contraste.mjs`, protocolo de teste manual e roteiro da demo).
 
 ## Recursos planejados
 

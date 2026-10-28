@@ -50,6 +50,7 @@ Durante todo o fluxo:
 | [`animar-componente`](skills/animar-componente/SKILL.md) | 🟢 base pronta | Atyrson Souto | Aplica o catálogo de animações `rqr-*` (CSS ou Lottie) com reduzir-movimento e acessibilidade; proíbe visual de cassino |
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
 | [`orquestrar-branches`](skills/orquestrar-branches/SKILL.md) | 🟢 base pronta | Danillo Meira | Mapa de quem está mexendo em quê: aponta dois devs na mesma spec, no mesmo arquivo ou em conflito real, antes de virar retrabalho. Rodar antes de começar tarefa e antes de PR |
+| [`acessibilidade-wcag`](skills/acessibilidade-wcag/SKILL.md) | 🟢 base pronta | Danillo Meira | Acessibilidade rigorosa pela WCAG 2.2: AA inteiro + 20 critérios AAA promovidos para o público em crise, cognitivo (COGA), caminho de crise C1–C9. Scripts que reprovam o PR (código e contraste nos temas), protocolo manual e roteiro do bônus de 5% |
 
 ### Skills de stack
 
