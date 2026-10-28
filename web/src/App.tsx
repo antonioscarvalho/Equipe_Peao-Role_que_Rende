@@ -13,12 +13,7 @@ function App() {
   const { rota, ir } = useRota()
   // Gatilhos que chegam de outra tela (pós-lapso da 004) ficam só em memória, nunca na URL.
   const [gatilhosIniciais, setGatilhosIniciais] = useState<string[]>([])
-  const [reduzir, setReduzir] = useState(() => {
-    if (typeof window !== 'undefined' && window.matchMedia) {
-      return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    }
-    return false
-  })
+  const [reduzir, setReduzir] = useState(false)
 
   useEffect(() => {
     document.documentElement.classList.toggle('reduzir-animacoes', reduzir)

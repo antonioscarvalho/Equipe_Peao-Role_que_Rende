@@ -257,7 +257,7 @@ h1:focus {
 }
 
 /* Onda (respiração) */
-.onda {
+.onda-container {
   display: grid;
   justify-items: center;
   gap: var(--rqr-esp-1);
@@ -270,10 +270,10 @@ h1:focus {
   border-radius: 50%;
   background: var(--rqr-azul-claro);
   border: 4px solid var(--rqr-azul-escuro);
-  animation: respirar 10s ease-in-out infinite;
+  animation: respirar-circulo 10s ease-in-out infinite;
 }
 
-@keyframes respirar {
+@keyframes respirar-circulo {
   0%,
   100% {
     transform: scale(0.7);
@@ -283,11 +283,25 @@ h1:focus {
   }
 }
 
+.onda__fase-446 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--rqr-azul-escuro);
+}
+
+.onda__fase-446 b {
+  display: inline-block;
+  min-width: 1.4em;
+  color: var(--rqr-roxo);
+  font-variant-numeric: tabular-nums;
+}
+
 .onda__frase {
   font-size: var(--rqr-fs-lead);
   font-weight: 700;
   margin: 0;
-  min-height: 3em;
+  min-height: 2.2em;
 }
 
 .onda__tempo {
@@ -755,15 +769,6 @@ a.botao {
   border: 1px solid var(--cor-borda);
   border-radius: 8px;
   font-size: var(--rqr-fs-small);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
 }
 
 /* ==========================================================
@@ -1311,31 +1316,328 @@ a.botao {
   color: var(--rqr-cinza-700);
 }
 
+/* ---------- Saudação e Título Início ---------- */
+.inicio-saudacao {
+  margin-bottom: 4px;
+}
+
+.topo__oi {
+  margin: 0;
+  font-weight: 700;
+  color: var(--rqr-cinza-900);
+  font-size: 14px;
+}
+
+.topo__titulo {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* ---------- Seletores de Humor do Bichinho ---------- */
+.humores {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.chip-humor {
+  border: 3px solid var(--rqr-azul-escuro);
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  border-radius: 99px;
+  padding: 6px 12px;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop), background var(--rqr-dur-base);
+}
+
+.chip-humor:hover {
+  transform: translateY(-2px);
+}
+
+.chip-humor.is-on {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-amarelo);
+}
+
+/* ---------- Missões do Dia ---------- */
+.secao-missoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.secao-missoes h2 {
+  font-size: 18px;
+  font-weight: 900;
+  margin: 0;
+}
+
+.progresso-barra {
+  flex: 1;
+  max-width: 140px;
+  height: 12px;
+  border-radius: 99px;
+  background: var(--rqr-cinza-100);
+  border: 2px solid var(--rqr-azul-escuro);
+  overflow: hidden;
+}
+
+.progresso-barra span {
+  display: block;
+  height: 100%;
+  background: var(--rqr-verde-agro);
+  transform-origin: left;
+  transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop);
+}
+
+.missoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.missao {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  border: 3px solid var(--rqr-azul-escuro);
+  border-radius: 18px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 0 var(--rqr-azul-escuro);
+  font: inherit;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-padrao), box-shadow var(--rqr-dur-rapida), background var(--rqr-dur-base);
+}
+
+.missao:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--rqr-azul-escuro);
+}
+
+.missao:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--rqr-azul-escuro);
+}
+
+.missao__icone {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--rqr-azul-claro);
+  border: 2px solid var(--rqr-azul-escuro);
+  transition: background var(--rqr-dur-base);
+}
+
+.missao__texto {
+  flex: 1;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.missao__valor {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--rqr-roxo);
+}
+
+.missao.is-ok {
+  background: var(--rqr-verde-claro);
+  cursor: default;
+}
+
+.missao.is-ok .missao__icone {
+  background: var(--rqr-verde-agro);
+  animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop);
+}
+
+.missao.is-ok .missao__texto {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+.link-reiniciar {
+  margin-top: 10px;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--rqr-azul-escuro);
+  font-size: 14px;
+}
+
 /* ---------- Botão SOS Estilizado ---------- */
+.sos-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .botao--sos {
   min-height: 56px;
+  width: 100%;
   background: var(--rqr-azul-escuro) !important;
   color: var(--rqr-amarelo) !important;
-  border: 3px solid var(--rqr-azul-escuro) !important;
-  font-size: 20px !important;
+  border: 3px solid var(--rqr-amarelo) !important;
+  font-size: 19px !important;
   font-weight: 900 !important;
-  box-shadow: 0 6px 0 var(--rqr-azul) !important;
   border-radius: 99px !important;
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 10px !important;
-  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop), box-shadow var(--rqr-dur-rapida) !important;
+  cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop) !important;
 }
 
 .botao--sos:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 0 var(--rqr-azul) !important;
+  transform: scale(1.03);
 }
 
 .botao--sos:active {
-  transform: translateY(3px);
-  box-shadow: 0 2px 0 var(--rqr-azul) !important;
+  transform: scale(0.97);
+}
+
+/* ---------- Modal de Crise / Respiração 4-4-6 ---------- */
+.crise-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  padding: 24px;
+  text-align: center;
+  color: var(--rqr-branco);
+  background: radial-gradient(circle at 50% 40%, var(--rqr-roxo), var(--rqr-azul-escuro) 70%);
+  animation: fade var(--rqr-dur-media) var(--rqr-ease-padrao) both;
+}
+
+.crise-modal__fechar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid var(--rqr-amarelo);
+  background: transparent;
+  color: var(--rqr-amarelo);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.crise-modal__titulo {
+  color: var(--rqr-amarelo);
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.crise-modal__fase {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.crise-modal__fase b {
+  display: inline-block;
+  min-width: 1.4em;
+  color: var(--rqr-amarelo);
+  font-variant-numeric: tabular-nums;
+}
+
+.crise-modal__ciclos {
+  display: flex;
+  gap: 8px;
+}
+
+.crise-modal__ciclos span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--rqr-amarelo);
+  transition: background var(--rqr-dur-base);
+}
+
+.crise-modal__ciclos .ok {
+  background: var(--rqr-amarelo);
+}
+
+.crise-modal__ciclos .agora {
+  background: var(--rqr-azul-claro);
+}
+
+.crise-modal__atalho-sos {
+  margin-top: 4px;
+  background: rgb(255 255 255 / 0.14);
+  color: var(--rqr-amarelo);
+  border: 2px solid var(--rqr-amarelo);
+  border-radius: 99px;
+  padding: 8px 18px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.crise-modal__fim {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  max-width: 340px;
+}
+
+.crise-modal__fim p,
+.crise-modal__fim small {
+  margin: 0;
+}
+
+.crise-modal__fim small {
+  opacity: 0.85;
+}
+
+.crise-modal__alivio {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ajuda-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.12);
+  border: 2px solid rgb(255 255 255 / 0.5);
+  color: var(--rqr-branco);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.ajuda-link:hover {
+  background: rgb(255 255 255 / 0.2);
 }
 
 /* ---------- Respiração / Onda Concêntrica ---------- */
@@ -1343,7 +1645,6 @@ a.botao {
   position: relative;
   width: 260px;
   height: 260px;
-  margin: var(--rqr-esp-2) auto;
   display: grid;
   place-items: center;
 }
@@ -1359,7 +1660,7 @@ a.botao {
 .onda__anel--2 {
   border-color: var(--rqr-amarelo);
   border-style: dashed;
-  inset: 24px;
+  inset: 22px;
 }
 
 .onda__centro {
@@ -1370,26 +1671,41 @@ a.botao {
 
 .onda--inspira .onda__anel,
 .onda--segura .onda__anel {
-  transform: scale(1.05);
+  transform: scale(1);
   opacity: 1;
 }
 
 .onda--inspira .onda__centro,
 .onda--segura .onda__centro {
-  transform: scale(1.15);
+  transform: scale(1.18);
 }
 
 .onda--expira .onda__anel {
-  transform: scale(0.65);
+  transform: scale(0.62);
   opacity: 0.5;
 }
 
 .onda--expira .onda__centro {
-  transform: scale(0.9);
+  transform: scale(0.88);
 }
 
 .onda--segura .onda__anel--2 {
   animation: girar 4s linear;
+}
+
+@keyframes girar {
+  to {
+    rotate: 90deg;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---------- Grafismos Decorativos Rolê que Rende ---------- */
