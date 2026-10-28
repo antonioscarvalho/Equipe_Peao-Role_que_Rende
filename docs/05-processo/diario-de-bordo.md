@@ -52,6 +52,11 @@
 **O que foi decidido:** com o merge do PR #20, as missões do dia com "+R$", a moeda e o confete foram para a tela inicial do app oficial. Decisão: **ficam como estão**. O risco de leitura pela Seção 8.4 ("mecânicas de recompensa") ficou registrado na [auditoria](../03-design/auditoria-gamificacao.md).
 **Próximos passos:** a equipe escolhe itens da [proposta de gamificação](../03-design/proposta-gamificacao.md) (P1 "Seu motivo" e P2 "próximo marco" são Must); nada foi implementado.
 
+### 2026-10-28 — Proposta de questionário de entrada
+**Quem:** Maykon Júnio (com apoio de IA, ver declaração)
+**O que aconteceu:** proposta de questionário em [questionario-onboarding.md](../02-produto/questionario-onboarding.md): entrada em 5 telas (limites e 18+, motivo, importância e confiança, meta e primeiro passo, sonho com o dinheiro e gasto em faixas), blocos opcionais "Me conta mais" (gatilhos, balança, apoio, tipo de aposta, ajuda, finanças, carta, nome do Guardião) e acompanhamento semanal. Base: Kim, Chou, Burke, Werbach, McGonigal, Schell e as skills clínicas. Nada implementado.
+**Próximos passos:** a equipe aprova; revisar specs 002 e 004 e criar a spec do "Me conta mais"; revisão clínica dos textos 🩺.
+
 _—_
 
 ## Dia 3 — 29/10/2026

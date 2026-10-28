@@ -28,6 +28,7 @@
 - **Por quê:** é a motivação mais forte de chapéu branco (Chou 1: sentido) e o valor da primeira sessão (Kim). Hoje o SOS tem a etapa "motivo", mas **nada fornece o motivo**, então ela nunca aparece.
 - **O quê:** o onboarding da spec 002 (motivo em chips + texto livre, régua de importância, meta "parar / diminuir / ainda não sei") e o motivo guardado no aparelho, exibido no início e no SOS.
 - **Pronto quando:** depois do onboarding, o início mostra "Seu motivo: …" e o SOS mostra a etapa do motivo.
+- **Questionário completo proposto:** [questionario-onboarding.md](../02-produto/questionario-onboarding.md) (entrada em 5 telas, "Me conta mais" e acompanhamento).
 
 ## P2 · Próximo marco anunciado (Must)
 - **Por quê:** recompensa previsível é chapéu branco; surpresa vira chapéu preto (Chou 7; Schell, lente da recompensa). Já é critério aprovado (spec 002, CA-9).
