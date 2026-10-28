@@ -1,8 +1,12 @@
 import { useEffect, useRef } from "react";
-import Lottie, { type LottieRefCurrentProps } from "lottie-react";
+import LottieRaw, { type LottieRefCurrentProps } from "lottie-react";
 import aliviado from "./lottie/aliviado.json";
 import brilho from "./lottie/brilho.json";
 import broto from "./lottie/broto.json";
+
+// Interoperabilidade CJS/ESM do lottie-react no Vite com React 19
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Lottie = ((LottieRaw as any)?.default || LottieRaw) as typeof LottieRaw;
 
 /*
  * Animações Lottie: Noto Animated Emoji (Google), licença CC BY 4.0.
