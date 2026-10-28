@@ -1,0 +1,215 @@
+/* Rolê que Rende — tokens de estilo
+   Fonte: Manual IDV 2025 + bb.com.br/site/role-que-rende
+   Animações (seção "Movimento") são proposta derivada da identidade. */
+
+:root {
+  /* ---------- Paleta oficial ---------- */
+  --rqr-amarelo: #FCFC30;
+  --rqr-azul-escuro: #3333BD;
+  --rqr-azul: #465EFF;
+  --rqr-azul-claro: #54DCFC;
+  --rqr-roxo: #735CC6;
+  --rqr-rosa-escuro: #FF6E91;
+  --rqr-rosa-claro: #FFA7D3;
+  --rqr-branco: #FFFFFF;
+  --rqr-verde-agro: #00EBD0;
+
+  /* Tints oficiais (kit do site) */
+  --rqr-amarelo-claro: #FFF7B5;
+  --rqr-realce: #FFEC86;
+  --rqr-roxo-claro: #BDB6FF;
+  --rqr-verde-claro: #83FFEA;
+
+  /* Cores de interface do site */
+  --rqr-header: #3D5AFF;
+  --rqr-banner: #1653FD;
+  --rqr-link: #3354FD;
+
+  /* Neutros (brandzone BB) */
+  --rqr-preto: #111214;
+  --rqr-cinza-900: #4E5155;
+  --rqr-cinza-700: #686C73;
+  --rqr-cinza-600: #767A86;
+  --rqr-cinza-100: #F0F2F4;
+
+  /* Dourado da moeda (só recompensa/economia) */
+  --rqr-ouro-luz: #F2C50B;
+  --rqr-ouro: #E49702;
+  --rqr-ouro-sombra: #D47D12;
+
+  /* ---------- Papéis semânticos ---------- */
+  --rqr-fundo: var(--rqr-amarelo);
+  --rqr-fundo-conteudo: var(--rqr-branco);
+  --rqr-fundo-escuro: var(--rqr-azul-escuro);
+  --rqr-fundo-escuro-2: var(--rqr-roxo);
+  --rqr-texto: var(--rqr-azul-escuro);          /* sobre amarelo/branco */
+  --rqr-texto-suave: var(--rqr-cinza-900);
+  --rqr-texto-inverso: var(--rqr-branco);       /* sobre azul/roxo */
+  --rqr-titulo-claro: var(--rqr-azul);          /* título sobre branco (>=24px) */
+  --rqr-titulo-escuro: var(--rqr-amarelo);      /* título sobre azul/roxo */
+  --rqr-foco: var(--rqr-azul-escuro);
+  --rqr-texto-fraco: var(--rqr-cinza-700);
+  --rqr-fundo-suave: var(--rqr-cinza-100);      /* trilhos, barras de progresso */
+  --rqr-borda: var(--rqr-azul-escuro);          /* contorno de card, chip, botão */
+  --rqr-sombra-cor: var(--rqr-azul-escuro);     /* sombra sólida */
+  --rqr-ativo-fundo: var(--rqr-azul-escuro);    /* chip ligado, botão SOS */
+  --rqr-ativo-texto: var(--rqr-amarelo);
+  --rqr-realce-fundo: var(--rqr-amarelo);
+  --rqr-realce-texto: inherit;
+  --rqr-cena-topo: var(--rqr-amarelo-claro);
+  --rqr-cena-base: var(--rqr-amarelo);
+  --rqr-valor: var(--rqr-roxo);
+  --rqr-fundo-destaque: var(--rqr-amarelo-claro); /* trilho das abas */
+  --rqr-ceu-topo: var(--rqr-azul-claro);         /* céu dos mini jogos (canvas) */
+  --rqr-ceu-base: var(--rqr-amarelo-claro);
+  --rqr-terra: var(--rqr-amarelo-claro);         /* chão abaixo da grama no carrinho */
+  color-scheme: light;
+
+  /* ---------- Tipografia ---------- */
+  --rqr-font-titulo: "BancoDoBrasil Titulos", "Nunito Sans", "Roboto", system-ui, sans-serif;
+  --rqr-font-texto: "BancoDoBrasil Textos", "Roboto", "Nunito Sans", system-ui, sans-serif;
+  --rqr-fs-display: clamp(40px, 6vw + 10px, 80px);
+  --rqr-fs-h1: clamp(32px, 4vw + 8px, 56px);
+  --rqr-fs-h2: clamp(28px, 2.5vw + 10px, 40px);
+  --rqr-fs-h3: clamp(22px, 1vw + 14px, 28px);
+  --rqr-fs-lead: clamp(18px, 1vw + 10px, 24px);
+  --rqr-fs-body: clamp(16px, .4vw + 14px, 18px);
+  --rqr-fs-small: 14px;
+  --rqr-lh-display: 1.1;
+  --rqr-lh-titulo: 1.2;
+  --rqr-lh-corpo: 1.5;
+
+  /* ---------- Espaço e layout ---------- */
+  --rqr-container: 1140px;
+  --rqr-esp-1: 10px;
+  --rqr-esp-2: 20px;
+  --rqr-esp-3: 30px;
+  --rqr-esp-4: 40px;
+  --rqr-esp-5: 50px;
+  --rqr-gap: 20px;
+  --rqr-raio-card: 24px;
+  --rqr-raio-pilula: 999px;
+  --rqr-sombra-solida: 0 4px 0 var(--rqr-sombra-cor);
+  --rqr-sombra-solida-hover: 0 6px 0 var(--rqr-sombra-cor);
+
+  /* ---------- Movimento ---------- */
+  --rqr-dur-rapida: 150ms;
+  --rqr-dur-base: 300ms;
+  --rqr-dur-media: 450ms;
+  --rqr-dur-lenta: 600ms;
+  --rqr-ease-padrao: cubic-bezier(.2, .8, .2, 1);
+  --rqr-ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+  --rqr-ease-entrada: cubic-bezier(.4, 0, 1, 1);
+}
+
+/* ---------- Modo escuro ----------
+   Ligado por data-tema="escuro" no <html> (tema.ts). No "Automático" segue o
+   tema do navegador; a pessoa também pode fixar Claro ou Escuro.
+   Só os papéis semânticos mudam. Paleta oficial e bichinho continuam com as
+   cores da marca. Fundo é um azul-noite derivado do azul-escuro; títulos em
+   destaque vão para o amarelo, como no site sobre fundo azul. */
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --rqr-fundo: #13133A;
+  --rqr-fundo-conteudo: #1D1D55;
+  --rqr-fundo-suave: #2A2A6E;
+  --rqr-texto: #F4F4FF;
+  --rqr-texto-suave: #C9CBE8;
+  --rqr-texto-fraco: #A9ACD0;
+  --rqr-borda: var(--rqr-roxo-claro);
+  --rqr-sombra-cor: #07071C;
+  --rqr-ativo-fundo: var(--rqr-amarelo);
+  --rqr-ativo-texto: var(--rqr-azul-escuro);
+  --rqr-realce-fundo: var(--rqr-roxo);
+  --rqr-realce-texto: var(--rqr-amarelo);
+  --rqr-cena-topo: #1D1D55;
+  --rqr-cena-base: var(--rqr-roxo);         /* roxo e não azul-escuro: o contorno do bichinho e o telhado são azul-escuro */
+  --rqr-valor: var(--rqr-roxo-claro);
+  --rqr-fundo-destaque: #2A2A6E;
+  --rqr-ceu-topo: #1D1D55;
+  --rqr-ceu-base: var(--rqr-roxo);
+  --rqr-terra: #2A2A6E;
+}
+
+/* ---------- Componentes base ---------- */
+.rqr-botao {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 12px 28px;
+  border: 3px solid var(--rqr-azul-escuro); border-radius: var(--rqr-raio-pilula);
+  background: var(--rqr-amarelo); color: var(--rqr-azul-escuro);
+  font: 700 18px/1 var(--rqr-font-titulo);
+  box-shadow: var(--rqr-sombra-solida); cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-padrao),
+              box-shadow var(--rqr-dur-rapida) var(--rqr-ease-padrao),
+              background var(--rqr-dur-base);
+}
+.rqr-botao:hover { transform: translateY(-2px); box-shadow: var(--rqr-sombra-solida-hover); }
+.rqr-botao:active { transform: translateY(4px); box-shadow: 0 0 0 var(--rqr-sombra-cor); }
+.rqr-botao:focus-visible { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 4px; }
+.rqr-botao--escuro { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); border-color: var(--rqr-amarelo); box-shadow: 0 4px 0 var(--rqr-amarelo); }
+
+.rqr-card {
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border-radius: var(--rqr-raio-card); padding: var(--rqr-esp-3);
+  border: 3px solid var(--rqr-borda); box-shadow: 0 6px 0 var(--rqr-sombra-cor);
+}
+.rqr-icone-circulo {
+  display: inline-grid; place-items: center; width: 64px; height: 64px;
+  border-radius: 50%; background: var(--rqr-rosa-escuro); color: var(--rqr-azul-escuro);
+}
+.rqr-realce {
+  color: var(--rqr-realce-texto);
+  background: linear-gradient(var(--rqr-realce-fundo), var(--rqr-realce-fundo)) no-repeat 0 85% / 100% 45%;
+  padding: 0 .1em;
+}
+.rqr-destaque { font-weight: 800; font-style: italic; }
+
+/* ---------- Animações ---------- */
+@keyframes rqr-pop {
+  0% { opacity: 0; transform: scale(.6) rotate(-6deg); }
+  70% { opacity: 1; transform: scale(1.08) rotate(1deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+@keyframes rqr-pincelada { from { stroke-dashoffset: var(--rqr-traco, 600); } to { stroke-dashoffset: 0; } }
+@keyframes rqr-marca-texto { from { background-size: 0% 45%; } to { background-size: 100% 45%; } }
+@keyframes rqr-flutuar {
+  from { transform: translateY(-6px) rotate(var(--rqr-rot, 0deg)); }
+  to { transform: translateY(6px) rotate(calc(var(--rqr-rot, 0deg) + 3deg)); }
+}
+@keyframes rqr-moeda {
+  0% { transform: translateY(0) rotateY(0); }
+  40% { transform: translateY(-14px) rotateY(180deg); }
+  100% { transform: translateY(0) rotateY(360deg); }
+}
+@keyframes rqr-tremida {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+@keyframes rqr-on {
+  0% { box-shadow: 0 0 0 0 rgb(84 220 252 / .7); }
+  100% { box-shadow: 0 0 0 16px rgb(84 220 252 / 0); }
+}
+
+.rqr-anim-pop { animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop) both; }
+.rqr-anim-pincelada { stroke-dasharray: var(--rqr-traco, 600); animation: rqr-pincelada var(--rqr-dur-lenta) var(--rqr-ease-padrao) both; }
+.rqr-anim-marca-texto { animation: rqr-marca-texto var(--rqr-dur-media) var(--rqr-ease-padrao) both; }
+.rqr-anim-flutuar { animation: rqr-flutuar 5s ease-in-out infinite alternate; }
+.rqr-anim-moeda { animation: rqr-moeda 800ms var(--rqr-ease-padrao); }
+.rqr-anim-tremida { animation: rqr-tremida var(--rqr-dur-base) linear; }
+.rqr-anim-on { animation: rqr-on 1.6s ease-out infinite; }
+.rqr-escalonado > * { animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop) both; }
+.rqr-escalonado > *:nth-child(2) { animation-delay: 60ms; }
+.rqr-escalonado > *:nth-child(3) { animation-delay: 120ms; }
+.rqr-escalonado > *:nth-child(4) { animation-delay: 180ms; }
+.rqr-escalonado > *:nth-child(5) { animation-delay: 240ms; }
+.rqr-escalonado > *:nth-child(6) { animation-delay: 300ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}

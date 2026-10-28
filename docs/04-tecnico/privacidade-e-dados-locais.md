@@ -29,8 +29,8 @@ O prompt de produto pedia duas opções. A equipe já tinha decidido; fica regis
 | Estimativa de gasto semanal, meta do dinheiro preservado | R$ 150/semana → "conta de luz" | **Sensível** (finanças + contexto de saúde) | IndexedDB local | **Não** |
 | Contatos do Círculo de Confiança | Nome e telefone | Dado de **terceiro** | IndexedDB local | **Não** (só o usuário envia a mensagem, pelo app de mensagens dele) |
 | Plano de segurança (crise) | Sinais de alerta, quem chamar | **Sensível** | IndexedDB local | **Não** |
-| Perfil: apelido, foto, cenário | "Bia", foto 256×256 | **Pessoal**, e sensível pelo contexto (ligar rosto e nome a um app de apostas) | IndexedDB local, store `perfil` (foto em bytes, recortada e reencodada, sem os metadados do arquivo original) | **Não** |
-| Aparência do bichinho | cor, roupa, acessórios | Comum | IndexedDB local, store `configuracao` | Não |
+| Perfil: apelido, foto, cenário | "Bia", foto 256×256 | **Pessoal**, e sensível pelo contexto (ligar rosto e nome a um app de apostas) | localStorage, chaves `rqr:perfil` e `rqr:foto` (foto recortada, reencodada e guardada como `data:`, sem os metadados do arquivo original) | **Não** |
+| Aparência do bichinho | cor, roupa, acessórios | Comum | localStorage, chave `rqr:aparencia` | Não |
 | Preferências (tema, fonte, modo discreto) | — | Comum | localStorage | Não |
 | **Conteúdo do app** | Cards de distorção, textos do SOS, links do Hub, telefones | Público | Arquivos em `web/src/content/*.json` dentro do build; opcionalmente o Supabase serve versões novas | — |
 | Dados do Open Finance (demo) | Transações | **Sintético** | `seed.sql` / mock | Só dado fictício |
