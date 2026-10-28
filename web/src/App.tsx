@@ -4,6 +4,7 @@ import { Circulo } from '@/app/circulo/Circulo'
 import { Crise } from '@/app/crise/Crise'
 import { Dinheiro } from '@/app/dinheiro/Dinheiro'
 import { Inicio } from '@/app/inicio/Inicio'
+import { Pausas } from '@/app/pausas/Pausas'
 import { Plano } from '@/app/plano/Plano'
 import { Sos } from '@/app/sos/Sos'
 import { useRota } from '@/hooks/useRota'
@@ -39,6 +40,7 @@ function App() {
             aoAbrirDinheiro={() => ir('/dinheiro')}
             aoAbrirPlano={() => abrirPlano()}
             aoAbrirCirculo={() => ir('/circulo')}
+            aoAbrirPausas={() => ir('/pausas')}
           />
         )}
         {rota === '/checkin' && <Checkin aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
@@ -47,6 +49,7 @@ function App() {
           <Plano gatilhosIniciais={gatilhosIniciais} aoAbrirCirculo={() => ir('/circulo')} aoVoltar={() => ir('/')} />
         )}
         {rota === '/circulo' && <Circulo aoAbrirPlano={() => abrirPlano()} aoVoltar={() => ir('/')} />}
+        {rota === '/pausas' && <Pausas aoVoltar={() => ir('/')} />}
         {rota === '/sos' && <Sos aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
         {rota === '/ajuda' && <Crise aoVoltar={() => ir('/')} />}
       </main>
