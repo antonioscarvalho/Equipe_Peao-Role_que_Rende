@@ -5,7 +5,7 @@ description: Projeta e audita gamificação no Guardião com base em Werbach, Yu
 
 # Gamificação ética — Guardião
 
-Base: 7 livros indicados pela equipe ([bibliografia](references/bibliografia.md)). Os conceitos estão resumidos com palavras nossas em [frameworks](references/frameworks.md); o que pode e o que não pode no nosso app está no [catálogo](references/catalogo.md).
+Base: 7 livros indicados pela equipe ([bibliografia](references/bibliografia.md)). Os conceitos estão resumidos com palavras nossas em [frameworks](references/frameworks.md); o que pode e o que não pode no nosso app está no [catálogo](references/catalogo.md). Para consultar os autores sem os livros, use o [material gratuito e oficial](references/materiais-gratuitos.md).
 
 > **Por que "ética":** o público é especialmente sensível a recompensa variável, urgência e perda — exatamente o que as apostas exploram. Toda técnica passa pelo filtro da skill `design-etico-saude-digital` e da Seção 8.4 do edital (nada de sorte, aposta ou valor monetário, salvo fim educativo explícito).
 

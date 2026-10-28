@@ -57,6 +57,8 @@ Base das skills `gamificacao-etica` e `pitch-gamificacao` (lista indicada pela e
 | *The Art of Game Design: A Book of Lenses* | Jesse Schell | Morgan Kaufmann, 1ª ed., 2008 |
 | *Game Mechanics: Advanced Game Design* | Ernest Adams (com Joris Dormans) | New Riders, 1ª ed., 2012 |
 
+Material gratuito e oficial dos autores (artigos do Yu-kai Chou, curso do Werbach no Coursera, Game Thinking, Schell Games, Designer's Notebook, Machinations e TED da McGonigal), verificado em 28/10/2026: [materiais-gratuitos.md](../../.claude/skills/gamificacao-etica/references/materiais-gratuitos.md).
+
 ## Identidade visual
 
 | Fonte | Tema | Link | Verificado |

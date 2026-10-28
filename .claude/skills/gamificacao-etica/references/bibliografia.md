@@ -12,4 +12,6 @@ Lista indicada pela equipe em 28/10/2026. Os resumos em [frameworks](frameworks.
 | *The Art of Game Design: A Book of Lenses* | Jesse Schell | Morgan Kaufmann, 1ª ed., 2008 | Tétrade elementar, lentes |
 | *Game Mechanics: Advanced Game Design* | Ernest Adams (com Joris Dormans) | New Riders, 1ª ed., 2012 | Economia interna, ciclos de realimentação |
 
+Os livros têm direitos autorais e não ficam no repositório. Material gratuito e oficial dos autores: [materiais-gratuitos.md](materiais-gratuitos.md).
+
 Registro em `docs/07-conformidade/fontes-e-referencias.md` (seção Gamificação).
