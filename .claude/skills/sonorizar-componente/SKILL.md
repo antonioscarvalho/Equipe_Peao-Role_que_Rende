@@ -9,7 +9,7 @@ description: Adiciona sons e feedback sonoro a um componente ou tela do Rolê qu
 
 ## Antes de começar
 1. Leia o componente alvo e a animação que ele já usa (skill `animar-componente`).
-2. Veja o exemplo pronto em `prototipos/prova-visual/src/sons.ts` e como ele é chamado em `App.tsx` e `Respiracao.tsx`.
+2. Veja o exemplo pronto em `web/src/sons.ts` e como ele é chamado em `App.tsx` e `Respiracao.tsx`.
 
 ## De onde vem o som (nesta ordem)
 1. **Síntese com Web Audio** (padrão): adicione uma receita em `sons.ts`. Não tem arquivo, não tem licença, funciona offline e na rede corporativa.

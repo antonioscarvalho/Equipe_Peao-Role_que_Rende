@@ -13,7 +13,8 @@ const fases = [
 const CICLOS = 3;
 
 /** Momento de crise: respiração guiada 4-4-6 com o bichinho. Apoio complementar, com canais reais de ajuda. */
-export function Respiracao({ aoFechar, reduzir }: { aoFechar: () => void; reduzir: boolean }) {
+/** `aoJogar`: abre o Pulo do Bichinho como "3 minutos para a onda passar" (tarefa visual curta contra a fissura). */
+export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => void; aoJogar?: () => void; reduzir: boolean }) {
   const [ciclo, setCiclo] = useState(0);
   // Spec 003 CA-3: sem som por padrão no momento de crise; a pessoa pode ligar aqui.
   const [comSom, setComSom] = useState(false);
@@ -84,6 +85,11 @@ export function Respiracao({ aoFechar, reduzir }: { aoFechar: () => void; reduzi
           <a className="ajuda" href="https://www.gov.br/pt-br/servicos/plataforma-centralizada-de-autoexclusao-apostas" target="_blank" rel="noreferrer">
             <Icone nome="shieldCheck" /> Autoexclusão de apostas (gov.br)
           </a>
+          {aoJogar && (
+            <button className="ajuda ajuda--botao" onClick={aoJogar}>
+              <Icone nome="sprout" /> Pulo do Bichinho: 3 minutos pra onda passar
+            </button>
+          )}
           <button className="rqr-botao" onClick={aoFechar}>Voltar pro meu rolê</button>
           <small>Este app é um apoio complementar e não substitui atendimento profissional.</small>
         </div>

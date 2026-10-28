@@ -1,10 +1,12 @@
-# Prova visual — bichinho, missões e respiração
+# Rolê que Rende — app web (antiga prova visual)
 
 Protótipo para validar animações e visual no estilo do Rolê que Rende. Serve de referência para as skills `criar-personagem`, `animar-componente` e `sonorizar-componente`.
 
+Este é o app publicado na Vercel (pasta `web/`). O app web anterior está em `lixo/web-antigo/`.
+
 ## Rodar
 ```bash
-cd prototipos/prova-visual
+cd web
 npm install
 npm run dev   # abre em http://localhost:5180
 ```
