@@ -35,6 +35,7 @@ export function carregarVLibras() {
     // Sem internet a bolha só não aparece; o app continua funcionando.
     script.onerror = () => script.remove();
     document.body.appendChild(script);
+    quandoABolhaSurgir(discreta);
   };
   const quandoOcioso = () =>
     "requestIdleCallback" in window
@@ -42,6 +43,32 @@ export function carregarVLibras() {
       : setTimeout(injetar, 1500);
   if (document.readyState === "complete") quandoOcioso();
   else window.addEventListener("load", quandoOcioso, { once: true });
+}
+
+/**
+ * No hover e no foco a bolha se abre numa faixa de 200 px com a imagem "Acessível com VLibras",
+ * por cima do conteúdo. A faixa só repete o que o aria-label do botão já diz, então fica
+ * fechada. O estilo entra no shadow DOM (aberto) do carregador, que o CSS da página não alcança;
+ * se uma versão nova mudar os ids, a regra só deixa de valer e a faixa volta.
+ */
+function discreta(raiz: ShadowRoot) {
+  const estilo = document.createElement("style");
+  estilo.textContent =
+    "#vlibras-access { width: 40px !important; } #vlibras-popup { display: none !important; }";
+  raiz.appendChild(estilo);
+}
+
+function quandoABolhaSurgir(aplicar: (raiz: ShadowRoot) => void) {
+  const tentar = () => {
+    const raiz = document.getElementById("vlibras-access-wrapper")?.shadowRoot;
+    if (raiz) aplicar(raiz);
+    return !!raiz;
+  };
+  if (tentar()) return;
+  const observador = new MutationObserver(
+    () => tentar() && observador.disconnect(),
+  );
+  observador.observe(document.body, { childList: true });
 }
 
 /**
