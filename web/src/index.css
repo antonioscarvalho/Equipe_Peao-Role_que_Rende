@@ -983,7 +983,8 @@ a.botao {
 .bicho {
   position: relative;
   z-index: 1;
-  --corpo: var(--rqr-azul-claro);
+  /* --corpo-base vem da personalização (domain/aparencia). Os humores não trocam a cor escolhida. */
+  --corpo: var(--corpo-base, var(--rqr-azul-claro));
 }
 
 .bicho svg {
@@ -1133,7 +1134,7 @@ a.botao {
 
 /* feliz: pula */
 .bicho--feliz {
-  --corpo: var(--rqr-azul-claro);
+  --corpo: var(--corpo-base, var(--rqr-azul-claro));
 }
 
 .bicho--feliz .olho--feliz,
@@ -1159,7 +1160,7 @@ a.botao {
 
 /* orgulhoso: cresce e brilha */
 .bicho--orgulhoso {
-  --corpo: var(--rqr-rosa-claro);
+  --corpo: var(--corpo-base, var(--rqr-azul-claro));
 }
 
 .bicho--orgulhoso .olho--feliz,
@@ -1181,7 +1182,8 @@ a.botao {
 
 /* cansado */
 .bicho--cansado {
-  --corpo: var(--rqr-roxo-claro);
+  /* Mais frio, sem perder a cor da pessoa (skill criar-personagem). */
+  --corpo: color-mix(in srgb, var(--corpo-base, var(--rqr-azul-claro)) 55%, var(--rqr-roxo-claro));
 }
 
 .bicho--cansado .olho--cansado,
@@ -2013,4 +2015,115 @@ a.botao {
 
 .pausa__resumo {
   padding-left: 1.25rem;
+}
+
+/* ---------- Personalizar bichinho ---------- */
+.personalizar__previa {
+  display: grid;
+  place-items: center;
+  padding: var(--rqr-esp-1, 12px) 0;
+  background: var(--rqr-branco);
+  border: 3px solid var(--rqr-azul-escuro);
+  border-radius: var(--rqr-raio-card);
+}
+
+.personalizar__marco {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--rqr-amarelo-claro);
+  border: 2px dashed var(--rqr-azul-escuro);
+  border-radius: 14px;
+}
+
+.personalizar__grupo {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.personalizar__grupo legend {
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.personalizar__opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.amostra,
+.opcao-item {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: var(--alvo-toque);
+  min-height: var(--alvo-toque);
+  padding: 6px 12px;
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  border: 3px solid var(--rqr-azul-escuro);
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: var(--rqr-fs-small);
+  cursor: pointer;
+  transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
+}
+
+/* O rádio fica acessível (teclado e leitor de tela), só sai da frente visualmente. */
+.amostra input,
+.opcao-item input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: inherit;
+}
+
+.amostra:has(input:checked),
+.opcao-item:has(input:checked) {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-amarelo);
+}
+
+.amostra:has(input:focus-visible),
+.opcao-item:has(input:focus-visible) {
+  outline: 3px solid var(--rqr-foco);
+  outline-offset: 3px;
+}
+
+.amostra:hover,
+.opcao-item:not(.is-bloqueado):hover {
+  transform: translateY(-2px);
+}
+
+.amostra__cor {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid var(--rqr-azul-escuro);
+}
+
+.amostra:has(input:checked) .amostra__cor {
+  border-color: var(--rqr-amarelo);
+}
+
+.opcao-item.is-bloqueado {
+  border-style: dashed;
+  color: var(--rqr-texto-suave);
+  cursor: not-allowed;
+}
+
+.opcao-item__dica {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+fieldset:disabled .amostra,
+fieldset:disabled .opcao-item {
+  opacity: 0.6;
 }

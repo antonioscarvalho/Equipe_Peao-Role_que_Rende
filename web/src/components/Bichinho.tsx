@@ -1,4 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef, type CSSProperties } from 'react'
+import { APARENCIA_PADRAO, CORES, CORES_ROUPA, corDe, descreverAparencia, type Aparencia } from '@/domain/aparencia'
+import { CAMINHO_CORPO, Cabeca, Peito, Rosto, Roupa } from './ItensBichinho'
 
 export type Humor = 'calmo' | 'feliz' | 'cansado' | 'orgulhoso' | 'apoio'
 
@@ -10,7 +12,14 @@ const descricao: Record<Humor, string> = {
   apoio: 'Bichinho de braços abertos, respirando junto com você',
 }
 
-type Props = { humor: Humor; nivel: number; tamanho?: number; reduzir?: boolean }
+type Props = {
+  humor: Humor
+  nivel: number
+  tamanho?: number
+  reduzir?: boolean
+  /** Personalização (cor, roupa, acessórios). Já deve vir filtrada por `aparenciaVisivel`. */
+  aparencia?: Aparencia
+}
 
 /** Deslocamento máximo das pupilas, em unidades do viewBox (olho tem rx 8). */
 const MAX_OLHAR = 5
@@ -19,7 +28,15 @@ const MAX_OLHAR = 5
  * Mascote original em SVG com camadas animáveis por CSS.
  * Regra: ele nunca morre nem culpa. No humor "cansado" só fica encolhido e com cor mais fria.
  */
-export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false }: Props) {
+export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false, aparencia = APARENCIA_PADRAO }: Props) {
+  // ids únicos por instância: com dois bichinhos na página, ids repetidos fazem um usar o filtro do outro.
+  const base = useId().replace(/:/g, '')
+  const idPincel = `pincel-${base}`
+  const idBrilho = `brilho-${base}`
+  const idCorpo = `corpo-${base}`
+  const corRoupa = corDe(CORES_ROUPA, aparencia.corRoupa)
+  const estilo = { width: tamanho, height: tamanho, '--corpo-base': corDe(CORES, aparencia.cor) } as CSSProperties
+  const rotulo = `${descricao[humor]}. ${descreverAparencia(aparencia)}.`
   const svgRef = useRef<SVGSVGElement>(null)
   const pupilasRef = useRef<SVGGElement>(null)
 
@@ -62,48 +79,54 @@ export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false }: Props
   }, [reduzir])
 
   return (
-    <div className={`bicho bicho--${humor}`} style={{ width: tamanho, height: tamanho }}>
-      <svg ref={svgRef} viewBox="0 0 200 200" role="img" aria-label={descricao[humor]}>
+    <div className={`bicho bicho--${humor}`} style={estilo}>
+      <svg ref={svgRef} viewBox="0 0 200 200" role="img" aria-label={rotulo}>
         <defs>
           {/* Contorno com textura de pincel: desloca a borda de leve, sem animar o filtro */}
-          <filter id="pincel" x="-10%" y="-10%" width="120%" height="120%">
+          <filter id={idPincel} x="-10%" y="-10%" width="120%" height="120%">
             <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" />
             <feDisplacementMap in="SourceGraphic" scale="4" />
           </filter>
-          <radialGradient id="brilho" cx="35%" cy="30%" r="70%">
+          <radialGradient id={idBrilho} cx="35%" cy="30%" r="70%">
             <stop offset="0" stopColor="#fff" stopOpacity=".55" />
             <stop offset=".5" stopColor="#fff" stopOpacity="0" />
           </radialGradient>
+          <clipPath id={idCorpo}>
+            <path d={CAMINHO_CORPO} />
+          </clipPath>
         </defs>
 
         <ellipse className="bicho__sombra" cx="100" cy="186" rx="52" ry="8" />
 
         <g className="bicho__corpo-grupo">
           {/* Broto que cresce com o nível (hábitos novos) */}
-          <g className="bicho__broto" data-nivel={Math.min(nivel, 3)} filter="url(#pincel)">
+          <g className="bicho__broto" data-nivel={Math.min(nivel, 3)} filter={`url(#${idPincel})`}>
             <path d="M100 52 C100 40 100 34 100 26" />
             <path className="folha folha--1" d="M100 38 C88 30 80 34 78 26 C90 22 98 28 100 38Z" />
             <path className="folha folha--2" d="M100 32 C112 24 120 28 124 20 C110 16 102 22 100 32Z" />
             <circle className="flor" cx="100" cy="22" r="7" />
           </g>
 
-          <g className="bicho__braco bicho__braco--e" filter="url(#pincel)">
+          <g className="bicho__braco bicho__braco--e" filter={`url(#${idPincel})`}>
             <path d="M48 140 C30 136 22 150 28 158 C34 164 46 156 52 150" />
           </g>
-          <g className="bicho__braco bicho__braco--d" filter="url(#pincel)">
+          <g className="bicho__braco bicho__braco--d" filter={`url(#${idPincel})`}>
             <path d="M152 140 C170 136 178 150 172 158 C166 164 154 156 148 150" />
           </g>
 
           <path
             className="bicho__corpo"
-            filter="url(#pincel)"
-            d="M100 50 C146 50 162 86 160 124 C158 160 132 178 100 178 C68 178 42 160 40 124 C38 86 54 50 100 50Z"
+            filter={`url(#${idPincel})`}
+            d={CAMINHO_CORPO}
           />
           <path
             className="bicho__brilho"
             d="M100 56 C140 56 154 88 152 122 C150 154 128 170 100 170 C72 170 48 154 46 122 C44 88 60 56 100 56Z"
-            fill="url(#brilho)"
+            fill={`url(#${idBrilho})`}
           />
+
+          <Roupa id={aparencia.roupa} cor={corRoupa} recorte={idCorpo} />
+          <Peito id={aparencia.peito} />
 
           <g className="bicho__rosto">
             <g className="bicho__olhos">
@@ -130,6 +153,9 @@ export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false }: Props
             <path className="boca boca--aberta" d="M86 130 Q100 154 114 130 Q100 136 86 130Z" />
             <path className="boca boca--reta" d="M90 138 Q100 134 110 138" />
           </g>
+
+          <Rosto id={aparencia.rosto} />
+          <Cabeca id={aparencia.cabeca} cor={corRoupa} />
         </g>
       </svg>
     </div>

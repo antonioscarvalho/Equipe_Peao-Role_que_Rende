@@ -15,7 +15,9 @@ import { Respiracao } from '@/components/Respiracao'
 import { tocar, tocarMissao } from '@/components/sons'
 import { conteudoCheckin, conteudoDinheiro } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
+import { aparenciaVisivel } from '@/domain/aparencia'
 import { estagioGuardiao, formatarReais } from '@/domain/progresso'
+import { useAparencia } from '@/hooks/useAparencia'
 import { useProgresso } from '@/hooks/useProgresso'
 
 export type AbaInicio = 'role' | 'diario'
@@ -27,6 +29,8 @@ interface InicioProps {
   aoAbrirPlano: () => void
   aoAbrirCirculo: () => void
   aoAbrirPausas?: () => void
+  /** Abre a personalização do bichinho. Opcional para quem renderiza a Inicio sem ela. */
+  aoPersonalizar?: () => void
   /** Aba ativa dentro do Início ('role' = prova visual limpa; 'diario' = check-in Como foi hoje?) */
   abaAtiva?: AbaInicio
   aoMudarAba?: (aba: AbaInicio) => void
@@ -68,9 +72,11 @@ export function Inicio({
   aoApostar,
   aoAbrirDinheiro,
   abaAtiva = 'role',
+  aoPersonalizar,
   hoje,
   reduzir = false,
 }: InicioProps) {
+  const { aparencia } = useAparencia()
   const { estado, progresso, registroDeHoje, gastoSemanal, meta, registrar, registrarHumor, hoje: dia } = useProgresso(hoje)
   const [anotado, setAnotado] = useState(false)
   const [feitas, setFeitas] = useState<number[]>([])
@@ -162,7 +168,13 @@ export function Inicio({
             <div className="balao" key={humorBicho}>
               {falas[humorBicho]}
             </div>
-            <Bichinho humor={humorBicho} nivel={nivel} tamanho={200} reduzir={reduzir} />
+            <Bichinho
+              humor={humorBicho}
+              nivel={nivel}
+              tamanho={200}
+              reduzir={reduzir}
+              aparencia={aparenciaVisivel(aparencia, progresso.totalSemApostar)}
+            />
             <Bairro construidas={construidas} />
             {(anotado || (moedaKey > 0 && humorBicho === 'feliz')) && (
               <div className="cena__brilho" key={moedaKey}>
@@ -170,6 +182,12 @@ export function Inicio({
               </div>
             )}
           </section>
+
+          {aoPersonalizar && (
+            <Botao variante="secundario" onClick={aoPersonalizar}>
+              <Icone nome="palette" tamanho={20} /> Personalizar bichinho
+            </Botao>
+          )}
 
           {/* Seletores interativos de humor do Bichinho (prova visual) */}
           <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">

@@ -7,6 +7,14 @@ import type { Checkin, ConfiguracaoFinancas } from '@/lib/db'
 
 type Estado = 'carregando' | 'pronto'
 
+/** O instante de agora, mas no dia que a tela mostra. Assim o que se vê e o que se grava caem no mesmo dia. */
+function agoraNoDia(dia: string): Date {
+  const agora = new Date()
+  const [ano, mes, d] = dia.split('-').map(Number)
+  agora.setFullYear(ano, mes - 1, d)
+  return agora
+}
+
 /**
  * Check-ins, estimativa de gasto e meta do aparelho, já convertidos no progresso.
  * Gravar é melhor esforço, como no SOS: se o IndexedDB falhar (modo anônimo), a tela
@@ -34,17 +42,18 @@ export function useProgresso(hoje: string = dataLocal()) {
 
   const registrar = useCallback(
     (apostou: boolean, detalhes?: DetalhesLapso) => {
+      const quando = agoraNoDia(hoje)
       const local: Checkin = {
         data: hoje,
         apostou,
         ...detalhesDoLapso(apostou, detalhes),
-        registradoEm: new Date().toISOString(),
+        registradoEm: quando.toISOString(),
       }
       setLista((atual) => {
         const humor = atual.find((c) => c.data === hoje)?.humor
         return [...atual.filter((c) => c.data !== hoje), humor === undefined ? local : { ...local, humor }]
       })
-      checkins.registrar(apostou, detalhes).catch(() => undefined)
+      checkins.registrar(apostou, detalhes, quando).catch(() => undefined)
     },
     [hoje],
   )
@@ -58,7 +67,7 @@ export function useProgresso(hoje: string = dataLocal()) {
           return humor === null ? semHumor : { ...semHumor, humor }
         }),
       )
-      checkins.registrarHumor(humor).catch(() => undefined)
+      checkins.registrarHumor(humor, agoraNoDia(hoje)).catch(() => undefined)
     },
     [hoje],
   )

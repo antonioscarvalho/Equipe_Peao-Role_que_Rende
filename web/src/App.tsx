@@ -5,6 +5,7 @@ import { Crise } from '@/app/crise/Crise'
 import { Dinheiro } from '@/app/dinheiro/Dinheiro'
 import { type AbaInicio, Inicio } from '@/app/inicio/Inicio'
 import { Pausas } from '@/app/pausas/Pausas'
+import { Personalizar } from '@/app/personalizar/Personalizar'
 import { Plano } from '@/app/plano/Plano'
 import { Sos } from '@/app/sos/Sos'
 import { Decoracao } from '@/components/Decoracao'
@@ -130,6 +131,7 @@ function App() {
               aoAbrirPlano={() => abrirPlano()}
               aoAbrirCirculo={() => ir('/circulo')}
               aoAbrirPausas={() => ir('/pausas')}
+              aoPersonalizar={() => ir('/personalizar')}
               reduzir={reduzir}
             />
           )}
@@ -140,6 +142,7 @@ function App() {
           )}
           {rota === '/circulo' && <Circulo aoAbrirPlano={() => abrirPlano()} aoVoltar={irParaRole} />}
           {rota === '/pausas' && <Pausas aoVoltar={irParaRole} />}
+          {rota === '/personalizar' && <Personalizar aoVoltar={irParaRole} reduzir={reduzir} />}
           {rota === '/sos' && <Sos aoPedirAjuda={() => ir('/ajuda')} aoTerminar={irParaRole} />}
           {rota === '/ajuda' && <Crise aoVoltar={irParaRole} />}
         </main>

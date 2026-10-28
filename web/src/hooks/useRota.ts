@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export type Rota = '/' | '/sos' | '/ajuda' | '/checkin' | '/dinheiro' | '/plano' | '/circulo' | '/pausas'
+export type Rota = '/' | '/sos' | '/ajuda' | '/checkin' | '/dinheiro' | '/plano' | '/circulo' | '/pausas' | '/personalizar'
 
-const ROTAS: Rota[] = ['/', '/sos', '/ajuda', '/checkin', '/dinheiro', '/plano', '/circulo', '/pausas']
+const ROTAS: Rota[] = ['/', '/sos', '/ajuda', '/checkin', '/dinheiro', '/plano', '/circulo', '/pausas', '/personalizar']
 
 function rotaAtual(): Rota {
   const caminho = window.location.pathname as Rota

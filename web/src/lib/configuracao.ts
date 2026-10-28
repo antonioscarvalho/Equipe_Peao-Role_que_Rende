@@ -7,7 +7,7 @@ export const configuracao = {
   async lerFinancas(): Promise<ConfiguracaoFinancas> {
     const db = await abrirBanco()
     // Quem gravou antes da meta existir tem só o gasto.
-    return { ...PADRAO, ...(await db.get('configuracao', 'financas')) }
+    return { ...PADRAO, ...((await db.get('configuracao', 'financas')) as ConfiguracaoFinancas | undefined) }
   },
 
   async salvarFinancas(financas: ConfiguracaoFinancas): Promise<void> {
