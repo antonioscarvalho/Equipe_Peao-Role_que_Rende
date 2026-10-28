@@ -11,7 +11,7 @@ Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` 
 | T002 | Conteúdo do F5 e do F8 em JSON + tipos + vocabulário proibido cobrindo o arquivo | CA-2, CA-5, CA-7 | `web/src/content/prevencao.json`, `conteudo.ts`, `conteudo.test.ts` | — | [P] | Atyrson | ✅ |
 | T003 | Domínio de mensagem: `normalizarTelefone`, `linkWhatsApp`, `linkSms` + testes | CA-5 | `web/src/domain/mensagem.ts` (+ teste) | — | [P] | Atyrson | ✅ |
 | T004 | Repositório de gatilhos e planos (limite de 5) + testes com `fake-indexeddb` | CA-1, CA-2 | `web/src/lib/prevencao.ts` (+ teste) | T001 | [P] | Atyrson | ✅ |
-| T005 | Repositório do Círculo (limite de 3) + testes | CA-4 | `web/src/lib/circulo.ts` (+ teste) | T001 | [P] | Atyrson | ⬜ |
+| T005 | Repositório do Círculo (limite de 3) + testes | CA-4 | `web/src/lib/circulo.ts` (+ teste) | T001 | [P] | Atyrson | ✅ |
 | T006 | Rotas `/plano` e `/circulo`, estado `gatilhosIniciais` no `App` e atalhos no Início | CA-1, CA-4, CA-6 | `useRota.ts`, `App.tsx`, `Inicio.tsx` | — | | Atyrson | ⬜ |
 | T007 | Tela "Seu plano": chips de gatilhos + "Outro" e criador de planos com exemplos e limite | CA-1, CA-2 | `web/src/app/plano/Plano.tsx` (+ teste) | T002, T004, T006 | | Atyrson | ⬜ |
 | T008 | Tela "Seu Círculo": cadastro, edição, remoção e botões WhatsApp/SMS com a nota fixa | CA-4, CA-5 | `web/src/app/circulo/Circulo.tsx` (+ teste) | T002, T003, T005, T006 | [P] | Atyrson | ⬜ |
