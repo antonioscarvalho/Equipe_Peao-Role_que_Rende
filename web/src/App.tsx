@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import { Checkin } from '@/app/checkin/Checkin'
 import { Circulo } from '@/app/circulo/Circulo'
 import { Crise } from '@/app/crise/Crise'
+import { Dinheiro } from '@/app/dinheiro/Dinheiro'
 import { Inicio } from '@/app/inicio/Inicio'
 import { Plano } from '@/app/plano/Plano'
 import { Sos } from '@/app/sos/Sos'
@@ -31,8 +33,16 @@ function App() {
       </header>
       <main className="conteudo">
         {rota === '/' && (
-          <Inicio aoAbrirSos={() => ir('/sos')} aoAbrirPlano={() => abrirPlano()} aoAbrirCirculo={() => ir('/circulo')} />
+          <Inicio
+            aoAbrirSos={() => ir('/sos')}
+            aoApostar={() => ir('/checkin')}
+            aoAbrirDinheiro={() => ir('/dinheiro')}
+            aoAbrirPlano={() => abrirPlano()}
+            aoAbrirCirculo={() => ir('/circulo')}
+          />
         )}
+        {rota === '/checkin' && <Checkin aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
+        {rota === '/dinheiro' && <Dinheiro aoVoltar={() => ir('/')} />}
         {rota === '/plano' && (
           <Plano gatilhosIniciais={gatilhosIniciais} aoAbrirCirculo={() => ir('/circulo')} aoVoltar={() => ir('/')} />
         )}

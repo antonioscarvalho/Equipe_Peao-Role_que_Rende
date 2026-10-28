@@ -72,7 +72,7 @@ describe('Seu plano', () => {
     expect(await screen.findByText('Se bater o tédio, então eu vou ouvir uma música que eu gosto.')).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('Plano salvo.')
     expect(titulo()).toHaveTextContent('Seu plano pros momentos difíceis')
-    expect(titulo()).toHaveFocus()
+    await waitFor(() => expect(titulo()).toHaveFocus())
   })
 
   it('erros ficam ligados ao campo e o foco vai pro primeiro com erro', async () => {
@@ -149,6 +149,6 @@ describe('Seu plano', () => {
     await userEvent.keyboard('{Enter}')
 
     expect(await screen.findByText('Se bater a solidão, então eu vou caminhar 10 minutos.')).toBeInTheDocument()
-    expect(titulo()).toHaveFocus()
+    await waitFor(() => expect(titulo()).toHaveFocus())
   })
 })

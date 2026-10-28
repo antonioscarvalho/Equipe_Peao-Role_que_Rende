@@ -136,7 +136,7 @@ export function Plano({ gatilhosIniciais = [], aoAbrirCirculo, aoVoltar }: Plano
         />
       )}
       {planos !== null && gatilhos.includes(OUTRO) && (
-        <div className="campo">
+        <div className="grupo-campo">
           <label htmlFor="plano-outro">{textos.rotuloOutro}</label>
           <input
             id="plano-outro"
@@ -245,9 +245,9 @@ function EditorPlano({ plano, aoSalvar, aoCancelar }: EditorPlanoProps) {
 
   return (
     <form className="formulario" onSubmit={enviar} noValidate>
-      <div className="campo">
+      <div className="grupo-campo">
         <label htmlFor="plano-se">{textos.rotuloSe}</label>
-        <p id="plano-se-dica" className="campo__dica">
+        <p id="plano-se-dica" className="grupo-campo__dica">
           {textos.dicaSe}
         </p>
         <input
@@ -267,9 +267,9 @@ function EditorPlano({ plano, aoSalvar, aoCancelar }: EditorPlanoProps) {
         )}
       </div>
 
-      <div className="campo">
+      <div className="grupo-campo">
         <label htmlFor="plano-entao">{textos.rotuloEntao}</label>
-        <p id="plano-entao-dica" className="campo__dica">
+        <p id="plano-entao-dica" className="grupo-campo__dica">
           {textos.dicaEntao}
         </p>
         <input
@@ -290,7 +290,7 @@ function EditorPlano({ plano, aoSalvar, aoCancelar }: EditorPlanoProps) {
       </div>
 
       <div className="exemplos" role="group" aria-labelledby="plano-ideias">
-        <p id="plano-ideias" className="campo__dica">
+        <p id="plano-ideias" className="grupo-campo__dica">
           {textos.ideias}
         </p>
         <div className="linha">

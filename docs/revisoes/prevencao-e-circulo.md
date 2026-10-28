@@ -59,7 +59,7 @@
 | Não se apresenta como substituto de tratamento | ✅ |
 | Só dados públicos, sintéticos ou do próprio usuário | ✅ |
 | Conteúdo produzido durante o Game Jam | ✅ commits de 27/10/2026 na branch `feat/005-prevencao-e-circulo-atyrson` |
-| Uso de IA declarado; assets e APIs listados | ✅ declaração, item 17; `wa.me` em licenças e integrações |
+| Uso de IA declarado; assets e APIs listados | ✅ declaração, item 18; `wa.me` em licenças e integrações |
 
 ## Checklists das skills
 

@@ -1,0 +1,26 @@
+{
+  "_comentario": "Textos do check-in e do pós-lapso (fluxo F4). Fonte: docs/02-produto/microcopy.md. REVISÃO CLÍNICA PENDENTE.",
+  "revisaoClinica": "pendente",
+  "pergunta": "Como foi hoje?",
+  "naoApostei": "Não apostei",
+  "apostei": "Apostei",
+  "respostaNaoApostei": "Anotado.",
+  "posLapso": {
+    "agradecimentoTitulo": "Obrigado por registrar.",
+    "agradecimento": "Isso não apaga o que você já construiu.",
+    "perguntaGatilho": "O que aconteceu antes?",
+    "dicaGatilho": "Marque o que tiver a ver, se quiser. Dá pra pular.",
+    "perguntaPlano": "O que dá pra ajustar no seu plano?",
+    "agoraNao": "Agora não",
+    "retomar": "Você já tem {n} dias sem apostar. Bora retomar o caminho?",
+    "toMal": "Tô mal com isso",
+    "voltar": "Voltar pro início",
+    "proximo": "Próximo"
+  },
+  "humor": {
+    "legenda": "Como você está se sentindo?",
+    "dica": "Se quiser. Dá pra pular.",
+    "opcoes": ["Muito mal", "Mal", "Mais ou menos", "Bem", "Muito bem"]
+  },
+  "gatilhos": ["dia do pagamento", "jogo na TV", "tédio", "briga", "solidão", "bebida", "notificação", "outro"]
+}

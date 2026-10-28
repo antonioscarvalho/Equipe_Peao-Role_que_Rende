@@ -4,7 +4,7 @@
 - **Branch:** `feat/005-prevencao-e-circulo-atyrson` (a partir de `development` em `a510791`)
 - **Responsável:** Atyrson Souto (com apoio de IA: Kiro CLI, Claude Opus 5.5)
 - **Data:** 2026-10-27
-- **Estado:** T001–T009, T011 e T012 ✅ · T010 ⬜ bloqueada pela 004
+- **Estado:** T001–T009, T011 e T012 ✅ · T010 ⬜ (a 004 entrou na `development` pelo PR #14; a T010 pode começar)
 
 ## 1. O que foi implementado
 
@@ -74,7 +74,7 @@
 | `web/src/app/inicio/Inicio.tsx` | Atalhos "Seu plano" e "Seu Círculo" abaixo do "Bateu a vontade?" |
 | `web/src/content/conteudo.ts` / `conteudo.test.ts` | `conteudoPrevencao`, `preencher()` e testes do conteúdo novo |
 | `web/src/index.css` | Chips (iguais aos da 004), campos, cartões, links com cara de botão |
-| `docs/07-conformidade/*`, `docs/04-tecnico/integracoes-externas.md` | Uso de IA (item 17), `wa.me` e `sms:` registrados, revisão no checklist de conteúdo |
+| `docs/07-conformidade/*`, `docs/04-tecnico/integracoes-externas.md` | Uso de IA (item 18), `wa.me` e `sms:` registrados, revisão no checklist de conteúdo |
 
 ## 3. Dados
 
@@ -93,7 +93,7 @@ Os limites estão em `prevencao.json` e são conferidos no repositório e na tel
 | Spec / dono | Efeito | O que fazer |
 |---|---|---|
 | **001/003 SOS** (Ian, Antonio) | O passo "O que dá pra fazer agora?" passa a mostrar planos, Círculo, as ações gerais de `sos.json` e, sem dados, convite + CVV 188. Os testes antigos do SOS seguem passando | Aprovar o diff do `Sos.tsx` |
-| **004 Contador e dinheiro** (Danillo) | As duas branches mexem em `db.ts`, `useRota.ts`, `App.tsx`, `Inicio.tsx`, `conteudo.ts`, `conteudo.test.ts`, `App.test.tsx` e `index.css`. A simulação de merge deu conflito nesses arquivos, sempre por blocos somados dos dois lados | Quem fizer o merge mantém os dois lados; em `db.ts` vale a versão 3; em `index.css` sai o bloco `.chip` repetido. `Chips.tsx` não conflita |
+| **004 Contador e dinheiro** (Danillo) | **Já juntada** (merge da `development` na branch, ver seção 7). Ajustes nos testes da 004: `checkins.test.ts` aceita banco na versão ≥ 2; `Inicio.test.tsx` passa as props novas `aoAbrirPlano` e `aoAbrirCirculo` | Danillo conferir os dois ajustes |
 | **004** | A lista de gatilhos está duplicada em `checkin.json` e `prevencao.json` | Decidir um dono da lista depois do merge |
 | **004 → T010** | Falta o botão "Editar meu plano" no `Checkin.tsx`, chamando `abrirPlano(gatilhos)` do `App` | Fazer depois do merge da 004 |
 | **006 Crise e hub** | O CA-7 também vale para a crise. `AcoesDoPlano` pode ser reaproveitado | Combinar quando a 006 começar |
@@ -102,7 +102,7 @@ Os limites estão em `prevencao.json` e são conferidos no repositório e na tel
 
 ## 5. Pendências
 
-- T010 (CA-6), bloqueada pelo merge da 004.
+- T010 (CA-6): botão "Editar meu plano" no `Checkin.tsx`. Já dá para fazer.
 - Revisão clínica dos textos de `prevencao.json` (`"revisaoClinica": "pendente"`).
 - Criptografia local com PIN (mesma pendência do SOS).
 - Nota "Seu plano fica só neste celular." na tela do plano (sugestão da revisão).
@@ -112,10 +112,27 @@ Os limites estão em `prevencao.json` e são conferidos no repositório e na tel
 
 ```bash
 cd web
-npm test          # 225 testes
+npm test          # 321 testes (com a 004)
 npm run typecheck
 npm run lint
 npm run dev
 ```
 
 No navegador: Início → **Seu plano** (marque chips, crie um plano, use "Carregar exemplo", tente passar de 5) → **Seu Círculo** ("Carregar exemplo" cria o "Irmão (exemplo)", `(61) 90000-0000`; não envie a mensagem) → Início → **Bateu a vontade?** até "O que dá pra fazer agora?". Para ver o estado vazio, apague o IndexedDB `guardiao` no DevTools e recarregue.
+
+## 7. Merge com a `development` (004 já integrada)
+
+A `development` recebeu a 004 (PR #14) enquanto a 005 estava em andamento. A branch recebeu a `development` por merge, com os conflitos resolvidos assim:
+
+| Arquivo | Resolução |
+|---|---|
+| `web/src/lib/db.ts` | Tipos da 004 como estão na `development` (com `humor` e `meta`) + tipos e stores da 005; versão 3 |
+| `web/src/hooks/useRota.ts`, `web/src/App.tsx` | As quatro rotas novas (`/checkin`, `/dinheiro`, `/plano`, `/circulo`) |
+| `web/src/app/inicio/Inicio.tsx` | Tela da 004 inteira; os atalhos "Seu plano" e "Seu Círculo" ficam depois do cartão do check-in |
+| `web/src/content/conteudo.ts` / `conteudo.test.ts` | Conteúdo dos dois lados; o vocabulário proibido cobre `checkin.json`, `metas.json` e `prevencao.json` |
+| `web/src/index.css` | CSS da 004 inteiro + bloco da 005. **A 004 já usa `.campo` no próprio `<input>`**, então o invólucro da 005 (rótulo, dica, campo e erro) foi renomeado para `.grupo-campo`. `.campo__erro` é compartilhado |
+| `web/src/App.test.tsx` | Testes dos dois lados |
+| `docs/07-conformidade/declaracao-de-uso-de-ia.md` | Item 17 é da 004 (Danillo); o da 005 virou o item 18 |
+| `specs/README.md`, `docs/02-produto/escopo-e-backlog.md` | Estado da 004 vindo da `development`; 005 como implementada, T010 pendente |
+
+Dois testes de foco da 005 passaram a usar `waitFor`, porque falharam uma vez com a suíte maior (o foco vem de um `useEffect` depois da gravação no IndexedDB).

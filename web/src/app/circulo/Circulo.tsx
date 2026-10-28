@@ -106,7 +106,7 @@ export function Circulo({ aoAbrirPlano, aoVoltar }: CirculoProps) {
       {contatos !== null && contatos.length === 0 && <p>{textos.vazio}</p>}
       {contatos !== null && contatos.length > 0 && (
         <>
-          <fieldset className="campo campo--opcoes">
+          <fieldset className="grupo-campo grupo-campo--opcoes">
             <legend>{textos.rotuloMensagem}</legend>
             {textos.mensagens.map((texto) => (
               <label key={texto} className="opcao">
@@ -217,7 +217,7 @@ function EditorContato({ contato, aoSalvar, aoCancelar }: EditorContatoProps) {
 
   return (
     <form className="formulario" onSubmit={enviar} noValidate>
-      <div className="campo">
+      <div className="grupo-campo">
         <label htmlFor="circulo-nome">{textos.rotuloNome}</label>
         {/* autocomplete desligado: o dado é de outra pessoa, não da dona do aparelho. */}
         <input
@@ -238,9 +238,9 @@ function EditorContato({ contato, aoSalvar, aoCancelar }: EditorContatoProps) {
         )}
       </div>
 
-      <div className="campo">
+      <div className="grupo-campo">
         <label htmlFor="circulo-telefone">{textos.rotuloTelefone}</label>
-        <p id="circulo-telefone-dica" className="campo__dica">
+        <p id="circulo-telefone-dica" className="grupo-campo__dica">
           {textos.dicaTelefone}
         </p>
         <input

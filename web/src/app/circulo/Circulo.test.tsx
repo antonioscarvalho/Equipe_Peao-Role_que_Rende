@@ -47,7 +47,7 @@ describe('Seu Círculo de Confiança', () => {
     expect(await screen.findByRole('heading', { level: 2, name: 'Irmão (exemplo)' })).toBeInTheDocument()
     expect(screen.getByText('(61) 90000-0000')).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('Pessoa salva.')
-    expect(titulo()).toHaveFocus()
+    await waitFor(() => expect(titulo()).toHaveFocus())
     expect(await circulo.listar()).toEqual([expect.objectContaining({ telefone: '5561900000000' })])
   })
 
@@ -140,7 +140,7 @@ describe('Seu Círculo de Confiança', () => {
     await userEvent.keyboard('61900000000{Enter}')
 
     await screen.findByRole('heading', { level: 2, name: 'Irmão (exemplo)' })
-    expect(titulo()).toHaveFocus()
+    await waitFor(() => expect(titulo()).toHaveFocus())
     await userEvent.tab()
     expect(screen.getByRole('radio', { name: /Tô com vontade/ })).toHaveFocus()
     await userEvent.tab()

@@ -9,18 +9,21 @@ export interface EpisodioSos {
   foiParaCrise: boolean
 }
 
-/** Store da spec 004 (check-in). Declarada aqui igual à branch da 004 para o banco ser o mesmo em qualquer ordem de merge. */
 export interface Checkin {
   /** 'AAAA-MM-DD' no fuso do aparelho; um check-in por dia, o último vale. */
   data: string
   apostou: boolean
   /** Só quando apostou. A spec 005 lê daqui para montar o plano Se/Então. */
   gatilhos?: string[]
+  /** 1 (muito mal) a 5 (muito bem); opcional, marcado depois do registro (CA-1). */
+  humor?: number
   registradoEm: string
 }
 
 export interface ConfiguracaoFinancas {
   gastoSemanalEstimado: number | null
+  /** Para onde a pessoa quer levar o dinheiro, nas palavras dela ("conta de luz"). */
+  meta: string | null
 }
 
 /** Spec 005: gatilhos que a pessoa marcou (chave fixa 'gatilhos'). */
@@ -72,7 +75,7 @@ export function abrirBanco(): Promise<IDBPDatabase<GuardiaoDB>> {
         const store = db.createObjectStore('episodiosSos', { keyPath: 'id' })
         store.createIndex('porInicio', 'inicio')
       }
-      // Versão 2 = spec 004. Cria se ainda não existir, para a 005 funcionar antes ou depois do merge da 004.
+      // Versão 2 = spec 004.
       if (versaoAnterior < 2) {
         if (!existe('checkins')) db.createObjectStore('checkins', { keyPath: 'data' })
         if (!existe('configuracao')) db.createObjectStore('configuracao')

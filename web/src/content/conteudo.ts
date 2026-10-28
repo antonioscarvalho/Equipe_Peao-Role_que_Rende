@@ -1,6 +1,8 @@
 import canaisJson from './canais-de-ajuda.json'
 import prevencaoJson from './prevencao.json'
 import sosJson from './sos.json'
+import checkinJson from './checkin.json'
+import metasJson from './metas.json'
 
 export interface CanalDeAjuda {
   id: string
@@ -41,6 +43,27 @@ export const conteudoSos = sosJson as {
   acoes: string[]
 }
 
+export const conteudoCheckin = checkinJson
+
+interface MetaJson {
+  id: string
+  nome: string
+  plural: string
+  valorReferencia: number | null
+  status: 'confirmado' | 'conferir'
+  verificado_em: string | null
+  fonte: string
+  link: string
+}
+
+export interface Meta extends MetaJson {
+  valorReferencia: number
+}
+
+/** Igual aos canais de ajuda: meta só chega à tela com valor de referência conferido na fonte. */
+export const metasConfirmadas: Meta[] = (metasJson.metas as MetaJson[]).filter(
+  (m): m is Meta => m.status === 'confirmado' && typeof m.valorReferencia === 'number' && m.valorReferencia > 0,
+)
 /** Textos do plano Se/Então (F5) e do Círculo de Confiança (F8). */
 export const conteudoPrevencao = prevencaoJson
 
