@@ -42,7 +42,7 @@ function App() {
           />
         )}
         {rota === '/checkin' && <Checkin aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
-        {rota === '/dinheiro' && <Dinheiro aoVoltar={() => ir('/')} />}
+        {rota === '/dinheiro' && <Dinheiro aoVoltar={() => ir('/')} aoAbrirCheckin={() => ir('/checkin')} />}
         {rota === '/plano' && (
           <Plano gatilhosIniciais={gatilhosIniciais} aoAbrirCirculo={() => ir('/circulo')} aoVoltar={() => ir('/')} />
         )}

@@ -1,12 +1,13 @@
 import { useState } from 'react'
+import { Aproximado } from '@/components/Aproximado'
 import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
 import { Chips } from '@/components/Chips'
 import { Contador } from '@/components/Contador'
-import { Aproximado } from '@/components/Aproximado'
+import { Guardiao } from '@/components/Guardiao'
 import { conteudoCheckin, conteudoDinheiro, conteudoPrevencao } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
-import { formatarReais } from '@/domain/progresso'
+import { estagioGuardiao, formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
 
 interface InicioProps {
@@ -45,7 +46,7 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, a
   return (
     <section className="tela tela--inicio" aria-labelledby="inicio-titulo">
       <h1 id="inicio-titulo">Bora construir uma vida sem apostas? Um passo de cada vez.</h1>
-      <Botao grande onClick={aoAbrirSos}>
+      <Botao grande onClick={aoAbrirSos} className="botao--sos">
         Bateu a vontade?
       </Botao>
 
@@ -74,18 +75,28 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, a
         {estado === 'carregando' ? (
           <div className="esqueleto esqueleto--contador" role="status" aria-label="Carregando seus registros" />
         ) : (
-          <Contador
-            dias={progresso.totalSemApostar}
-            desde={progresso.inicio && dataPorExtenso(progresso.inicio, dia)}
-            noMes={progresso.diasSemApostarNoMes}
-            sequencia={progresso.sequenciaAtual}
-            diasSemRegistro={progresso.diasSemRegistroNoMes}
-          />
+          <div className="jornada">
+            <Guardiao
+              estagio={estagioGuardiao(progresso.totalSemApostar)}
+              humor={registroDeHoje?.apostou ? 'acolhendo' : 'tranquilo'}
+              tamanho={110}
+            />
+            <div className="jornada__info">
+              <Contador
+                dias={progresso.totalSemApostar}
+                desde={progresso.inicio && dataPorExtenso(progresso.inicio, dia)}
+                noMes={progresso.diasSemApostarNoMes}
+                sequencia={progresso.sequenciaAtual}
+                diasSemRegistro={progresso.diasSemRegistroNoMes}
+              />
+            </div>
+          </div>
         )}
         {/* CA-6: sem gasto informado, o card convida em vez de mostrar R$ 0. */}
         {estado === 'pronto' && progresso.dinheiroPreservado !== null && (
           <p className="checkin__dinheiro">
-            {conteudoDinheiro.resumoInicio} <strong>
+            {conteudoDinheiro.resumoInicio}{' '}
+            <strong>
               <Aproximado />
               {formatarReais(progresso.dinheiroPreservado)}
             </strong>
@@ -97,7 +108,7 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, a
         </Botao>
       </Cartao>
 
-      <nav className="linha" aria-label="Prepare-se pros momentos difíceis">
+      <nav className="linha grade-atalhos" aria-label="Prepare-se pros momentos difíceis">
         <Botao variante="secundario" onClick={aoAbrirPlano}>
           {conteudoPrevencao.atalhos.plano}
         </Botao>
