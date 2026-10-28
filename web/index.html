@@ -3,7 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FCFC30" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#FCFC30" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#13133A" media="(prefers-color-scheme: dark)" />
+    <script>
+      // Aplica o tema antes do React (mesma regra de src/tema.ts), para a tela não piscar.
+      (function () {
+        var p = "auto";
+        try { p = localStorage.getItem("rqr-tema") || "auto"; } catch (e) {}
+        var escuro = p === "escuro" || (p !== "claro" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.tema = escuro ? "escuro" : "claro";
+      })();
+    </script>
     <title>Prova visual · Equipe Peão</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

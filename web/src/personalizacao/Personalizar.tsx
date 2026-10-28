@@ -6,6 +6,7 @@ import {
   type Aparencia, type OpcaoCor, type OpcaoItem,
 } from "./aparencia";
 import { DIAS_SEM_APOSTAR_DEMO, useAparencia } from "./armazenamento";
+import { BotaoTema } from "../BotaoTema";
 
 const plural = (n: number) => (n === 1 ? "1 dia" : `${n} dias`);
 
@@ -53,7 +54,10 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
       <main className="celular personalizar" aria-labelledby="personalizar-titulo">
         <div className="personalizar__topo">
           <button className="link personalizar__voltar" onClick={aoVoltar}>← Voltar</button>
-          <button className="rqr-botao personalizar__pronto" onClick={aoVoltar}>Pronto</button>
+          <span className="personalizar__acoes">
+            <BotaoTema compacto />
+            <button className="rqr-botao personalizar__pronto" onClick={aoVoltar}>Pronto</button>
+          </span>
         </div>
         <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo personalizar__titulo">
           Deixe o bichinho com a sua cara

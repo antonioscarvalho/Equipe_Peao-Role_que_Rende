@@ -5,7 +5,7 @@ html, body { margin: 0; }
 body {
   font-family: "Nunito Sans", var(--rqr-font-texto);
   color: var(--rqr-texto);
-  background: var(--rqr-amarelo);
+  background: var(--rqr-fundo);
   -webkit-font-smoothing: antialiased;
 }
 button { font: inherit; color: inherit; }
@@ -17,20 +17,20 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .palco { min-height: 100dvh; display: grid; place-items: center; padding: 24px 12px; position: relative; overflow: hidden; }
 .celular {
   position: relative; z-index: 1; width: min(400px, 100%);
-  background: var(--rqr-branco); border: 4px solid var(--rqr-azul-escuro);
-  border-radius: 36px; box-shadow: 0 10px 0 var(--rqr-azul-escuro);
+  background: var(--rqr-fundo-conteudo); border: 4px solid var(--rqr-borda);
+  border-radius: 36px; box-shadow: 0 10px 0 var(--rqr-sombra-cor);
   padding: 22px 18px 96px; display: flex; flex-direction: column; gap: 16px;
   animation: rqr-pop var(--rqr-dur-lenta) var(--rqr-ease-pop) both;
 }
 
 /* ---------- Topo ---------- */
 .topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.topo__oi { margin: 0; font-weight: 700; color: var(--rqr-cinza-900); }
+.topo__oi { margin: 0; font-weight: 700; color: var(--rqr-texto-suave); }
 .topo__titulo { font-size: 26px; font-weight: 900; line-height: 1.15; }
 .interruptor { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 11px; font-weight: 700; text-align: center; max-width: 76px; }
 .interruptor input { position: absolute; opacity: 0; }
-.interruptor__trilho { width: 44px; height: 26px; border-radius: 99px; background: var(--rqr-cinza-100); border: 3px solid var(--rqr-azul-escuro); position: relative; transition: background var(--rqr-dur-base); }
-.interruptor__trilho::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--rqr-azul-escuro); transition: transform var(--rqr-dur-base) var(--rqr-ease-pop); }
+.interruptor__trilho { width: 44px; height: 26px; border-radius: 99px; background: var(--rqr-fundo-suave); border: 3px solid var(--rqr-borda); position: relative; transition: background var(--rqr-dur-base); }
+.interruptor__trilho::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--rqr-texto); transition: transform var(--rqr-dur-base) var(--rqr-ease-pop); }
 .interruptor input:checked + .interruptor__trilho { background: var(--rqr-azul-claro); }
 .interruptor input:checked + .interruptor__trilho::after { transform: translateX(18px); }
 .interruptor input:focus-visible + .interruptor__trilho { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
@@ -38,12 +38,12 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 /* ---------- Cena do bichinho ---------- */
 .cena {
   position: relative; display: grid; justify-items: center;
-  background: linear-gradient(180deg, var(--rqr-amarelo-claro), var(--rqr-amarelo) 70%);
-  border: 3px solid var(--rqr-azul-escuro); border-radius: 28px; padding: 46px 10px 0; overflow: hidden;
+  background: linear-gradient(180deg, var(--rqr-cena-topo), var(--rqr-cena-base) 70%);
+  border: 3px solid var(--rqr-borda); border-radius: 28px; padding: 46px 10px 0; overflow: hidden;
 }
 .balao {
   position: absolute; top: 12px; left: 50%; translate: -50% 0; z-index: 2;
-  background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 16px;
+  background: var(--rqr-fundo-conteudo); border: 3px solid var(--rqr-borda); border-radius: 16px;
   padding: 6px 12px; font-weight: 800; font-size: 14px; white-space: nowrap; max-width: 92%;
   overflow: hidden; text-overflow: ellipsis;
   animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop) both;
@@ -53,7 +53,7 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .bairro__peca { transform-box: fill-box; transform-origin: 50% 100%; transform: scale(0); opacity: 0;
   transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop), opacity var(--rqr-dur-base); }
 .bairro__peca.is-on { transform: scale(1); opacity: 1; }
-.bairro__vaga { fill: none; stroke: var(--rqr-azul-escuro); stroke-width: 2; stroke-dasharray: 4 4; opacity: .35; }
+.bairro__vaga { fill: none; stroke: var(--rqr-borda); stroke-width: 2; stroke-dasharray: 4 4; opacity: .35; }
 
 /* ---------- Bichinho ---------- */
 .bicho { position: relative; z-index: 1; --corpo: var(--rqr-azul-claro); }
@@ -124,49 +124,51 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 
 /* ---------- Chips de humor ---------- */
 .humores { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.chip { border: 3px solid var(--rqr-azul-escuro); background: var(--rqr-branco); border-radius: 99px; padding: 6px 12px; font-weight: 800; font-size: 13px; cursor: pointer;
+.chip { border: 3px solid var(--rqr-borda); background: var(--rqr-fundo-conteudo); border-radius: 99px; padding: 6px 12px; font-weight: 800; font-size: 13px; cursor: pointer;
   transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop), background var(--rqr-dur-base); }
 .chip:hover { transform: translateY(-2px); }
-.chip.is-on { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); }
+.chip.is-on { background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); }
 
 /* ---------- Cards ---------- */
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.mini { padding: 12px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 0 var(--rqr-azul-escuro); }
+.mini { padding: 12px; border-radius: 20px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 0 var(--rqr-sombra-cor); }
 .mini p { margin: 0; }
-.mini__icone { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 3px solid var(--rqr-azul-escuro); perspective: 300px; }
+.mini__icone { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 3px solid var(--rqr-borda); perspective: 300px; }
 .mini__icone--moeda { background: var(--rqr-amarelo-claro); }
 .moeda { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 900; color: var(--rqr-ouro-sombra);
   background: radial-gradient(circle at 35% 30%, var(--rqr-ouro-luz), var(--rqr-ouro) 70%); border: 2px solid var(--rqr-ouro-sombra); }
-.mini__rotulo { font-size: 12px; font-weight: 700; color: var(--rqr-cinza-900); }
+.mini__rotulo { font-size: 12px; font-weight: 700; color: var(--rqr-texto-suave); }
 .mini__valor { font-size: 20px; font-weight: 900; font-variant-numeric: tabular-nums; }
-.mini__nota { font-size: 11px; color: var(--rqr-cinza-700); }
+.mini__nota { font-size: 11px; color: var(--rqr-texto-fraco); }
 
 /* ---------- Missões ---------- */
 .secao { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 .secao h2 { font-size: 18px; font-weight: 900; }
-.progresso { flex: 1; max-width: 140px; height: 12px; border-radius: 99px; background: var(--rqr-cinza-100); border: 2px solid var(--rqr-azul-escuro); overflow: hidden; }
+.progresso { flex: 1; max-width: 140px; height: 12px; border-radius: 99px; background: var(--rqr-fundo-suave); border: 2px solid var(--rqr-borda); overflow: hidden; }
 .progresso span { display: block; height: 100%; background: var(--rqr-verde-agro); transform-origin: left; transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop); }
 .missoes { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .missao { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer;
-  background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 18px; padding: 10px 12px;
-  box-shadow: 0 4px 0 var(--rqr-azul-escuro);
+  background: var(--rqr-fundo-conteudo); border: 3px solid var(--rqr-borda); border-radius: 18px; padding: 10px 12px;
+  box-shadow: 0 4px 0 var(--rqr-sombra-cor);
   transition: transform var(--rqr-dur-rapida) var(--rqr-ease-padrao), box-shadow var(--rqr-dur-rapida), background var(--rqr-dur-base); }
-.missao:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--rqr-azul-escuro); }
-.missao:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--rqr-azul-escuro); }
-.missao__icone { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--rqr-azul-claro); border: 2px solid var(--rqr-azul-escuro); transition: background var(--rqr-dur-base); }
+.missao:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--rqr-sombra-cor); }
+.missao:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--rqr-sombra-cor); }
+.missao__icone { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--rqr-azul-claro); color: var(--rqr-azul-escuro); border: 2px solid var(--rqr-azul-escuro); transition: background var(--rqr-dur-base); }
 .missao__texto { flex: 1; font-weight: 700; font-size: 14px; }
-.missao__valor { font-size: 12px; font-weight: 900; color: var(--rqr-roxo); }
-.missao.is-ok { background: var(--rqr-verde-claro); cursor: default; }
+.missao__valor { font-size: 12px; font-weight: 900; color: var(--rqr-valor); }
+.missao.is-ok { background: var(--rqr-verde-claro); color: var(--rqr-azul-escuro); cursor: default; }
+.missao.is-ok .missao__valor { color: var(--rqr-roxo); }
 .missao.is-ok .missao__icone { background: var(--rqr-verde-agro); animation: rqr-pop var(--rqr-dur-media) var(--rqr-ease-pop); }
 .missao.is-ok .missao__texto { text-decoration: line-through; text-decoration-thickness: 2px; }
-.link { margin-top: 10px; background: none; border: 0; text-decoration: underline; font-weight: 700; cursor: pointer; color: var(--rqr-azul-escuro); }
+.link { margin-top: 10px; background: none; border: 0; text-decoration: underline; font-weight: 700; cursor: pointer; color: var(--rqr-texto); }
+.crise .link { color: inherit; }
 
 /* ---------- Botão "Deu vontade" ---------- */
 .sos {
   position: absolute; left: 50%; bottom: 20px; translate: -50% 0;
   display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 28px;
-  border: 3px solid var(--rqr-amarelo); border-radius: 99px; cursor: pointer;
-  background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); font-weight: 900; font-size: 18px; white-space: nowrap;
+  border: 3px solid var(--rqr-ativo-texto); border-radius: 99px; cursor: pointer;
+  background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); font-weight: 900; font-size: 18px; white-space: nowrap;
   transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop);
 }
 .sos:hover { transform: scale(1.04); }
@@ -213,7 +215,7 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .g--anel { width: 80px; top: 14%; right: 8%; stroke: var(--rqr-roxo); stroke-width: 10; animation-duration: 6s; }
 .g--flor { width: 70px; bottom: 16%; left: 9%; stroke: var(--rqr-azul-claro); stroke-width: 9; --rqr-rot: 12deg; animation-duration: 4.5s; }
 .g--arco { width: 130px; bottom: 6%; right: 6%; stroke: var(--rqr-rosa-escuro); stroke-width: 12; animation-duration: 5.5s; }
-.g--tri { width: 70px; top: 52%; right: 4%; stroke: var(--rqr-azul-escuro); stroke-width: 7; --rqr-rot: 15deg; }
+.g--tri { width: 70px; top: 52%; right: 4%; stroke: var(--rqr-borda); stroke-width: 7; --rqr-rot: 15deg; }
 @media (max-width: 600px) { .g--seta, .g--tri, .g--flor { display: none; } }
 
 /* ---------- Reduzir animações (interruptor do app) ---------- */
@@ -232,6 +234,16 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 
 /* ---------- Interruptores (animações e sons) ---------- */
 .interruptores { display: flex; gap: 8px; align-items: flex-start; }
+
+/* ---------- Botão de tema (Automático → Claro → Escuro) ---------- */
+.botao-tema { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0; border: 0; background: none;
+  cursor: pointer; font-size: 11px; font-weight: 700; text-align: center; max-width: 76px; color: var(--rqr-texto); }
+.botao-tema__icone { display: grid; place-items: center; width: 32px; height: 26px; border-radius: 99px;
+  background: var(--rqr-fundo-suave); border: 3px solid var(--rqr-borda); transition: background var(--rqr-dur-base); }
+.botao-tema--compacto .botao-tema__icone { width: 44px; height: 44px; border-radius: 50%; background: var(--rqr-fundo-conteudo); }
+.botao-tema:hover .botao-tema__icone { background: var(--rqr-azul-claro); color: var(--rqr-azul-escuro); }
+.botao-tema:focus-visible { outline: none; }
+.botao-tema:focus-visible .botao-tema__icone { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
 
 /* ---------- Confete: explosão do centro para as laterais (missão concluída) ---------- */
 .confete { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
@@ -254,16 +266,16 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .jogo-botao { width: 100%; margin-top: 14px; }
 .pulo {
   position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column;
-  background: var(--rqr-azul-escuro); color: var(--rqr-azul-escuro);
+  background: var(--rqr-azul-escuro); color: var(--rqr-texto);
   padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
 }
 .pulo__topo {
   display: flex; align-items: center; gap: 10px; padding: 10px 14px;
-  background: var(--rqr-amarelo); border-bottom: 3px solid var(--rqr-azul-escuro);
+  background: var(--rqr-fundo); border-bottom: 3px solid var(--rqr-borda);
 }
 .pulo__titulo { margin: 0; font-size: 18px; flex: 1; }
-.pulo__placar { font-weight: 800; background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 99px; padding: 2px 12px; }
-.pulo__fechar { position: static; }
+.pulo__placar { font-weight: 800; background: var(--rqr-fundo-conteudo); border: 3px solid var(--rqr-borda); border-radius: 99px; padding: 2px 12px; }
+.pulo__fechar { position: static; flex: none; border-color: var(--rqr-borda); color: var(--rqr-texto); }
 .pulo__mundo {
   position: relative; flex: 1; width: 100%; max-width: 480px; margin: 0 auto; overflow: hidden;
   touch-action: none; user-select: none; -webkit-user-select: none; cursor: pointer;
@@ -273,8 +285,8 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .pulo__painel {
   position: absolute; inset: 50% 16px auto; translate: 0 -50%; z-index: 2;
   display: grid; justify-items: center; gap: 10px; text-align: center;
-  background: var(--rqr-branco); border: 3px solid var(--rqr-azul-escuro); border-radius: 24px; padding: 18px;
-  box-shadow: 0 6px 0 var(--rqr-azul-escuro); cursor: default;
+  background: var(--rqr-fundo-conteudo); border: 3px solid var(--rqr-borda); border-radius: 24px; padding: 18px;
+  box-shadow: 0 6px 0 var(--rqr-sombra-cor); cursor: default;
 }
 .pulo__chamada { margin: 0; font-weight: 800; font-size: 20px; }
 .pulo__dicas { margin: 0; padding: 0; list-style: none; font-size: 14px; display: grid; gap: 4px; }

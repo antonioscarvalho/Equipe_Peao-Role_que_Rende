@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { tocar } from "./sons";
 import { useAparenciaVisivel } from "./personalizacao";
+import { BotaoTema } from "./BotaoTema";
 import { DURACAO_PARTIDA_MS, FOLHA_A_CADA_PLATAFORMAS, quadroMs } from "./partida";
 
 /**
@@ -140,7 +141,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
     const C = {
       contorno: cor("--rqr-azul-escuro"), normal: cor("--rqr-verde-agro"), move: cor("--rqr-azul"),
       nuvem: cor("--rqr-branco"), mola: cor("--rqr-rosa-escuro"), folha: cor("--rqr-verde-agro"),
-      ceu1: cor("--rqr-azul-claro"), ceu2: cor("--rqr-amarelo-claro"),
+      ceu1: cor("--rqr-ceu-topo"), ceu2: cor("--rqr-ceu-base"),
     };
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const g = jogo.current;
@@ -322,6 +323,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
+        <BotaoTema compacto />
         <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo">×</button>
       </div>
 

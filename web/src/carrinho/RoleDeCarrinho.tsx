@@ -4,6 +4,7 @@ import { Bichinho } from "../Bichinho";
 import { tocar } from "../sons";
 import { CORES_ROUPA, corDe } from "../personalizacao/aparencia";
 import { useAparenciaVisivel } from "../personalizacao";
+import { BotaoTema } from "../BotaoTema";
 import { DURACAO_PARTIDA_MS, FOLHA_ALTA_A_CADA, FOLHA_A_CADA_PX, quadroMs } from "../partida";
 import "./carrinho.css";
 
@@ -102,8 +103,8 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     const css = getComputedStyle(document.documentElement);
     const cor = (n: string) => css.getPropertyValue(n).trim() || "#000";
     const C = {
-      contorno: cor("--rqr-azul-escuro"), grama: cor("--rqr-verde-agro"), terra: cor("--rqr-amarelo-claro"),
-      ceu1: cor("--rqr-azul-claro"), ceu2: cor("--rqr-amarelo-claro"), morroLonge: cor("--rqr-roxo-claro"),
+      contorno: cor("--rqr-azul-escuro"), grama: cor("--rqr-verde-agro"), terra: cor("--rqr-terra"),
+      ceu1: cor("--rqr-ceu-topo"), ceu2: cor("--rqr-ceu-base"), morroLonge: cor("--rqr-roxo-claro"),
       branco: cor("--rqr-branco"), folha: cor("--rqr-verde-agro"), roda: cor("--rqr-azul-escuro"),
     };
     const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -308,6 +309,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         <span className="pulo__placar" aria-label={`${metros} metros, ${folhas} folhas`}>
           <b>{metros} m</b> · 🍃 {folhas}
         </span>
+        <BotaoTema compacto />
         <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo">×</button>
       </div>
 

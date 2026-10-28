@@ -11,6 +11,7 @@ import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
 import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
 import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
+import { BotaoTema } from "./BotaoTema";
 
 type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
 
@@ -106,6 +107,7 @@ export default function App() {
             <span className="interruptor__trilho" aria-hidden="true" />
             <span className="interruptor__texto">Sons</span>
           </label>
+          <BotaoTema />
           </div>
         </header>
 
