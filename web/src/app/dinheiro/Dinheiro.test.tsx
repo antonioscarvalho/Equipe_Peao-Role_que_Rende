@@ -8,9 +8,8 @@ import { Dinheiro } from './Dinheiro'
 
 function renderizar() {
   const aoVoltar = vi.fn()
-  const aoAbrirCheckin = vi.fn()
-  render(<Dinheiro aoVoltar={aoVoltar} aoAbrirCheckin={aoAbrirCheckin} hoje="2026-10-27" />)
-  return { aoVoltar, aoAbrirCheckin }
+  render(<Dinheiro aoVoltar={aoVoltar} hoje="2026-10-27" />)
+  return { aoVoltar }
 }
 
 // O toLocaleString põe um espaço não separável entre "R$" e o número.
@@ -84,66 +83,5 @@ describe('Dinheiro preservado', () => {
     renderizar()
     await userEvent.click(await screen.findByRole('button', { name: 'Em coisas do dia a dia' }))
     expect(screen.getByText('Dá pra pagar 1 semana de compras')).toBeInTheDocument()
-  })
-})
-
-describe('Demonstração de Open Finance (Spec 007)', () => {
-  beforeEach(() => apagarBanco())
-
-  it('CA-1: modo manual é o padrão e convite da demonstração está visível', async () => {
-    renderizar()
-    expect(await screen.findByRole('button', { name: 'Ver demonstração com conta fictícia' })).toBeInTheDocument()
-    expect(screen.queryByRole('status', { name: /Modo de demonstração ativo/ })).not.toBeInTheDocument()
-  })
-
-  it('CA-2: toque em "Ver demonstração..." pede confirmação em até 3 linhas', async () => {
-    renderizar()
-    await userEvent.click(await screen.findByRole('button', { name: 'Ver demonstração com conta fictícia' }))
-
-    expect(screen.getByText(/Isto é uma demonstração com dados fictícios/)).toBeInTheDocument()
-    expect(screen.getByText(/Com o Open Finance e sua autorização/)).toBeInTheDocument()
-    expect(screen.getByText(/Quer ver como ficaria esse acompanhamento/)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Entrar na demonstração' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Voltar ao modo manual' })).toBeInTheDocument()
-
-    // Cancelar volta ao modo manual
-    await userEvent.click(screen.getByRole('button', { name: 'Voltar ao modo manual' }))
-    expect(screen.getByRole('button', { name: 'Ver demonstração com conta fictícia' })).toBeInTheDocument()
-    expect(screen.queryByText(/Isto é uma demonstração com dados fictícios/)).not.toBeInTheDocument()
-  })
-
-  it('CA-3 e CA-4: demonstração ativa mostra selo, dados sintéticos e estimativa sem julgamento', async () => {
-    const { aoAbrirCheckin } = renderizar()
-    await userEvent.click(await screen.findByRole('button', { name: 'Ver demonstração com conta fictícia' }))
-    await userEvent.click(screen.getByRole('button', { name: 'Entrar na demonstração' }))
-
-    // CA-3: Selo presente na tela
-    expect(screen.getByRole('status', { name: 'Modo de demonstração ativo' })).toHaveTextContent(
-      'DEMONSTRAÇÃO — dados fictícios',
-    )
-    expect(screen.getByText('Conta fictícia conectada para demonstração')).toBeInTheDocument()
-
-    // CA-4: Estimativa calculada sobre o extrato e mensagem acolhedora/neutra
-    expect(screen.getByText(/Estimativa preservada na demonstração/)).toBeInTheDocument()
-    expect(screen.getByText(/Sem novas saídas desse tipo há/)).toHaveTextContent(
-      /Sem novas saídas desse tipo há 25 dias/,
-    )
-    expect(screen.getByText('Quer registrar como foi seu dia?')).toBeInTheDocument()
-
-    // Botão de check-in funciona
-    await userEvent.click(screen.getByRole('button', { name: 'Ir para o check-in' }))
-    expect(aoAbrirCheckin).toHaveBeenCalled()
-  })
-
-  it('CA-5: "Sair da demonstração" fecha a demo e retorna ao modo manual', async () => {
-    renderizar()
-    await userEvent.click(await screen.findByRole('button', { name: 'Ver demonstração com conta fictícia' }))
-    await userEvent.click(screen.getByRole('button', { name: 'Entrar na demonstração' }))
-
-    expect(screen.getByRole('status', { name: 'Modo de demonstração ativo' })).toBeInTheDocument()
-
-    await userEvent.click(screen.getByRole('button', { name: 'Sair da demonstração' }))
-    expect(screen.queryByRole('status', { name: 'Modo de demonstração ativo' })).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Ver demonstração com conta fictícia' })).toBeInTheDocument()
   })
 })

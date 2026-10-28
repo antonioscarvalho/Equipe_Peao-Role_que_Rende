@@ -25,7 +25,6 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 | jsdom | 30.1 | MIT | https://github.com/jsdom/jsdom | Ambiente de navegador nos testes do web |
 | Testing Library (react, user-event, jest-dom) | 16.3 / 14.6 / 7.0 | MIT | https://github.com/testing-library | Testes de tela do web |
 | fake-indexeddb | 6.2 | Apache 2.0 | https://github.com/dumbmatter/fakeIndexedDB | IndexedDB em memória nos testes |
-| lottie-react | 2.4.1 | MIT | https://github.com/Gamote/lottie-react | Renderização de animações Lottie no app web |
 
 ## Skills de IA de terceiros (`.claude/skills/`)
 
@@ -51,8 +50,7 @@ Avaliadas e **não instaladas** por não terem licença declarada: `brainstorm` 
 | Fontes BancoDoBrasil Títulos / Textos | Banco do Brasil | Proprietária: **não incluída no repo**; só usar se a organização fornecer | — | não | — | — |
 | Fonte Nunito Sans (fallback de títulos) | Vernon Adams et al. / Google Fonts | SIL OFL 1.1 | https://fonts.google.com/specimen/Nunito+Sans | não | Não exige no produto | carregada via Google Fonts em `assets/exemplo.html` |
 | Fonte Roboto (fallback de textos) | Google / Google Fonts | SIL OFL 1.1 | https://fonts.google.com/specimen/Roboto | não | Não exige no produto | carregada via Google Fonts em `assets/exemplo.html` |
-| Ícones Lucide (SVGs) | Lucide Contributors | ISC | https://lucide.dev | não | Manter aviso de copyright | `web/src/components/icones-data.ts` |
-| Animações Noto Animated Emoji (aliviado, brilho, broto) | Google | CC BY 4.0 | https://googlefonts.github.io/noto-emoji-animation/ | não | Atribuição ao Google (CC BY 4.0) | `web/src/components/lottie/` |
+| _a preencher_ | | | | sim/não | | |
 
 ## Assets sonoros (música, efeitos, voz)
 

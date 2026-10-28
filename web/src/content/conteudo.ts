@@ -4,7 +4,6 @@ import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
 import dinheiroJson from './dinheiro.json'
-import demoOpenFinanceJson from './open-finance-demo.json'
 import pausasJson from './pausas.json'
 
 export interface CanalDeAjuda {
@@ -48,7 +47,7 @@ export const conteudoSos = sosJson as {
 
 export const conteudoCheckin = checkinJson
 
-export interface MetaJson {
+interface MetaJson {
   id: string
   nome: string
   plural: string
@@ -73,9 +72,6 @@ export const metasConfirmadas: Meta[] = (metasJson.metas as MetaJson[]).filter(
 export const conteudoPrevencao = prevencaoJson
 
 export const conteudoDinheiro = dinheiroJson
-
-/** Dados e textos da demonstração de Open Finance (Spec 007). */
-export const conteudoOpenFinanceDemo = demoOpenFinanceJson
 
 /** Troca cada {chave} do texto pelo valor; chave sem valor fica como está, para o erro aparecer no teste. */
 export function preencher(texto: string, valores: Record<string, string | number>): string {

@@ -70,14 +70,9 @@ export function Sos({ motivo, aoPedirAjuda, aoTerminar, duracaoOnda = conteudoSo
         <>
           <h1 id="sos-titulo">Quanto tá a vontade agora?</h1>
           <ReguaVontade rotulo="De 0 a 10" valor={antes} aoEscolher={escolherAntes} />
-          <div className="linha">
-            <Botao variante="alerta" onClick={pedirAjuda}>
-              Não tô aguentando
-            </Botao>
-            <Botao variante="secundario" onClick={aoTerminar}>
-              Voltar pro início
-            </Botao>
-          </div>
+          <Botao variante="alerta" onClick={pedirAjuda}>
+            Não tô aguentando
+          </Botao>
         </>
       )}
 

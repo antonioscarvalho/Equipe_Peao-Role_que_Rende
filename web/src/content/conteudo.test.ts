@@ -5,7 +5,6 @@ import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
 import dinheiroJson from './dinheiro.json'
-import demoOpenFinanceJson from './open-finance-demo.json'
 import { canaisDeAjuda, canal, conteudoPrevencao, metasConfirmadas, preencher } from './conteudo'
 
 // Vocabulário vedado pelo guia de tom de voz e pela Seção 8.4 do edital.
@@ -38,12 +37,9 @@ function textos(valor: unknown): string[] {
 }
 
 describe('conteúdo do app', () => {
-  it.each(textos([canaisJson, sosJson, checkinJson, metasJson, dinheiroJson, prevencaoJson, demoOpenFinanceJson]))(
-    'não usa vocabulário vedado: %s',
-    (texto) => {
-      for (const padrao of PROIBIDAS) expect(texto).not.toMatch(padrao)
-    },
-  )
+  it.each(textos([canaisJson, sosJson, checkinJson, metasJson, dinheiroJson, prevencaoJson]))('não usa vocabulário vedado: %s', (texto) => {
+    for (const padrao of PROIBIDAS) expect(texto).not.toMatch(padrao)
+  })
 
   it('todo canal confirmado tem data de verificação e fonte', () => {
     expect(canaisDeAjuda.length).toBeGreaterThan(0)
@@ -53,7 +49,12 @@ describe('conteúdo do app', () => {
     }
   })
 
-  it('canais obrigatórios do edital estão presentes', () => {
+  it('esconde canais que ainda precisam ser conferidos', () => {
+    expect(canaisDeAjuda.some((c) => c.status === 'conferir')).toBe(false)
+    expect(() => canal('teleatendimento-sus')).toThrow()
+  })
+
+  it('tem CVV 188 e SAMU 192', () => {
     expect(canal('cvv').telefone).toBe('188')
     expect(canal('samu').telefone).toBe('192')
   })

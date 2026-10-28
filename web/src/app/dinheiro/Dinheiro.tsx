@@ -1,21 +1,18 @@
 /**
- * Dinheiro preservado (spec 004, CA-5 e CA-6) e demonstração de Open Finance com dados sintéticos (spec 007).
+ * Dinheiro preservado (spec 004, CA-5 e CA-6). O Open Finance é a spec 007, fora desta tela por enquanto.
  * Skills: controle-estimulos-financas · design-etico-saude-digital.
  * O valor é sempre estimativa, a partir do que a pessoa informou (CDC); nada vem de conta real.
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Aproximado } from '@/components/Aproximado'
 import { Botao } from '@/components/Botao'
-import { Cartao } from '@/components/Cartao'
-import { conteudoDinheiro as t, conteudoOpenFinanceDemo as demo, metasConfirmadas, preencher } from '@/content/conteudo'
-import { dataPorExtenso, nomeDoMes } from '@/domain/datas'
-import { analisarExtrato } from '@/domain/openFinance'
+import { conteudoDinheiro as t, metasConfirmadas, preencher } from '@/content/conteudo'
+import { dataPorExtenso } from '@/domain/datas'
 import { emMetas, formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
 
 interface DinheiroProps {
   aoVoltar: () => void
-  aoAbrirCheckin?: () => void
   hoje?: string
 }
 
@@ -26,14 +23,13 @@ function lerValor(texto: string): number | null {
   return Number.isFinite(numero) && numero > 0 && numero <= LIMITE_SEMANAL ? numero : null
 }
 
-export function Dinheiro({ aoVoltar, aoAbrirCheckin, hoje }: DinheiroProps) {
+export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
   const { estado, progresso, gastoSemanal, meta, salvarFinancas, hoje: dia } = useProgresso(hoje)
   const [editando, setEditando] = useState(false)
   const [texto, setTexto] = useState('')
   const [textoMeta, setTextoMeta] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [visao, setVisao] = useState<'reais' | 'metas'>('reais')
-  const [modoDemo, setModoDemo] = useState<'inativo' | 'confirmando' | 'ativo'>('inativo')
   const titulo = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => titulo.current?.focus(), [])
@@ -55,17 +51,9 @@ export function Dinheiro({ aoVoltar, aoAbrirCheckin, hoje }: DinheiroProps) {
 
   const valor = progresso.dinheiroPreservado
   const metas = valor === null ? [] : emMetas(valor, metasConfirmadas)
-  const analiseDemo = analisarExtrato(demo.transacoes, demo.dataReferencia)
 
   return (
     <section className="tela tela--dinheiro" aria-labelledby="dinheiro-titulo">
-      {/* CA-3: Toda a tela mostra o selo DEMONSTRAÇÃO quando a demo estiver ativa */}
-      {modoDemo === 'ativo' && (
-        <aside className="selo-demo" role="status" aria-label="Modo de demonstração ativo">
-          {demo.selo}
-        </aside>
-      )}
-
       <h1 id="dinheiro-titulo" ref={titulo} tabIndex={-1}>
         {t.titulo}
       </h1>
@@ -74,7 +62,7 @@ export function Dinheiro({ aoVoltar, aoAbrirCheckin, hoje }: DinheiroProps) {
         <div className="esqueleto esqueleto--valor" role="status" aria-label={t.carregando} />
       )}
 
-      {pedindoValor && modoDemo === 'inativo' && (
+      {pedindoValor && (
         <form className="pilha" onSubmit={salvar} noValidate>
           {gastoSemanal === null && <p className="tela__lead">{t.convite}</p>}
           <label htmlFor="gasto-semanal">{t.campoGasto}</label>
@@ -113,8 +101,7 @@ export function Dinheiro({ aoVoltar, aoAbrirCheckin, hoje }: DinheiroProps) {
         </form>
       )}
 
-      {/* Visão Normal do Dinheiro Preservado (Modo Manual - CA-1) */}
-      {estado === 'pronto' && !pedindoValor && valor !== null && modoDemo !== 'ativo' && (
+      {estado === 'pronto' && !pedindoValor && valor !== null && (
         <>
           {metasConfirmadas.length > 0 && (
             <div className="linha" role="group" aria-label={t.mostrarEm}>
@@ -174,91 +161,6 @@ export function Dinheiro({ aoVoltar, aoAbrirCheckin, hoje }: DinheiroProps) {
             {t.mudar}
           </Botao>
         </>
-      )}
-
-      {/* CA-2: Confirmação prévia de até 3 linhas antes de entrar na demonstração */}
-      {modoDemo === 'confirmando' && (
-        <Cartao titulo={demo.confirmacao.titulo}>
-          <div className="pilha">
-            <p>{demo.confirmacao.linha1}</p>
-            <p>{demo.confirmacao.linha2}</p>
-            <p>{demo.confirmacao.linha3}</p>
-            <div className="linha">
-              <Botao onClick={() => setModoDemo('ativo')}>
-                {demo.confirmacao.confirmar}
-              </Botao>
-              <Botao variante="secundario" onClick={() => setModoDemo('inativo')}>
-                {demo.confirmacao.cancelar}
-              </Botao>
-            </div>
-          </div>
-        </Cartao>
-      )}
-
-      {/* CA-3 e CA-4: Demonstração ativa com dados sintéticos */}
-      {modoDemo === 'ativo' && (
-        <Cartao titulo={demo.extrato.titulo}>
-          <p className="nota">{demo.extrato.subtitulo}</p>
-          <div className="valor">
-            <span className="valor__rotulo">{demo.extrato.comparativo}</span>
-            <span className="valor__numero">
-              <Aproximado />
-              {formatarReais(analiseDemo.aMenosQueMesAnterior)}
-            </span>
-            <span className="nota">
-              {formatarReais(analiseDemo.aMenosQueMesAnterior)} {demo.extrato.aMenos} de{' '}
-              {nomeDoMes(analiseDemo.mesAnterior.mes + '-01')}
-            </span>
-          </div>
-
-          {analiseDemo.diasSemTransacao !== null && (
-            <p className="nota">
-              Sem novas saídas desse tipo há <strong>{analiseDemo.diasSemTransacao} dias</strong>.
-            </p>
-          )}
-
-          {/* CA-4: Sugestão neutra sem julgamento */}
-          <div className="sugestao-demo">
-            <p>{demo.extrato.sugestao}</p>
-            {aoAbrirCheckin && (
-              <Botao variante="secundario" onClick={aoAbrirCheckin}>
-                {demo.extrato.botaoCheckin}
-              </Botao>
-            )}
-          </div>
-
-          <div className="transacoes-demo">
-            <h3>{demo.extrato.transacoesTitulo}</h3>
-            <ul className="lista-transacoes">
-              {demo.transacoes.slice(0, 5).map((tr, idx) => (
-                <li key={idx} className="item-transacao">
-                  <span>
-                    {dataPorExtenso(tr.data, demo.dataReferencia)} · {tr.destinatario}
-                  </span>
-                  <strong>{formatarReais(tr.valor)}</strong>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* CA-5: Sair da demonstração volta ao modo manual */}
-          <Botao variante="secundario" onClick={() => setModoDemo('inativo')}>
-            {demo.botaoSair}
-          </Botao>
-        </Cartao>
-      )}
-
-      {/* CA-1: Convidativo para a demonstração quando inativo */}
-      {modoDemo === 'inativo' && (
-        <Cartao titulo="Demonstração com Open Finance">
-          <p>
-            No futuro, com o Open Finance, você poderá acompanhar sua estimativa de forma automática e integrada à sua
-            conta com total segurança. Por enquanto, tudo funciona no modo manual.
-          </p>
-          <Botao variante="secundario" onClick={() => setModoDemo('confirmando')}>
-            {demo.botaoAbrir}
-          </Botao>
-        </Cartao>
       )}
 
       <Botao variante="secundario" onClick={aoVoltar}>
