@@ -9,20 +9,46 @@ export interface EpisodioSos {
   foiParaCrise: boolean
 }
 
+export interface Checkin {
+  /** 'AAAA-MM-DD' no fuso do aparelho; um check-in por dia, o último vale. */
+  data: string
+  apostou: boolean
+  /** Só quando apostou. A spec 005 lê daqui para montar o plano Se/Então. */
+  gatilhos?: string[]
+  /** 1 (muito mal) a 5 (muito bem); opcional, marcado depois do registro (CA-1). */
+  humor?: number
+  registradoEm: string
+}
+
+export interface ConfiguracaoFinancas {
+  gastoSemanalEstimado: number | null
+  /** Para onde a pessoa quer levar o dinheiro, nas palavras dela ("conta de luz"). */
+  meta: string | null
+}
+
 interface GuardiaoDB extends DBSchema {
   episodiosSos: { key: string; value: EpisodioSos; indexes: { porInicio: string } }
+  checkins: { key: string; value: Checkin }
+  configuracao: { key: 'financas'; value: ConfiguracaoFinancas }
 }
 
 const NOME = 'guardiao'
-const VERSAO = 1
+const VERSAO = 2
 
 let conexao: Promise<IDBPDatabase<GuardiaoDB>> | null = null
 
 export function abrirBanco(): Promise<IDBPDatabase<GuardiaoDB>> {
   conexao ??= openDB<GuardiaoDB>(NOME, VERSAO, {
-    upgrade(db) {
-      const store = db.createObjectStore('episodiosSos', { keyPath: 'id' })
-      store.createIndex('porInicio', 'inicio')
+    // Cada versão só cria o que falta, para quem já usa o app não perder o que guardou.
+    upgrade(db, versaoAnterior) {
+      if (versaoAnterior < 1) {
+        const store = db.createObjectStore('episodiosSos', { keyPath: 'id' })
+        store.createIndex('porInicio', 'inicio')
+      }
+      if (versaoAnterior < 2) {
+        db.createObjectStore('checkins', { keyPath: 'data' })
+        db.createObjectStore('configuracao')
+      }
     },
   })
   return conexao

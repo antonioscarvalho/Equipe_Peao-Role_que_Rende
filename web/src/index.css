@@ -333,6 +333,156 @@ h1:focus {
   font-weight: 700;
 }
 
+/* Spec 004: check-in, contador e dinheiro preservado */
+.cartao > .cartao__titulo {
+  margin: 0 0 var(--rqr-esp-1);
+  font-size: var(--rqr-fs-lead);
+}
+
+.cartao > * + * {
+  margin-top: var(--rqr-esp-1);
+}
+
+.botao--secundario[aria-pressed='true'] {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+}
+
+.chips {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.chips__legenda {
+  font-weight: 700;
+  padding: 0;
+}
+
+.chips__dica {
+  margin: 4px 0 0;
+  font-size: var(--rqr-fs-small);
+  color: var(--rqr-texto-suave);
+}
+
+.chips__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--rqr-esp-1);
+}
+
+.chip {
+  min-height: var(--alvo-toque);
+  padding: 8px var(--rqr-esp-2);
+  border-radius: var(--rqr-raio-pilula);
+  border: 2px solid var(--rqr-azul-escuro);
+  background: var(--rqr-branco);
+  color: var(--rqr-azul-escuro);
+  font: inherit;
+  cursor: pointer;
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--rqr-azul-escuro);
+  color: var(--rqr-texto-inverso);
+  font-weight: 700;
+}
+
+.checkin__resposta {
+  min-height: 1.5em;
+  font-weight: 700;
+}
+
+.checkin__dinheiro {
+  margin: 0;
+}
+
+.checkin__resposta:empty {
+  margin: 0;
+}
+
+.contador p {
+  margin: 0;
+}
+
+.contador__numero {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-h1);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.contador__frase {
+  font-weight: 700;
+}
+
+.contador__detalhe {
+  font-size: var(--rqr-fs-small);
+}
+
+.valor {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.valor__numero {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-h1);
+  font-weight: 700;
+}
+
+.metas {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: var(--rqr-fs-lead);
+  font-weight: 700;
+}
+
+.campo {
+  min-height: var(--alvo-toque);
+  padding: 8px 12px;
+  border: 2px solid var(--rqr-azul-escuro);
+  border-radius: 12px;
+  background: var(--rqr-branco);
+  color: var(--rqr-texto);
+  font: inherit;
+}
+
+/* Sem token de erro na paleta: o erro é texto em negrito com borda tracejada, nunca só cor. */
+.campo[aria-invalid='true'] {
+  border-style: dashed;
+}
+
+.campo__erro {
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Esqueleto com a forma do que vem: bloco do contador e do valor. */
+.esqueleto {
+  border-radius: 12px;
+  background: var(--rqr-cinza-100);
+  animation: esqueleto-brilho 1.2s var(--rqr-ease-padrao) infinite alternate;
+}
+
+.esqueleto--contador {
+  height: 96px;
+  width: 60%;
+}
+
+.esqueleto--valor {
+  height: 72px;
+  width: 50%;
+}
+
+@keyframes esqueleto-brilho {
+  to {
+    opacity: 0.5;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

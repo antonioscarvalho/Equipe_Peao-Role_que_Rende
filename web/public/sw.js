@@ -2,7 +2,7 @@
 // Estratégia: navegação vai pra rede e cai no index.html do cache; demais arquivos do próprio site
 // usam o cache primeiro e são guardados na primeira visita. Nada da pessoa passa por aqui
 // (os registros ficam no IndexedDB), e requisições de outros domínios são ignoradas.
-const CACHE = 'guardiao-v1'
+const CACHE = 'guardiao-v2'
 const ESSENCIAIS = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg']
 
 // Os arquivos do build têm hash no nome; lemos o index.html para guardar o JS e o CSS já na instalação,

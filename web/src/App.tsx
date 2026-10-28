@@ -1,4 +1,6 @@
+import { Checkin } from '@/app/checkin/Checkin'
 import { Crise } from '@/app/crise/Crise'
+import { Dinheiro } from '@/app/dinheiro/Dinheiro'
 import { Inicio } from '@/app/inicio/Inicio'
 import { Sos } from '@/app/sos/Sos'
 import { useRota } from '@/hooks/useRota'
@@ -20,7 +22,11 @@ function App() {
         )}
       </header>
       <main className="conteudo">
-        {rota === '/' && <Inicio aoAbrirSos={() => ir('/sos')} />}
+        {rota === '/' && (
+          <Inicio aoAbrirSos={() => ir('/sos')} aoApostar={() => ir('/checkin')} aoAbrirDinheiro={() => ir('/dinheiro')} />
+        )}
+        {rota === '/checkin' && <Checkin aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
+        {rota === '/dinheiro' && <Dinheiro aoVoltar={() => ir('/')} />}
         {rota === '/sos' && <Sos aoPedirAjuda={() => ir('/ajuda')} aoTerminar={() => ir('/')} />}
         {rota === '/ajuda' && <Crise aoVoltar={() => ir('/')} />}
       </main>
