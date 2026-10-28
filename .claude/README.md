@@ -52,6 +52,7 @@ Durante todo o fluxo:
 | [`pitch-gamificacao`](skills/pitch-gamificacao/SKILL.md) | 🟢 base pronta | Maykon Júnio | Frase, slide, demonstração e respostas à Banca sobre a gamificação ("isso não vicia?") |
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
 | [`orquestrar-branches`](skills/orquestrar-branches/SKILL.md) | 🟢 base pronta | Danillo Meira | Mapa de quem está mexendo em quê: aponta dois devs na mesma spec, no mesmo arquivo ou em conflito real, antes de virar retrabalho. Rodar antes de começar tarefa e antes de PR |
+| [`acessibilidade-wcag`](skills/acessibilidade-wcag/SKILL.md) | 🟢 base pronta | Danillo Meira | Acessibilidade rigorosa pela WCAG 2.2: AA inteiro + 20 critérios AAA promovidos para o público em crise, cognitivo (COGA), caminho de crise C1–C9. Scripts que reprovam o PR (código e contraste nos temas), protocolo manual e roteiro do bônus de 5% |
 
 ### Skills de stack
 

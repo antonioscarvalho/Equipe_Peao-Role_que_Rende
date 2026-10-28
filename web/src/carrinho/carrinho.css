@@ -1,0 +1,16 @@
+/* Mini jogo Rolê de Carrinho. Reaproveita o visual .pulo* de styles.css; aqui só o que é dele. */
+.carrinho__bicho { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; pointer-events: none; }
+.carrinho__pedais {
+  position: absolute; left: 0; right: 0; bottom: 14px; z-index: 2;
+  display: flex; justify-content: space-between; padding: 0 14px; pointer-events: none;
+}
+.carrinho__pedal {
+  pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none;
+  width: 104px; height: 72px; border-radius: 20px;
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border: 3px solid var(--rqr-borda); box-shadow: 0 6px 0 var(--rqr-sombra-cor);
+  font: inherit; font-weight: 900; font-size: 16px; cursor: pointer;
+}
+.carrinho__pedal--gas { background: var(--rqr-amarelo); color: var(--rqr-azul-escuro); }
+.carrinho__pedal:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--rqr-sombra-cor); }
+.carrinho__pedal:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }

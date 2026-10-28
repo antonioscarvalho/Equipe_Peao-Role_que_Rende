@@ -25,4 +25,4 @@ __pycache__/
 
 # Claude Code (configurações pessoais)
 .claude/settings.local.json
-prototipos/prova-visual/certs/
+web/certs/

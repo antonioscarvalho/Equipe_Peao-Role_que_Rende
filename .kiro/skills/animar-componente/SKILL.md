@@ -9,7 +9,7 @@ description: Adiciona animações e microinterações a um componente ou tela us
 
 ## Antes de começar
 1. Leia `.claude/skills/guia-estilo-role-que-rende/references/animacoes.md` e `assets/tokens.css`.
-2. Leia o componente alvo e veja exemplos prontos em `prototipos/prova-visual/src/`.
+2. Leia o componente alvo e veja exemplos prontos em `web/src/`.
 
 ## Passos
 1. **Escolha a animação pelo propósito**, nunca para enfeitar:

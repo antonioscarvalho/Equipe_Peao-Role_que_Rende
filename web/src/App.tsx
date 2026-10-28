@@ -1,219 +1,210 @@
-import { useEffect, useState } from 'react'
-import { Checkin } from '@/app/checkin/Checkin'
-import { Circulo } from '@/app/circulo/Circulo'
-import { Crise } from '@/app/crise/Crise'
-import { Dinheiro } from '@/app/dinheiro/Dinheiro'
-import { type AbaInicio, Inicio } from '@/app/inicio/Inicio'
-import { Pausas } from '@/app/pausas/Pausas'
-import { Personalizar } from '@/app/personalizar/Personalizar'
-import { Plano } from '@/app/plano/Plano'
-import { Sos } from '@/app/sos/Sos'
-import { Decoracao } from '@/components/Decoracao'
-import { Icone } from '@/components/Icone'
-import { Respiracao } from '@/components/Respiracao'
-import { ligarSons, tocar } from '@/components/sons'
-import { conteudoPrevencao } from '@/content/conteudo'
-import { useRota } from '@/hooks/useRota'
+import { useCallback, useEffect, useState } from "react";
+import { Bichinho, type Humor } from "./Bichinho";
+import { Bairro, totalPecas } from "./Bairro";
+import { Contador } from "./Contador";
+import { Respiracao } from "./Respiracao";
+import { Icone } from "./Icone";
+import { Animacao } from "./Animacao";
+import { Confete } from "./Confete";
+import { PuloDoBichinho } from "./PuloDoBichinho";
+import type { NomeIcone } from "./icones-data";
+import { ligarSons, tocar, tocarMissao } from "./sons";
+import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
+import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
+import { BotaoTema } from "./BotaoTema";
 
-function App() {
-  const { rota, ir } = useRota()
-  // Gatilhos que chegam de outra tela (pós-lapso da 004) ficam só em memória, nunca na URL.
-  const [gatilhosIniciais, setGatilhosIniciais] = useState<string[]>([])
-  const [reduzir, setReduzir] = useState(false)
-  const [sons, setSons] = useState(false)
-  const [abaInicio, setAbaInicio] = useState<AbaInicio>('role')
-  const [respirandoCrise, setRespirandoCrise] = useState(false)
+type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
+
+// Dados sintéticos para a demonstração (edital 8.5).
+const missoes: Missao[] = [
+  { id: 1, texto: "Caminhar 15 minutos", icone: "sprout", valor: 20 },
+  { id: 2, texto: "Mandar mensagem pra alguém de confiança", icone: "heartHandshake", valor: 30 },
+  { id: 3, texto: "Anotar os gastos de hoje", icone: "piggyBank", valor: 50 },
+  { id: 4, texto: "Jogar bola ou ir na praça", icone: "house", valor: 40 },
+];
+
+const humores: { id: Humor; rotulo: string }[] = [
+  { id: "calmo", rotulo: "Calmo" },
+  { id: "feliz", rotulo: "Feliz" },
+  { id: "orgulhoso", rotulo: "Orgulhoso" },
+  { id: "cansado", rotulo: "Dia difícil" },
+];
+
+const falas: Record<Humor, string> = {
+  calmo: "Bora cuidar do nosso rolê hoje?",
+  feliz: "Boa! Cada passo conta.",
+  orgulhoso: "Olha quanto você já protegeu!",
+  cansado: "Dia difícil acontece. Tô aqui, nada do que construímos sumiu.",
+  apoio: "Respira comigo.",
+};
+
+export default function App() {
+  const [feitas, setFeitas] = useState<number[]>([]);
+  const [humor, setHumor] = useState<Humor>("calmo");
+  const [protegido, setProtegido] = useState(1240);
+  const [crise, setCrise] = useState(false);
+  // "crise": aberto pelo "Deu vontade", com convite de 3 minutos pra onda passar.
+  const [jogo, setJogo] = useState<false | "inicio" | "crise">(false);
+  const [moedaKey, setMoedaKey] = useState(0);
+  const [confete, setConfete] = useState(0);
+  const [reduzir, setReduzir] = useState(
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [aviso, setAviso] = useState("");
+  // Sons das missões ligados por padrão; o interruptor desliga.
+  // A respiração (SOS) continua sem som por padrão, conforme spec 003 CA-3.
+  const [sons, setSons] = useState(true);
+  const aparencia = useAparenciaVisivel();
+
+  useEffect(() => { ligarSons(sons); }, [sons]);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('reduzir-animacoes', reduzir)
-  }, [reduzir])
+    document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
+  }, [reduzir]);
 
-  const abrirPlano = (gatilhos: string[] = []) => {
-    setGatilhosIniciais(gatilhos)
-    ir('/plano')
-  }
+  const concluir = useCallback((m: Missao) => {
+    if (feitas.includes(m.id)) return;
+    setFeitas((f) => [...f, m.id]);
+    setProtegido((v) => v + m.valor);
+    setMoedaKey((k) => k + 1);
+    setConfete((c) => c + 1);
+    setHumor("feliz");
+    tocarMissao(feitas.length + 1, missoes.length);
+    window.setTimeout(() => tocar("moeda"), 250);
+    window.setTimeout(() => tocar("folha"), 650);
+    if (feitas.length + 1 === missoes.length) {
+      // Todas concluídas: conquista do dia, depois da moeda e da folha.
+      window.setTimeout(() => tocar("conquista"), 1300);
+    }
+    setAviso(feitas.length + 1 === missoes.length
+      ? `Todas as missões de hoje concluídas! O bairro inteiro agradece.`
+      : `Missão concluída: ${m.texto}. Mais um lugar do bairro foi reconstruído.`);
+    window.setTimeout(() => setHumor((h) => (h === "feliz" ? "calmo" : h)), 2600);
+  }, [feitas]);
 
-  const irParaRole = () => {
-    setAbaInicio('role')
-    ir('/')
-  }
+  const reiniciar = () => { setFeitas([]); setHumor("calmo"); setProtegido(1240); };
 
-  const irParaDiario = () => {
-    setAbaInicio('diario')
-    ir('/')
-  }
-
-  const emRole = rota === '/' && abaInicio === 'role'
-  const emDiario = (rota === '/' && abaInicio === 'diario') || rota === '/checkin'
-  const emCofre = rota === '/dinheiro'
-  const emApoio = rota === '/plano' || rota === '/circulo' || rota === '/pausas'
+  const nivel = feitas.length;
+  const construidas = Math.min(totalPecas, 2 + nivel);
 
   return (
     <div className="palco">
       <Decoracao />
-      <div className="celular">
+      <main className="celular" aria-label="Prova visual do app">
         <header className="topo">
-          <button type="button" className="topo__marca" onClick={irParaRole}>
-            Guardião
-          </button>
-          <div className="interruptores">
-            <label className="interruptor" title="Reduzir animações">
-              <input
-                type="checkbox"
-                checked={reduzir}
-                onChange={(e) => setReduzir(e.target.checked)}
-                aria-label="Reduzir animações"
-              />
-              <span className="interruptor__trilho" aria-hidden="true" />
-              <span className="interruptor__texto">Reduzir animações</span>
-            </label>
-            <label className="interruptor" title="Sons">
-              <input
-                type="checkbox"
-                checked={sons}
-                onChange={(e) => {
-                  const ativo = e.target.checked
-                  setSons(ativo)
-                  ligarSons(ativo)
-                  if (ativo) tocar('clique')
-                }}
-                aria-label="Sons"
-              />
-              <span className="interruptor__trilho" aria-hidden="true" />
-              <span className="interruptor__texto">Sons</span>
-            </label>
+          <div>
+            <p className="topo__oi">Oi, Lucas</p>
+            <h1 className="topo__titulo"><span className="rqr-realce rqr-anim-marca-texto">Seu rolê</span> de hoje</h1>
           </div>
-          {/* Saída para a crise a 1 toque de qualquer tela (skill seguranca-e-crise). */}
-          {rota !== '/ajuda' && (
-            <button type="button" className="topo__ajuda" onClick={() => ir('/ajuda')}>
-              Preciso de ajuda agora
-            </button>
-          )}
+          <div className="interruptores">
+          <label className="interruptor">
+            <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
+            <span className="interruptor__trilho" aria-hidden="true" />
+            <span className="interruptor__texto">Reduzir animações</span>
+          </label>
+          <label className="interruptor">
+            <input type="checkbox" checked={sons} onChange={(e) => { setSons(e.target.checked); if (e.target.checked) { ligarSons(true); tocar("clique"); } }} />
+            <span className="interruptor__trilho" aria-hidden="true" />
+            <span className="interruptor__texto">Sons</span>
+          </label>
+          <BotaoTema />
+          </div>
         </header>
 
-        <main className="conteudo">
-          {emApoio && (
-            <div className="apoio-abas apoio-abas--3" role="tablist" aria-label="Opções de apoio">
-              <button
-                type="button"
-                className={`apoio-aba ${rota === '/plano' ? 'is-on' : ''}`}
-                aria-current={rota === '/plano' ? 'page' : undefined}
-                onClick={() => abrirPlano()}
-              >
-                {conteudoPrevencao.atalhos.plano}
-              </button>
-              <button
-                type="button"
-                className={`apoio-aba ${rota === '/circulo' ? 'is-on' : ''}`}
-                aria-current={rota === '/circulo' ? 'page' : undefined}
-                onClick={() => ir('/circulo')}
-              >
-                {conteudoPrevencao.atalhos.circulo}
-              </button>
-              <button
-                type="button"
-                className={`apoio-aba ${rota === '/pausas' ? 'is-on' : ''}`}
-                aria-current={rota === '/pausas' ? 'page' : undefined}
-                onClick={() => ir('/pausas')}
-              >
-                Pausas pra cabeça
-              </button>
+        <section className="cena" aria-label="Seu bichinho">
+          <div className="balao" key={humor}>{falas[humor]}</div>
+          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} />
+          <BotaoPersonalizar />
+          <Bairro construidas={construidas} />
+          {moedaKey > 0 && humor === "feliz" && (
+            <div className="cena__brilho" key={moedaKey}>
+              <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
             </div>
           )}
+        </section>
 
-          {rota === '/' && (
-            <Inicio
-              abaAtiva={abaInicio}
-              aoMudarAba={setAbaInicio}
-              aoAbrirSos={() => ir('/sos')}
-              aoApostar={() => ir('/checkin')}
-              aoAbrirDinheiro={() => ir('/dinheiro')}
-              aoAbrirPlano={() => abrirPlano()}
-              aoAbrirCirculo={() => ir('/circulo')}
-              aoAbrirPausas={() => ir('/pausas')}
-              aoPersonalizar={() => ir('/personalizar')}
-              reduzir={reduzir}
-            />
-          )}
-          {rota === '/checkin' && <Checkin aoPedirAjuda={() => ir('/ajuda')} aoTerminar={irParaRole} />}
-          {rota === '/dinheiro' && <Dinheiro aoVoltar={irParaRole} aoAbrirCheckin={() => ir('/checkin')} />}
-          {rota === '/plano' && (
-            <Plano gatilhosIniciais={gatilhosIniciais} aoAbrirCirculo={() => ir('/circulo')} aoVoltar={irParaRole} />
-          )}
-          {rota === '/circulo' && <Circulo aoAbrirPlano={() => abrirPlano()} aoVoltar={irParaRole} />}
-          {rota === '/pausas' && <Pausas aoVoltar={irParaRole} />}
-          {rota === '/personalizar' && <Personalizar aoVoltar={irParaRole} reduzir={reduzir} />}
-          {rota === '/sos' && <Sos aoPedirAjuda={() => ir('/ajuda')} aoTerminar={irParaRole} />}
-          {rota === '/ajuda' && <Crise aoVoltar={irParaRole} />}
-        </main>
+        <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
+          {humores.map((h) => (
+            <button key={h.id} className={`chip ${humor === h.id ? "is-on" : ""}`}
+              aria-pressed={humor === h.id} onClick={() => setHumor(h.id)}>{h.rotulo}</button>
+          ))}
+        </div>
 
-        {/* Bottom Tab Bar Fixa (5 Abas — Estilo App Nativo) */}
-        <nav className="tabbar" aria-label="Navegação principal">
-          <button
-            type="button"
-            className={`tabbar__item ${emRole ? 'is-active' : ''}`}
-            aria-current={emRole ? 'page' : undefined}
-            onClick={irParaRole}
-          >
-            <Icone nome="house" tamanho={20} />
-            <span>Rolê</span>
-          </button>
-
-          <button
-            type="button"
-            className={`tabbar__item ${emDiario ? 'is-active' : ''}`}
-            aria-current={emDiario ? 'page' : undefined}
-            onClick={irParaDiario}
-          >
-            <Icone nome="check" tamanho={20} />
-            <span>Check-in</span>
-          </button>
-
-          <button
-            type="button"
-            className={`tabbar__sos rqr-anim-on ${rota === '/sos' ? 'is-active' : ''}`}
-            onClick={() => setRespirandoCrise(true)}
-          >
-            <span className="tabbar__sos-circulo">
-              <Icone nome="wind" tamanho={22} />
+        <section className="cards rqr-escalonado">
+          <article className="rqr-card mini">
+            <span className="mini__icone mini__icone--lottie" style={{ background: "var(--rqr-verde-claro)" }}>
+              <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
             </span>
-            <span>Deu vontade</span>
-          </button>
+            <div>
+              <p className="mini__rotulo">Dias de cuidado</p>
+              <p className="mini__valor">12 dias</p>
+              <p className="mini__nota">Dia difícil não zera nada.</p>
+            </div>
+          </article>
+          <article className="rqr-card mini">
+            <span className="mini__icone mini__icone--moeda" key={moedaKey}>
+              <span className={moedaKey ? "moeda rqr-anim-moeda" : "moeda"} aria-hidden="true">R$</span>
+            </span>
+            <div>
+              <p className="mini__rotulo">Dinheiro protegido</p>
+              <p className="mini__valor"><Contador valor={protegido} reduzir={reduzir} /></p>
+              <p className="mini__nota">Estimativa do que deixou de ir pra apostas.</p>
+            </div>
+          </article>
+        </section>
 
-          <button
-            type="button"
-            className={`tabbar__item ${emCofre ? 'is-active' : ''}`}
-            aria-current={emCofre ? 'page' : undefined}
-            onClick={() => ir('/dinheiro')}
-          >
-            <Icone nome="piggyBank" tamanho={20} />
-            <span>Cofre</span>
-          </button>
+        <section aria-labelledby="missoes-titulo">
+          <div className="secao">
+            <h2 id="missoes-titulo">Missões do dia</h2>
+            <span className="progresso" aria-label={`${nivel} de ${missoes.length} missões`}>
+              <span style={{ transform: `scaleX(${nivel / missoes.length})` }} />
+            </span>
+          </div>
+          <ul className="missoes rqr-escalonado">
+            {missoes.map((m) => {
+              const ok = feitas.includes(m.id);
+              return (
+                <li key={m.id}>
+                  <button className={`missao ${ok ? "is-ok" : ""}`} onClick={() => concluir(m)} aria-pressed={ok}>
+                    <span className="missao__icone"><Icone nome={ok ? "check" : m.icone} /></span>
+                    <span className="missao__texto">{m.texto}</span>
+                    <span className="missao__valor">+ R$ {m.valor}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
+        </section>
 
-          <button
-            type="button"
-            className={`tabbar__item ${emApoio ? 'is-active' : ''}`}
-            aria-current={emApoio ? 'page' : undefined}
-            onClick={() => abrirPlano()}
-          >
-            <Icone nome="shieldCheck" tamanho={20} />
-            <span>Apoio</span>
-          </button>
-        </nav>
+        <button className="rqr-botao jogo-botao" onClick={() => setJogo("inicio")}>
+          Jogar: Pulo do Bichinho
+        </button>
+        <BotaoCarrinho reduzir={reduzir} />
 
-        {respirandoCrise && (
-          <Respiracao
-            aoFechar={() => setRespirandoCrise(false)}
-            aoIrParaSos={() => {
-              setRespirandoCrise(false)
-              ir('/sos')
-            }}
-            reduzir={reduzir}
-          />
-        )}
-      </div>
+        <button className="sos rqr-anim-on" onClick={() => setCrise(true)}>
+          <Icone nome="wind" tamanho={28} /> Deu vontade
+        </button>
+
+        <p className="sr-only" aria-live="polite">{aviso}</p>
+      </main>
+      <Confete disparo={confete} reduzir={reduzir} />
+      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
+        chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
+      {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}
+        aoJogar={() => { setCrise(false); setJogo("crise"); }} />}
     </div>
-  )
+  );
 }
 
-export default App
+function Decoracao() {
+  return (
+    <div className="decor" aria-hidden="true">
+      <svg className="g g--seta rqr-anim-flutuar" viewBox="0 0 120 80"><path className="rqr-anim-pincelada" style={{ ["--rqr-traco" as string]: 260 }} d="M8 60 C30 10 70 10 74 40 C78 64 50 64 56 40 C62 20 96 18 112 30 M112 30 l-16 -4 M112 30 l-6 14" /></svg>
+      <svg className="g g--anel rqr-anim-flutuar" viewBox="0 0 60 60"><circle cx="30" cy="30" r="20" /></svg>
+      <svg className="g g--flor rqr-anim-flutuar" viewBox="0 0 60 60"><path d="M30 6v48M6 30h48M13 13l34 34M47 13L13 47" /></svg>
+      <svg className="g g--arco rqr-anim-flutuar" viewBox="0 0 100 60"><path d="M8 10 C20 56 80 56 92 10" /></svg>
+      <svg className="g g--tri rqr-anim-flutuar" viewBox="0 0 60 60"><path d="M30 8 L54 50 L6 50Z" /></svg>
+    </div>
+  );
+}

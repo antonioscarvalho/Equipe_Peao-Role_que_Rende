@@ -48,6 +48,22 @@
   --rqr-titulo-claro: var(--rqr-azul);          /* título sobre branco (>=24px) */
   --rqr-titulo-escuro: var(--rqr-amarelo);      /* título sobre azul/roxo */
   --rqr-foco: var(--rqr-azul-escuro);
+  --rqr-texto-fraco: var(--rqr-cinza-700);
+  --rqr-fundo-suave: var(--rqr-cinza-100);      /* trilhos, barras de progresso */
+  --rqr-borda: var(--rqr-azul-escuro);          /* contorno de card, chip, botão */
+  --rqr-sombra-cor: var(--rqr-azul-escuro);     /* sombra sólida */
+  --rqr-ativo-fundo: var(--rqr-azul-escuro);    /* chip ligado, botão SOS */
+  --rqr-ativo-texto: var(--rqr-amarelo);
+  --rqr-realce-fundo: var(--rqr-amarelo);
+  --rqr-realce-texto: inherit;
+  --rqr-cena-topo: var(--rqr-amarelo-claro);
+  --rqr-cena-base: var(--rqr-amarelo);
+  --rqr-valor: var(--rqr-roxo);
+  --rqr-fundo-destaque: var(--rqr-amarelo-claro); /* trilho das abas */
+  --rqr-ceu-topo: var(--rqr-azul-claro);         /* céu dos mini jogos (canvas) */
+  --rqr-ceu-base: var(--rqr-amarelo-claro);
+  --rqr-terra: var(--rqr-amarelo-claro);         /* chão abaixo da grama no carrinho */
+  color-scheme: light;
 
   /* ---------- Tipografia ---------- */
   --rqr-font-titulo: "BancoDoBrasil Titulos", "Nunito Sans", "Roboto", system-ui, sans-serif;
@@ -73,8 +89,8 @@
   --rqr-gap: 20px;
   --rqr-raio-card: 24px;
   --rqr-raio-pilula: 999px;
-  --rqr-sombra-solida: 0 4px 0 var(--rqr-azul-escuro);
-  --rqr-sombra-solida-hover: 0 6px 0 var(--rqr-azul-escuro);
+  --rqr-sombra-solida: 0 4px 0 var(--rqr-sombra-cor);
+  --rqr-sombra-solida-hover: 0 6px 0 var(--rqr-sombra-cor);
 
   /* ---------- Movimento ---------- */
   --rqr-dur-rapida: 150ms;
@@ -84,6 +100,35 @@
   --rqr-ease-padrao: cubic-bezier(.2, .8, .2, 1);
   --rqr-ease-pop: cubic-bezier(.34, 1.56, .64, 1);
   --rqr-ease-entrada: cubic-bezier(.4, 0, 1, 1);
+}
+
+/* ---------- Modo escuro ----------
+   Ligado por data-tema="escuro" no <html> (tema.ts). No "Automático" segue o
+   tema do navegador; a pessoa também pode fixar Claro ou Escuro.
+   Só os papéis semânticos mudam. Paleta oficial e bichinho continuam com as
+   cores da marca. Fundo é um azul-noite derivado do azul-escuro; títulos em
+   destaque vão para o amarelo, como no site sobre fundo azul. */
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --rqr-fundo: #13133A;
+  --rqr-fundo-conteudo: #1D1D55;
+  --rqr-fundo-suave: #2A2A6E;
+  --rqr-texto: #F4F4FF;
+  --rqr-texto-suave: #C9CBE8;
+  --rqr-texto-fraco: #A9ACD0;
+  --rqr-borda: var(--rqr-roxo-claro);
+  --rqr-sombra-cor: #07071C;
+  --rqr-ativo-fundo: var(--rqr-amarelo);
+  --rqr-ativo-texto: var(--rqr-azul-escuro);
+  --rqr-realce-fundo: var(--rqr-roxo);
+  --rqr-realce-texto: var(--rqr-amarelo);
+  --rqr-cena-topo: #1D1D55;
+  --rqr-cena-base: var(--rqr-roxo);         /* roxo e não azul-escuro: o contorno do bichinho e o telhado são azul-escuro */
+  --rqr-valor: var(--rqr-roxo-claro);
+  --rqr-fundo-destaque: #2A2A6E;
+  --rqr-ceu-topo: #1D1D55;
+  --rqr-ceu-base: var(--rqr-roxo);
+  --rqr-terra: #2A2A6E;
 }
 
 /* ---------- Componentes base ---------- */
@@ -99,21 +144,22 @@
               background var(--rqr-dur-base);
 }
 .rqr-botao:hover { transform: translateY(-2px); box-shadow: var(--rqr-sombra-solida-hover); }
-.rqr-botao:active { transform: translateY(4px); box-shadow: 0 0 0 var(--rqr-azul-escuro); }
+.rqr-botao:active { transform: translateY(4px); box-shadow: 0 0 0 var(--rqr-sombra-cor); }
 .rqr-botao:focus-visible { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 4px; }
 .rqr-botao--escuro { background: var(--rqr-azul-escuro); color: var(--rqr-amarelo); border-color: var(--rqr-amarelo); box-shadow: 0 4px 0 var(--rqr-amarelo); }
 
 .rqr-card {
-  background: var(--rqr-branco); color: var(--rqr-texto);
+  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
   border-radius: var(--rqr-raio-card); padding: var(--rqr-esp-3);
-  border: 3px solid var(--rqr-azul-escuro); box-shadow: 0 6px 0 var(--rqr-azul-escuro);
+  border: 3px solid var(--rqr-borda); box-shadow: 0 6px 0 var(--rqr-sombra-cor);
 }
 .rqr-icone-circulo {
   display: inline-grid; place-items: center; width: 64px; height: 64px;
   border-radius: 50%; background: var(--rqr-rosa-escuro); color: var(--rqr-azul-escuro);
 }
 .rqr-realce {
-  background: linear-gradient(var(--rqr-amarelo), var(--rqr-amarelo)) no-repeat 0 85% / 100% 45%;
+  color: var(--rqr-realce-texto);
+  background: linear-gradient(var(--rqr-realce-fundo), var(--rqr-realce-fundo)) no-repeat 0 85% / 100% 45%;
   padding: 0 .1em;
 }
 .rqr-destaque { font-weight: 800; font-style: italic; }

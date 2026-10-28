@@ -2,12 +2,23 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Guardião</title>
-    <meta name="theme-color" content="#3333BD" />
-    <meta name="description" content="Apoio pra atravessar a vontade de apostar e encontrar ajuda." />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#FCFC30" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#13133A" media="(prefers-color-scheme: dark)" />
+    <script>
+      // Aplica o tema antes do React (mesma regra de src/tema.ts), para a tela não piscar.
+      (function () {
+        var p = "auto";
+        try { p = localStorage.getItem("rqr-tema") || "auto"; } catch (e) {}
+        var escuro = p === "escuro" || (p !== "claro" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.tema = escuro ? "escuro" : "claro";
+      })();
+    </script>
+    <title>Prova visual · Equipe Peão</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>
