@@ -1,4 +1,5 @@
 import canaisJson from './canais-de-ajuda.json'
+import prevencaoJson from './prevencao.json'
 import sosJson from './sos.json'
 
 export interface CanalDeAjuda {
@@ -38,4 +39,12 @@ export const conteudoSos = sosJson as {
   validacaoCard: string
   cards: CardExame[]
   acoes: string[]
+}
+
+/** Textos do plano Se/Então (F5) e do Círculo de Confiança (F8). */
+export const conteudoPrevencao = prevencaoJson
+
+/** Troca {chave} pelos valores. Ex.: preencher('Se {se}', { se: 'tédio' }). */
+export function preencher(modelo: string, valores: Record<string, string>): string {
+  return modelo.replace(/\{(\w+)\}/g, (trecho, chave: string) => valores[chave] ?? trecho)
 }
