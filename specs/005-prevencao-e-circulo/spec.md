@@ -1,8 +1,8 @@
 # Spec 005 — Plano de Prevenção de Recaída (Planos Se/Então) e Círculo de Confiança
 
-- **Estado:** ✅ aprovada (Equipe Peão, 27/10/2026) · 🔄 **alterada pela revisão de 27/10/2026 — aguarda reaprovação**
+- **Estado:** ✅ aprovada (Equipe Peão, 27/10/2026) · ✅ **reaprovada após a revisão de 27/10/2026** (Atyrson Souto)
 - **Autor(es):** Ian Costa Guimarães · revisão: Maykon Júnio (com apoio de IA)
-- **Aprovada por:** Equipe Peão em 2026-10-27 · reaprovação: _—_
+- **Aprovada por:** Equipe Peão em 2026-10-27 · reaprovação: Atyrson Souto em 2026-10-27
 - **Prioridade:** Should
 - **Issue:** [#8](https://github.com/antonioscarvalho/equipepeao/issues/8) · **Fluxos:** [F5 e F8](../../docs/02-produto/fluxos.md)
 
