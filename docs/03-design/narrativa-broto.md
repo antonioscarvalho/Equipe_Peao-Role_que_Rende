@@ -82,7 +82,7 @@ Os capítulos destravam ao jogar, nunca por sorte. Podem ser relidos, e toda con
 O capítulo 6 é o mais importante clinicamente: depois de um lapso, a pessoa costuma pensar "já estraguei tudo" e apostar mais (efeito de violação da abstinência). Ver o Broto escorregar e a luz continuar acesa prepara a pessoa antes de ela passar por isso.
 
 ### Capítulo 1: A Queda
-**Jogo:** Pulo do Bichinho (já existe em `web/src/PuloDoBichinho.tsx`). O Broto tenta subir de volta até o céu.
+**Jogo:** Pulo do Bichinho (já existe em `web/src/jogos/pulo/PuloDoBichinho.tsx`). O Broto tenta subir de volta até o céu.
 
 > **Broto:** Ufa. Não deu pra chegar lá em cima hoje. Mas olha quanto a gente subiu.
 

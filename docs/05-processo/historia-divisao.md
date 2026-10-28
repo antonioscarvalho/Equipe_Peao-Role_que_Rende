@@ -34,9 +34,9 @@ A base define este formato. Quem mudar o contrato avisa no grupo.
 
 | Caminho | Dono |
 |---|---|
-| `web/src/historia/Dialogo.tsx`, `progresso.ts`, `tipos.ts` | Base (Atyrson) |
+| `web/src/historia/Dialogo.tsx`, `Historia.tsx`, `progresso.ts`, `tipos.ts`, `useModal.ts`, `historia.css` | Base (Atyrson) |
 | `web/src/historia/capitulos/capN.ts` | Dono do capítulo |
-| `web/src/historia/capitulos/index.ts` | Todos, **uma linha** por capítulo |
+| `web/src/historia/capitulos/index.ts` | Todos, **uma linha** por capítulo (ex.: `cap2: { capitulo: cap2, jogo: DesviaDosCometas, nomeJogo: "Desvia dos Cometas" },`) |
 | `web/src/jogos/<nome>/` (com o CSS próprio) | Dono do jogo |
 | `web/src/App.tsx` | Só a base e a integração final (Antonio) |
 
@@ -95,7 +95,7 @@ Partida de cerca de 3 minutos, usando `web/src/partida.ts`.
 
 | Capítulo | Responsável | Branch | Estado |
 |---|---|---|---|
-| Base + Cap. 1 | Atyrson | — | Em andamento |
+| Base + Cap. 1 | Atyrson | `feat/historia-cap1-queda` | Em revisão (PR) |
 | Cap. 2 | Maykon | — | A fazer |
 | Cap. 3 | Ian | — | A fazer |
 | Cap. 4 | Danillo | — | A fazer |
