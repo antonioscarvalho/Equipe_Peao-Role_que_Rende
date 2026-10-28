@@ -442,6 +442,49 @@ h2 {
   margin: 0 0 var(--rqr-esp-1);
 }
 
+/* Link com cara de botão (envio pelo WhatsApp/SMS) */
+a.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.campo--opcoes {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.campo--opcoes legend {
+  font-weight: 700;
+  padding: 0;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--alvo-toque);
+  cursor: pointer;
+}
+
+.opcao input {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--rqr-azul-escuro);
+}
+
+.cartao--item h2 {
+  margin: 0;
+}
+
+.nota--fixa {
+  font-weight: 700;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

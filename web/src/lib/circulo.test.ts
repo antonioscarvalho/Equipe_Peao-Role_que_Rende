@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { circulo, LIMITE_CONTATOS, LimiteAtingido, TelefoneInvalido } from './circulo'
-import { apagarBanco } from './db'
+import { apagarBanco, type ContatoCirculo } from './db'
 
 describe('circulo (IndexedDB local)', () => {
   const fetchEspiao = vi.fn()
@@ -23,7 +23,7 @@ describe('circulo (IndexedDB local)', () => {
   })
 
   it('CA-4: recusa o 4º contato, mas deixa editar no limite', async () => {
-    const salvos = []
+    const salvos: ContatoCirculo[] = []
     for (let i = 1; i <= LIMITE_CONTATOS; i++) {
       salvos.push(await circulo.salvar({ nome: `Pessoa ${i} (exemplo)`, telefone: `(61) 90000-000${i}` }))
     }
