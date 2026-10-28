@@ -22,7 +22,7 @@ Coluna **Teste**: 🤖 o `auditar.mjs` pega; 🎨 o `contraste.mjs` mede; ✋ s�
 | 1.2.3 Audiodescrição ou alternativa (gravado) | A | Quando houver | Vídeo cuja imagem informa algo que a fala não diz: audiodescrição ou transcrição completa ao lado. | ✋ |
 | 1.2.4 Legendas (ao vivo) | AA | Quando houver | Só se houver transmissão ao vivo (não previsto). | ✋ |
 | 1.2.5 Audiodescrição (gravado) | AA | Quando houver | Vídeo informativo: faixa de audiodescrição. | ✋ |
-| 1.2.6 Língua de sinais (gravado) | AAA | Meta | Libras é diferencial no Brasil. Widget VLibras depende de CDN e quebra o offline: fica para o "próximos passos" do pitch, não para o protótipo. | ✋ |
+| 1.2.6 Língua de sinais (gravado) | AAA | Meta | Libras é diferencial no Brasil. O widget VLibras está ligado (skill `vlibras`): depende de internet e, offline, a bolha só não aparece, sem quebrar o resto. | ✋ |
 | 1.2.7 Audiodescrição estendida | AAA | Quando houver | — | ✋ |
 | 1.2.8 Alternativa em mídia (gravado) | AAA | Quando houver | Transcrição completa de todo vídeo. | ✋ |
 | 1.2.9 Só áudio (ao vivo) | AAA | Quando houver | — | ✋ |

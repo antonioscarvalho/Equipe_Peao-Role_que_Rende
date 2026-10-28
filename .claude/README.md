@@ -53,6 +53,7 @@ Durante todo o fluxo:
 | [`arquiteto-de-software`](skills/arquiteto-de-software/SKILL.md) | 🟢 base pronta | Danillo Meira | Estrutura do backend (Fastify/Vercel): camadas, Repository e Retry, regras da Vercel e do edital |
 | [`orquestrar-branches`](skills/orquestrar-branches/SKILL.md) | 🟢 base pronta | Danillo Meira | Mapa de quem está mexendo em quê: aponta dois devs na mesma spec, no mesmo arquivo ou em conflito real, antes de virar retrabalho. Rodar antes de começar tarefa e antes de PR |
 | [`acessibilidade-wcag`](skills/acessibilidade-wcag/SKILL.md) | 🟢 base pronta | Danillo Meira | Acessibilidade rigorosa pela WCAG 2.2: AA inteiro + 20 critérios AAA promovidos para o público em crise, cognitivo (COGA), caminho de crise C1–C9. Scripts que reprovam o PR (código e contraste nos temas), protocolo manual e roteiro do bônus de 5% |
+| [`vlibras`](skills/vlibras/SKILL.md) | 🟢 base pronta | Danillo Meira | Deixa o que for implementado legível pelo VLibras Widget (Libras): o que a versão 7.x lê de fato, texto ou glosa em todo controle, bolha escondida na partida dos jogos, privacidade e compatibilidade; script que reprova o PR |
 
 ### Skills de stack
 

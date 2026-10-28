@@ -309,3 +309,12 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .ajuda-agora__painel { z-index: 70; max-width: 100%; }
 .ajuda-agora__painel .ajuda { max-width: 380px; }
 .ajuda-agora__painel h2:focus { outline: none; }
+
+/* ---------- VLibras (skill vlibras) ---------- */
+/* O VLibras traduz o elemento exato que recebeu o toque, não o botão em volta dele: tocar no
+   ícone de um botão traduzia nada (e num <svg> o widget dá erro). Com os filhos transparentes
+   ao toque, o alvo é sempre o controle inteiro, com o texto ou o data-vlibras-gloss dele. */
+:where(button, a, [role="button"]) * { pointer-events: none; }
+/* Durante a partida dos jogos (useEsconderVLibras). */
+body[data-vlibras-oculto] #vlibras-access-wrapper,
+body[data-vlibras-oculto] #vlibras-app-root { display: none !important; }

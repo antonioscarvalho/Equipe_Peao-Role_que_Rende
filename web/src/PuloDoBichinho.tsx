@@ -3,6 +3,7 @@ import { Bichinho } from "./Bichinho";
 import { tocar } from "./sons";
 import { useAparenciaVisivel } from "./personalizacao";
 import { BotaoTema } from "./BotaoTema";
+import { useEsconderVLibras } from "./vlibras";
 import { DURACAO_PARTIDA_MS, FOLHA_A_CADA_PLATAFORMAS, quadroMs } from "./partida";
 
 /**
@@ -37,6 +38,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bichoRef = useRef<HTMLDivElement>(null);
   const [estado, setEstado] = useState<Estado>("inicio");
+  useEsconderVLibras(estado === "jogando");
   const [pontos, setPontos] = useState(0);
   const [folhas, setFolhas] = useState(0);
   const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
@@ -324,7 +326,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo">×</button>
+        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"

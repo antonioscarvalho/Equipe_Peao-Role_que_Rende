@@ -56,7 +56,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
 
   return (
     <div className="crise" role="dialog" aria-modal="true" aria-labelledby="crise-titulo">
-      <button className="crise__fechar" onClick={aoFechar} aria-label="Fechar">×</button>
+      <button className="crise__fechar" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
       {!terminou ? (
         <>
           <h2 id="crise-titulo" className="crise__titulo">A vontade vem em onda.<br />Vamos atravessar juntos.</h2>

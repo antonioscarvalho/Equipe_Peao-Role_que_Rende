@@ -5,6 +5,7 @@ import { tocar } from "../sons";
 import { CORES_ROUPA, corDe } from "../personalizacao/aparencia";
 import { useAparenciaVisivel } from "../personalizacao";
 import { BotaoTema } from "../BotaoTema";
+import { useEsconderVLibras } from "../vlibras";
 import { DURACAO_PARTIDA_MS, FOLHA_ALTA_A_CADA, FOLHA_A_CADA_PX, quadroMs } from "../partida";
 import "./carrinho.css";
 
@@ -59,6 +60,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bichoRef = useRef<HTMLDivElement>(null);
   const [estado, setEstado] = useState<Estado>("inicio");
+  useEsconderVLibras(estado === "jogando");
   const [metros, setMetros] = useState(0);
   const [folhas, setFolhas] = useState(0);
   const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
@@ -310,7 +312,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
           <b>{metros} m</b> · 🍃 {folhas}
         </span>
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo">×</button>
+        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"
