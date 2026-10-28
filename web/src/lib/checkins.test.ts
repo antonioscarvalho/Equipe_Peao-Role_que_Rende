@@ -64,7 +64,7 @@ describe('check-in e configuração (IndexedDB local)', () => {
     v1.close()
 
     const db = await abrirBanco()
-    expect(db.version).toBe(2)
+    expect(db.version).toBeGreaterThanOrEqual(2) // a 005 sobe para a 3
     expect(await episodiosSos.listar()).toHaveLength(1)
     await checkins.registrar(false)
     expect(await checkins.listar()).toHaveLength(1)

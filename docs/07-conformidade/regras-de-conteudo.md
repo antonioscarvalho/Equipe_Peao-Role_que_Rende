@@ -30,4 +30,4 @@
 
 | Data | Revisor(a) | Resultado | Observações |
 |---|---|---|---|
-| _—_ | _—_ | _—_ | _—_ |
+| 2026-10-27 | Kiro (Claude Opus 5.5), para revisão de Atyrson Souto | ✅ sem ❌ (spec 005) | Plano Se/Então e Círculo de Confiança. Detalhes e ressalvas em [docs/revisoes/prevencao-e-circulo.md](../revisoes/prevencao-e-circulo.md) |

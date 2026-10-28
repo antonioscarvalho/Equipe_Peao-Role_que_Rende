@@ -9,7 +9,7 @@ import { Inicio } from './Inicio'
 const HOJE = '2026-10-27'
 
 function renderizar() {
-  const props = { aoAbrirSos: vi.fn(), aoApostar: vi.fn(), aoAbrirDinheiro: vi.fn() }
+  const props = { aoAbrirSos: vi.fn(), aoApostar: vi.fn(), aoAbrirDinheiro: vi.fn(), aoAbrirPlano: vi.fn(), aoAbrirCirculo: vi.fn() }
   render(<Inicio {...props} hoje={HOJE} />)
   return props
 }

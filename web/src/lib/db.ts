@@ -28,28 +28,65 @@ export interface ConfiguracaoFinancas {
   meta: string | null
 }
 
+/** Spec 005: gatilhos que a pessoa marcou (chave fixa 'gatilhos'). */
+export interface GatilhosPessoa {
+  selecionados: string[]
+  outro?: string
+  atualizadoEm: string
+}
+
+/** Spec 005: plano "Se… então eu vou…". No máximo 5. */
+export interface PlanoSeEntao {
+  id: string
+  se: string
+  entao: string
+  criadoEm: string
+  atualizadoEm: string
+}
+
+/** Spec 005: pessoa do Círculo de Confiança. Dado de terceiro (LGPD): só no aparelho. No máximo 3. */
+export interface ContatoCirculo {
+  id: string
+  nome: string
+  /** Só dígitos, com o 55 na frente. */
+  telefone: string
+  criadoEm: string
+}
+
 interface GuardiaoDB extends DBSchema {
   episodiosSos: { key: string; value: EpisodioSos; indexes: { porInicio: string } }
   checkins: { key: string; value: Checkin }
   configuracao: { key: 'financas'; value: ConfiguracaoFinancas }
+  prevencao: { key: 'gatilhos'; value: GatilhosPessoa }
+  planos: { key: string; value: PlanoSeEntao; indexes: { porCriacao: string } }
+  circulo: { key: string; value: ContatoCirculo; indexes: { porCriacao: string } }
 }
 
-const NOME = 'guardiao'
-const VERSAO = 2
+export const NOME_BANCO = 'guardiao'
+const NOME = NOME_BANCO
+export const VERSAO_BANCO = 3
 
 let conexao: Promise<IDBPDatabase<GuardiaoDB>> | null = null
 
 export function abrirBanco(): Promise<IDBPDatabase<GuardiaoDB>> {
-  conexao ??= openDB<GuardiaoDB>(NOME, VERSAO, {
+  conexao ??= openDB<GuardiaoDB>(NOME, VERSAO_BANCO, {
     // Cada versão só cria o que falta, para quem já usa o app não perder o que guardou.
     upgrade(db, versaoAnterior) {
+      const existe = (nome: string) => db.objectStoreNames.contains(nome as never)
       if (versaoAnterior < 1) {
         const store = db.createObjectStore('episodiosSos', { keyPath: 'id' })
         store.createIndex('porInicio', 'inicio')
       }
+      // Versão 2 = spec 004.
       if (versaoAnterior < 2) {
-        db.createObjectStore('checkins', { keyPath: 'data' })
-        db.createObjectStore('configuracao')
+        if (!existe('checkins')) db.createObjectStore('checkins', { keyPath: 'data' })
+        if (!existe('configuracao')) db.createObjectStore('configuracao')
+      }
+      // Versão 3 = spec 005.
+      if (versaoAnterior < 3) {
+        if (!existe('prevencao')) db.createObjectStore('prevencao')
+        if (!existe('planos')) db.createObjectStore('planos', { keyPath: 'id' }).createIndex('porCriacao', 'criadoEm')
+        if (!existe('circulo')) db.createObjectStore('circulo', { keyPath: 'id' }).createIndex('porCriacao', 'criadoEm')
       }
     },
   })

@@ -4,7 +4,7 @@ import { Cartao } from '@/components/Cartao'
 import { Chips } from '@/components/Chips'
 import { Contador } from '@/components/Contador'
 import { Aproximado } from '@/components/Aproximado'
-import { conteudoCheckin, conteudoDinheiro } from '@/content/conteudo'
+import { conteudoCheckin, conteudoDinheiro, conteudoPrevencao } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
 import { formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
@@ -13,6 +13,8 @@ interface InicioProps {
   aoAbrirSos: () => void
   aoApostar: () => void
   aoAbrirDinheiro: () => void
+  aoAbrirPlano: () => void
+  aoAbrirCirculo: () => void
   /** Os testes passam um dia fixo; no app vale o dia de hoje do aparelho. */
   hoje?: string
 }
@@ -20,7 +22,7 @@ interface InicioProps {
 const humor = conteudoCheckin.humor
 
 /** Tela inicial: o SOS continua sendo a ação principal; o check-in vem logo abaixo (fluxo F4). */
-export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, hoje }: InicioProps) {
+export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, aoAbrirPlano, aoAbrirCirculo, hoje }: InicioProps) {
   const { estado, progresso, registroDeHoje, gastoSemanal, meta, registrar, registrarHumor, hoje: dia } = useProgresso(hoje)
   const [anotado, setAnotado] = useState(false)
 
@@ -95,6 +97,14 @@ export function Inicio({ aoAbrirSos, aoApostar, aoAbrirDinheiro, hoje }: InicioP
         </Botao>
       </Cartao>
 
+      <nav className="linha" aria-label="Prepare-se pros momentos difíceis">
+        <Botao variante="secundario" onClick={aoAbrirPlano}>
+          {conteudoPrevencao.atalhos.plano}
+        </Botao>
+        <Botao variante="secundario" onClick={aoAbrirCirculo}>
+          {conteudoPrevencao.atalhos.circulo}
+        </Botao>
+      </nav>
       <p className="nota">
         Este app é um apoio. Ele não substitui atendimento profissional. Seus registros ficam só neste celular.
       </p>

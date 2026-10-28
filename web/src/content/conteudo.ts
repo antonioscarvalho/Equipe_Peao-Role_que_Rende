@@ -1,4 +1,5 @@
 import canaisJson from './canais-de-ajuda.json'
+import prevencaoJson from './prevencao.json'
 import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
@@ -66,6 +67,8 @@ export interface Meta extends MetaJson {
 export const metasConfirmadas: Meta[] = (metasJson.metas as MetaJson[]).filter(
   (m): m is Meta => m.status === 'confirmado' && typeof m.valorReferencia === 'number' && m.valorReferencia > 0,
 )
+/** Textos do plano Se/Então (F5) e do Círculo de Confiança (F8). */
+export const conteudoPrevencao = prevencaoJson
 
 export const conteudoDinheiro = dinheiroJson
 

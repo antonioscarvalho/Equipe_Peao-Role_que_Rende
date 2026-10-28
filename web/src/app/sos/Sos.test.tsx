@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { apagarBanco } from '@/lib/db'
 import { episodiosSos } from '@/lib/episodiosSos'
+import { prevencao } from '@/lib/prevencao'
 import { Sos } from './Sos'
 
 function renderizar(props: Partial<Parameters<typeof Sos>[0]> = {}) {
@@ -93,5 +94,26 @@ describe('SOS', () => {
     await irAteOFim()
     await marcar(5)
     expect(screen.getByRole('status')).toHaveTextContent('Tá difícil hoje. Quer falar com alguém agora?')
+  })
+
+  it('spec 005 CA-3: o passo de ação mostra os planos salvos', async () => {
+    await prevencao.salvarPlano({ se: 'bater o tédio', entao: 'caminhar 10 minutos' })
+    renderizar()
+    await marcar(6)
+    await userEvent.click(screen.getByRole('button', { name: 'Ir pro próximo passo' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    expect(screen.getByRole('heading', { name: 'O que dá pra fazer agora?' })).toBeInTheDocument()
+    expect(await screen.findByText('Se bater o tédio, então eu vou caminhar 10 minutos.')).toBeInTheDocument()
+  })
+
+  it('spec 005 CA-7: sem plano, o passo de ação mostra convite e CVV, e o "Próximo" segue', async () => {
+    renderizar()
+    await marcar(6)
+    await userEvent.click(screen.getByRole('button', { name: 'Ir pro próximo passo' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    expect(await screen.findByText(/Quer montar seu plano depois\?/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /CVV · 188/ })).toHaveAttribute('href', 'tel:188')
+    await userEvent.click(screen.getByRole('button', { name: 'Próximo' }))
+    expect(screen.getByRole('heading', { name: 'E agora, quanto tá a vontade?' })).toBeInTheDocument()
   })
 })

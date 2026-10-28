@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import canaisJson from './canais-de-ajuda.json'
+import prevencaoJson from './prevencao.json'
 import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
 import dinheiroJson from './dinheiro.json'
-import { canaisDeAjuda, canal, metasConfirmadas, preencher } from './conteudo'
+import { canaisDeAjuda, canal, conteudoPrevencao, metasConfirmadas, preencher } from './conteudo'
 
 // Vocabulário vedado pelo guia de tom de voz e pela Seção 8.4 do edital.
 const PROIBIDAS = [
@@ -36,7 +37,7 @@ function textos(valor: unknown): string[] {
 }
 
 describe('conteúdo do app', () => {
-  it.each(textos([canaisJson, sosJson, checkinJson, metasJson, dinheiroJson]))('não usa vocabulário vedado: %s', (texto) => {
+  it.each(textos([canaisJson, sosJson, checkinJson, metasJson, dinheiroJson, prevencaoJson]))('não usa vocabulário vedado: %s', (texto) => {
     for (const padrao of PROIBIDAS) expect(texto).not.toMatch(padrao)
   })
 
@@ -56,6 +57,39 @@ describe('conteúdo do app', () => {
   it('tem CVV 188 e SAMU 192', () => {
     expect(canal('cvv').telefone).toBe('188')
     expect(canal('samu').telefone).toBe('192')
+  })
+
+  it('prevencao.json segue o microcopy F5 e F8', () => {
+    expect(conteudoPrevencao.plano.titulo).toBe('Seu plano pros momentos difíceis')
+    expect(conteudoPrevencao.plano.perguntaGatilhos).toBe('O que costuma trazer a vontade?')
+    expect(conteudoPrevencao.circulo.titulo).toBe('Seu Círculo de Confiança')
+    expect(conteudoPrevencao.circulo.whatsapp).toBe('Enviar pelo meu WhatsApp')
+    expect(conteudoPrevencao.circulo.nota).toBe('A gente nunca manda mensagem sozinho.')
+    expect(conteudoPrevencao.circulo.mensagens).toEqual([
+      'Tô com vontade de apostar, pode falar comigo?',
+      'Hoje tá difícil, me liga quando puder?',
+    ])
+  })
+
+  it('CA-1 e CA-2: tem os gatilhos da spec, exemplos de ação e os limites', () => {
+    for (const g of ['dia do pagamento', 'solidão', 'briga', 'tédio', 'bebida', 'jogo na TV']) {
+      expect(conteudoPrevencao.gatilhos).toContain(g)
+    }
+    expect(conteudoPrevencao.gatilhos).toContain(conteudoPrevencao.gatilhoOutro)
+    expect(conteudoPrevencao.plano.exemplos).toHaveLength(3)
+    expect(conteudoPrevencao.limitePlanos).toBe(5)
+    expect(conteudoPrevencao.limiteContatos).toBe(3)
+  })
+
+  it('dado de demo é sintético', () => {
+    expect(conteudoPrevencao.demo.contato.nome).toMatch(/\(exemplo\)/)
+    expect(conteudoPrevencao.demo.contato.telefone).toBe('(61) 90000-0000')
+  })
+
+  it('preencher troca as chaves do modelo', () => {
+    expect(preencher(conteudoPrevencao.plano.modelo, { se: 'bater o tédio', entao: 'caminhar' })).toBe(
+      'Se bater o tédio, então eu vou caminhar.',
+    )
   })
 })
 

@@ -498,6 +498,126 @@ h1:focus {
   }
 }
 
+/* Spec 005: formulários e cartões do plano e do Círculo. .grupo-campo envolve rótulo, dica, campo e erro. */
+h2 {
+  font-family: var(--rqr-font-titulo);
+  font-size: var(--rqr-fs-lead);
+  margin: var(--rqr-esp-1) 0 0;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-2);
+}
+
+.grupo-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.grupo-campo label {
+  font-weight: 700;
+}
+
+.grupo-campo input,
+.grupo-campo select {
+  min-height: var(--alvo-toque);
+  padding: 8px 12px;
+  border: 2px solid var(--rqr-azul-escuro);
+  border-radius: 8px;
+  background: var(--rqr-branco);
+  color: var(--rqr-texto);
+  font: inherit;
+}
+
+.grupo-campo input[aria-invalid='true'] {
+  border-width: 3px;
+}
+
+.grupo-campo .campo__erro::before {
+  content: '⚠ ';
+}
+
+.grupo-campo__dica {
+  margin: 0;
+  font-size: var(--rqr-fs-small);
+  color: var(--rqr-texto-suave);
+}
+
+.lista-cartoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+}
+
+.cartao--item p {
+  margin: 0 0 var(--rqr-esp-1);
+}
+
+/* Link com cara de botão (envio pelo WhatsApp/SMS) */
+a.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+
+.grupo-campo--opcoes {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.grupo-campo--opcoes legend {
+  font-weight: 700;
+  padding: 0;
+}
+
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--alvo-toque);
+  cursor: pointer;
+}
+
+.opcao input {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  accent-color: var(--rqr-azul-escuro);
+}
+
+.cartao--item h2 {
+  margin: 0;
+}
+
+.nota--fixa {
+  font-weight: 700;
+}
+
+.acoes-do-plano,
+.acoes-do-plano section,
+.acoes-do-plano__convite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rqr-esp-1);
+}
+
+.acoes-do-plano p {
+  margin: 0;
+}
+
+.acoes-do-plano__nome {
+  font-weight: 700;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
