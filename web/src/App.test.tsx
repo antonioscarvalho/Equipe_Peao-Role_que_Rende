@@ -47,4 +47,26 @@ describe('App', () => {
     render(<App />)
     expect(screen.getByRole('button', { name: 'Bateu a vontade?' })).toBeInTheDocument()
   })
+
+  it('spec 005: "Seu plano" e "Seu Círculo" abrem pelo início, sem dado na URL, com a ajuda no topo', async () => {
+    render(<App />)
+    await userEvent.click(screen.getByRole('button', { name: 'Seu plano' }))
+    expect(screen.getByRole('heading', { level: 1, name: 'Seu plano pros momentos difíceis' })).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/plano')
+    expect(window.location.search).toBe('')
+    expect(screen.getByRole('button', { name: 'Preciso de ajuda agora' })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Guardião' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Seu Círculo' }))
+    expect(screen.getByRole('heading', { level: 1, name: 'Seu Círculo de Confiança' })).toBeInTheDocument()
+    expect(window.location.pathname).toBe('/circulo')
+    expect(window.location.search).toBe('')
+    expect(screen.getByRole('button', { name: 'Preciso de ajuda agora' })).toBeInTheDocument()
+  })
+
+  it('spec 005: /plano e /circulo abrem direto pela URL', () => {
+    window.history.replaceState(null, '', '/circulo')
+    render(<App />)
+    expect(screen.getByRole('heading', { level: 1, name: 'Seu Círculo de Confiança' })).toBeInTheDocument()
+  })
 })
