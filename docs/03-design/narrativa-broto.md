@@ -82,7 +82,7 @@ Os capítulos destravam ao jogar, nunca por sorte. Podem ser relidos, e toda con
 O capítulo 6 é o mais importante clinicamente: depois de um lapso, a pessoa costuma pensar "já estraguei tudo" e apostar mais (efeito de violação da abstinência). Ver o Broto escorregar e a luz continuar acesa prepara a pessoa antes de ela passar por isso.
 
 ### Capítulo 1: A Queda
-**Duração:** 10 a 15 minutos. É o primeiro contato com o app: abre sozinho no primeiro acesso, depois da abertura (`web/src/Abertura.tsx`) e do aviso. Apresenta o Broto e faz, na voz dele, as perguntas do [questionário de entrada](../02-produto/questionario-onboarding.md) (apelido, idade, como a pessoa chega, motivo, meta e se quer guardar). O resto é conversa para criar confiança: a Vila Estrela, a poeira de luz, a cantiga da Vó, música, as luas e o Broto como "alienígena".
+**Duração:** 10 a 15 minutos. É o primeiro contato com o app: abre sozinho no primeiro acesso, depois da abertura (`web/src/Abertura.tsx`) e do aviso. Apresenta o Broto e faz, na voz dele, as perguntas do [questionário de entrada](../02-produto/questionario-onboarding.md) (aparência do Broto, apelido, idade, como a pessoa chega, motivo, meta e se quer guardar). O resto é conversa para criar confiança: a Vila Estrela, a poeira de luz, a cantiga da Vó, música, as luas e o Broto como "alienígena".
 
 **Ordem:** queda do espaço → conversa antes do jogo → Pulo do Bichinho → fala de abertura → conversa depois do jogo → perguntas da pessoa → pergunta do Broto → lição.
 
@@ -96,7 +96,8 @@ As perguntas do app têm sempre "Prefiro não dizer". Menor de 18 anos: o Broto 
 - **Broto:** Opa. Tem alguém aí? Desculpa o susto. Eu não costumo cair do céu assim, juro.
   - "Você tá bem?" → "Tô inteiro. Um pouco amassado, mas inteiro."
   - "Quem é você?" → "Já já eu conto. Deixa eu só achar minha antena."
-- **Broto:** Pronto, me ajeitei. Eu sou o Broto. Sou um broto de luz, lá de cima.
+- **Broto:** Eu sou o Broto. Sou um broto de luz, lá de cima. Mas olha meu estado… caí todo bagunçado.
+- **Broto:** Me ajuda a me arrumar? Escolhe minha cor e o que eu visto. Vou mudando aqui na sua frente. _(pergunta do app: aparencia — cor, roupa, cabeça, rosto e peito do catálogo da spec 009)_
 - **Broto:** E você? Como eu te chamo? Pode ser apelido. Se preferir, eu te chamo de "você" mesmo. _(pergunta do app: nome)_
 - **Broto:** Prazer, {nome}. Que bom que foi você que me achou.
 - **Broto:** Pergunta chata, mas eu preciso fazer: você tem 18 anos ou mais? _(pergunta do app: idade)_

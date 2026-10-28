@@ -1,122 +1,134 @@
-/* História do Broto: mapa dos capítulos e diálogo. Só tokens de tokens.css. */
-.historia, .historia-dialogo {
-  position: fixed; inset: 0; display: grid; scroll-padding: 24px; place-items: center; padding: 24px 16px;
-  overflow-y: auto; background: var(--rqr-fundo); color: var(--rqr-texto);
-}
-.historia { z-index: 30; }
-.historia-dialogo { z-index: 45; background: rgb(17 18 20 / .55); }
+/* História do Broto. Só tokens de tokens.css.
+   Duas telas: o mapa dos capítulos (cartão central) e o diálogo estilo RPG (Persona, Stardew Valley):
+   cena em tela cheia, caixa de texto compacta embaixo, escolhas à direita, controles pequenos no topo. */
 
+/* ---------- Mapa e aviso ---------- */
+.historia {
+  position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 24px 16px; overflow-y: auto;
+  background: var(--rqr-fundo); color: var(--rqr-texto);
+}
 .historia__caixa {
-  position: relative; display: grid; gap: 16px; width: min(460px, 100%);
-  padding: 24px 20px; border: 3px solid var(--rqr-borda); border-radius: 24px;
-  background: var(--rqr-fundo-conteudo); box-shadow: 6px 6px 0 var(--rqr-sombra-cor);
+  position: relative; display: grid; gap: 14px; width: min(460px, 100%); padding: 24px 20px;
+  border: 3px solid var(--rqr-borda); border-radius: 24px; background: var(--rqr-fundo-conteudo); box-shadow: 6px 6px 0 var(--rqr-sombra-cor);
 }
-.historia__titulo, .historia-dialogo__titulo {
-  margin: 0; padding-right: 52px; font-family: var(--rqr-font-titulo); font-size: 1.5rem; font-weight: 900; color: var(--rqr-texto);
-}
+.historia__titulo { margin: 0; padding-right: 52px; font-family: var(--rqr-font-titulo); font-size: 1.5rem; font-weight: 900; }
 .historia__fechar {
   position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%;
-  border: 3px solid var(--rqr-borda); background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
-  font-size: 1.625rem; line-height: 1; cursor: pointer;
+  border: 3px solid var(--rqr-borda); background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font-size: 1.625rem; line-height: 1; cursor: pointer;
 }
 .historia__aviso { margin: 0; font-size: var(--rqr-fs-lead); font-weight: 700; }
-
 .historia__mapa { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
 .historia-cap {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px;
-  padding: 10px 16px; border: 3px solid var(--rqr-borda); border-radius: 16px;
-  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font: inherit; font-weight: 800; text-align: left; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 56px; padding: 10px 16px;
+  border: 3px solid var(--rqr-borda); border-radius: 16px; background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  font: inherit; font-weight: 800; text-align: left; cursor: pointer;
 }
 .historia-cap:disabled { cursor: default; border-style: dashed; background: var(--rqr-fundo-suave); }
 .historia-cap.is-ok { background: var(--rqr-fundo-destaque); }
 .historia-cap__estado { flex: none; font-size: var(--rqr-fs-small); font-weight: 700; color: var(--rqr-texto-suave); }
-
-
-.historia-opcao {
-  min-height: 48px; padding: 10px 16px; border: 3px solid var(--rqr-borda); border-radius: 16px;
-  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font: inherit; font-weight: 800; text-align: left; cursor: pointer;
-}
-.historia-opcao[aria-pressed="true"] { background: var(--rqr-fundo-destaque); }
-.historia-opcao--leve { font-weight: 700; border-style: dashed; }
 .historia-agora-nao {
-  min-height: 44px; background: none; border: 0; color: var(--rqr-texto);
-  font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer;
+  min-height: 44px; background: none; border: 0; color: var(--rqr-texto); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer;
 }
-.historia-nota { color: var(--rqr-texto-suave); font-size: var(--rqr-fs-small); }
-
-.historia :focus-visible, .historia-dialogo :focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
-
-/* Ajuda humana a 1 toque dentro da história (substitui o botão flutuante, que cobria a cena). */
 .historia-ajuda {
   justify-self: start; min-height: 44px; padding: 0 4px; background: none; border: 0; color: var(--rqr-texto);
   font: inherit; font-weight: 800; text-decoration: underline; cursor: pointer;
 }
+.historia-nota { color: var(--rqr-texto-suave); font-size: var(--rqr-fs-small); }
+.historia :focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
 
-/* ---------- Diálogo estilo RPG (Persona / Stardew Valley) ----------
-   A cena ocupa a tela inteira; a caixa de texto é compacta, embaixo; as escolhas são uma
-   lista curta à direita, acima da caixa. Botões de controle ficam pequenos no topo. */
-.historia-dialogo { display: block; padding: 0; background: var(--rqr-azul-escuro); overflow: hidden;
-  animation: historia-entra var(--rqr-dur-lenta) var(--rqr-ease-padrao) both; }
-@keyframes historia-entra { from { opacity: 0; } to { opacity: 1; } }
+/* ---------- Diálogo estilo RPG ---------- */
+.historia-dialogo {
+  position: fixed; inset: 0; z-index: 45; overflow: hidden; color: var(--rqr-texto);
+  background: var(--rqr-azul-escuro); /* opaco: nada do app aparece por trás */
+}
 .historia-dialogo__palco { position: absolute; inset: 0; }
+.historia-dialogo__palco > .cena { animation: historia-entra 700ms var(--rqr-ease-padrao) both; }
+@keyframes historia-entra { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
 .historia-dialogo__ceu { position: absolute; inset: 0; background: linear-gradient(var(--rqr-azul-escuro), var(--rqr-roxo)); }
-/* O Broto fica na cena, perto da cratera, como personagem do cenário. */
-.historia-dialogo__broto { position: absolute; left: calc(30% - 60px); bottom: 21%; transition: transform var(--rqr-dur-lenta) var(--rqr-ease-padrao); }
 
+/* Controles: faixa fina no topo, sem borda, com fundo escuro translúcido para ler sobre qualquer cena. */
 .historia-dialogo__topo {
-  position: absolute; top: max(10px, env(safe-area-inset-top)); left: 10px; right: 10px; display: flex; align-items: center; gap: 8px;
+  position: absolute; top: 0; left: 0; right: 0; z-index: 2; display: flex; align-items: center; gap: 8px;
+  padding: max(10px, env(safe-area-inset-top)) 10px 10px; background: linear-gradient(rgb(17 18 20 / .55), transparent);
 }
 .historia-dialogo__titulo {
-  margin: 0 auto 0 0; padding: 4px 12px; border-radius: 999px; font-size: .875rem; font-weight: 800;
-  background: rgb(17 18 20 / .55); color: var(--rqr-branco); border: 0;
+  flex: 1; min-width: 0; margin: 0; font-family: var(--rqr-font-titulo); font-size: .9375rem; font-weight: 900;
+  color: var(--rqr-branco); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .historia-topo__botao {
-  min-height: 44px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--rqr-branco);
-  background: rgb(17 18 20 / .55); color: var(--rqr-branco); font: inherit; font-size: .875rem; font-weight: 800; cursor: pointer;
+  flex: none; min-height: 44px; padding: 0 12px; border-radius: 999px; border: 2px solid var(--rqr-branco);
+  background: rgb(17 18 20 / .45); color: var(--rqr-branco); font: inherit; font-size: .8125rem; font-weight: 800; cursor: pointer;
 }
 .historia-topo__botao--ajuda { border-color: var(--rqr-amarelo); color: var(--rqr-amarelo); }
 
+/* Escolhas: coluna à direita, logo acima da caixa de texto. A altura da caixa vem de --caixa-h. */
+.historia-dialogo { --caixa-h: 124px; }
+/* Parte de baixo: escolhas em cima, caixa de texto embaixo, uma empilhada na outra (nada se sobrepõe). */
+.historia-dialogo__baixo {
+  position: absolute; z-index: 2; left: 50%; translate: -50% 0; bottom: max(10px, env(safe-area-inset-bottom));
+  width: min(680px, calc(100% - 20px)); max-height: calc(100% - 76px); display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+}
 .historia-dialogo__acoes {
-  position: absolute; right: 12px; bottom: calc(150px + env(safe-area-inset-bottom)); display: grid; gap: 6px;
-  width: min(300px, calc(100% - 24px)); max-height: 45vh; overflow-y: auto; justify-items: stretch;
+  display: grid; gap: 6px; width: min(320px, 72%); min-height: 0; overflow-y: auto; padding: 2px 6px 6px 2px;
 }
 .historia-dialogo__acoes:empty { display: none; }
 .historia-dialogo .historia-opcao {
-  min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 2px solid var(--rqr-borda);
-  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font-size: .9375rem; box-shadow: 3px 3px 0 var(--rqr-sombra-cor);
-  animation: historia-opcao var(--rqr-dur-media) var(--rqr-ease-padrao) both;
+  min-height: 44px; padding: 8px 14px; border: 2px solid var(--rqr-borda); border-radius: 12px; background: var(--rqr-fundo-conteudo);
+  color: var(--rqr-texto); font: inherit; font-size: .9375rem; font-weight: 800; text-align: left; cursor: pointer;
+  box-shadow: 3px 3px 0 var(--rqr-sombra-cor); animation: historia-opcao var(--rqr-dur-media) var(--rqr-ease-padrao) both;
 }
-.historia-dialogo .historia-opcao:nth-child(2) { animation-delay: 40ms; } .historia-dialogo .historia-opcao:nth-child(3) { animation-delay: 80ms; }
-.historia-dialogo .historia-opcao:nth-child(4) { animation-delay: 120ms; } .historia-dialogo .historia-opcao:nth-child(n+5) { animation-delay: 160ms; }
+.historia-dialogo .historia-opcao[aria-pressed="true"] { background: var(--rqr-fundo-destaque); }
+.historia-dialogo .historia-opcao--leve { border-style: dashed; font-weight: 700; }
+.historia-dialogo .historia-opcao:nth-child(2) { animation-delay: 40ms; }
+.historia-dialogo .historia-opcao:nth-child(3) { animation-delay: 80ms; }
+.historia-dialogo .historia-opcao:nth-child(n+4) { animation-delay: 120ms; }
 @keyframes historia-opcao { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
-.historia-opcao--seguir { font-weight: 900; }
 
+/* Caixa de texto compacta, com a etiqueta do nome por cima da borda. */
 .historia-caixa {
-  position: absolute; left: 50%; translate: -50% 0; bottom: max(10px, env(safe-area-inset-bottom)); width: min(640px, calc(100% - 20px));
-  display: grid; gap: 4px; padding: 18px 16px 8px; border: 3px solid var(--rqr-borda); border-radius: 16px;
-  background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); box-shadow: 4px 4px 0 var(--rqr-sombra-cor);
+  position: relative; flex: none; width: 100%; min-height: var(--caixa-h); display: grid; grid-template-rows: 1fr auto auto; gap: 2px;
+  padding: 20px 16px 8px; border: 3px solid var(--rqr-borda); border-radius: 16px;
+  background: var(--rqr-fundo-conteudo); box-shadow: 4px 4px 0 var(--rqr-sombra-cor);
 }
 .historia-caixa__nome {
-  position: absolute; top: -16px; left: 14px; padding: 2px 14px; border-radius: 10px; border: 3px solid var(--rqr-borda);
+  position: absolute; top: 0; left: 14px; translate: 0 -55%; padding: 2px 14px; border-radius: 10px; border: 3px solid var(--rqr-borda);
   background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); font-family: var(--rqr-font-titulo); font-weight: 900; font-size: .9375rem;
 }
-.historia-caixa__fala { display: grid; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: pointer; min-height: 3em; }
+.historia-caixa__fala { display: grid; align-content: start; }
 .historia-caixa__fala > span { grid-area: 1 / 1; }
 .historia-balao__texto { margin: 0; font-size: var(--rqr-fs-body); line-height: 1.45; }
 .historia-balao__molde { visibility: hidden; }
+.historia-fala__cursor { display: inline-block; width: .5em; height: 1em; margin-left: 2px; vertical-align: -2px; background: var(--rqr-texto); opacity: .5; }
 .historia-caixa__seguir {
-  justify-self: end; min-height: 44px; padding: 0 10px; border: 0; background: none; color: var(--rqr-texto);
-  font: inherit; font-weight: 900; cursor: pointer;
+  justify-self: end; min-height: 44px; padding: 0 10px; border: 0; background: none; color: var(--rqr-texto); font: inherit; font-weight: 900; cursor: pointer;
 }
-.historia-caixa .historia-nota { font-size: .75rem; }
+.historia-caixa .historia-nota { margin: 0; font-size: .75rem; }
 
-/* Perguntas do questionário (nome, motivos) dentro da lista de escolhas. */
-.especial { display: grid; gap: 6px; padding: 10px; border: 2px solid var(--rqr-borda); border-radius: 12px; background: var(--rqr-fundo-conteudo); }
+.historia-dialogo :focus-visible { outline: 3px solid var(--rqr-amarelo); outline-offset: 2px; }
+.historia-dialogo__titulo:focus-visible { outline-color: var(--rqr-branco); }
+
+/* Perguntas do app (nome, motivos, aparência) dentro da coluna de escolhas. */
+.especial { display: grid; gap: 8px; padding: 10px; border: 2px solid var(--rqr-borda); border-radius: 12px; background: var(--rqr-fundo-conteudo); box-shadow: 3px 3px 0 var(--rqr-sombra-cor); }
 .especial__rotulo { font-weight: 800; font-size: .875rem; }
 .especial__campo { min-height: 44px; padding: 0 12px; border: 2px solid var(--rqr-borda); border-radius: 10px; font: inherit; background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); }
-.especial__erro { margin: 0; color: var(--rqr-texto); font-weight: 800; }
+.especial__erro { margin: 0; font-weight: 800; }
 .especial__chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .especial .chip { min-height: 44px; }
 .especial .historia-opcao { box-shadow: none; animation: none; }
-@media (prefers-reduced-motion: reduce) { .historia-dialogo, .historia-dialogo .historia-opcao { animation: none; } }
-@media (min-width: 900px) { .historia-dialogo__acoes { right: calc(50% - 320px); } }
+.especial .rqr-botao { min-height: 44px; padding: 0 14px; font-size: 1rem; }
+.especial__abas { display: flex; gap: 4px; overflow-x: auto; }
+.especial__aba { flex: none; min-height: 40px; padding: 0 10px; border: 2px solid var(--rqr-borda); border-radius: 999px; background: none; color: var(--rqr-texto); font: inherit; font-size: .8125rem; font-weight: 800; cursor: pointer; }
+.especial__aba.is-on { background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); }
+.especial__cores { display: flex; flex-wrap: wrap; gap: 8px; }
+.especial__cor { width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--rqr-borda); cursor: pointer; }
+.especial__cor[aria-pressed="true"] { outline: 3px solid var(--rqr-foco); outline-offset: 2px; }
+
+/* Celular deitado ou tela baixa: caixa mais baixa. */
+@media (max-height: 560px) { .historia-dialogo { --caixa-h: 110px; } .historia-caixa .historia-nota { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .historia-dialogo__palco > .cena, .historia-dialogo .historia-opcao { animation: none; }
+}
+
+/* Primeiro acesso: o aviso aparece já no céu da história, não no amarelo do app. */
+.historia--inicio { background: radial-gradient(circle at 50% 30%, var(--rqr-roxo), var(--rqr-azul-escuro) 70%); }

@@ -85,7 +85,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
 
   return (
     <>
-      <div ref={caixa} className="historia" role="dialog" aria-modal="true" aria-labelledby="historia-titulo"
+      <div ref={caixa} className={`historia ${iniciar ? "historia--inicio" : ""}`} role="dialog" aria-modal="true" aria-labelledby="historia-titulo"
         aria-hidden={escondeMapa || undefined} style={escondeMapa ? { visibility: "hidden" } : undefined}>
         <div className="historia__caixa">
           <h2 id="historia-titulo" ref={titulo} className="historia__titulo" tabIndex={-1}>História do Broto</h2>

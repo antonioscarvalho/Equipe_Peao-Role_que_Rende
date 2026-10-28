@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 /** Em que ponto da conversa a pessoa está. A cena do capítulo desenha esse momento. */
 export type Momento = {
@@ -10,5 +10,6 @@ export type Momento = {
 };
 
 /** Arte de fundo de um capítulo. Fica atrás do diálogo, decorativa: o texto vai no `aria-label`. */
-export type PropsCena = { momento: Momento; reduzir: boolean };
+/** `ator`: o Broto, que a cena posiciona no próprio desenho (assim ele fica sempre no chão certo). */
+export type PropsCena = { momento: Momento; reduzir: boolean; ator?: ReactNode };
 export type Cena = ComponentType<PropsCena>;

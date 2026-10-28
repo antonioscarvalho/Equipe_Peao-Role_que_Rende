@@ -17,6 +17,8 @@ const ESTRELAS: [number, number, number][] = [
   [40, 60, 2.5], [92, 140, 1.8], [150, 40, 2], [210, 120, 1.6], [250, 50, 2.4], [360, 70, 1.8],
   [380, 190, 2.2], [60, 230, 1.6], [130, 300, 2], [330, 290, 1.6], [20, 360, 1.8], [270, 220, 1.4],
   [180, 200, 1.2], [110, 80, 1.3], [300, 10, 1.6], [70, 10, 1.2], [230, -40, 1.8], [40, -80, 1.4], [340, -60, 2],
+  [-160, 80, 2], [-120, 200, 1.6], [-60, 40, 1.8], [-180, 320, 1.4], [-90, 380, 2], [440, 60, 2.2], [500, 180, 1.6],
+  [560, 40, 1.8], [470, 330, 1.4], [580, 280, 2], [-20, 140, 1.4], [420, 400, 1.6],
 ];
 /** Constelação que se desenha no momento "estrelas". */
 const CONSTELACAO = "M90 140 L150 100 L210 120 L250 60 L320 90 L360 70";
@@ -34,6 +36,7 @@ const ROTULOS: Record<string, string> = {
   estrelas: "Estrelas se ligam por linhas e formam um desenho no céu.",
   nave: "A nave da família, sem combustível, perto da Vila Estrela. Uma linha tracejada mostra a queda até a cratera.",
   regua: "Uma régua vai da grama até o alto e marca a altura que o Broto já subiu.",
+  queda: "Uma estrelinha risca o céu da noite e cai na grama da praça, ao lado da cratera. É o Broto.",
   amanhecer: "Amanhece na praça. Plataformas sobem, uma de cada vez, da grama até o céu. Uma janela do bairro acende.",
 };
 
@@ -49,12 +52,12 @@ export function rotuloCenaCap1(m: PropsCena["momento"]) {
   return ROTULOS[momentoCap1(m)];
 }
 
-export function CenaCap1({ momento }: PropsCena) {
+export function CenaCap1({ momento, ator }: PropsCena) {
   const m = momentoCap1(momento);
   const noCeu = CEU.includes(m);
 
   return (
-    <svg className={`cena cena--${m} ${noCeu ? "cena--ceu" : ""}`} viewBox="0 0 400 700"
+    <svg className={`cena cena--${m} ${noCeu ? "cena--ceu" : ""}`} viewBox="-200 0 800 700"
       preserveAspectRatio="xMidYMax slice" role="img" aria-label={ROTULOS[m]}>
       <defs>
         <linearGradient id="cena1-ceu" x1="0" y1="0" x2="0" y2="1">
@@ -66,9 +69,9 @@ export function CenaCap1({ momento }: PropsCena) {
           <stop offset="1" className="cena__brilho-borda" />
         </radialGradient>
       </defs>
-      <rect width="400" height="700" fill="url(#cena1-ceu)" />
+      <rect x="-200" width="800" height="700" fill="url(#cena1-ceu)" />
 
-      {/* Câmera: tudo abaixo se move junto quando o olhar sobe para a Vila. */}
+      {/* Céu: aproxima quando a conversa é sobre a Vila (efeito de câmera). */}
       <g className="cena__camera">
         <g className="cena__estrelas cena__estrelas--longe">
           {ESTRELAS.filter((_, i) => i % 2).map(([x, y, r], i) => (
@@ -115,8 +118,14 @@ export function CenaCap1({ momento }: PropsCena) {
           <circle cx="246" cy="168" r="4" className="cena__nave-janela" />
           <path d="M240 178 l-4 8 M254 178 l4 8" className="cena__traco" />
           <rect x="266" y="160" width="18" height="6" rx="3" className="cena__tanque" />
-          <path d="M244 190 C 200 300, 120 380, 120 520" className="cena__rastro" />
         </g>
+
+      </g>
+
+      {/* Chão: a praça, o bairro e o Broto. Desce um pouco quando o olhar sobe, e o Broto continua à vista. */}
+      <g className="cena__chao">
+        {/* Caminho da queda: termina na cratera, por isso fica no chão. */}
+        <path d="M244 150 C 200 300, 120 380, 120 520" className="cena__rastro cena__nave-rastro" />
 
         {/* Régua da altura já subida. */}
         <g className="cena__regua">
@@ -134,16 +143,16 @@ export function CenaCap1({ momento }: PropsCena) {
 
         {/* O bairro em volta da praça, apagado. Na lição, a primeira janela acende. */}
         <g className="cena__bairro">
-          {[[188, 488, 54, 56], [252, 470, 62, 72], [324, 492, 58, 52]].map(([x, y, w, h], i) => (
+          {[[-170, 490, 56, 54], [-100, 476, 60, 66], [188, 488, 54, 56], [252, 470, 62, 72], [324, 492, 58, 52], [410, 484, 60, 60], [486, 496, 54, 50]].map(([x, y, w, h], i) => (
             <g key={i}>
               <path d={`M${x} ${y} l${w / 2} -${h * 0.45} l${w / 2} ${h * 0.45} v${h} h-${w}z`} className="cena__casa" />
-              <rect x={x + w / 2 - 9} y={y + h * 0.25} width="18" height="18" rx="3" className={`cena__janela ${i === 1 ? "cena__janela--primeira" : ""}`} />
+              <rect x={x + w / 2 - 9} y={y + h * 0.25} width="18" height="18" rx="3" className={`cena__janela ${i === 3 ? "cena__janela--primeira" : ""}`} />
             </g>
           ))}
         </g>
 
         {/* Chão: morro de grama com a cratera da queda. */}
-        <path d="M0 560 Q 100 520 200 540 T 400 530 V 900 H 0 Z" className="cena__grama" />
+        <path d="M-200 545 Q -100 520 0 560 Q 100 520 200 540 T 400 530 T 600 540 V 900 H -200 Z" className="cena__grama" />
         <ellipse cx="120" cy="552" rx="54" ry="12" className="cena__cratera" />
         <g className="cena__fumaca">
           <circle cx="104" cy="530" r="9" /><circle cx="124" cy="518" r="11" /><circle cx="142" cy="532" r="8" />
@@ -156,6 +165,15 @@ export function CenaCap1({ momento }: PropsCena) {
               className="cena__nota" style={{ animationDelay: `${i * 0.7}s` }} />
           ))}
         </g>
+      {/* Rastro da queda (abertura do capítulo). */}
+        <path d="M640 -40 C 420 120, 200 300, 120 520" className="cena__queda-rastro" pathLength={1} />
+
+        {/* O Broto: no chão, ao lado da cratera. A câmera leva ele junto. */}
+        {ator && (
+          <foreignObject x="58" y="440" width="124" height="120" className="cena__ator">
+            <div className="cena__ator-caixa">{ator}</div>
+          </foreignObject>
+        )}
       </g>
     </svg>
   );

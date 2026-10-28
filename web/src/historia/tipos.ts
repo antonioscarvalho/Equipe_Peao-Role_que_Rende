@@ -35,7 +35,7 @@ export interface Passo {
   humor?: 'calmo' | 'feliz' | 'cansado' | 'orgulhoso' | 'apoio'
   opcoes?: { rotulo: string; resposta?: string; abreCrise?: boolean }[]
   /** Pergunta do app com tela própria (só a base implementa). */
-  especial?: 'nome' | 'idade' | 'motivo' | 'meta' | 'guardar'
+  especial?: 'nome' | 'aparencia' | 'idade' | 'motivo' | 'meta' | 'guardar'
 }
 
 export interface PropsJogo {

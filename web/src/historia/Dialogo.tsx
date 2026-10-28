@@ -82,19 +82,24 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
   const [cenaAtual, setCenaAtual] = useState<string | undefined>(parte === "antes" ? roteiro[0]?.cena : undefined);
 
   useModal(caixa, aoFechar, !crise);
-  useEffect(() => { titulo.current?.focus(); }, []);
+  const acoes = useRef<HTMLDivElement>(null);
+  const seguirRef = useRef<HTMLButtonElement>(null);
+  // A cada fala nova, o foco vai para a primeira escolha ou para "Continuar" (teclado e leitor seguem a conversa).
+  useEffect(() => {
+    const alvo = acoes.current?.querySelector<HTMLElement>("button, input") ?? seguirRef.current;
+    alvo?.focus({ preventScroll: true });
+  }, [fala, etapa, i]);
   // Antes não acabou e o roteiro está vazio: nada a dizer.
   useEffect(() => { if (parte === "antes" && !roteiro.length) aoConcluir(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { visivel, completo, completar } = useDigitando(fala, reduzir);
 
-  const fecharCrise = useCallback(() => { setCrise(false); titulo.current?.focus(); }, []);
+  const fecharCrise = useCallback(() => { setCrise(false); window.setTimeout(() => seguirRef.current?.focus(), 0); }, []);
 
   const ir = (proxima: Etapa, novaFala: string) => {
     setEtapa(proxima);
     setFala(novaFala);
     setRespondeu(false);
-    titulo.current?.focus();
   };
 
   const passo = etapa === "roteiro" ? roteiro[i] : undefined;
@@ -125,11 +130,9 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
       {/* Cena em tela cheia, como nos RPGs (Persona, Stardew Valley): a arte é a protagonista. */}
       <div className="historia-dialogo__palco">
         {CenaDoCapitulo
-          ? <CenaDoCapitulo momento={{ etapa: etapa === "roteiro" ? "abertura" : etapa, pergunta, cena: cenaDoMomento }} reduzir={reduzir} />
+          ? <CenaDoCapitulo momento={{ etapa: etapa === "roteiro" ? "abertura" : etapa, pergunta, cena: cenaDoMomento }} reduzir={reduzir}
+              ator={<Bichinho humor={humor} nivel={2} tamanho={104} reduzir={reduzir} aparencia={aparencia} />} />
           : <div className="historia-dialogo__ceu" />}
-        <div className={`historia-dialogo__broto historia-dialogo__broto--${humor}`}>
-          <Bichinho humor={humor} nivel={2} tamanho={120} reduzir={reduzir} aparencia={aparencia} />
-        </div>
       </div>
 
       <header className="historia-dialogo__topo">
@@ -138,8 +141,9 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
         <button className="historia-topo__botao" onClick={aoFechar}>Agora não</button>
       </header>
 
+      <div className="historia-dialogo__baixo">
       {/* Escolhas: lista curta acima da caixa de texto, do lado direito. */}
-      <div className="historia-dialogo__acoes">
+      <div className="historia-dialogo__acoes" ref={acoes}>
           {etapa === "roteiro" && passo && (
             respondeu || (!passo.opcoes && !passo.especial) ? null : passo.especial ? (
               <Especial key={i} tipo={passo.especial} conversa={conversa} mudar={mudarConversa}
@@ -204,11 +208,12 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             : etapa === "broto" && respondeu ? depoisDoBroto
             : etapa === "oferta" ? () => ir("licao", capitulo.licao)
             : null;
-          if (etapa === "licao") return <button className="historia-caixa__seguir" onClick={aoConcluir}>Concluir capítulo ▸</button>;
-          return seguir && <button className="historia-caixa__seguir" onClick={() => (completo ? seguir() : completar())}>
+          if (etapa === "licao") return <button ref={seguirRef} className="historia-caixa__seguir" onClick={aoConcluir}>Concluir capítulo ▸</button>;
+          return seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => (completo ? seguir() : completar())}>
             {completo ? "Continuar ▸" : "Mostrar tudo ▸"}</button>;
         })()}
         <small className="historia-nota">O Broto é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
+      </div>
       </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}
     </div>
