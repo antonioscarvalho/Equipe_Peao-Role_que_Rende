@@ -1,23 +1,69 @@
-export type Humor = "calmo" | "feliz" | "cansado" | "orgulhoso" | "apoio";
+import { useEffect, useRef } from 'react'
+
+export type Humor = 'calmo' | 'feliz' | 'cansado' | 'orgulhoso' | 'apoio'
 
 const descricao: Record<Humor, string> = {
-  calmo: "Bichinho calmo, respirando devagar",
-  feliz: "Bichinho feliz, pulando de alegria",
-  cansado: "Bichinho cansado, mas tranquilo. Ele se recupera com cuidado",
-  orgulhoso: "Bichinho orgulhoso, com os olhos fechados de alegria",
-  apoio: "Bichinho de braços abertos, respirando junto com você",
-};
+  calmo: 'Bichinho calmo, respirando devagar',
+  feliz: 'Bichinho feliz, pulando de alegria',
+  cansado: 'Bichinho cansado, mas tranquilo. Ele se recupera com cuidado',
+  orgulhoso: 'Bichinho orgulhoso, com os olhos fechados de alegria',
+  apoio: 'Bichinho de braços abertos, respirando junto com você',
+}
 
-type Props = { humor: Humor; nivel: number; tamanho?: number };
+type Props = { humor: Humor; nivel: number; tamanho?: number; reduzir?: boolean }
+
+/** Deslocamento máximo das pupilas, em unidades do viewBox (olho tem rx 8). */
+const MAX_OLHAR = 5
 
 /**
  * Mascote original em SVG com camadas animáveis por CSS.
  * Regra: ele nunca morre nem culpa. No humor "cansado" só fica encolhido e com cor mais fria.
  */
-export function Bichinho({ humor, nivel, tamanho = 220 }: Props) {
+export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false }: Props) {
+  const svgRef = useRef<SVGSVGElement>(null)
+  const pupilasRef = useRef<SVGGElement>(null)
+
+  // Olhos acompanham o mouse (ou o dedo). Atualiza direto no DOM, sem re-render, uma vez por quadro.
+  useEffect(() => {
+    const g = pupilasRef.current
+    if (!g) return
+    if (reduzir) {
+      g.style.transform = ''
+      return
+    }
+    let quadro = 0
+    const mover = (e: PointerEvent) => {
+      cancelAnimationFrame(quadro)
+      quadro = requestAnimationFrame(() => {
+        const svg = svgRef.current
+        if (!svg) return
+        const r = svg.getBoundingClientRect()
+        // Centro entre os olhos: (100, 108) no viewBox de 200.
+        const cx = r.left + r.width * 0.5
+        const cy = r.top + r.height * 0.54
+        const dx = e.clientX - cx
+        const dy = e.clientY - cy
+        const dist = Math.hypot(dx, dy) || 1
+        // Perto do bichinho o olhar se move pouco; longe, chega ao máximo.
+        const forca = Math.min(1, dist / (r.width * 1.2)) * MAX_OLHAR
+        g.style.transform = `translate(${(dx / dist) * forca}px, ${(dy / dist) * forca * 0.8}px)`
+      })
+    }
+    const centralizar = () => {
+      g.style.transform = ''
+    }
+    window.addEventListener('pointermove', mover, { passive: true })
+    document.addEventListener('pointerleave', centralizar)
+    return () => {
+      cancelAnimationFrame(quadro)
+      window.removeEventListener('pointermove', mover)
+      document.removeEventListener('pointerleave', centralizar)
+    }
+  }, [reduzir])
+
   return (
     <div className={`bicho bicho--${humor}`} style={{ width: tamanho, height: tamanho }}>
-      <svg viewBox="0 0 200 200" role="img" aria-label={descricao[humor]}>
+      <svg ref={svgRef} viewBox="0 0 200 200" role="img" aria-label={descricao[humor]}>
         <defs>
           {/* Contorno com textura de pincel: desloca a borda de leve, sem animar o filtro */}
           <filter id="pincel" x="-10%" y="-10%" width="120%" height="120%">
@@ -62,10 +108,12 @@ export function Bichinho({ humor, nivel, tamanho = 220 }: Props) {
           <g className="bicho__rosto">
             <g className="bicho__olhos">
               <g className="olho olho--aberto">
-                <ellipse cx="78" cy="108" rx="8" ry="11" />
-                <ellipse cx="122" cy="108" rx="8" ry="11" />
-                <circle className="olho__luz" cx="81" cy="103" r="3" />
-                <circle className="olho__luz" cx="125" cy="103" r="3" />
+                <g ref={pupilasRef} className="olho__pupilas">
+                  <ellipse cx="78" cy="108" rx="8" ry="11" />
+                  <ellipse cx="122" cy="108" rx="8" ry="11" />
+                  <circle className="olho__luz" cx="81" cy="103" r="3" />
+                  <circle className="olho__luz" cx="125" cy="103" r="3" />
+                </g>
               </g>
               <g className="olho olho--feliz">
                 <path d="M68 110 Q78 98 88 110" />
@@ -85,5 +133,5 @@ export function Bichinho({ humor, nivel, tamanho = 220 }: Props) {
         </g>
       </svg>
     </div>
-  );
+  )
 }

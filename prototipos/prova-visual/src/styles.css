@@ -72,6 +72,8 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .bochecha { fill: var(--rqr-rosa-escuro); opacity: .55; }
 .olho, .boca { opacity: 0; transition: opacity var(--rqr-dur-rapida); }
 .olho--aberto { transform-box: fill-box; transform-origin: center; }
+/* Pupilas seguindo o mouse: transição curta para suavizar; o piscar continua no grupo de fora. */
+.olho__pupilas { transition: transform 120ms var(--rqr-ease-padrao); }
 .bicho__broto path { fill: none; stroke: var(--rqr-azul-escuro); stroke-width: 4; stroke-linecap: round; }
 .bicho__broto .folha { fill: var(--rqr-verde-agro); stroke-width: 3; transform-box: fill-box; transform: scale(0); transition: transform var(--rqr-dur-lenta) var(--rqr-ease-pop); }
 .folha--1 { transform-origin: 100% 100%; }
@@ -226,3 +228,23 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .cena__brilho { position: absolute; top: 34%; right: 8%; z-index: 3; pointer-events: none; }
 .mini__icone--lottie { overflow: hidden; }
 .crise__alivio { display: flex; align-items: center; gap: 4px; }
+
+/* ---------- Interruptores (animações e sons) ---------- */
+.interruptores { display: flex; gap: 8px; align-items: flex-start; }
+
+/* ---------- Confete: explosão do centro para as laterais (missão concluída) ---------- */
+.confete { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+.confete__peca {
+  position: absolute; top: 50%; left: 50%; display: block;
+  translate: -50% -50%; opacity: 0;
+  animation: rqr-confete 1.5s var(--rqr-ease-padrao) forwards;
+}
+.confete__peca svg { width: 100%; height: 100%; display: block; overflow: visible; }
+@keyframes rqr-confete {
+  0%   { transform: translate(0, 0) scale(.3) rotate(0deg); opacity: 0; }
+  8%   { opacity: 1; }
+  55%  { transform: translate(var(--dx), var(--dy)) scale(1) rotate(calc(var(--giro) * .6)); opacity: 1; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + var(--queda))) scale(.9) rotate(var(--giro)); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .confete { display: none; } }
+.reduzir-animacoes .confete { display: none; }

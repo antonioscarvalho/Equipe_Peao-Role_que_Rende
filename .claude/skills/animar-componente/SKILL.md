@@ -21,7 +21,8 @@ description: Adiciona animações e microinterações a um componente ou tela us
    | Erro sem punir | `rqr-tremida` (curta, 300ms) |
    | Estado ativo | `rqr-on` |
    | Decoração parada | `rqr-flutuar` (lento, 4–6s) |
-   | Calma / crise | respiração 4s inspira, 4s segura, 6s expira (escala 0.85 ↔ 1.15) |
+   | Missão concluída (esforço) | Confete do tema (`Confete.tsx`): formas rqr do centro para as laterais, 1,5 s, nunca dourado nem moedas |
+| Calma / crise | respiração 4s inspira, 4s segura, 6s expira (escala 0.85 ↔ 1.15) |
 2. **Use os tokens**, não valores soltos: `--rqr-dur-*` e `--rqr-ease-*`. UI entre 150 e 600ms.
 3. **Anime só `transform` e `opacity`** (fluido a 60fps, inclusive em Android antigo). Evite animar `width`, `height`, `top`, `box-shadow` em loop.
 4. **Acessibilidade obrigatória:**

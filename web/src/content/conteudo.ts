@@ -5,6 +5,7 @@ import checkinJson from './checkin.json'
 import metasJson from './metas.json'
 import dinheiroJson from './dinheiro.json'
 import demoOpenFinanceJson from './open-finance-demo.json'
+import pausasJson from './pausas.json'
 
 export interface CanalDeAjuda {
   id: string
@@ -80,3 +81,6 @@ export const conteudoOpenFinanceDemo = demoOpenFinanceJson
 export function preencher(texto: string, valores: Record<string, string | number>): string {
   return texto.replace(/\{(\w+)\}/g, (inteiro, chave: string) => (chave in valores ? String(valores[chave]) : inteiro))
 }
+
+/** Textos das pausas (minijogos calmos, sem pontuação, sem sorte). */
+export const conteudoPausas = pausasJson

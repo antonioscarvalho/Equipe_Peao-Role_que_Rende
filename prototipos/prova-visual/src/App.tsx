@@ -5,7 +5,9 @@ import { Contador } from "./Contador";
 import { Respiracao } from "./Respiracao";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
+import { Confete } from "./Confete";
 import type { NomeIcone } from "./icones-data";
+import { ligarSons, tocar, tocarMissao } from "./sons";
 
 type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
 
@@ -38,10 +40,16 @@ export default function App() {
   const [protegido, setProtegido] = useState(1240);
   const [crise, setCrise] = useState(false);
   const [moedaKey, setMoedaKey] = useState(0);
+  const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
   const [aviso, setAviso] = useState("");
+  // Sons das missões ligados por padrão; o interruptor desliga.
+  // A respiração (SOS) continua sem som por padrão, conforme spec 003 CA-3.
+  const [sons, setSons] = useState(true);
+
+  useEffect(() => { ligarSons(sons); }, [sons]);
 
   useEffect(() => {
     document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
@@ -52,8 +60,18 @@ export default function App() {
     setFeitas((f) => [...f, m.id]);
     setProtegido((v) => v + m.valor);
     setMoedaKey((k) => k + 1);
+    setConfete((c) => c + 1);
     setHumor("feliz");
-    setAviso(`Missão concluída: ${m.texto}. Mais um lugar do bairro foi reconstruído.`);
+    tocarMissao(feitas.length + 1, missoes.length);
+    window.setTimeout(() => tocar("moeda"), 250);
+    window.setTimeout(() => tocar("folha"), 650);
+    if (feitas.length + 1 === missoes.length) {
+      // Todas concluídas: conquista do dia, depois da moeda e da folha.
+      window.setTimeout(() => tocar("conquista"), 1300);
+    }
+    setAviso(feitas.length + 1 === missoes.length
+      ? `Todas as missões de hoje concluídas! O bairro inteiro agradece.`
+      : `Missão concluída: ${m.texto}. Mais um lugar do bairro foi reconstruído.`);
     window.setTimeout(() => setHumor((h) => (h === "feliz" ? "calmo" : h)), 2600);
   }, [feitas]);
 
@@ -71,16 +89,23 @@ export default function App() {
             <p className="topo__oi">Oi, Lucas</p>
             <h1 className="topo__titulo"><span className="rqr-realce rqr-anim-marca-texto">Seu rolê</span> de hoje</h1>
           </div>
+          <div className="interruptores">
           <label className="interruptor">
             <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
             <span className="interruptor__trilho" aria-hidden="true" />
             <span className="interruptor__texto">Reduzir animações</span>
           </label>
+          <label className="interruptor">
+            <input type="checkbox" checked={sons} onChange={(e) => { setSons(e.target.checked); if (e.target.checked) { ligarSons(true); tocar("clique"); } }} />
+            <span className="interruptor__trilho" aria-hidden="true" />
+            <span className="interruptor__texto">Sons</span>
+          </label>
+          </div>
         </header>
 
         <section className="cena" aria-label="Seu bichinho">
           <div className="balao" key={humor}>{falas[humor]}</div>
-          <Bichinho humor={humor} nivel={nivel} />
+          <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} />
           <Bairro construidas={construidas} />
           {moedaKey > 0 && humor === "feliz" && (
             <div className="cena__brilho" key={moedaKey}>
@@ -149,6 +174,7 @@ export default function App() {
 
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
+      <Confete disparo={confete} reduzir={reduzir} />
       {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir} />}
     </div>
   );

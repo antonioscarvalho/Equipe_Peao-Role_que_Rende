@@ -4,11 +4,13 @@ import { Circulo } from '@/app/circulo/Circulo'
 import { Crise } from '@/app/crise/Crise'
 import { Dinheiro } from '@/app/dinheiro/Dinheiro'
 import { type AbaInicio, Inicio } from '@/app/inicio/Inicio'
+import { Pausas } from '@/app/pausas/Pausas'
 import { Plano } from '@/app/plano/Plano'
 import { Sos } from '@/app/sos/Sos'
 import { Decoracao } from '@/components/Decoracao'
 import { Icone } from '@/components/Icone'
 import { Respiracao } from '@/components/Respiracao'
+import { ligarSons, tocar } from '@/components/sons'
 import { conteudoPrevencao } from '@/content/conteudo'
 import { useRota } from '@/hooks/useRota'
 
@@ -17,6 +19,7 @@ function App() {
   // Gatilhos que chegam de outra tela (pós-lapso da 004) ficam só em memória, nunca na URL.
   const [gatilhosIniciais, setGatilhosIniciais] = useState<string[]>([])
   const [reduzir, setReduzir] = useState(false)
+  const [sons, setSons] = useState(false)
   const [abaInicio, setAbaInicio] = useState<AbaInicio>('role')
   const [respirandoCrise, setRespirandoCrise] = useState(false)
 
@@ -42,7 +45,7 @@ function App() {
   const emRole = rota === '/' && abaInicio === 'role'
   const emDiario = (rota === '/' && abaInicio === 'diario') || rota === '/checkin'
   const emCofre = rota === '/dinheiro'
-  const emApoio = rota === '/plano' || rota === '/circulo'
+  const emApoio = rota === '/plano' || rota === '/circulo' || rota === '/pausas'
 
   return (
     <div className="palco">
@@ -52,16 +55,33 @@ function App() {
           <button type="button" className="topo__marca" onClick={irParaRole}>
             Guardião
           </button>
-          <label className="interruptor" title="Reduzir animações">
-            <input
-              type="checkbox"
-              checked={reduzir}
-              onChange={(e) => setReduzir(e.target.checked)}
-              aria-label="Reduzir animações"
-            />
-            <span className="interruptor__trilho" aria-hidden="true" />
-            <span className="interruptor__texto">Reduzir animações</span>
-          </label>
+          <div className="interruptores">
+            <label className="interruptor" title="Reduzir animações">
+              <input
+                type="checkbox"
+                checked={reduzir}
+                onChange={(e) => setReduzir(e.target.checked)}
+                aria-label="Reduzir animações"
+              />
+              <span className="interruptor__trilho" aria-hidden="true" />
+              <span className="interruptor__texto">Reduzir animações</span>
+            </label>
+            <label className="interruptor" title="Sons">
+              <input
+                type="checkbox"
+                checked={sons}
+                onChange={(e) => {
+                  const ativo = e.target.checked
+                  setSons(ativo)
+                  ligarSons(ativo)
+                  if (ativo) tocar('clique')
+                }}
+                aria-label="Sons"
+              />
+              <span className="interruptor__trilho" aria-hidden="true" />
+              <span className="interruptor__texto">Sons</span>
+            </label>
+          </div>
           {/* Saída para a crise a 1 toque de qualquer tela (skill seguranca-e-crise). */}
           {rota !== '/ajuda' && (
             <button type="button" className="topo__ajuda" onClick={() => ir('/ajuda')}>
@@ -72,7 +92,7 @@ function App() {
 
         <main className="conteudo">
           {emApoio && (
-            <div className="apoio-abas" role="tablist" aria-label="Opções de apoio">
+            <div className="apoio-abas apoio-abas--3" role="tablist" aria-label="Opções de apoio">
               <button
                 type="button"
                 className={`apoio-aba ${rota === '/plano' ? 'is-on' : ''}`}
@@ -89,6 +109,14 @@ function App() {
               >
                 {conteudoPrevencao.atalhos.circulo}
               </button>
+              <button
+                type="button"
+                className={`apoio-aba ${rota === '/pausas' ? 'is-on' : ''}`}
+                aria-current={rota === '/pausas' ? 'page' : undefined}
+                onClick={() => ir('/pausas')}
+              >
+                Pausas pra cabeça
+              </button>
             </div>
           )}
 
@@ -101,6 +129,7 @@ function App() {
               aoAbrirDinheiro={() => ir('/dinheiro')}
               aoAbrirPlano={() => abrirPlano()}
               aoAbrirCirculo={() => ir('/circulo')}
+              aoAbrirPausas={() => ir('/pausas')}
               reduzir={reduzir}
             />
           )}
@@ -110,6 +139,7 @@ function App() {
             <Plano gatilhosIniciais={gatilhosIniciais} aoAbrirCirculo={() => ir('/circulo')} aoVoltar={irParaRole} />
           )}
           {rota === '/circulo' && <Circulo aoAbrirPlano={() => abrirPlano()} aoVoltar={irParaRole} />}
+          {rota === '/pausas' && <Pausas aoVoltar={irParaRole} />}
           {rota === '/sos' && <Sos aoPedirAjuda={() => ir('/ajuda')} aoTerminar={irParaRole} />}
           {rota === '/ajuda' && <Crise aoVoltar={irParaRole} />}
         </main>

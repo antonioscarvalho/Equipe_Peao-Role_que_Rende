@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Animacao } from './Animacao'
 import { Bichinho } from './Bichinho'
 import { Icone } from './Icone'
+import { tocar } from './sons'
 
 const fases = [
   { nome: 'Inspire', seg: 4, classe: 'inspira' },
@@ -20,6 +21,8 @@ interface RespiracaoProps {
 /** Momento de crise/vontade: respiração guiada 4-4-6 com o bichinho. Apoio complementar, com canais reais de ajuda. */
 export function Respiracao({ aoFechar, aoIrParaSos, reduzir = false }: RespiracaoProps) {
   const [ciclo, setCiclo] = useState(0)
+  // Spec 003 CA-3: sem som por padrão no momento de crise; a pessoa pode ligar aqui.
+  const [comSom, setComSom] = useState(false)
   const [fase, setFase] = useState(0)
   const [resta, setResta] = useState<number>(fases[0].seg)
   const terminou = ciclo >= CICLOS
@@ -49,6 +52,15 @@ export function Respiracao({ aoFechar, aoIrParaSos, reduzir = false }: Respiraca
     return () => window.removeEventListener('keydown', esc)
   }, [aoFechar])
 
+  // Tom calmo marcando o ritmo, só se a pessoa ligou os sons. "Segure" fica em silêncio.
+  useEffect(() => {
+    if (terminou) return
+    const c = fases[fase].classe
+    if (!comSom) return
+    if (c === 'inspira') tocar('inspira')
+    if (c === 'expira') tocar('expira')
+  }, [fase, ciclo, terminou, comSom])
+
   const f = fases[fase]
 
   return (
@@ -70,9 +82,17 @@ export function Respiracao({ aoFechar, aoIrParaSos, reduzir = false }: Respiraca
             <span className="onda__anel onda__anel--1" />
             <span className="onda__anel onda__anel--2" />
             <div className="onda__centro">
-              <Bichinho humor="apoio" nivel={1} tamanho={150} />
+              <Bichinho humor="apoio" nivel={1} tamanho={150} reduzir={reduzir} />
             </div>
           </div>
+          <button
+            type="button"
+            className="crise-modal__som-link"
+            onClick={() => setComSom((v) => !v)}
+            aria-pressed={comSom}
+          >
+            {comSom ? 'Desligar som da respiração' : 'Ligar som da respiração'}
+          </button>
           <p className="crise-modal__fase" aria-live="polite">
             {f.nome} <b>{resta}</b>
           </p>
@@ -90,7 +110,7 @@ export function Respiracao({ aoFechar, aoIrParaSos, reduzir = false }: Respiraca
       ) : (
         <div className="crise-modal__fim rqr-escalonado">
           <div className="crise-modal__alivio">
-            <Bichinho humor="feliz" nivel={2} tamanho={130} />
+            <Bichinho humor="feliz" nivel={2} tamanho={130} reduzir={reduzir} />
             <Animacao nome="aliviado" tamanho={84} reduzir={reduzir} rotulo="Rosto aliviado" />
           </div>
           <h2 id="respiracao-titulo" className="crise-modal__titulo">

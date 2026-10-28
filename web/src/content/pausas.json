@@ -1,0 +1,83 @@
+{
+  "revisaoClinica": "PENDENTE: textos escritos pela equipe, sem revisão de profissional de saúde mental.",
+  "titulo": "Pausas pra cabeça",
+  "lead": "Três atividades calmas pra ocupar as mãos e a mente. Sem pontos, sem tempo correndo, sem sorte. Faz no seu ritmo.",
+  "aterramento": {
+    "nome": "5 sentidos",
+    "descricao": "Traz a atenção pro agora, um sentido por vez.",
+    "fonte": "Técnica de aterramento 5-4-3-2-1, usada em manejo de ansiedade.",
+    "passos": [
+      { "quantidade": 5, "pedido": "Olhe em volta. Ache 5 coisas que você consegue ver." },
+      { "quantidade": 4, "pedido": "Agora 4 coisas que você consegue tocar. Sinta a textura." },
+      { "quantidade": 3, "pedido": "3 sons que você consegue ouvir, perto ou longe." },
+      { "quantidade": 2, "pedido": "2 cheiros. Se não sentir nenhum, lembre de 2 cheiros que você gosta." },
+      { "quantidade": 1, "pedido": "1 gosto na boca. Pode tomar um gole d'água." }
+    ],
+    "fim": "Pronto. Você trouxe a cabeça pro presente. Se a vontade ainda tá forte, o botão \"Bateu a vontade?\" continua aqui."
+  },
+  "pensamentos": {
+    "nome": "Pensamento ou fato?",
+    "descricao": "Olha de perto as frases que a vontade de apostar costuma falar.",
+    "fonte": "Correção de erros de pensamento sobre o jogo (Ladouceur et al., 2001). Ver docs/pesquisa/02-intervencoes.md.",
+    "cartas": [
+      {
+        "id": "quase",
+        "frase": "Eu quase ganhei. Na próxima vai.",
+        "opcoes": ["Quase ganhar mostra que tô chegando perto", "Quase ganhar é perder, e a próxima rodada não lembra da anterior"],
+        "realista": 1,
+        "explicacao": "O \"quase\" é desenhado pra dar a sensação de que falta pouco. Cada rodada é independente: perder por pouco não aumenta a chance da próxima."
+      },
+      {
+        "id": "recuperar",
+        "frase": "Preciso apostar pra recuperar o que perdi.",
+        "opcoes": ["Correr atrás da perda costuma aumentar a dívida", "Se eu parar agora, perco tudo de vez"],
+        "realista": 0,
+        "explicacao": "Tentar recuperar a perda é um dos sinais mais comuns do jogo problemático. O dinheiro perdido não volta apostando mais; parar é o que protege o que ainda está com você."
+      },
+      {
+        "id": "controle",
+        "frase": "Eu entendo de futebol, então tenho vantagem.",
+        "opcoes": ["Conhecimento ajuda, mas não controla o resultado nem a margem da casa", "Quem estuda o jogo sempre ganha no fim"],
+        "realista": 0,
+        "explicacao": "Saber do esporte dá sensação de controle. Só que as odds já incluem a margem da casa, e o acaso decide boa parte do resultado."
+      },
+      {
+        "id": "sequencia",
+        "frase": "Perdi tanto seguido que agora tem que vir uma vitória.",
+        "opcoes": ["A sorte tá devendo uma pra mim", "O resultado não tem memória; perder seguido não faz ganhar"],
+        "realista": 1,
+        "explicacao": "Isso tem nome: falácia do apostador. Moeda, roleta ou jogo de futebol não \"compensam\" perdas anteriores."
+      },
+      {
+        "id": "so-hoje",
+        "frase": "Só hoje, só um pouquinho, não tem problema.",
+        "opcoes": ["Um pouquinho não conta", "Essa frase costuma aparecer bem antes de uma recaída maior"],
+        "realista": 1,
+        "explicacao": "A vontade negocia. Perceber a frase \"só hoje\" já é um passo: dá pra adiar a decisão e esperar a onda passar."
+      }
+    ],
+    "fim": "Você olhou de frente pra frases que a vontade usa. Elas vão voltar às vezes, e agora você reconhece."
+  },
+  "contas": {
+    "nome": "Arruma o mês",
+    "descricao": "Organize um mês de exemplo e veja o que vem primeiro.",
+    "fonte": "Dados sintéticos de um orçamento de R$ 2.500 por mês. Não usa nenhuma conta real.",
+    "renda": 2500,
+    "categorias": [
+      { "id": "essencial", "nome": "Essencial", "dica": "Casa, comida, saúde, transporte" },
+      { "id": "divida", "nome": "Dívida", "dica": "O que precisa negociar ou pagar" },
+      { "id": "espera", "nome": "Pode esperar", "dica": "Dá pra adiar ou cortar este mês" }
+    ],
+    "itens": [
+      { "id": "aluguel", "nome": "Aluguel", "valor": 800, "sugerida": "essencial" },
+      { "id": "mercado", "nome": "Mercado", "valor": 550, "sugerida": "essencial" },
+      { "id": "luz", "nome": "Luz e água", "valor": 180, "sugerida": "essencial" },
+      { "id": "onibus", "nome": "Passagem de ônibus", "valor": 220, "sugerida": "essencial" },
+      { "id": "cartao", "nome": "Fatura do cartão atrasada", "valor": 400, "sugerida": "divida" },
+      { "id": "amigo", "nome": "Dinheiro emprestado do amigo", "valor": 150, "sugerida": "divida" },
+      { "id": "streaming", "nome": "Dois streamings", "valor": 70, "sugerida": "espera" },
+      { "id": "delivery", "nome": "Delivery no fim de semana", "valor": 130, "sugerida": "espera" }
+    ],
+    "fim": "Não existe jeito único de organizar. Se as dívidas pesam, vale procurar renegociação no seu banco ou no Procon da sua cidade."
+  }
+}

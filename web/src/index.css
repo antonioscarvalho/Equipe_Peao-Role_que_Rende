@@ -1885,7 +1885,7 @@ a.botao {
   transform: translateY(2px);
 }
 
-/* ---------- Seletor de sub-abas dentro de Apoio (Plano / Círculo) ---------- */
+/* ---------- Seletor de sub-abas dentro de Apoio (Plano / Círculo / Pausas) ---------- */
 .apoio-abas {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1893,15 +1893,21 @@ a.botao {
   padding: 12px 16px 0;
 }
 
+.apoio-abas--3 {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
 .apoio-aba {
-  padding: 8px 12px;
+  padding: 8px 8px;
   border: 3px solid var(--rqr-azul-escuro);
   border-radius: 99px;
   background: var(--rqr-branco);
   color: var(--rqr-azul-escuro);
   font-family: var(--rqr-font-titulo);
   font-weight: 800;
-  font-size: 13px;
+  font-size: 12px;
+  text-align: center;
   cursor: pointer;
   transition: transform var(--rqr-dur-rapida) var(--rqr-ease-pop), background var(--rqr-dur-base);
 }
@@ -1910,4 +1916,101 @@ a.botao {
   background: var(--rqr-azul-escuro);
   color: var(--rqr-amarelo);
   box-shadow: 0 3px 0 var(--rqr-azul);
+}
+
+/* ---------- Pupilas, Interruptores, Confete e Som (Prova Visual Dev) ---------- */
+.olho__pupilas {
+  transition: transform 120ms var(--rqr-ease-padrao);
+}
+
+.interruptores {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.crise-modal__som-link {
+  background: none;
+  border: 0;
+  color: var(--rqr-amarelo);
+  text-decoration: underline;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.confete {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.confete__peca {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  translate: -50% -50%;
+  opacity: 0;
+  animation: rqr-confete 1.5s var(--rqr-ease-padrao) forwards;
+}
+
+.confete__peca svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+@keyframes rqr-confete {
+  0% {
+    transform: translate(0, 0) scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  55% {
+    transform: translate(var(--dx), var(--dy)) scale(1) rotate(calc(var(--giro) * 0.6));
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), calc(var(--dy) + var(--queda))) scale(0.9) rotate(var(--giro));
+    opacity: 0;
+  }
+}
+
+.reduzir-animacoes .confete {
+  display: none;
+}
+
+/* Pausas pra cabeça: visual calmo, sem animação de vitória. */
+.pausa__pedido {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.pausa__pontos {
+  display: flex;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pausa__ponto {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+}
+
+.pausa__ponto--feito {
+  background: currentColor;
+}
+
+.pausa__resumo {
+  padding-left: 1.25rem;
 }

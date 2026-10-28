@@ -6,11 +6,13 @@ import { Bichinho, type Humor } from '@/components/Bichinho'
 import { Botao } from '@/components/Botao'
 import { Cartao } from '@/components/Cartao'
 import { Chips } from '@/components/Chips'
+import { Confete } from '@/components/Confete'
 import { Contador } from '@/components/Contador'
 import { ContadorAnimado } from '@/components/ContadorAnimado'
 import { Icone } from '@/components/Icone'
 import type { NomeIcone } from '@/components/icones-data'
 import { Respiracao } from '@/components/Respiracao'
+import { tocar, tocarMissao } from '@/components/sons'
 import { conteudoCheckin, conteudoDinheiro } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
 import { estagioGuardiao, formatarReais } from '@/domain/progresso'
@@ -24,6 +26,7 @@ interface InicioProps {
   aoAbrirDinheiro: () => void
   aoAbrirPlano: () => void
   aoAbrirCirculo: () => void
+  aoAbrirPausas?: () => void
   /** Aba ativa dentro do Início ('role' = prova visual limpa; 'diario' = check-in Como foi hoje?) */
   abaAtiva?: AbaInicio
   aoMudarAba?: (aba: AbaInicio) => void
@@ -73,6 +76,7 @@ export function Inicio({
   const [feitas, setFeitas] = useState<number[]>([])
   const [humorManual, setHumorManual] = useState<Humor | null>(null)
   const [moedaKey, setMoedaKey] = useState(0)
+  const [confete, setConfete] = useState(0)
   const [avisoMissao, setAvisoMissao] = useState('')
   const [respirandoCrise, setRespirandoCrise] = useState(false)
 
@@ -80,6 +84,8 @@ export function Inicio({
     registrar(false)
     setAnotado(true)
     setMoedaKey((k) => k + 1)
+    setConfete((c) => c + 1)
+    tocar('conquista')
     setHumorManual('feliz')
     window.setTimeout(() => setHumorManual((h) => (h === 'feliz' ? null : h)), 2600)
   }
@@ -99,11 +105,17 @@ export function Inicio({
   const concluirMissao = useCallback(
     (m: Missao) => {
       if (feitas.includes(m.id)) return
+      const novoTotal = feitas.length + 1
       setFeitas((f) => [...f, m.id])
       setMoedaKey((k) => k + 1)
+      setConfete((c) => c + 1)
+      tocarMissao(novoTotal, missoes.length)
       setHumorManual('feliz')
       setAvisoMissao(`Missão concluída: ${m.texto}. Mais um lugar do bairro foi reconstruído.`)
-      window.setTimeout(() => setHumorManual((h) => (h === 'feliz' ? null : h)), 2600)
+      window.setTimeout(
+        () => setHumorManual((h) => (h === 'feliz' ? (novoTotal === missoes.length ? 'orgulhoso' : null) : h)),
+        2600,
+      )
     },
     [feitas],
   )
@@ -150,7 +162,7 @@ export function Inicio({
             <div className="balao" key={humorBicho}>
               {falas[humorBicho]}
             </div>
-            <Bichinho humor={humorBicho} nivel={nivel} tamanho={200} />
+            <Bichinho humor={humorBicho} nivel={nivel} tamanho={200} reduzir={reduzir} />
             <Bairro construidas={construidas} />
             {(anotado || (moedaKey > 0 && humorBicho === 'feliz')) && (
               <div className="cena__brilho" key={moedaKey}>
@@ -167,7 +179,10 @@ export function Inicio({
                 type="button"
                 className={`chip-humor ${humorBicho === h.id ? 'is-on' : ''}`}
                 aria-pressed={humorBicho === h.id}
-                onClick={() => setHumorManual(h.id)}
+                onClick={() => {
+                  tocar('clique')
+                  setHumorManual(h.id)
+                }}
               >
                 {h.rotulo}
               </button>
@@ -316,6 +331,8 @@ export function Inicio({
       <p className="sr-only" aria-live="polite">
         {avisoMissao}
       </p>
+
+      <Confete disparo={confete} reduzir={reduzir} />
 
       {respirandoCrise && (
         <Respiracao
