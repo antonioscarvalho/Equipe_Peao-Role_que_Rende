@@ -1,5 +1,7 @@
 import type { ComponentType } from "react";
 import type { Capitulo, IdCapitulo, PropsJogo } from "../tipos";
+import { PuloDoBichinho } from "../../jogos/pulo/PuloDoBichinho";
+import { cap1 } from "./cap1";
 
 /**
  * Capítulos prontos. UMA LINHA por capítulo (e um import), para não dar conflito de merge.
@@ -9,6 +11,7 @@ import type { Capitulo, IdCapitulo, PropsJogo } from "../tipos";
 export type EntradaCapitulo = { capitulo: Capitulo; jogo?: ComponentType<PropsJogo>; nomeJogo?: string };
 
 export const capitulos: Partial<Record<IdCapitulo, EntradaCapitulo>> = {
+  cap1: { capitulo: cap1, jogo: PuloDoBichinho, nomeJogo: "Pulo do Bichinho" },
 };
 
 /** Títulos do mapa para quem ainda não chegou (narrativa-broto.md, "Mapa"). */

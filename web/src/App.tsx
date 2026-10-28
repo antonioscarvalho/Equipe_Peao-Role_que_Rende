@@ -7,7 +7,7 @@ import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
 import { AjudaAgora } from "./AjudaAgora";
-import { PuloDoBichinho } from "./PuloDoBichinho";
+import { PuloDoBichinho } from "./jogos/pulo/PuloDoBichinho";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
 import { BotaoPersonalizar, useAparenciaVisivel } from "./personalizacao";
