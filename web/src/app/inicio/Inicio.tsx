@@ -11,10 +11,12 @@ import { ContadorAnimado } from '@/components/ContadorAnimado'
 import { Icone } from '@/components/Icone'
 import type { NomeIcone } from '@/components/icones-data'
 import { Respiracao } from '@/components/Respiracao'
-import { conteudoCheckin, conteudoDinheiro, conteudoPrevencao } from '@/content/conteudo'
+import { conteudoCheckin, conteudoDinheiro } from '@/content/conteudo'
 import { dataPorExtenso } from '@/domain/datas'
 import { estagioGuardiao, formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
+
+export type AbaInicio = 'role' | 'diario'
 
 interface InicioProps {
   aoAbrirSos: () => void
@@ -22,6 +24,9 @@ interface InicioProps {
   aoAbrirDinheiro: () => void
   aoAbrirPlano: () => void
   aoAbrirCirculo: () => void
+  /** Aba ativa dentro do Início ('role' = prova visual limpa; 'diario' = check-in Como foi hoje?) */
+  abaAtiva?: AbaInicio
+  aoMudarAba?: (aba: AbaInicio) => void
   /** Os testes passam um dia fixo; no app vale o dia de hoje do aparelho. */
   hoje?: string
   reduzir?: boolean
@@ -54,13 +59,12 @@ const falas: Record<Humor, string> = {
   apoio: 'Respira comigo.',
 }
 
-/** Tela inicial integrando a prova visual completa e a lógica de domínio. */
+/** Tela inicial dividida entre a aba 'role' (100% prova-visual) e a aba 'diario' (Check-in). */
 export function Inicio({
   aoAbrirSos,
   aoApostar,
   aoAbrirDinheiro,
-  aoAbrirPlano,
-  aoAbrirCirculo,
+  abaAtiva = 'role',
   hoje,
   reduzir = false,
 }: InicioProps) {
@@ -132,183 +136,182 @@ export function Inicio({
 
   return (
     <section className="tela tela--inicio" aria-labelledby="inicio-titulo">
-      <div className="inicio-saudacao">
-        <p className="topo__oi">Oi, Lucas</p>
-        <h1 id="inicio-titulo" className="topo__titulo">
-          <span className="rqr-realce rqr-anim-marca-texto">Seu rolê</span> de hoje
-        </h1>
-      </div>
-
-      {/* Cena Viva do Bichinho e Bairro reconstruído */}
-      <section className="cena" aria-label="Seu bichinho">
-        <div className="balao" key={humorBicho}>
-          {falas[humorBicho]}
-        </div>
-        <Bichinho humor={humorBicho} nivel={nivel} tamanho={200} />
-        <Bairro construidas={construidas} />
-        {(anotado || (moedaKey > 0 && humorBicho === 'feliz')) && (
-          <div className="cena__brilho" key={moedaKey}>
-            <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
+      {abaAtiva === 'role' ? (
+        <>
+          <div className="inicio-saudacao">
+            <p className="topo__oi">Oi, Lucas</p>
+            <h1 id="inicio-titulo" className="topo__titulo">
+              <span className="rqr-realce rqr-anim-marca-texto">Seu rolê</span> de hoje
+            </h1>
           </div>
-        )}
-      </section>
 
-      {/* Seletores interativos de humor do Bichinho (prova visual) */}
-      <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
-        {humoresDemo.map((h) => (
-          <button
-            key={h.id}
-            type="button"
-            className={`chip-humor ${humorBicho === h.id ? 'is-on' : ''}`}
-            aria-pressed={humorBicho === h.id}
-            onClick={() => setHumorManual(h.id)}
-          >
-            {h.rotulo}
-          </button>
-        ))}
-      </div>
-
-      {/* Cards de Resumo Rápido com entrada escalonada e moeda giratória */}
-      <div className="cards-mini rqr-escalonado">
-        <article className="card-mini">
-          <span className="card-mini__icone card-mini__icone--broto">
-            <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
-          </span>
-          <div>
-            <p className="card-mini__rotulo">Dias de cuidado</p>
-            <p className="card-mini__valor">
-              {progresso.totalSemApostar} {progresso.totalSemApostar === 1 ? 'dia' : 'dias'}
-            </p>
-            <p className="card-mini__nota">Dia difícil não zera nada.</p>
-          </div>
-        </article>
-
-        <button type="button" className="card-mini" onClick={aoAbrirDinheiro}>
-          <span className="card-mini__icone card-mini__icone--moeda" key={moedaKey}>
-            <span className={moedaKey ? 'moeda-badge rqr-anim-moeda' : 'moeda-badge'} aria-hidden="true">
-              R$
-            </span>
-          </span>
-          <div>
-            <p className="card-mini__rotulo">Dinheiro protegido</p>
-            <p className="card-mini__valor">
-              <ContadorAnimado valor={valorProtegido} reduzir={reduzir} />
-            </p>
-            <p className="card-mini__nota">Ver Open Finance →</p>
-          </div>
-        </button>
-      </div>
-
-      {/* Missões do Dia (prova visual) */}
-      <section aria-labelledby="missoes-titulo">
-        <div className="secao-missoes">
-          <h2 id="missoes-titulo">Missões do dia</h2>
-          <span className="progresso-barra" aria-label={`${feitas.length} de ${missoes.length} missões`}>
-            <span style={{ transform: `scaleX(${feitas.length / missoes.length})` }} />
-          </span>
-        </div>
-        <ul className="missoes rqr-escalonado">
-          {missoes.map((m) => {
-            const ok = feitas.includes(m.id)
-            return (
-              <li key={m.id}>
-                <button
-                  type="button"
-                  className={`missao ${ok ? 'is-ok' : ''}`}
-                  onClick={() => concluirMissao(m)}
-                  aria-pressed={ok}
-                >
-                  <span className="missao__icone">
-                    <Icone nome={ok ? 'check' : m.icone} />
-                  </span>
-                  <span className="missao__texto">{m.texto}</span>
-                  <span className="missao__valor">+ R$ {m.valor}</span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-        {feitas.length > 0 && (
-          <button type="button" className="link-reiniciar" onClick={reiniciarMissoes}>
-            Reiniciar demonstração
-          </button>
-        )}
-      </section>
-
-      {/* Botões de SOS e Respiração com pulso rqr-anim-on */}
-      <div className="sos-acoes">
-        <button type="button" className="botao--sos rqr-anim-on" onClick={() => setRespirandoCrise(true)}>
-          <Icone nome="wind" tamanho={28} /> Deu vontade · Respirar
-        </button>
-        <Botao variante="secundario" onClick={aoAbrirSos}>
-          Bateu a vontade?
-        </Botao>
-      </div>
-
-      <Cartao titulo={conteudoCheckin.pergunta}>
-        <div className="linha" role="group" aria-label={conteudoCheckin.pergunta}>
-          <Botao variante="secundario" aria-pressed={registroDeHoje?.apostou === false} onClick={naoApostei}>
-            {conteudoCheckin.naoApostei}
-          </Botao>
-          <Botao variante="secundario" aria-pressed={registroDeHoje?.apostou === true} onClick={apostei}>
-            {conteudoCheckin.apostei}
-          </Botao>
-        </div>
-        {/* Resposta serena (CA-2): só texto, sem som. */}
-        <p role="status" className="checkin__resposta">
-          {anotado ? conteudoCheckin.respostaNaoApostei : ''}
-        </p>
-        {registroDeHoje && (
-          <Chips
-            legenda={humor.legenda}
-            dica={humor.dica}
-            opcoes={humor.opcoes}
-            selecionados={registroDeHoje.humor ? [humor.opcoes[registroDeHoje.humor - 1]] : []}
-            aoMudar={escolherHumor}
-          />
-        )}
-        {estado === 'carregando' ? (
-          <div className="esqueleto esqueleto--contador" role="status" aria-label="Carregando seus registros" />
-        ) : (
-          <div className="jornada">
-            <div className="jornada__info">
-              <Contador
-                dias={progresso.totalSemApostar}
-                desde={progresso.inicio && dataPorExtenso(progresso.inicio, dia)}
-                noMes={progresso.diasSemApostarNoMes}
-                sequencia={progresso.sequenciaAtual}
-                diasSemRegistro={progresso.diasSemRegistroNoMes}
-              />
+          {/* Cena Viva do Bichinho e Bairro reconstruído */}
+          <section className="cena" aria-label="Seu bichinho">
+            <div className="balao" key={humorBicho}>
+              {falas[humorBicho]}
             </div>
-          </div>
-        )}
-        {/* CA-6: sem gasto informado, o card convida em vez de mostrar R$ 0. */}
-        {estado === 'pronto' && progresso.dinheiroPreservado !== null && (
-          <p className="checkin__dinheiro">
-            {conteudoDinheiro.resumoInicio}{' '}
-            <strong>
-              <Aproximado />
-              {formatarReais(progresso.dinheiroPreservado)}
-            </strong>
-            {meta && ` — ${meta}`}
-          </p>
-        )}
-        <Botao variante="secundario" onClick={aoAbrirDinheiro}>
-          {gastoSemanal === null ? conteudoDinheiro.convite : conteudoDinheiro.verDinheiro}
-        </Botao>
-      </Cartao>
+            <Bichinho humor={humorBicho} nivel={nivel} tamanho={200} />
+            <Bairro construidas={construidas} />
+            {(anotado || (moedaKey > 0 && humorBicho === 'feliz')) && (
+              <div className="cena__brilho" key={moedaKey}>
+                <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
+              </div>
+            )}
+          </section>
 
-      <nav className="linha grade-atalhos" aria-label="Prepare-se pros momentos difíceis">
-        <Botao variante="secundario" onClick={aoAbrirPlano}>
-          {conteudoPrevencao.atalhos.plano}
-        </Botao>
-        <Botao variante="secundario" onClick={aoAbrirCirculo}>
-          {conteudoPrevencao.atalhos.circulo}
-        </Botao>
-      </nav>
-      <p className="nota">
-        Este app é um apoio. Ele não substitui atendimento profissional. Seus registros ficam só neste celular.
-      </p>
+          {/* Seletores interativos de humor do Bichinho (prova visual) */}
+          <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
+            {humoresDemo.map((h) => (
+              <button
+                key={h.id}
+                type="button"
+                className={`chip-humor ${humorBicho === h.id ? 'is-on' : ''}`}
+                aria-pressed={humorBicho === h.id}
+                onClick={() => setHumorManual(h.id)}
+              >
+                {h.rotulo}
+              </button>
+            ))}
+          </div>
+
+          {/* Cards de Resumo Rápido com entrada escalonada e moeda giratória */}
+          <div className="cards-mini rqr-escalonado">
+            <article className="card-mini">
+              <span className="card-mini__icone card-mini__icone--broto">
+                <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
+              </span>
+              <div>
+                <p className="card-mini__rotulo">Dias de cuidado</p>
+                <p className="card-mini__valor">
+                  {progresso.totalSemApostar} {progresso.totalSemApostar === 1 ? 'dia' : 'dias'}
+                </p>
+                <p className="card-mini__nota">Dia difícil não zera nada.</p>
+              </div>
+            </article>
+
+            <button type="button" className="card-mini" onClick={aoAbrirDinheiro}>
+              <span className="card-mini__icone card-mini__icone--moeda" key={moedaKey}>
+                <span className={moedaKey ? 'moeda-badge rqr-anim-moeda' : 'moeda-badge'} aria-hidden="true">
+                  R$
+                </span>
+              </span>
+              <div>
+                <p className="card-mini__rotulo">Dinheiro protegido</p>
+                <p className="card-mini__valor">
+                  <ContadorAnimado valor={valorProtegido} reduzir={reduzir} />
+                </p>
+                <p className="card-mini__nota">Ver Open Finance →</p>
+              </div>
+            </button>
+          </div>
+
+          {/* Missões do Dia (prova visual) */}
+          <section aria-labelledby="missoes-titulo">
+            <div className="secao-missoes">
+              <h2 id="missoes-titulo">Missões do dia</h2>
+              <span className="progresso-barra" aria-label={`${feitas.length} de ${missoes.length} missões`}>
+                <span style={{ transform: `scaleX(${feitas.length / missoes.length})` }} />
+              </span>
+            </div>
+            <ul className="missoes rqr-escalonado">
+              {missoes.map((m) => {
+                const ok = feitas.includes(m.id)
+                return (
+                  <li key={m.id}>
+                    <button
+                      type="button"
+                      className={`missao ${ok ? 'is-ok' : ''}`}
+                      onClick={() => concluirMissao(m)}
+                      aria-pressed={ok}
+                    >
+                      <span className="missao__icone">
+                        <Icone nome={ok ? 'check' : m.icone} />
+                      </span>
+                      <span className="missao__texto">{m.texto}</span>
+                      <span className="missao__valor">+ R$ {m.valor}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+            {feitas.length > 0 && (
+              <button type="button" className="link-reiniciar" onClick={reiniciarMissoes}>
+                Reiniciar demonstração
+              </button>
+            )}
+          </section>
+        </>
+      ) : (
+        <>
+          <div className="inicio-saudacao">
+            <p className="topo__oi">Registro diário</p>
+            <h1 id="inicio-titulo" className="topo__titulo">
+              <span className="rqr-realce rqr-anim-marca-texto">Seu diário</span> de cuidado
+            </h1>
+          </div>
+
+          <Cartao titulo={conteudoCheckin.pergunta}>
+            <div className="linha" role="group" aria-label={conteudoCheckin.pergunta}>
+              <Botao variante="secundario" aria-pressed={registroDeHoje?.apostou === false} onClick={naoApostei}>
+                {conteudoCheckin.naoApostei}
+              </Botao>
+              <Botao variante="secundario" aria-pressed={registroDeHoje?.apostou === true} onClick={apostei}>
+                {conteudoCheckin.apostei}
+              </Botao>
+            </div>
+            {/* Resposta serena (CA-2): só texto, sem som. */}
+            <p role="status" className="checkin__resposta">
+              {anotado ? conteudoCheckin.respostaNaoApostei : ''}
+            </p>
+            {registroDeHoje && (
+              <Chips
+                legenda={humor.legenda}
+                dica={humor.dica}
+                opcoes={humor.opcoes}
+                selecionados={registroDeHoje.humor ? [humor.opcoes[registroDeHoje.humor - 1]] : []}
+                aoMudar={escolherHumor}
+              />
+            )}
+            {estado === 'carregando' ? (
+              <div className="esqueleto esqueleto--contador" role="status" aria-label="Carregando seus registros" />
+            ) : (
+              <div className="jornada">
+                <div className="jornada__info">
+                  <Contador
+                    dias={progresso.totalSemApostar}
+                    desde={progresso.inicio && dataPorExtenso(progresso.inicio, dia)}
+                    noMes={progresso.diasSemApostarNoMes}
+                    sequencia={progresso.sequenciaAtual}
+                    diasSemRegistro={progresso.diasSemRegistroNoMes}
+                  />
+                </div>
+              </div>
+            )}
+            {/* CA-6: sem gasto informado, o card convida em vez de mostrar R$ 0. */}
+            {estado === 'pronto' && progresso.dinheiroPreservado !== null && (
+              <p className="checkin__dinheiro">
+                {conteudoDinheiro.resumoInicio}{' '}
+                <strong>
+                  <Aproximado />
+                  {formatarReais(progresso.dinheiroPreservado)}
+                </strong>
+                {meta && ` — ${meta}`}
+              </p>
+            )}
+            <Botao variante="secundario" onClick={aoAbrirDinheiro}>
+              {gastoSemanal === null ? conteudoDinheiro.convite : conteudoDinheiro.verDinheiro}
+            </Botao>
+          </Cartao>
+
+          <Botao variante="secundario" onClick={aoAbrirSos}>
+            Bateu a vontade?
+          </Botao>
+
+          <p className="nota">
+            Este app é um apoio. Ele não substitui atendimento profissional. Seus registros ficam só neste celular.
+          </p>
+        </>
+      )}
 
       <p className="sr-only" aria-live="polite">
         {avisoMissao}

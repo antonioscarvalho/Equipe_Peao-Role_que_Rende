@@ -10,16 +10,19 @@ describe('App', () => {
     await apagarBanco()
   })
 
-  it('CA-1: o SOS está a 1 toque da tela inicial', async () => {
+  it('CA-1: o SOS e a Respiração 4-4-6 estão a 1 toque pela Bottom Tab Bar', async () => {
     render(<App />)
-    await userEvent.click(screen.getByRole('button', { name: 'Bateu a vontade?' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Deu vontade' }))
+    expect(screen.getByRole('heading', { name: /A vontade vem em onda/ })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: /Ir pro apoio passo a passo/ }))
     expect(screen.getByRole('heading', { name: 'Quanto tá a vontade agora?' })).toBeInTheDocument()
     expect(window.location.pathname).toBe('/sos')
   })
 
   it('CA-2: "Preciso de ajuda agora" leva à crise de qualquer tela', async () => {
     render(<App />)
-    await userEvent.click(screen.getByRole('button', { name: 'Bateu a vontade?' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Cofre' }))
     await userEvent.click(screen.getByRole('button', { name: 'Preciso de ajuda agora' }))
     expect(screen.getByRole('heading', { name: /momento muito difícil/ })).toBeInTheDocument()
   })
@@ -45,18 +48,17 @@ describe('App', () => {
 
     window.history.replaceState(null, '', '/qualquer-coisa')
     render(<App />)
-    expect(screen.getByRole('button', { name: 'Bateu a vontade?' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Deu vontade' })).toBeInTheDocument()
   })
 
-  it('spec 005: "Seu plano" e "Seu Círculo" abrem pelo início, sem dado na URL, com a ajuda no topo', async () => {
+  it('spec 005: a aba "Apoio" abre "Seu plano" e permite alternar para "Seu Círculo"', async () => {
     render(<App />)
-    await userEvent.click(screen.getByRole('button', { name: 'Seu plano' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Apoio' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Seu plano pros momentos difíceis' })).toBeInTheDocument()
     expect(window.location.pathname).toBe('/plano')
     expect(window.location.search).toBe('')
     expect(screen.getByRole('button', { name: 'Preciso de ajuda agora' })).toBeInTheDocument()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Guardião' }))
     await userEvent.click(screen.getByRole('button', { name: 'Seu Círculo' }))
     expect(screen.getByRole('heading', { level: 1, name: 'Seu Círculo de Confiança' })).toBeInTheDocument()
     expect(window.location.pathname).toBe('/circulo')
@@ -70,8 +72,9 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Seu Círculo de Confiança' })).toBeInTheDocument()
   })
 
-  it('spec 004: "Apostei" no início leva ao pós-lapso, e de lá à crise', async () => {
+  it('spec 004: na aba Check-in, "Apostei" leva ao pós-lapso, e de lá à crise', async () => {
     render(<App />)
+    await userEvent.click(screen.getByRole('button', { name: 'Check-in' }))
     await userEvent.click(screen.getByRole('button', { name: 'Apostei' }))
     expect(window.location.pathname).toBe('/checkin')
     expect(screen.getByRole('heading', { name: 'Obrigado por registrar.' })).toBeInTheDocument()
@@ -80,9 +83,9 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /momento muito difícil/ })).toBeInTheDocument()
   })
 
-  it('spec 004: o dinheiro preservado abre a partir do início', async () => {
+  it('spec 004: o dinheiro preservado abre pela aba Cofre ou pelo card da Home', async () => {
     render(<App />)
-    await userEvent.click(await screen.findByRole('button', { name: 'Quer ver quanto você preservou?' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Cofre' }))
     expect(window.location.pathname).toBe('/dinheiro')
     expect(screen.getByRole('heading', { name: 'Dinheiro preservado' })).toBeInTheDocument()
   })
