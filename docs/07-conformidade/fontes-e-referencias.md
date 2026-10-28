@@ -43,6 +43,20 @@ Mostrados na tela do dinheiro preservado como "coisas do dia a dia". Conferidos 
 
 Atualizar antes do pitch: a ANP publica toda semana e o DIEESE todo mês. Os valores ficam em `web/src/content/metas.json`.
 
+## Gamificação
+
+Base das skills `gamificacao-etica` e `pitch-gamificacao` (lista indicada pela equipe em 28/10/2026). Os resumos nas skills são interpretação da equipe e não reproduzem trechos.
+
+| Livro | Autor | Edição |
+|---|---|---|
+| *A Realidade em Jogo* | Jane McGonigal | Best Seller, 1ª ed., 2012 |
+| *Gamificar – Como a Gamificação motiva as pessoas a fazerem coisas extraordinárias* | Brian Burke | DVS Editora, 1ª ed., 2015 |
+| *The Gamification Toolkit: Dynamics, Mechanics, and Components for the Win* | Kevin Werbach (com Dan Hunter) | Wharton School Press, 2015 |
+| *Actionable Gamification: Beyond Points, Badges, and Leaderboards* | Yu-kai Chou | Octalysis Media, 2015 |
+| *Game Thinking* | Amy Jo Kim | gamethinking.io, 2ª ed., 2018 |
+| *The Art of Game Design: A Book of Lenses* | Jesse Schell | Morgan Kaufmann, 1ª ed., 2008 |
+| *Game Mechanics: Advanced Game Design* | Ernest Adams (com Joris Dormans) | New Riders, 1ª ed., 2012 |
+
 ## Identidade visual
 
 | Fonte | Tema | Link | Verificado |
