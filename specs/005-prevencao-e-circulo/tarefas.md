@@ -18,7 +18,7 @@ Legenda: ⬜ a fazer · 🟨 em andamento · ✅ pronto · ❌ cortado · `[P]` 
 | T009 | `AcoesDoPlano` no passo de ação do SOS, com estado vazio (convite + CVV 188) | CA-3, CA-7 | `web/src/components/AcoesDoPlano.tsx` (+ teste), `web/src/app/sos/Sos.tsx` | T004, T005, T003 | | Atyrson (combinar com Ian/Antonio) | ✅ |
 | T010 | "Editar meu plano" no pós-lapso abre `/plano` com o gatilho marcado — **bloqueada pela 004** | CA-6 | `web/src/app/checkin/Checkin.tsx`, `App.tsx` | T007 e **merge da 004 na `development`** | | Atyrson (combinar com Danillo) | ⬜ |
 | T011 | Acessibilidade: rótulos, erros com `aria-describedby`, foco no título, alvos 44 px, teclado | todos | `Plano.tsx`, `Circulo.tsx`, `index.css` | T007, T008 | | Atyrson | ✅ |
-| T012 | Conformidade: checklist de `docs/07-conformidade/regras-de-conteudo.md`, `/conformidade-legal-br`, `/registrar-uso-ia` e `/registrar-asset` (link `wa.me`) | todos | `docs/07-conformidade/*`, `docs/revisoes/` | todas | | Atyrson | ⬜ |
+| T012 | Conformidade: checklist de `docs/07-conformidade/regras-de-conteudo.md`, `/conformidade-legal-br`, `/registrar-uso-ia` e `/registrar-asset` (link `wa.me`) | todos | `docs/07-conformidade/*`, `docs/revisoes/` | todas | | Atyrson | ✅ |
 
 ## Critério de pronto por tarefa
 
