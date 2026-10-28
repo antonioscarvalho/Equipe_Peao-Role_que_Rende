@@ -21,11 +21,6 @@ export function diasDecorridosNoMes(hoje: DataLocal): number {
   return Number(hoje.slice(8, 10))
 }
 
-export function nomeDoMes(dia: DataLocal): string {
-  const [ano, mes] = dia.split('-').map(Number)
-  return new Date(ano, mes - 1, 1).toLocaleDateString('pt-BR', { month: 'long' })
-}
-
 export function somarDias(dia: DataLocal, n: number): DataLocal {
   const [ano, mes, d] = dia.split('-').map(Number)
   return dataLocal(new Date(ano, mes - 1, d + n))

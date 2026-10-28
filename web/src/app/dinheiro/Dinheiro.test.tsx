@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { checkins } from '@/lib/checkins'
@@ -67,15 +67,5 @@ describe('Dinheiro preservado', () => {
     renderizar()
     await screen.findByText('Estimativa de dinheiro preservado')
     expect(screen.queryByRole('button', { name: 'Em coisas do dia a dia' })).not.toBeInTheDocument()
-  })
-
-  it('CA-6: a simulação de Open Finance avisa que são dados de exemplo', async () => {
-    renderizar()
-    const simulacao = screen.getByRole('region', { name: 'Simulação de Open Finance' })
-    expect(within(simulacao).getByText(/Simulação com dados de exemplo/)).toBeInTheDocument()
-
-    await userEvent.click(within(simulacao).getByRole('button', { name: 'Ver a simulação' }))
-    expect(within(simulacao).getByText(/Pix para intermediadoras de apostas em setembro/)).toBeInTheDocument()
-    expect(within(simulacao).getByText(/a menos que no mês anterior/)).toBeInTheDocument()
   })
 })

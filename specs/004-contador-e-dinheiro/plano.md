@@ -85,6 +85,8 @@ INÍCIO
 ## 5. Decisões (confirmadas em 2026-10-27)
 
 > **Revisão de 27/10/2026 (spec 004 revisada):** a decisão 1 continua valendo, mas a contagem deixou de ser do mês: o número principal é o total desde o primeiro registro, e o mês e a sequência atual aparecem em texto pequeno. A sequência conta os dias seguidos de "Não apostei" até hoje ou até ontem, e some da tela quando é zero, para não soar como placar perdido. A decisão 2 passou a multiplicar pelo total. A meta é texto livre da pessoa, opcional, gravado junto com o gasto. Tarefa T011.
+>
+> O Open Finance saiu da 004 e virou a spec 007. A simulação (`domain/openFinance.ts`, `content/open-finance-demo.json` e o painel da tela do dinheiro, tarefa T008) foi retirada desta branch e guardada em `feat/007-open-finance-demo`, para quem assumir a 007 adaptar aos critérios dela. As linhas abaixo que falam da simulação ficam como registro do plano aprovado.
 
 1. **O que conta como "dia sem apostar".** A spec diz "total de dias sem apostar no mês corrente", e o check-in é opcional. Há dois jeitos de contar:
    - **(a) Só os dias registrados como "Não apostei"** _(recomendado)_. O número é sempre algo que a pessoa afirmou, e o app não inventa dado. A tela mostra "{n} dias sem apostar" e, embaixo, quantos dias do mês ainda não têm registro, sem cobrança.
@@ -134,6 +136,6 @@ Não há.
 | CA-3 | Teste do fluxo: "Apostei" passa pelos quatro passos; "Tô mal com isso" leva a `/ajuda` |
 | CA-4 | Teste de domínio: um lapso no meio do mês não zera o total; o JSON não contém "perdeu a sequência", "dia zero" nem variações |
 | CA-5 | Teste de domínio do cálculo e da conversão em metas; teste de tela da troca reais ⇄ metas |
-| CA-6 | Teste de domínio: o extrato sintético separa os Pix para intermediadora; o painel diz "simulação" e "dados de exemplo" |
-| CA-7 | Teste de tela: sem conectar nada, check-in, contador e dinheiro preservado funcionam |
+| CA-6 | Teste de tela: sem gasto informado, o início convida e a tela do dinheiro pede o valor e a meta, as duas editáveis depois |
+| CA-7 | Teste de guarda: nenhum arquivo do app nem o service worker usa a API de notificação |
 | Todos | `npm test && npm run build` em `web/` (Node 22+) e conferência manual offline com `npm run preview` |

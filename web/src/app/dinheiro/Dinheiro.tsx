@@ -1,15 +1,12 @@
 /**
- * Dinheiro preservado (spec 004, CA-5 e CA-6) e simulação de Open Finance (spec 007, ainda por ajustar).
+ * Dinheiro preservado (spec 004, CA-5 e CA-6). O Open Finance é a spec 007, fora desta tela por enquanto.
  * Skills: controle-estimulos-financas · design-etico-saude-digital.
  * O valor é sempre estimativa, a partir do que a pessoa informou (CDC); nada vem de conta real.
  */
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Botao } from '@/components/Botao'
-import { Cartao } from '@/components/Cartao'
 import { metasConfirmadas } from '@/content/conteudo'
-import demo from '@/content/open-finance-demo.json'
-import { dataPorExtenso, nomeDoMes } from '@/domain/datas'
-import { analisarExtrato } from '@/domain/openFinance'
+import { dataPorExtenso } from '@/domain/datas'
 import { emMetas, formatarReais } from '@/domain/progresso'
 import { useProgresso } from '@/hooks/useProgresso'
 
@@ -32,7 +29,6 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
   const [textoMeta, setTextoMeta] = useState('')
   const [erro, setErro] = useState<string | null>(null)
   const [visao, setVisao] = useState<'reais' | 'metas'>('reais')
-  const [simulacaoAberta, setSimulacaoAberta] = useState(false)
   const titulo = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => titulo.current?.focus(), [])
@@ -54,7 +50,6 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
 
   const valor = progresso.dinheiroPreservado
   const metas = valor === null ? [] : emMetas(valor, metasConfirmadas)
-  const analise = analisarExtrato(demo.transacoes, demo.dataReferencia)
 
   return (
     <section className="tela tela--dinheiro" aria-labelledby="dinheiro-titulo">
@@ -151,43 +146,6 @@ export function Dinheiro({ aoVoltar, hoje }: DinheiroProps) {
           </Botao>
         </>
       )}
-
-      <Cartao titulo="Simulação de Open Finance">
-        <p>{demo.aviso}</p>
-        <p>
-          Com a sua autorização, o Open Finance poderia mostrar isto sozinho, sem você precisar anotar nada. Por
-          enquanto, tudo funciona no modo manual.
-        </p>
-        <Botao variante="secundario" aria-expanded={simulacaoAberta} onClick={() => setSimulacaoAberta((a) => !a)}>
-          {simulacaoAberta ? 'Esconder a simulação' : 'Ver a simulação'}
-        </Botao>
-        {simulacaoAberta && (
-          <dl className="simulacao">
-            <div>
-              <dt>Pix para intermediadoras de apostas em {nomeDoMes(analise.mesAnterior.mes + '-01')}</dt>
-              <dd>
-                {analise.mesAnterior.quantidade}, somando {formatarReais(analise.mesAnterior.total)}
-              </dd>
-            </div>
-            <div>
-              <dt>Em {nomeDoMes(analise.mesAtual.mes + '-01')}</dt>
-              <dd>
-                {analise.mesAtual.quantidade}, somando {formatarReais(analise.mesAtual.total)}
-              </dd>
-            </div>
-            {analise.diasSemPix !== null && (
-              <div>
-                <dt>Sem nenhum Pix desse tipo há</dt>
-                <dd>{analise.diasSemPix} dias</dd>
-              </div>
-            )}
-            <div>
-              <dt>Dinheiro preservado na simulação</dt>
-              <dd>{formatarReais(analise.aMenosQueMesAnterior)} a menos que no mês anterior</dd>
-            </div>
-          </dl>
-        )}
-      </Cartao>
 
       <Botao variante="secundario" onClick={aoVoltar}>
         Voltar pro início
