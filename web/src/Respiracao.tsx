@@ -85,6 +85,8 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
           <a className="ajuda" href="https://www.gov.br/pt-br/servicos/plataforma-centralizada-de-autoexclusao-apostas" target="_blank" rel="noreferrer">
             <Icone nome="shieldCheck" /> Autoexclusão de apostas (gov.br)
           </a>
+          {/* Spec 006, CA-4: situação da plataforma depois da MP 1.394/2026 não confirmada em fonte oficial. */}
+          <small>Autoexclusão: situação depois da MP 1.394/2026 ainda não confirmada. Confira no site antes de contar com ela.</small>
           {aoJogar && (
             <button className="ajuda ajuda--botao" onClick={aoJogar}>
               <Icone nome="sprout" /> Pulo do Bichinho: 3 minutos pra onda passar

@@ -17,13 +17,13 @@ Baixadas em 28/10/2026 e guardadas em [`assets/fontes/`](../assets/fontes/), par
 
 | Família | Pesos | Uso | Licença |
 |---|---|---|---|
-| **Nunito Sans** | 400, 600, 700, 800 (normal e itálico) | Títulos (`--rqr-font-titulo`) | SIL OFL 1.1 ([OFL-NunitoSans.txt](../assets/fontes/OFL-NunitoSans.txt)) |
+| **Nunito Sans** | 400, 600, 700, 800, 900 (normal e itálico) | Títulos (`--rqr-font-titulo`) | SIL OFL 1.1 ([OFL-NunitoSans.txt](../assets/fontes/OFL-NunitoSans.txt)) |
 | **Roboto** | 400, 500, 700 (normal e itálico) | Textos (`--rqr-font-texto`) | SIL OFL 1.1 ([OFL-Roboto.txt](../assets/fontes/OFL-Roboto.txt)) |
 
 Subconjunto *latin* (cobre os acentos do português). Origem: Fontsource 5.3.0 (`@fontsource/nunito-sans`, `@fontsource/roboto`).
 
 **Como usar:**
-- **Web (Vite):** importe o `tokens.css` (ele já faz `@import './fontes/fontes.css'`). No `npm run dev`, a pasta `assets` do guia precisa estar liberada em `server.fs.allow` (o `web/vite.config.ts` já faz isso).
+- **Web (Vite):** importe o `tokens.css` (ele já faz `@import './fontes/fontes.css'`) ou só o `fontes/fontes.css`, como faz o `web/src/styles.css`. No `npm run dev`, a pasta `assets` do guia precisa estar liberada em `server.fs.allow` (o `web/vite.config.ts` já faz isso).
 - **HTML solto:** `<link rel="stylesheet" href="…/assets/tokens.css">`.
 - **Mobile (Expo) e engines:** os arquivos `.woff2` estão listados em `assets/tokens.json` (`tipografia.arquivos`); para Expo, converta para `.ttf` ou use o pacote `@expo-google-fonts/nunito-sans` e `@expo-google-fonts/roboto`.
 

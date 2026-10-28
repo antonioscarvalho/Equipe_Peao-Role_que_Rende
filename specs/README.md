@@ -29,6 +29,8 @@ specs/
 | [008](008-configuracoes-privacidade-acessibilidade/spec.md) | Configurações, privacidade e acessibilidade | Vontade de jogar · Ajuda especializada | Must | 📝 rascunho | [#16](https://github.com/antonioscarvalho/equipepeao/issues/16) | Maykon Júnio |
 | [009](009-personalizacao-do-bichinho/spec.md) | Personalização do bichinho | Enfrentar momentos de vontade de jogar | Should | 🔍 implementada | _—_ | Atyrson Souto |
 
+> **Atualização de 28/10/2026 (tarde):** o `web/` publicado passou a ser a antiga prova visual (commit `85059f8`, Atyrson). As implementações das specs **001, 004 e 005** (SOS completo, crise, check-in, dinheiro, plano, Círculo, com testes) estão em `lixo/web-antigo/` e **não estão no app publicado**. No `web/` atual: personalização (009), "Deu vontade" com respiração e Pulo do Bichinho, missões e dinheiro protegido com dados de exemplo, e o botão **"Preciso de ajuda agora"** (CVV 188, SAMU 192, UBS/CAPS), recolocado em 28/10 por Maykon. A equipe precisa decidir o que volta do `lixo/web-antigo` para o app.
+
 > As specs do PR #11 foram renumeradas de 001–005 para 002–006 porque a `001-base-sos-crise` já existia e já estava implementada. As 003 e 006 detalham partes que a 001 começou.
 
 > **Revisão de 27/10/2026:** as specs 002–006 foram corrigidas (fontes, critérios verificáveis, lacunas e dependências) e precisam ser **reaprovadas**; o Open Finance saiu da 004 e virou a 007 (Must, diferencial, só com dados sintéticos); o fluxo F10 ganhou a 008. Cada spec diz no topo o que mudou.

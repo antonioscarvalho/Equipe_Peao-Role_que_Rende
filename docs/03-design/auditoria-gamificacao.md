@@ -16,6 +16,21 @@
 | 18 | `web/src/app/inicio/Inicio.tsx` | Missões do dia com "+R$", moeda girando, brilho e confete na tela inicial do app oficial | Edital 8.4 (leitura possível: "mecânica de recompensa"); spec 004 CA-2 ("sem confete"); `design-etico-saude-digital` | 🔴 | **Mantido por decisão** (28/10) |
 | 19 | Skill `sonorizar-componente` | Sons de missão e "conquista" ao fechar as missões do dia; no app, desligados por padrão | `design-etico-saude-digital` (sem som de vitória); Adams (celebração que escala) | 🟡 | **Mantido por decisão** (28/10); no app o padrão é desligado ✅ |
 
+## Reauditoria do `web/` novo — 28/10/2026 (depois da troca pela prova visual)
+
+O `web/` publicado passou a ser a prova visual. Itens 6 a 9 e 12 a 16 abaixo se referiam ao app anterior (agora em `lixo/web-antigo/`).
+
+| # | Onde | Achado | Classe | Situação |
+|---|---|---|---|---|
+| 20 | `web/src/App.tsx` | **Não havia "Preciso de ajuda agora"** em todas as telas; o CVV só aparecia no fim da respiração; sem SAMU 192 nem UBS/CAPS (specs 001 CA-2 e 006 CA-1; `seguranca-e-crise`) | 🔴 | **Corrigido** (`web/src/AjudaAgora.tsx`: botão fixo acima de todas as camadas, painel com 188, 192, chat do CVV e UBS/CAPS, offline) |
+| 21 | `web/index.html` | Fonte carregada do Google Fonts (precisa de internet; skill `web-react-vite`) | 🟡 | **Corrigido** (fontes locais do guia, inclusive peso 900) |
+| 22 | `web/src/Respiracao.tsx` | Autoexclusão apresentada sem aviso (spec 006 CA-4: condicional) | 🟡 | **Corrigido** (aviso de situação não confirmada depois da MP 1.394/2026) |
+| 23 | Personalização (spec 009) | Próximo marco anunciado com "faltam N dias"; lapso não tira item | 🟢 | De acordo (resolve P2 da proposta) |
+| 24 | `web/src/App.tsx` | Missões do dia com "+R$", moeda, confete; sons das missões ligados no interruptor | 🔴 | **Mantido por decisão** (28/10) |
+| 25 | `PuloDoBichinho.tsx` | Jogo de habilidade oferecido **no momento da vontade** ("3 minutos pra onda passar"), com recorde salvo e plataformas sorteadas; sem vidas, compra ou "última chance" | 🟡 | Para a equipe avaliar: a matriz (seção 2) trocou "minigame anti-ansiedade" por timer de *urge surfing* por falta de evidência; o recorde é comparação consigo mesmo (aceitável) |
+| 26 | `web/` × specs 001, 004, 005 | SOS com cards e régua antes/depois, check-in pós-lapso, contador que não zera, plano Se/Então e Círculo **saíram do app publicado** | 🟡 | Decisão da equipe: o que volta do `lixo/web-antigo/` |
+| 27 | `Respiracao.tsx` | Respiração 4-4-6 (o guia e o app antigo usavam 4-6) | 🟡 | Documentado; ritmo final depende de revisão clínica (proposta P8) |
+
 ## Resumo
 
 O **app oficial está de acordo** na essência: progresso que um lapso não apaga, pós-lapso sem punição, sem pontos, moedas, ranking ou prazo. Os problemas estão na **prova visual** e em **duas skills** que mandam usar a moeda girando, além de ajustes menores no SOS e no PR #20.

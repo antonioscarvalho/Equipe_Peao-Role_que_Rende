@@ -1,3 +1,5 @@
+/* Fontes locais do guia de estilo (Nunito Sans e Roboto, OFL): funcionam offline, sem Google Fonts. */
+@import "../../.claude/skills/guia-estilo-role-que-rende/assets/fontes/fontes.css";
 @import "./tokens.css";
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -14,7 +16,7 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- Palco e "celular" ---------- */
-.palco { min-height: 100dvh; display: grid; place-items: center; padding: 24px 12px; position: relative; overflow: hidden; }
+.palco { min-height: 100dvh; display: grid; place-items: center; padding: calc(64px + env(safe-area-inset-top, 0px)) 12px 24px; position: relative; overflow: hidden; } /* topo livre para o botão fixo "Preciso de ajuda agora" */
 .celular {
   position: relative; z-index: 1; width: min(400px, 100%);
   background: var(--rqr-fundo-conteudo); border: 4px solid var(--rqr-borda);
@@ -293,3 +295,17 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .pulo__resultado { margin: 0; font-size: 18px; }
 .pulo__recorde { margin: 0; font-weight: 800; color: var(--rqr-rosa-escuro); }
 .pulo__nota { margin: 0; padding: 6px 12px; font-size: 12px; text-align: center; color: var(--rqr-amarelo); }
+
+/* "Preciso de ajuda agora" (specs 001 e 006): fixo, acima de todas as camadas, 1 toque. */
+.ajuda-agora {
+  position: fixed; z-index: 60;
+  top: calc(8px + env(safe-area-inset-top, 0px)); left: calc(8px + env(safe-area-inset-left, 0px));
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px;
+  border-radius: 999px; border: 2px solid var(--rqr-amarelo); cursor: pointer;
+  background: var(--rqr-azul-escuro); color: var(--rqr-branco); font: 800 14px/1 var(--rqr-font-titulo);
+  box-shadow: 0 2px 0 rgb(0 0 0 / .2);
+}
+.ajuda-agora:focus-visible { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
+.ajuda-agora__painel { z-index: 70; max-width: 100%; }
+.ajuda-agora__painel .ajuda { max-width: 380px; }
+.ajuda-agora__painel h2:focus { outline: none; }
