@@ -3,6 +3,7 @@ import canaisJson from './canais-de-ajuda.json'
 import sosJson from './sos.json'
 import checkinJson from './checkin.json'
 import metasJson from './metas.json'
+import openFinanceJson from './open-finance-demo.json'
 import { canaisDeAjuda, canal, metasConfirmadas } from './conteudo'
 
 // Vocabulário vedado pelo guia de tom de voz e pela Seção 8.4 do edital.
@@ -35,7 +36,7 @@ function textos(valor: unknown): string[] {
 }
 
 describe('conteúdo do app', () => {
-  it.each(textos([canaisJson, sosJson, checkinJson, metasJson]))('não usa vocabulário vedado: %s', (texto) => {
+  it.each(textos([canaisJson, sosJson, checkinJson, metasJson, openFinanceJson]))('não usa vocabulário vedado: %s', (texto) => {
     for (const padrao of PROIBIDAS) expect(texto).not.toMatch(padrao)
   })
 
