@@ -163,11 +163,9 @@
 .rqr-escalonado > *:nth-child(5) { animation-delay: 240ms; }
 .rqr-escalonado > *:nth-child(6) { animation-delay: 300ms; }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    animation-delay: 0ms !important;
-    transition-duration: 1ms !important;
-  }
+html.reduzir-animacoes *, html.reduzir-animacoes *::before, html.reduzir-animacoes *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: 1ms !important;
 }

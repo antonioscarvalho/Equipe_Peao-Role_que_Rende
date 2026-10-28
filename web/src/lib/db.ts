@@ -56,7 +56,8 @@ export interface ContatoCirculo {
 interface GuardiaoDB extends DBSchema {
   episodiosSos: { key: string; value: EpisodioSos; indexes: { porInicio: string } }
   checkins: { key: string; value: Checkin }
-  configuracao: { key: 'financas'; value: ConfiguracaoFinancas }
+  // 'aparencia' guarda a personalização do bichinho; o formato é validado na leitura (domain/aparencia).
+  configuracao: { key: 'financas' | 'aparencia'; value: ConfiguracaoFinancas | Record<string, unknown> }
   prevencao: { key: 'gatilhos'; value: GatilhosPessoa }
   planos: { key: string; value: PlanoSeEntao; indexes: { porCriacao: string } }
   circulo: { key: string; value: ContatoCirculo; indexes: { porCriacao: string } }

@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "certs": "mkdir -p certs && openssl req -x509 -newkey rsa:2048 -nodes -days 30 -subj /CN=prova-visual -keyout certs/key.pem -out certs/cert.pem",
+    "dev:https": "HTTPS=1 vite"
   },
   "dependencies": {
     "lottie-react": "^2.4.1",
