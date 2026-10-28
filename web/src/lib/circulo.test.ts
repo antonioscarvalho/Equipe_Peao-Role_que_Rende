@@ -31,7 +31,7 @@ describe('circulo (IndexedDB local)', () => {
     expect(await circulo.listar()).toHaveLength(LIMITE_CONTATOS)
 
     await circulo.salvar({ id: salvos[0].id, nome: 'Mãe (exemplo)', telefone: salvos[0].telefone })
-    expect((await circulo.listar())[0]).toMatchObject({ id: salvos[0].id, nome: 'Mãe (exemplo)' })
+    expect((await circulo.listar()).find((c) => c.id === salvos[0].id)?.nome).toBe('Mãe (exemplo)')
 
     await circulo.apagar(salvos[2].id)
     expect(await circulo.listar()).toHaveLength(LIMITE_CONTATOS - 1)
