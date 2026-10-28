@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Dialogo } from "./Dialogo";
+import { Queda } from "./Queda";
 import { capitulos, TITULOS } from "./capitulos";
 import { ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, marcarAvisoVisto } from "./progresso";
 import { useModal } from "./useModal";
@@ -19,9 +20,12 @@ export function Historia({ aoFechar, reduzir }: { aoFechar: () => void; reduzir:
   const [tela, setTela] = useState<Tela>({ tipo: "mapa" });
   const [feitos, setFeitos] = useState(capitulosConcluidos);
   const [anuncio, setAnuncio] = useState("");
+  // Toda entrada na história começa com o Broto caindo do espaço.
+  const [intro, setIntro] = useState(true);
+  const fimIntro = useCallback(() => setIntro(false), []);
 
   const titulo = useRef<HTMLHeadingElement>(null);
-  useModal(caixa, aoFechar, tela.tipo === "mapa");
+  useModal(caixa, aoFechar, tela.tipo === "mapa" && !intro);
 
   // Ao abrir e ao voltar ao mapa: se o foco se perdeu (o jogo saiu da tela), traz para o título.
   useEffect(() => {
@@ -29,7 +33,7 @@ export function Historia({ aoFechar, reduzir }: { aoFechar: () => void; reduzir:
     const a = document.activeElement;
     if (!a || a === document.body || !document.contains(a)) titulo.current?.focus();
   }, [tela]);
-  useEffect(() => { titulo.current?.focus(); }, []);
+  useEffect(() => { if (!intro) titulo.current?.focus(); }, [intro]);
 
   const voltarAoMapa = useCallback(() => setTela({ tipo: "mapa" }), []);
   const abrirDialogo = useCallback(() => setTela((t) => (t.tipo === "jogo" ? { tipo: "dialogo", id: t.id } : t)), []);
@@ -49,6 +53,8 @@ export function Historia({ aoFechar, reduzir }: { aoFechar: () => void; reduzir:
 
   const entrada = tela.tipo !== "mapa" ? capitulos[tela.id] : undefined;
   const Jogo = tela.tipo === "jogo" ? entrada?.jogo : undefined;
+
+  if (intro) return <Queda aoFim={fimIntro} reduzir={reduzir} />;
 
   return (
     <>
@@ -89,7 +95,7 @@ export function Historia({ aoFechar, reduzir }: { aoFechar: () => void; reduzir:
 
       {Jogo && <Jogo reduzir={reduzir} aoFechar={abrirDialogo} aoTerminar={abrirDialogo} />}
       {tela.tipo === "dialogo" && entrada && (
-        <Dialogo capitulo={entrada.capitulo} reduzir={reduzir}
+        <Dialogo capitulo={entrada.capitulo} cena={entrada.cena} reduzir={reduzir}
           aoFechar={voltarAoMapa} aoConcluir={() => concluir(tela.id)} />
       )}
     </>

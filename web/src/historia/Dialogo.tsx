@@ -4,6 +4,7 @@ import { PainelCrise } from "../AjudaAgora";
 import { useAparenciaVisivel } from "../personalizacao";
 import { useModal } from "./useModal";
 import type { Capitulo } from "./tipos";
+import type { Cena } from "./cenas/tipos";
 import "./historia.css";
 
 /**
@@ -26,6 +27,8 @@ type Props = {
   reduzir: boolean;
   /** Chamado se a pessoa aceitar a oferta do capítulo. Quem integra decide o que `acao` abre. */
   aoOferta?: (acao: string) => void;
+  /** Arte de fundo do capítulo, que muda com o momento da conversa. Sem ela, fica o céu padrão. */
+  cena?: Cena;
 };
 
 /** Texto aparecendo aos poucos; com `reduzir`, aparece inteiro na hora. */
@@ -42,7 +45,7 @@ function useDigitando(texto: string, reduzir: boolean) {
   return { visivel: texto.slice(0, n), completo: n >= texto.length };
 }
 
-export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta }: Props) {
+export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta, cena: CenaDoCapitulo }: Props) {
   const aparencia = useAparenciaVisivel();
   const caixa = useRef<HTMLDivElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
@@ -51,6 +54,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta }: P
   const [fala, setFala] = useState(capitulo.falaAbertura);
   const [respondeu, setRespondeu] = useState(false);
   const [crise, setCrise] = useState(false);
+  const [pergunta, setPergunta] = useState<number | null>(null);
 
   useModal(caixa, aoFechar, !crise);
   useEffect(() => { titulo.current?.focus(); }, []);
@@ -71,25 +75,33 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta }: P
   const depoisDoBroto = () =>
     capitulo.oferta ? ir("oferta", fala) : ir("licao", capitulo.licao);
 
-  const humor: Humor = etapa === "licao" ? "orgulhoso" : etapa === "broto" ? "apoio" : "calmo";
+  const humor: Humor = etapa === "licao" ? "orgulhoso" : etapa === "broto" ? "apoio" : etapa === "abertura" ? "cansado" : "calmo";
 
   return (
     <div ref={caixa} className="historia-dialogo" role="dialog" aria-modal="true" aria-labelledby="dialogo-titulo">
-      <div className="historia-dialogo__caixa">
+      <div className="historia-dialogo__palco">
+        {CenaDoCapitulo ? <CenaDoCapitulo momento={{ etapa, pergunta }} reduzir={reduzir} /> : <div className="historia-dialogo__ceu" />}
         <h2 id="dialogo-titulo" ref={titulo} tabIndex={-1} className="historia-dialogo__titulo">
           {capitulo.titulo}
         </h2>
-
         <div className="historia-dialogo__cena">
-          <Bichinho humor={humor} nivel={2} tamanho={120} reduzir={reduzir} aparencia={aparencia} />
-          <p className="historia-fala" aria-hidden="true">
-            <span className="historia-fala__quem">Broto:</span> {visivel}
-            {!completo && <span className="historia-fala__cursor" />}
-          </p>
+          <div className="historia-balao" key={fala}>
+            <p className="historia-balao__texto" aria-hidden="true">
+              {visivel}
+              {!completo && <span className="historia-fala__cursor" />}
+            </p>
+            {/* Ocupa o espaço da fala inteira, para o balão não crescer letra por letra. */}
+            <p className="historia-balao__texto historia-balao__molde" aria-hidden="true">{fala}</p>
+          </div>
           {/* Leitor de tela recebe a fala inteira de uma vez, não letra por letra. */}
           <p className="sr-only" aria-live="polite">Broto: {fala}</p>
+          <div className="historia-dialogo__broto">
+            <Bichinho humor={humor} nivel={2} tamanho={104} reduzir={reduzir} aparencia={aparencia} />
+          </div>
         </div>
+      </div>
 
+        <div className="historia-dialogo__painel">
         <div className="historia-dialogo__acoes">
           {etapa === "abertura" && (
             <button className="rqr-botao" onClick={() => capitulo.perguntas.length ? ir("perguntas", CONVITE_PERGUNTAS) : ir("broto", capitulo.perguntaDoBroto.texto)}>
@@ -101,7 +113,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta }: P
             <>
               {capitulo.perguntas.map((p, i) => (
                 <button key={p.pergunta} className="historia-opcao" aria-pressed={ouvidas.includes(i)}
-                  onClick={() => { setOuvidas((o) => (o.includes(i) ? o : [...o, i])); setFala(p.resposta); }}>
+                  onClick={() => { setOuvidas((o) => (o.includes(i) ? o : [...o, i])); setPergunta(i); setFala(p.resposta); }}>
                   {p.pergunta}
                 </button>
               ))}
@@ -139,7 +151,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, aoOferta }: P
         </div>
 
         <small className="historia-nota">O Broto é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
-      </div>
+        </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}
     </div>
   );

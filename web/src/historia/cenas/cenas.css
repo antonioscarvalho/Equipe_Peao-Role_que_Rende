@@ -1,0 +1,98 @@
+/* Cenas da história. Decoração: só transform e opacity animam, e tudo para com reduzir. */
+.cena { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.cena__ceu-topo { stop-color: var(--rqr-azul-escuro); transition: stop-color var(--rqr-dur-lenta); }
+.cena__ceu-base { stop-color: var(--rqr-roxo); transition: stop-color var(--rqr-dur-lenta); }
+.cena--amanhecer .cena__ceu-topo { stop-color: var(--rqr-roxo); }
+.cena--amanhecer .cena__ceu-base { stop-color: var(--rqr-rosa-claro); }
+
+.cena__estrela { fill: var(--rqr-amarelo); animation: cena-brilho 5s ease-in-out infinite alternate; }
+@keyframes cena-brilho { from { opacity: 1; } to { opacity: .45; } }
+
+.cena__vila, .cena__nave, .cena__regua { transition: opacity var(--rqr-dur-lenta), transform var(--rqr-dur-lenta) var(--rqr-ease-padrao); transform-box: fill-box; transform-origin: center; }
+.cena__vila { opacity: .75; }
+.cena__vila.is-foco { opacity: 1; transform: scale(1.35); }
+.cena__halo { fill: var(--rqr-amarelo); opacity: 0; transition: opacity var(--rqr-dur-lenta); }
+.cena__vila.is-foco .cena__halo { opacity: .25; }
+.cena__asteroide { fill: var(--rqr-roxo-claro); stroke: var(--rqr-azul-escuro); stroke-width: 3; }
+.cena__cratera-pequena { fill: var(--rqr-roxo); }
+.cena__casinha { fill: var(--rqr-amarelo); stroke: var(--rqr-azul-escuro); stroke-width: 2; }
+
+.cena__nave { opacity: 0; }
+.cena__nave.is-foco { opacity: 1; }
+.cena__nave-corpo { fill: var(--rqr-rosa-escuro); stroke: var(--rqr-azul-escuro); stroke-width: 3; }
+.cena__nave-janela { fill: var(--rqr-azul-claro); stroke: var(--rqr-azul-escuro); stroke-width: 2; }
+.cena__tanque { fill: none; stroke: var(--rqr-amarelo); stroke-width: 2; }
+.cena__traco { stroke: var(--rqr-amarelo); stroke-width: 3; stroke-linecap: round; }
+.cena__rastro { fill: none; stroke: var(--rqr-amarelo); stroke-width: 3; stroke-dasharray: 6 10; stroke-linecap: round; }
+
+.cena__regua { opacity: 0; }
+.cena__regua.is-foco { opacity: 1; }
+.cena__regua-linha { fill: none; stroke: var(--rqr-amarelo); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+.cena__plataforma { fill: var(--rqr-verde-agro); stroke: var(--rqr-azul-escuro); stroke-width: 3; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.cena--amanhecer .cena__plataforma { animation: cena-plataforma var(--rqr-dur-lenta) var(--rqr-ease-padrao) both; }
+@keyframes cena-plataforma { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+.cena__grama { fill: var(--rqr-verde-agro); stroke: var(--rqr-azul-escuro); stroke-width: 4; }
+.cena__cratera { fill: var(--rqr-azul-escuro); opacity: .55; }
+.cena__fumaca circle { fill: var(--rqr-branco); opacity: .55; animation: cena-fumaca 6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes cena-fumaca { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cena *, .cena { animation: none !important; transition: none !important; }
+  .cena--amanhecer .cena__plataforma { opacity: 1; }
+}
+.reduzir-animacoes .cena--amanhecer .cena__plataforma { opacity: 1; }
+
+/* ---------- Abertura: o Broto cai do espaço ---------- */
+.queda { position: fixed; inset: 0; z-index: 46; overflow: hidden; background: var(--rqr-azul-escuro); }
+.queda .cena__fumaca, .queda .cena__cratera { opacity: 0; animation: queda-aparece var(--rqr-dur-lenta) var(--rqr-ease-padrao) 1.9s both; }
+@keyframes queda-aparece { to { opacity: .55; } }
+.queda__ceu { position: absolute; inset: 0; }
+/* Ponto de pouso: perto da cratera (x 120/400, chão a ~20% da base). */
+.queda__broto {
+  position: absolute; left: calc(30% - 42px); bottom: 17%;
+  animation: queda-broto 1.9s cubic-bezier(.45, 0, .9, .6) both, queda-quica var(--rqr-dur-lenta) var(--rqr-ease-pop) 1.9s forwards;
+}
+@keyframes queda-broto {
+  from { transform: translate(55vw, -85vh) rotate(-540deg) scale(.35); }
+  to { transform: translate(0, 0) rotate(0) scale(1); }
+}
+@keyframes queda-quica {
+  0% { transform: scale(1.18, .78); }
+  45% { transform: translateY(-26px) scale(.95, 1.06); }
+  100% { transform: none; }
+}
+.queda__rastro {
+  position: absolute; left: 30%; bottom: 22%; width: 120vh; height: 10px; border-radius: 999px; transform-origin: 0 50%;
+  rotate: -58deg; background: linear-gradient(90deg, var(--rqr-amarelo), transparent);
+  animation: queda-rastro 2.4s ease-out both;
+}
+@keyframes queda-rastro {
+  0% { opacity: 0; transform: scaleX(.05) translateX(80%); }
+  20% { opacity: .9; }
+  78% { opacity: .8; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+.queda__poeira { position: absolute; left: 30%; bottom: 17%; }
+.queda__poeira i {
+  position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--rqr-branco); opacity: 0;
+  animation: queda-poeira 700ms var(--rqr-ease-padrao) both;
+}
+.queda__poeira i:nth-child(1) { --dx: -60px; } .queda__poeira i:nth-child(2) { --dx: -28px; }
+.queda__poeira i:nth-child(3) { --dx: 28px; } .queda__poeira i:nth-child(4) { --dx: 60px; }
+@keyframes queda-poeira { 0% { opacity: .8; transform: translate(0, 0) scale(.4); } 100% { opacity: 0; transform: translate(var(--dx), -22px) scale(1.2); } }
+.queda__pular {
+  position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); min-width: 96px; min-height: 48px; padding: 0 18px;
+  border: 3px solid var(--rqr-amarelo); border-radius: 999px; background: var(--rqr-azul-escuro); color: var(--rqr-amarelo);
+  font: inherit; font-weight: 800; cursor: pointer;
+}
+.queda__pular:focus-visible { outline: 3px solid var(--rqr-branco); outline-offset: 3px; }
+.queda--parada .queda__broto, .queda--parada .queda__poeira i { animation: none; }
+.queda--parada .queda__rastro { display: none; }
+.queda--parada .cena__fumaca, .queda--parada .cena__cratera { animation: none; opacity: .55; }
+@media (prefers-reduced-motion: reduce) {
+  .queda__broto, .queda__poeira i, .queda .cena__fumaca, .queda .cena__cratera { animation: none !important; opacity: .55; }
+  .queda__broto { opacity: 1; }
+  .queda__rastro { display: none; }
+}
