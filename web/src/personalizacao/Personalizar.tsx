@@ -53,20 +53,23 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
       <main className="celular personalizar" aria-labelledby="personalizar-titulo">
         <div className="personalizar__topo">
           <button className="link personalizar__voltar" onClick={aoVoltar}>← Voltar</button>
-          <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo">
-            Deixe o bichinho com a sua cara
-          </h1>
+          <button className="rqr-botao personalizar__pronto" onClick={aoVoltar}>Pronto</button>
         </div>
+        <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo personalizar__titulo">
+          Deixe o bichinho com a sua cara
+        </h1>
 
         <div className="personalizar__previa">
-          <Bichinho humor="calmo" nivel={3} tamanho={150} reduzir={reduzir} aparencia={visivel} />
+          <Bichinho humor="calmo" nivel={3} tamanho={120} reduzir={reduzir} aparencia={visivel} />
+          <button className="personalizar__original" onClick={() => mudar({ ...APARENCIA_PADRAO })}>
+            Visual original
+          </button>
+          {proximo && (
+            <p className="personalizar__marco" role="status">
+              Próximo marco: <strong>{proximo.item.nome}</strong> em {plural(proximo.faltam)}
+            </p>
+          )}
         </div>
-
-        {proximo && (
-          <p className="personalizar__marco" role="status">
-            Próximo marco: <strong>{proximo.item.nome}</strong> com {plural(proximo.item.marco ?? 0)}. Faltam {plural(proximo.faltam)}.
-          </p>
-        )}
 
         <div className="personalizar__abas" role="tablist" aria-label="O que personalizar" onKeyDown={teclas}>
           {ABAS.map((x, i) => (
@@ -99,10 +102,6 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
           {aba === "peito" && <Itens titulo="Peito" nome="peito" opcoes={PEITO} valor={aparencia.peito} dias={dias} aoMudar={(peito) => mudar({ peito })} />}
         </div>
 
-        <div className="personalizar__acoes">
-          <button className="link" onClick={() => mudar({ ...APARENCIA_PADRAO })}>Voltar ao visual original</button>
-          <button className="rqr-botao" onClick={aoVoltar}>Pronto</button>
-        </div>
       </main>
     </div>
   );
