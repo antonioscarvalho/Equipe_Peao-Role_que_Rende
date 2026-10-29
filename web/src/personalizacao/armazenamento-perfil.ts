@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAparencia } from "./armazenamento";
+import { gravarGuardado, lerGuardado } from "../guardado";
 import { FotoRecusada, prepararFoto } from "./foto";
 import { normalizarNome, sanearFoto, sanearPerfil, validarNome, type ErroFoto, type ErroNome, type Perfil } from "./perfil";
 
@@ -11,26 +12,10 @@ const CHAVE = "rqr:perfil";
 const CHAVE_FOTO = "rqr:foto";
 const EVENTO = "rqr:perfil-mudou";
 
-// Quando o navegador recusa gravar (modo privado, cota cheia), a escolha vale até fechar a página.
-const naMemoria = new Map<string, string>();
-
-function ler(chave: string): string | null {
-  if (naMemoria.has(chave)) return naMemoria.get(chave)!;
-  try {
-    return localStorage.getItem(chave);
-  } catch {
-    return null;
-  }
-}
+const ler = lerGuardado;
 
 function gravar(chave: string, valor: string | null) {
-  naMemoria.delete(chave);
-  try {
-    if (valor === null) localStorage.removeItem(chave);
-    else localStorage.setItem(chave, valor);
-  } catch {
-    if (valor !== null) naMemoria.set(chave, valor);
-  }
+  gravarGuardado(chave, valor);
   window.dispatchEvent(new Event(EVENTO));
 }
 

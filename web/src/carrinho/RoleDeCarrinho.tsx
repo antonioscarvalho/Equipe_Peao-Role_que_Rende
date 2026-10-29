@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { Bichinho } from "../Bichinho";
 import { atualizarMotor, iniciarMotor, pararMotor, tocar, tocarTrilha } from "../sons";
 import { CORES_ROUPA, corDe } from "../personalizacao/aparencia";
+import { gravarGuardado, lerRecorde } from "../guardado";
 import { useAparenciaVisivel } from "../personalizacao";
 import { BotaoTema } from "../BotaoTema";
 import { Icone } from "../Icone";
@@ -65,7 +66,12 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   useEsconderVLibras(estado === "jogando");
   const [metros, setMetros] = useState(0);
   const [folhas, setFolhas] = useState(0);
-  const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
+  const [recorde, setRecorde] = useState(() => lerRecorde(CHAVE_RECORDE));
+  const guardarRecorde = (final: number) => {
+    const novo = Math.max(lerRecorde(CHAVE_RECORDE), final);
+    gravarGuardado(CHAVE_RECORDE, String(novo));
+    setRecorde(novo);
+  };
   const [aviso, setAviso] = useState("");
 
   // Trilha própria do jogo, com transição suave pra entrar e retorno ao menu Jogos ao fechar.
@@ -138,7 +144,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
 
     const virou = () => {
       const final = g.maisLonge;
-      setRecorde((r) => { const novo = Math.max(r, final); localStorage.setItem(CHAVE_RECORDE, String(novo)); return novo; });
+      guardarRecorde(final);
       setAviso(`O carrinho virou na grama macia, tudo bem! Você andou ${final} metros e pegou ${g.folhasPegas} folhas.`);
       tocar("clique");
       setEstado("virou");
@@ -298,7 +304,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
       // 3 minutos: termina com calma.
       if (g.tempo >= DURACAO_PARTIDA_MS) {
         const final = g.maisLonge;
-        setRecorde((r) => { const novo = Math.max(r, final); localStorage.setItem(CHAVE_RECORDE, String(novo)); return novo; });
+        guardarRecorde(final);
         setAviso(`3 minutos de passeio! Você andou ${final} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
         setEstado("tempo");
         return;
