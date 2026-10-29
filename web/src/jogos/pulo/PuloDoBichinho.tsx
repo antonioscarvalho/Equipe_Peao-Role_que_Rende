@@ -3,7 +3,7 @@ import { TRILHA_PULO, imagemCenarioPulo } from "./precarregar";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
-import { tocar, tocarTrilha } from "../../sons";
+import { pararTrilha, tocar, tocarTrilha } from "../../sons";
 import { vibrar } from "../../tato";
 import { useAparenciaVisivel } from "../../personalizacao";
 import { BotaoTema } from "../../BotaoTema";
@@ -80,6 +80,11 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     return () => {
       cancelado = true;
       window.clearTimeout(id);
+      if (trilhaRetorno === "nenhuma") {
+        console.log("[pulo] saindo, de volta à história (sem trilha)");
+        pararTrilha();
+        return;
+      }
       console.log(`[pulo] saindo, voltando pra ${urlRetorno}`);
       tocarTrilha(urlRetorno, infoRetorno);
     };

@@ -29,12 +29,12 @@ type Tela =
   | { tipo: "abertura" | "antes" | "jogo" | "depois"; id: IdCapitulo; folhas?: number };
 
 type Props = {
-  aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo; trilhaRetorno?: "app" | "jogos";
+  aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo;
   /** "Não tenho 18 anos": o app passa a mostrar só a tela de ajuda. */
   aoMenorDeIdade?: () => void;
 };
 
-export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app", aoMenorDeIdade }: Props) {
+export function Historia({ aoFechar, reduzir, iniciar, aoMenorDeIdade }: Props) {
   const caixa = useRef<HTMLDivElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const botaoAjuda = useRef<HTMLButtonElement>(null);
@@ -170,7 +170,7 @@ export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app", ao
           parte={tela.tipo} folhas={tela.folhas} menor={menor}
           aoFechar={sair} aoConcluir={() => (tela.tipo === "antes" ? depoisDoAntes(tela.id) : concluir(tela.id))} />
       )}
-      {Jogo && <Jogo reduzir={reduzir} trilhaRetorno={trilhaRetorno} aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}
+      {Jogo && <Jogo reduzir={reduzir} trilhaRetorno="nenhuma" aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}
     </>
   );
 }
