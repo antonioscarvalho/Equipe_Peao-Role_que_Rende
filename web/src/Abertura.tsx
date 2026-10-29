@@ -33,7 +33,7 @@ export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boole
       <div className="abertura__cenario" aria-hidden="true" />
       <div className="abertura__veu" aria-hidden="true" />
       <div className="abertura__placa">
-        <h1 className="abertura__nome">Guardião</h1>
+        <h1 className="abertura__nome">Meu amigo Broto!</h1>
         <p className="abertura__frase">Um passo de cada vez, com alguém do seu lado.</p>
       </div>
       {/* O Broto sai da navezinha pousada na grama. */}
@@ -41,7 +41,7 @@ export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boole
         {Array.from({ length: 8 }, (_, i) => <i key={i} className="abertura__poeira" style={{ ["--i" as string]: i }} />)}
         <Bichinho humor="feliz" nivel={2} tamanho={132} reduzir aparencia={aparencia} />
       </div>
-      <p className="sr-only" role="status">Abrindo o Guardião.</p>
+      <p className="sr-only" role="status">Abrindo o Meu amigo Broto!</p>
       <button className="kb kb--amarelo abertura__pular" onClick={() => { tocar("clique"); terminar(); }}>Pular</button>
     </div>
   );
