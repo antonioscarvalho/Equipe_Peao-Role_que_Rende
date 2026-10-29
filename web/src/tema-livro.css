@@ -1403,3 +1403,163 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .tabbar__historia .tabbar__sos-circulo, :root[data-tema="escuro"] .tabbar__historia .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--livro-tinta); }
 /* A estrelinha é decorativa: texto alternativo vazio para não entrar no nome do botão. */
 .tabbar__historia.is-novo .tabbar__sos-circulo::after { content: "★" / ""; }
+
+/* =====================================================================
+   Revisão (docx de bugs, 29/10)
+   ===================================================================== */
+/* 17. Som em Ajustes: mesmo cartão das linhas de Aparência e conforto. */
+.ajustes.controles-volume { display: grid; gap: 0; max-width: none; margin: 0; }
+.controles-volume .controle-volume { display: grid; gap: 4px; padding: 10px 16px 8px; }
+.controles-volume .controle-volume + .controle-volume { border-top: 2px dashed color-mix(in srgb, var(--rqr-borda) 35%, transparent); }
+.controles-volume .controle-volume__topo { font-size: 1rem; align-items: center; }
+.controles-volume .controle-volume__valor { font: 700 .8rem var(--rqr-font-texto); color: var(--rqr-texto-suave); }
+.controles-volume .controle-volume__passo {
+  width: 40px; height: 40px; min-width: 40px; border-width: 2.5px; font-family: var(--rqr-font-titulo);
+  background: var(--livro-grao), var(--rqr-fundo-conteudo); box-shadow: 0 3px 0 var(--rqr-sombra-cor);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.controles-volume .controle-volume__passo:active { transform: translateY(3px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+:root[data-tema="escuro"] .controles-volume .controle-volume__passo { background: var(--livro-grao), #36357A; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+
+/* 1. Botão de Libras: bloco azul com degrau (como os outros botões 3D), em todas as telas. */
+.botao-libras .botao-topo__icone,
+.historia-dialogo__topo .botao-libras .botao-topo__icone,
+:root[data-tema="escuro"] .botao-libras .botao-topo__icone,
+:root[data-tema="escuro"] .historia-dialogo__topo .botao-libras .botao-topo__icone {
+  background: var(--livro-grao), var(--livro-ceu); color: var(--livro-tinta);
+  border: 2.5px solid var(--livro-tinta); box-shadow: 0 4px 0 var(--livro-tinta);
+}
+:root[data-tema="escuro"] .botao-libras .botao-topo__icone { background: var(--livro-grao), var(--noite-azul); color: var(--noite-creme); border-color: var(--noite-funda); box-shadow: 0 4px 0 var(--noite-funda); }
+.botao-libras:active .botao-topo__icone { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); }
+
+/* 4, 14, 15. Perguntas do app (batismo, motivos, meta, guardar) sem o cartão branco por trás:
+   os botões ficam soltos na grade, como as outras escolhas. O cartão só fica no campo de nome
+   e na personalização, que têm rótulo e prévia. */
+.historia-dialogo .especial:not(form):not(.especial--aparencia) {
+  padding: 0; border: 0; background: none !important; box-shadow: none; border-radius: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
+}
+.historia-dialogo .especial:not(form):not(.especial--aparencia) > :only-child,
+.historia-dialogo .especial:not(form):not(.especial--aparencia) > .especial__chips,
+.historia-dialogo .especial:not(form):not(.especial--aparencia) > .rqr-botao { grid-column: 1 / -1; }
+.historia-dialogo .especial .historia-opcao { box-shadow: 0 5px 0 var(--livro-tinta); animation: historia-opcao 360ms cubic-bezier(.3, 1.6, .5, 1) both; }
+.historia-dialogo .especial > .historia-opcao:nth-child(4n+1) { background: var(--livro-grao), var(--livro-sol); }
+.historia-dialogo .especial > .historia-opcao:nth-child(4n+2) { background: var(--livro-grao), var(--livro-ceu); }
+.historia-dialogo .especial > .historia-opcao:nth-child(4n+3) { background: var(--livro-grao), var(--livro-rosa); }
+.historia-dialogo .especial > .historia-opcao:nth-child(4n+4) { background: var(--livro-grao), var(--livro-salvia); }
+:root[data-tema="escuro"] .historia-dialogo .especial:not(form):not(.especial--aparencia) { background: none !important; }
+:root[data-tema="escuro"] .historia-dialogo .especial .historia-opcao { box-shadow: 0 5px 0 var(--noite-funda); }
+
+/* 2. Foco: anel amarelo largo e por fora, sem a caixa quadrada que cortava o botão. */
+.historia-dialogo .historia-opcao:focus-visible,
+.historia-dialogo .chip:focus-visible,
+.historia-dialogo .rqr-botao:focus-visible,
+.historia-dialogo .especial__aba:focus-visible,
+.especial__item:focus-visible { outline: 3px solid var(--livro-tinta); outline-offset: 3px; box-shadow: 0 0 0 6px var(--livro-sol); }
+.historia-dialogo .historia-caixa__seguir:focus-visible { outline: 3px solid var(--livro-tinta); outline-offset: 0; border-radius: var(--livro-raio-p); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao:focus-visible,
+:root[data-tema="escuro"] .historia-dialogo .historia-caixa__seguir:focus-visible { outline-color: var(--noite-creme); }
+/* 3. A caixa de fala inteira é tocável para avançar. */
+.historia-caixa.is-tocavel { cursor: pointer; }
+
+/* 16. Perguntas da pessoa: número ímpar de perguntas não deixa buraco na grade. */
+.historia-dialogo__acoes > .historia-opcao:nth-child(odd):has(+ .historia-opcao--seguir) { grid-column: 1 / -1; }
+
+/* 12/13. Motivos: chips com ícone, "Prefiro não dizer" discreto. */
+.especial__chips .chip { display: inline-flex; align-items: center; gap: 6px; }
+.chip__icone { flex: none; display: inline-grid; place-items: center; }
+.historia-dialogo .especial .historia-opcao--discreta {
+  grid-column: 1 / -1; justify-self: center; min-height: 44px; padding: 4px 12px;
+  background: none !important; border: 0; box-shadow: none !important; text-decoration: underline;
+  font-size: .9rem; color: var(--livro-tinta-funda); animation: none;
+}
+:root[data-tema="escuro"] .historia-dialogo .especial .historia-opcao--discreta { color: var(--noite-creme); }
+
+/* 5. Vila Estrela sem o clarão amarelo em volta (parecia uma mancha de luz no céu). */
+.cena__halo { display: none; }
+/* 11. A régua amarela na esquerda (depois do jogo) saiu: a fala já conta a altura. */
+.cena__regua { display: none; }
+
+/* 8. Pulo: "como jogar" animado (celular que inclina e setas que apertam), pouco texto.
+   Ciclo de 2,4 s, lento e sem piscar; para com "Reduzir animações". */
+.pulo__como { display: flex; align-items: center; justify-content: center; gap: 18px; margin: 4px 0 2px; }
+.pulo__como-item { display: grid; justify-items: center; gap: 6px; }
+.pulo__como-item small { font: 700 .85rem var(--rqr-font-titulo); }
+.pulo__como-ou { font: 700 .85rem var(--rqr-font-texto); color: var(--rqr-texto-suave); }
+.pulo__celular {
+  display: grid; place-items: center; width: 34px; height: 58px; border-radius: 8px;
+  border: 2.5px solid var(--livro-tinta); background: var(--livro-grao), #FFFCF4; box-shadow: 0 3px 0 var(--livro-tinta);
+  animation: pulo-inclina 2.4s ease-in-out infinite;
+}
+.pulo__celular-tela { width: 22px; height: 38px; border-radius: 4px; background: var(--livro-ceu); }
+@keyframes pulo-inclina { 0%, 100% { rotate: -18deg; } 50% { rotate: 18deg; } }
+.pulo__teclas { display: flex; gap: 6px; }
+.pulo__tecla {
+  display: grid; place-items: center; width: 40px; height: 40px; border-radius: 9px;
+  font: 700 1.2rem/1 var(--rqr-font-titulo); color: var(--livro-tinta);
+  border: 2.5px solid var(--livro-tinta); background: var(--livro-grao), #FFFCF4; box-shadow: 0 4px 0 var(--livro-tinta);
+  animation: pulo-tecla 2.4s ease-in-out infinite;
+}
+.pulo__tecla--dir { animation-delay: 1.2s; }
+@keyframes pulo-tecla {
+  0%, 10%, 40%, 100% { transform: none; box-shadow: 0 4px 0 var(--livro-tinta); }
+  15%, 35% { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); }
+}
+.pulo__dica { margin: 0; font-weight: 700; font-size: .9rem; }
+.reduzir-animacoes .pulo__celular, .reduzir-animacoes .pulo__tecla { animation: none; }
+@media (prefers-reduced-motion: reduce) { .pulo__celular, .pulo__tecla { animation: none; } }
+:root[data-tema="escuro"] .pulo__celular, :root[data-tema="escuro"] .pulo__tecla { background: var(--livro-grao), #36357A; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 4px 0 var(--noite-funda); }
+
+/* 10. Personalização na história: cartão maior (quase a tela toda) e itens com mini prévia do
+   Broto usando cada um, como na tela Personalizar. */
+.historia-dialogo:has(.especial--aparencia) .historia-dialogo__acoes { max-height: calc(100dvh - 170px); overflow-y: auto; }
+.especial--aparencia { padding: 14px; gap: 12px; }
+.especial--aparencia .especial__previa { height: clamp(140px, 28dvh, 230px); }
+.especial__itens { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px 8px; }
+.especial__item {
+  position: relative; display: grid; justify-items: center; gap: 2px; padding: 6px 4px 8px; cursor: pointer;
+  font: 700 .78rem/1.15 var(--rqr-font-titulo); color: var(--livro-tinta-funda); text-align: center;
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), #FFFCF4; box-shadow: 0 4px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.especial__item-previa { display: grid; place-items: center; width: 56px; height: 52px; pointer-events: none; }
+.especial__item.is-on { background: var(--livro-grao), var(--livro-sol); }
+.especial__item:not(:disabled):active { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.especial__item:disabled { cursor: default; border-style: dashed; box-shadow: none; background: var(--livro-grao), var(--livro-papel-suave); }
+.especial__item:disabled .especial__item-previa { opacity: .45; filter: grayscale(.6); }
+.especial__item-marco { padding: 0 6px; border-radius: 99px; font-size: .65rem; background: var(--livro-tinta); color: var(--livro-sol); }
+:root[data-tema="escuro"] .especial__item { background: var(--livro-grao), #36357A; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 4px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .especial__item.is-on { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .especial__item:disabled { background: var(--livro-grao), #24234F; }
+
+/* ---------- Revisão "O botão de fala 3d deveria ser azul" ---------- */
+/* Título da história recebe foco por script (tabIndex -1): sem retângulo em volta. */
+.historia__titulo:focus, .historia__titulo:focus-visible { outline: none; box-shadow: none; }
+
+/* Sim / Não lado a lado, mesma largura. */
+.historia__par { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.historia__par > .rqr-botao { width: 100%; margin: 0; }
+
+/* Geometria única das escolhas da história: 2 por linha, e a última sobra (número ímpar)
+   ocupa a linha inteira. Vale para escolhas soltas, perguntas do Broto e perguntas do app. */
+.historia-dialogo__acoes > .historia-opcao:last-child:nth-child(odd),
+.historia-dialogo .especial:not(form):not(.especial--aparencia) > .historia-opcao:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* Campo de nome: "Prefiro não dizer" e "Pronto" lado a lado. */
+.historia-dialogo form.especial .especial__fim > .historia-opcao { box-shadow: 0 5px 0 var(--livro-tinta); }
+
+/* Motivos: todas as opções na tela, em grade de 2, sem rolagem. */
+.historia-dialogo:has(.especial__chips) .historia-dialogo__acoes { max-height: none; overflow: visible; }
+.historia-dialogo .especial__chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.historia-dialogo .especial__chips .chip {
+  width: 100%; min-height: 40px; padding: 4px 8px; justify-content: flex-start; text-align: left;
+  font-size: .8rem; line-height: 1.15; border-radius: var(--livro-raio-p);
+}
+.historia-dialogo .especial__chips .chip:last-child:nth-child(odd) { grid-column: 1 / -1; justify-content: center; }
+.chip__texto { min-width: 0; }
+@media (max-height: 640px) { .historia-dialogo .especial__chips .chip { min-height: 34px; font-size: .75rem; } }
+
+/* Pulo do Bichinho: sem faixa colorida no topo, só metros e folhas e os botões. */
+.pulo__topo { background: none !important; border: 0 !important; box-shadow: none; }
+.pulo__placar { display: inline-flex; align-items: center; gap: 4px; margin-right: auto; }

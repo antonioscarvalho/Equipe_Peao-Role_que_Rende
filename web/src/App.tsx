@@ -14,14 +14,18 @@ import { ORDEM, capitulosConcluidos, estaDesbloqueado, jaFezCapituloHoje, libera
 import { capitulos, TITULOS } from "./historia/capitulos";
 import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
-import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
+import { definirVolumeEfeitos, definirVolumeMusica, pararTrilha, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
 import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { useProgresso } from "./personalizacao/armazenamento";
 import { categoriaDe, proximoMarco, quantoFalta } from "./personalizacao/aparencia";
 import { abrirPersonalizar } from "./personalizacao/rota";
 import { RoleDeCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
+import { useContraste } from "./tema";
+import { useVibrar, vibrar } from "./tato";
 import { BotaoLibras } from "./BotaoLibras";
+import { PainelCrise } from "./AjudaAgora";
+import { ehMenorDeIdade } from "./menor";
 import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
@@ -76,7 +80,7 @@ function ControleVolume({ id, rotulo, valor, aoMudar }: { id: string; rotulo: st
   return (
     <div className="controle-volume">
       <div className="controle-volume__topo">
-        <label htmlFor={id}>{rotulo}</label>
+        <label htmlFor={id} className="ajuste__texto">{rotulo}</label>
         <span className="controle-volume__valor" aria-hidden="true">{valor === 0 ? "Mudo" : `${pct}%`}</span>
       </div>
       <div className="controle-volume__linha">
@@ -116,14 +120,28 @@ export default function App() {
   // false = fechada; true = mapa; "cap1" = primeiro acesso, direto no capítulo 1.
   const [historia, setHistoria] = useState<boolean | "cap1">(false);
   const [abrindo, setAbrindo] = useState(true);
+  // Respondeu que tem menos de 18 anos (tela de idade da história): só a tela de ajuda, sem o resto do app.
+  const [menorDeIdade, setMenorDeIdade] = useState(ehMenorDeIdade);
   const conhecer = useConhecer();
   const { perfil } = usePerfil();
   const nomeBroto = nomeDoBroto(perfil);
   const [brilho, setBrilho] = useState(0);
   const [confete, setConfete] = useState(0);
-  const [reduzir, setReduzir] = useState(
-    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
+  // Reduzir animações: a escolha guardada vence; sem escolha, segue o aparelho (WCAG 2.3.3).
+  const [reduzir, setReduzirEstado] = useState(() => {
+    try {
+      const v = localStorage.getItem("rqr-reduzir");
+      if (v === "1" || v === "0") return v === "1";
+    } catch { /* modo privado */ }
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
+  const setReduzir = (v: boolean) => {
+    try { localStorage.setItem("rqr-reduzir", v ? "1" : "0"); } catch { /* vale só nesta visita */ }
+    setReduzirEstado(v);
+  };
+  // Montado aqui (e não só em Ajustes) para o alto contraste valer em todas as telas.
+  const contraste = useContraste();
+  const vibracao = useVibrar();
   const [aviso, setAviso] = useState("");
   // Efeitos (missões, cliques) e música (cantiga, trilha) têm volume e guarda separados,
   // numa régua de 0 a 10 (cada setter já aplica e grava; nenhum efeito extra precisa disso).
@@ -150,6 +168,10 @@ export default function App() {
   // A abertura fica silenciosa e a música entra quando o primeiro menu aparece.
   useEffect(() => {
     if (abrindo) return;
+    if (historia) {
+      pararTrilha();
+      return;
+    }
     const menuJogos = aba === "jogos";
     tocarTrilha(
       menuJogos ? "/sons/trilha-alegre.opus" : "/sons/trilha-leve.opus",
@@ -157,7 +179,7 @@ export default function App() {
         ? { titulo: "Rolê de Hoje", artista: "Tema do menu de jogos" }
         : { titulo: "Um Passo de Cada Vez", artista: "Trilha do app" },
     );
-  }, [aba, abrindo]);
+  }, [aba, abrindo, historia]);
 
   // Pré-carrega apenas o que a pessoa provavelmente vai abrir a seguir; evita baixar a OST inteira no início.
   useEffect(() => {
@@ -171,18 +193,6 @@ export default function App() {
     if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
     if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
   }, [aba, abrindo, historia, crise]);
-
-  // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
-  const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);
-  useEffect(() => {
-    const tempo = { current: 0 };
-    const parar = ouvirTrilhaInfo((info) => {
-      setHudMusica(info);
-      window.clearTimeout(tempo.current);
-      tempo.current = window.setTimeout(() => setHudMusica(null), 4500);
-    });
-    return () => { window.clearTimeout(tempo.current); parar(); };
-  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
@@ -206,6 +216,7 @@ export default function App() {
     tocarMissao(feitasNaSemana, semana.missoes.length);
     window.setTimeout(() => tocar("folha"), 450);
     const completou = feitasNaSemana === semana.missoes.length;
+    vibrar(completou ? "conquista" : "sucesso");
     if (completou) window.setTimeout(() => tocar("conquista"), 1100);
     setAviso(completou ? `Semana ${semana.numero} completa! ${nomeBroto} tá orgulhoso.` : `Missão feita: ${mi.texto}.`);
   }, [plano.feitas, nomeBroto]);
@@ -216,6 +227,8 @@ export default function App() {
 
   const abrirCrise = () => { setCrise(true); setEvento({ humor: "apoio", ate: Date.now() + 10 * 60_000 }); };
   const fecharCrise = () => { setCrise(false); setEvento({ humor: "apoio", ate: Date.now() + 30_000 }); };
+
+  if (menorDeIdade) return <PainelCrise bloqueio aoFechar={() => {}} />;
 
   return (
     <div className="palco">
@@ -278,8 +291,8 @@ export default function App() {
                     <span className="destaque__estado">{cap.estado}</span>
                     {cap.pronto && cap.estado === "Disponível hoje" && <span className="destaque__novo" aria-hidden="true">Novo!</span>}
                   </button>
-                  <button className="destaque destaque--presente" onClick={() => { tocar("clique"); abrirPersonalizar(); }}
-                    aria-label={presente ? `Próximo presente: ${presente.item.nome}. ${presente.texto}. Abrir personalização.` : "Personalizar"}>
+                  {/* Sem aria-label: o nome acessível é o próprio texto visível (WCAG 2.5.3). */}
+                  <button className="destaque destaque--presente" onClick={() => { tocar("clique"); abrirPersonalizar(); }}>
                     <span className="presente__vitrine" aria-hidden="true">
                       <Bichinho humor="calmo" nivel={2} tamanho={64} reduzir aparencia={vestido} />
                     </span>
@@ -297,6 +310,7 @@ export default function App() {
                           })()}
                         </span>
                       )}
+                      <span className="sr-only">{presente ? `. ${presente.texto}. ` : ". "}Abrir personalização.</span>
                     </span>
                   </button>
                 </div>
@@ -361,7 +375,9 @@ export default function App() {
               </div>
               {aberta && (
                 <div className="secao">
-                  <span className="progresso" aria-label={`${feitas} de ${s.missoes.length} missões`}>
+                  <span className="progresso" role="progressbar" aria-label="Missões feitas na semana"
+                    aria-valuemin={0} aria-valuemax={s.missoes.length} aria-valuenow={feitas}
+                    aria-valuetext={`${feitas} de ${s.missoes.length} missões`}>
                     <span style={{ transform: `scaleX(${feitas / s.missoes.length})` }} />
                   </span>
                   <span className="secao__conta">{feitas}/{s.missoes.length}</span>
@@ -372,7 +388,7 @@ export default function App() {
                   if (!aberta) {
                     return (
                       <li key={mi.id}>
-                        <div className="missao is-oculta" aria-label="Missão oculta">
+                        <div className="missao is-oculta">
                           <span className="missao__icone" aria-hidden="true">?</span>
                           <span className="missao__texto">Missão oculta</span>
                         </div>
@@ -431,8 +447,13 @@ export default function App() {
             <h2 className="ajustes__grupo">Aparência e conforto</h2>
             <div className="ajustes">
               <label className="ajuste">
+                <span className="ajuste__texto">Alto contraste<small>Cores mais fortes e sem textura atrás do texto</small></span>
+                <input type="checkbox" role="switch" checked={contraste.alto} onChange={(e) => { tocar("clique"); contraste.mudar(e.target.checked); }} />
+                <span className="interruptor__trilho" aria-hidden="true" />
+              </label>
+              <label className="ajuste">
                 <span className="ajuste__texto">Reduzir animações<small>Menos movimento na tela</small></span>
-                <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
+                <input type="checkbox" role="switch" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
                 <span className="interruptor__trilho" aria-hidden="true" />
               </label>
               <div className="ajuste">
@@ -445,8 +466,21 @@ export default function App() {
               </button>
             </div>
 
+            <h2 className="ajustes__grupo">Vibração</h2>
+            <div className="ajustes">
+              <label className="ajuste">
+                <span className="ajuste__texto">Vibrar
+                  <small>{vibracao.suportado
+                    ? "O celular vibra de leve nos botões, nas missões e nos avisos"
+                    : "Este aparelho não vibra pelo navegador. O resto continua igual"}</small>
+                </span>
+                <input type="checkbox" role="switch" checked={vibracao.ligado} onChange={(e) => vibracao.mudar(e.target.checked)} />
+                <span className="interruptor__trilho" aria-hidden="true" />
+              </label>
+            </div>
+
             <h2 className="ajustes__grupo">Som</h2>
-            <div className="controles-volume">
+            <div className="ajustes controles-volume">
               <ControleVolume id="volume-efeitos" rotulo="Efeitos" valor={volumes.efeitos} aoMudar={definirEfeitos} />
               <ControleVolume id="volume-musica" rotulo="Música" valor={volumes.musica} aoMudar={definirMusica} />
             </div>
@@ -474,16 +508,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {hudMusica && (
-        <div className="hud-musica" role="status" aria-live="polite">
-          <Icone nome="music" tamanho={18} />
-          <div className="hud-musica__texto">
-            <span className="hud-musica__titulo">{hudMusica.titulo}</span>
-            <span className="hud-musica__artista">{hudMusica.artista}</span>
-          </div>
-        </div>
-      )}
-      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
+      {historia && <Historia aoFechar={() => setHistoria(false)} aoMenorDeIdade={() => { setHistoria(false); setMenorDeIdade(true); }} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
         trilhaRetorno={aba === "jogos" ? "jogos" : "app"} />}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);

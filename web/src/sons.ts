@@ -14,6 +14,8 @@ export type NomeSom =
   | "queda" | "aproximar" | "lua" | "constelacao" | "nave" | "medir" | "amanhecer" | "familia"
   | "cratera" | "bairro" | "transicao" | "pergunta" | "pouso";
 
+import { vibrar } from "./tato";
+
 let ctx: AudioContext | null = null;
 
 function contexto(): AudioContext | null {
@@ -175,13 +177,17 @@ const receitas: Record<NomeSom, Nota[]> = {
   ],
 };
 
-const CHAVE_VOL_EFEITOS = "rqr:volume-efeitos";
-const CHAVE_VOL_MUSICA = "rqr:volume-musica";
+// O "-v2" descarta o volume gravado antes da troca do padrão para 40%: sem ele, quem já abriu o
+// jogo continuaria com a música nos 20% antigos.
+const CHAVE_VOL_EFEITOS = "rqr:volume-efeitos-v2";
+const CHAVE_VOL_MUSICA = "rqr:volume-musica-v2";
 
 function lerVolumeGravado(chave: string, padrao: number): number {
   if (typeof window === "undefined") return padrao;
   try {
-    const v = Number(localStorage.getItem(chave));
+    const guardado = localStorage.getItem(chave);
+    if (guardado === null || guardado === "") return padrao; // Number(null) é 0: sem isso o app abria mudo.
+    const v = Number(guardado);
     return Number.isFinite(v) && v >= 0 && v <= 10 ? v : padrao;
   } catch {
     return padrao;
@@ -250,6 +256,8 @@ export function tocarMissao(feitas: number, total: number) {
 }
 
 export function tocar(nome: NomeSom) {
+  // Toque leve no celular junto do clique (tato.ts): vale mesmo com o som mudo, e não vibra na crise.
+  if (nome === "clique") vibrar("toque");
   if (volumeEfeitos <= 0) { console.debug(`[sons] mudo: régua de Efeitos em 0, "${nome}" não tocou`); return; }
   tocarNotas(receitas[nome], volumeEfeitos / 10);
 }
@@ -392,10 +400,12 @@ export function abaixarTrilha(ligar: boolean) {
  */
 export function tocarMusica(url: string, volume = 1) {
   if (typeof window === "undefined") return;
-  if (volumeMusica <= 0) { console.debug(`[sons] mudo: régua de Música em 0, "${url}" não tocou`); return; }
+  // A cantiga faz parte da história: toca se Música OU Efeitos estiverem ligados.
+  const nivel = Math.max(volumeMusica, volumeEfeitos);
+  if (nivel <= 0) { console.debug(`[sons] mudo: Música e Efeitos em 0, "${url}" não tocou`); return; }
   musicaAtual?.pause();
   const audio = new Audio(url);
-  audio.volume = (volumeMusica / 10) * volume;
+  audio.volume = Math.min(1, (nivel / 10) * volume);
   audio.loop = false;
   musicaAtual = audio;
   abaixarTrilha(true);

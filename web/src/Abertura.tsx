@@ -1,55 +1,67 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { useAparenciaVisivel } from "./personalizacao";
 import { CAMINHO_CORPO } from "./personalizacao/ItensBichinho";
 import "./abertura.css";
 
 /**
- * Abertura do app (cerca de 4 s), discreta, como a logo de um app:
- * 1. tela preta;
- * 2. o contorno do Broto se desenha em traço claro (o esboço vira a logo) e fica 1 s no escuro;
- * 3. o amarelo toma a tela a partir do Broto, que ganha cor;
- * 4. tudo some, revelando o app (sem nome: a logo é o próprio Broto).
- * Sem botão de pular (pedido do produto). Enter ou Esc ainda pulam. Com reduzir, fica parada e some em 1,2 s.
+ * Abertura do app (cerca de 6 s), em duas etapas sobre o fundo preto:
+ * 1. o logo do Rolê que Rende aparece, fica e some (2 s);
+ * 2. a logo do app: o contorno do Broto se desenha em traço claro, fica 1 s no escuro,
+ *    o amarelo toma a tela a partir do Broto, que ganha cor, e tudo some revelando o app (4 s).
+ * Sem botão de pular (pedido do produto). Enter ou Esc ainda pulam tudo.
+ * Com reduzir: cada etapa aparece parada (o logo 1,2 s, o Broto colorido 1,2 s), sem movimento.
+ * É decorativa (aria-hidden): o app por baixo já tem título e nome próprios.
  */
-const DURACAO_MS = 4000;
+const MARCA_MS = 2000;
+const APP_MS = 4000;
+const PARADA_MS = 1200;
 
 export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean }) {
   const aparencia = useAparenciaVisivel();
+  const [etapa, setEtapa] = useState<"marca" | "app">("marca");
   const acabou = useRef(false);
   const fim = useRef(aoFim);
   fim.current = aoFim;
   const terminar = () => { if (!acabou.current) { acabou.current = true; fim.current(); } };
 
   useEffect(() => {
-    const t = window.setTimeout(terminar, reduzir ? 1200 : DURACAO_MS);
+    const marca = reduzir ? PARADA_MS : MARCA_MS;
+    const t1 = window.setTimeout(() => setEtapa("app"), marca);
+    const t2 = window.setTimeout(terminar, marca + (reduzir ? PARADA_MS : APP_MS));
     const tecla = (e: KeyboardEvent) => { if (["Escape", "Enter"].includes(e.key)) { e.preventDefault(); terminar(); } };
     window.addEventListener("keydown", tecla);
-    return () => { window.clearTimeout(t); window.removeEventListener("keydown", tecla); };
+    return () => { window.clearTimeout(t1); window.clearTimeout(t2); window.removeEventListener("keydown", tecla); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className={`abertura ${reduzir ? "abertura--parada" : ""}`} aria-hidden="true">
-      <div className="abertura__amarelo" />
-      <div className="abertura__centro">
-        <div className="abertura__logo">
-          {/* O esboço: os mesmos traços do Broto, desenhados em linha clara sobre o preto. */}
-          <svg className="abertura__esboco" viewBox="0 0 200 200">
-            <path pathLength={1} d={CAMINHO_CORPO} />
-            <path pathLength={1} d="M48 140 C30 136 22 150 28 158 C34 164 46 156 52 150" />
-            <path pathLength={1} d="M152 140 C170 136 178 150 172 158 C166 164 154 156 148 150" />
-            <path pathLength={1} d="M100 52 C100 40 100 34 100 26" />
-            <path pathLength={1} d="M100 38 C88 30 80 34 78 26 C90 22 98 28 100 38Z" />
-            <path pathLength={1} d="M100 32 C112 24 120 28 124 20 C110 16 102 22 100 32Z" />
-            <path pathLength={1} d="M68 110 Q78 98 88 110 M112 110 Q122 98 132 110" />
-            <path pathLength={1} d="M88 132 Q100 146 112 132" />
-          </svg>
-          <div className="abertura__broto">
-            <Bichinho humor="feliz" nivel={2} tamanho={150} reduzir aparencia={aparencia} />
+    <div className={`abertura abertura--${etapa} ${reduzir ? "abertura--parada" : ""}`} aria-hidden="true">
+      {etapa === "marca" ? (
+        <img className="abertura__marca" src="/marca/role-que-rende.webp" alt="" width={449} height={315} decoding="async" />
+      ) : (
+        <>
+          <div className="abertura__amarelo" />
+          <div className="abertura__centro">
+            <div className="abertura__logo">
+              {/* O esboço: os mesmos traços do Broto, desenhados em linha clara sobre o preto. */}
+              <svg className="abertura__esboco" viewBox="0 0 200 200">
+                <path pathLength={1} d={CAMINHO_CORPO} />
+                <path pathLength={1} d="M48 140 C30 136 22 150 28 158 C34 164 46 156 52 150" />
+                <path pathLength={1} d="M152 140 C170 136 178 150 172 158 C166 164 154 156 148 150" />
+                <path pathLength={1} d="M100 52 C100 40 100 34 100 26" />
+                <path pathLength={1} d="M100 38 C88 30 80 34 78 26 C90 22 98 28 100 38Z" />
+                <path pathLength={1} d="M100 32 C112 24 120 28 124 20 C110 16 102 22 100 32Z" />
+                <path pathLength={1} d="M68 110 Q78 98 88 110 M112 110 Q122 98 132 110" />
+                <path pathLength={1} d="M88 132 Q100 146 112 132" />
+              </svg>
+              <div className="abertura__broto">
+                <Bichinho humor="feliz" nivel={2} tamanho={150} reduzir aparencia={aparencia} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

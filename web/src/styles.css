@@ -4,6 +4,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; }
+/* 2.4.11/2.4.12: o foco rolado para a vista não fica atrás da barra de abas (fixa embaixo) nem do topo. */
+html { scroll-padding-top: 16px; scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 body {
   font-family: "Nunito Sans", var(--rqr-font-texto);
   color: var(--rqr-texto);
@@ -262,7 +264,8 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
   background: var(--rqr-fundo-suave); border: 3px solid var(--rqr-borda); transition: background var(--rqr-dur-base); }
 .botao-tema--compacto .botao-tema__icone { width: 44px; height: 44px; border-radius: 50%; background: var(--rqr-fundo-conteudo); }
 .botao-tema:hover .botao-tema__icone { background: var(--rqr-azul-claro); color: var(--rqr-azul-escuro); }
-.botao-tema:focus-visible { outline: none; }
+/* O anel vai no ícone (regra abaixo); aqui fica transparente, e não "none", para aparecer no modo de cores forçadas. */
+.botao-tema:focus-visible { outline: 3px solid transparent; }
 .botao-tema:focus-visible .botao-tema__icone { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
 
 /* ---------- Confete: explosão do centro para as laterais (missão concluída) ---------- */
@@ -344,7 +347,8 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 /* Painel do protocolo de crise (CVV 188, SAMU 192), aberto pela história do Broto. */
 .ajuda-agora__painel { z-index: 70; max-width: 100%; }
 .ajuda-agora__painel .ajuda { max-width: 380px; }
-.ajuda-agora__painel h2:focus { outline: none; }
+/* Título que recebe foco pelo código (tabIndex -1): sem anel no foco do toque/código, com anel no do teclado. */
+.ajuda-agora__painel h2:focus:not(:focus-visible) { outline: 3px solid transparent; }
 
 /* ---------- Menu inferior (abas) e telas sem rolagem ---------- */
 .celular { padding-bottom: 0; min-height: min(780px, calc(100dvh - 96px)); }

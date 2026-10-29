@@ -34,17 +34,17 @@ export function AjudaAgora() {
  * Usado pelo botão "Preciso de ajuda agora" e pelas opções `abreCrise` da história do Broto.
  * Quem abre cuida de devolver o foco em `aoFechar`.
  */
-export function PainelCrise({ aoFechar }: { aoFechar: () => void }) {
+export function PainelCrise({ aoFechar, bloqueio = false }: { aoFechar: () => void; bloqueio?: boolean }) {
   const titulo = useRef<HTMLHeadingElement>(null);
   const fechar = useRef(aoFechar);
   fechar.current = aoFechar;
 
   useEffect(() => {
     titulo.current?.focus();
-    const esc = (e: KeyboardEvent) => e.key === "Escape" && fechar.current();
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && !bloqueio && fechar.current();
     window.addEventListener("keydown", esc);
     return () => window.removeEventListener("keydown", esc);
-  }, []);
+  }, [bloqueio]);
 
   // A trilha de fundo (alegre e energética) não combina com o momento de crise: abaixa
   // enquanto este painel estiver aberto, em qualquer tela do app, e devolve ao fechar.
@@ -56,17 +56,22 @@ export function PainelCrise({ aoFechar }: { aoFechar: () => void }) {
   return (
     <div className="crise ajuda-agora__painel" role="dialog" aria-modal="true" aria-labelledby="ajuda-agora-titulo">
       <div className="tela-libras"><BotaoLibras /></div>
-      <button className="crise__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
+      {!bloqueio && <button className="crise__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>}
       <h2 id="ajuda-agora-titulo" ref={titulo} tabIndex={-1} className="crise__titulo">
         Você não precisa passar por isso sozinho(a).
       </h2>
-      <p>Parece que está pesado. Escolha uma opção. Ligar é gratuito.</p>
+      {bloqueio ? (
+        <p>
+          Este app é só para maiores de 18 anos. Se quiser conversar sobre apostas ou qualquer coisa que esteja pesando,
+          procure um adulto de confiança ou um destes serviços. Ligar é gratuito.
+        </p>
+      ) : <p>Parece que está pesado. Escolha uma opção. Ligar é gratuito.</p>}
       <a className="ajuda" href="tel:188"><Icone nome="phone" /> CVV · conversar com alguém agora · 188 (24h)</a>
       <a className="ajuda" href="tel:192"><Icone nome="phone" /> SAMU · risco imediato · 192</a>
       <a className="ajuda" href="https://cvv.org.br" target="_blank" rel="noreferrer"><Icone nome="heartHandshake" /> Chat do CVV (precisa de internet)</a>
       <p>Você também pode ir à unidade de saúde (UBS) do seu bairro ou ao CAPS.</p>
       <small>O Meu amigo Broto! é um apoio e não substitui atendimento profissional nem serviço de emergência.</small>
-      <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar, sem pressa</button>
+      {!bloqueio && <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar, sem pressa</button>}
     </div>
   );
 }

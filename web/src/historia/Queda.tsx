@@ -4,6 +4,7 @@ import { Bichinho } from "../Bichinho";
 import { useAparenciaVisivel } from "../personalizacao";
 import { CenaCap1 } from "./cenas/CenaCap1";
 import { tocar } from "../sons";
+import { vibrar } from "../tato";
 import "./cenas/cenas.css";
 
 /**
@@ -26,7 +27,7 @@ export function Queda({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean 
     botao.current?.focus();
     if (reduzir) return;
     tocar("queda"); // vento descendo enquanto o Broto cai, antes do "pulo" do pouso
-    const pouso = window.setTimeout(() => { setPousou(true); tocar("pouso"); }, 1700);
+    const pouso = window.setTimeout(() => { setPousou(true); tocar("pouso"); vibrar("impacto"); }, 1700);
     const t = window.setTimeout(terminar, DURACAO_MS + 900);
     const esc = (e: KeyboardEvent) => { if (e.key === "Escape") { e.preventDefault(); terminar(); } };
     window.addEventListener("keydown", esc);
