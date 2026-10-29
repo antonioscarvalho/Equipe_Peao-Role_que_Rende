@@ -17,19 +17,26 @@ SR = 32000
 BATIDAS_POR_ACORDE = 8  # dois compassos 4/4
 CAUDA = 1.4
 FADE_LOOP = 1.0
-BATIDAS_OSTINATO = tuple(passo * 0.5 for passo in range(16))
-PASSOS_OSTINATO = (0, 2, 1, 2, 0, 2, 3, 2, 0, 2, 1, 2, 3, 2, 1, 2)
-BATIDAS_GANCHO = (0.0, 1.25, 1.75, 2.5, 4.0, 5.25, 5.75, 6.5)
-INTERVALOS_GANCHO = (0, 7, 9, 7, 12, 9, 7, 4)
-VOLUMES_GANCHO = (0.057, 0.045, 0.044, 0.050, 0.062, 0.046, 0.044, 0.053)
+BATIDAS_OSTINATO = (0.5, 1.0, 1.75, 2.5, 3.25, 4.5, 5.0, 5.75, 6.5, 7.25)
+PASSOS_OSTINATO = (0, 2, 1, 3, 1, 0, 2, 3, 2, 1)
+MELODIAS_SECOES = (
+    ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
+     (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 4, 1.0)),
+    ((0.0, 4, 0.65), (0.75, 7, 0.4), (1.25, 9, 1.1), (3.0, 12, 0.8),
+     (4.25, 9, 0.95), (5.5, 7, 0.4), (6.0, 4, 0.45), (6.75, 7, 0.85)),
+    ((0.0, 0, 0.55), (0.75, 4, 0.55), (1.5, 7, 0.9), (2.5, 9, 0.9),
+     (4.0, 12, 1.1), (5.25, 14, 0.4), (5.75, 16, 0.5), (6.5, 12, 1.0)),
+    ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
+     (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 0, 1.0)),
+)
 
 
-# Cada secao define o acorde, o baixo e o ostinato. O mesmo gancho ascendente volta
-# sobre cada acorde para ficar facil de reconhecer e cantarolar.
+# Cada secao define o acorde, o baixo e o ostinato. A melodia tem frase, resposta,
+# subida para o climax e retorno do tema com resolucao.
 TRILHAS = {
     "leve": {
         "arquivo": "trilha-leve",
-        "bpm": 92,
+        "bpm": 100,
         "secoes": [
             ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81]),
             ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74]),
@@ -39,7 +46,7 @@ TRILHAS = {
     },
     "alegre": {
         "arquivo": "trilha-alegre",
-        "bpm": 102,
+        "bpm": 108,
         "secoes": [
             ([48, 55, 60, 64, 67], (36, 43), [60, 64, 67, 74]),
             ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77]),
@@ -59,7 +66,7 @@ TRILHAS = {
     },
     "carrinho": {
         "arquivo": "trilha-carrinho",
-        "bpm": 98,
+        "bpm": 104,
         "secoes": [
             ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
             ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
@@ -102,6 +109,27 @@ def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.
         canal[i] += volume * env * onda
 
 
+def acrescentar_nota_melodia(canal, nota, inicio, duracao, volume, detune, atraso=0.0):
+    t0 = inicio + atraso
+    freq = hz(nota) * (1.0 + detune)
+    ataque = 0.018
+    soltura = 0.18
+    limite = min(len(canal), int((t0 + duracao + soltura) * SR))
+    i0 = max(0, int(t0 * SR))
+    for i in range(i0, limite):
+        t = i / SR - t0
+        if t < ataque:
+            env = t / ataque
+        elif t < duracao:
+            env = 0.82 + 0.18 * math.exp(-2.5 * (t - ataque))
+        else:
+            env = 0.82 * math.exp(-13.0 * (t - duracao))
+        vibrato = 0.0018 * math.sin(2.0 * math.pi * 5.1 * t)
+        fase = 2.0 * math.pi * freq * (1.0 + vibrato) * t
+        onda = 0.72 * math.sin(fase) + 0.21 * math.sin(2.0 * fase) + 0.07 * math.sin(3.0 * fase)
+        canal[i] += volume * env * onda
+
+
 def crossfade_loop(canal, ciclo, fade):
     amostras_ciclo = int(ciclo * SR)
     amostras_fade = int(fade * SR)
@@ -124,40 +152,38 @@ def gerar_canal(config, detune, atraso):
         inicio = indice * duracao_secao
         crescimento = 0.58 + indice * 0.12
 
-        # Acorde em ataques curtos substitui blocos sustentados, sem timbre de orgao.
-        notas_acorde = (acorde[0], acorde[1], acorde[-1])
-        for batida in (0, 4):
-            for voz, nota in enumerate(notas_acorde):
-                acrescentar_pluck(canal, nota, inicio + batida * segundos_batida,
-                                  0.026 * crescimento, 6.5, detune,
-                                  atraso + voz * 0.035)
+        # Ataque breve marca a troca harmonica; nao ha acordes sustentados.
+        notas_acorde = (acorde[0], acorde[1])
+        for voz, nota in enumerate(notas_acorde):
+            acrescentar_pluck(canal, nota, inicio, 0.018 * crescimento, 7.5,
+                              detune, atraso + voz * 0.045)
 
-        # Baques suaves marcam os tempos fortes e dao peso ao crescendo.
-        for batida in (0, 4):
-            acrescentar_baque(canal, inicio + batida * segundos_batida,
-                              0.035 * crescimento, detune, atraso)
+        # Um baque por acorde deixa espaco para a frase principal.
+        acrescentar_baque(canal, inicio, 0.026 * crescimento, detune, atraso)
 
-        # Pulso grave regular, com raiz e quinta alternadas sob o ostinato.
-        for batida in range(BATIDAS_POR_ACORDE):
-            nota_baixo = baixo[0] if batida % 2 == 0 else baixo[1]
+        # O baixo muda entre os dois compassos em vez de marcar cada tempo.
+        for batida, nota_baixo in ((0, baixo[0]), (4, baixo[1])):
             acrescentar_pluck(canal, nota_baixo, inicio + batida * segundos_batida,
-                              0.050 * crescimento, 5.8, detune, atraso)
+                              0.032 * crescimento, 6.8, detune, atraso)
 
-        # Ostinato em colcheias cria movimento; as oitavas finais ampliam o crescendo.
-        for batida, passo in zip(BATIDAS_OSTINATO, PASSOS_OSTINATO):
-            acrescentar_pluck(canal, arpejo[passo], inicio + batida * segundos_batida,
-                              0.024 * crescimento, 8.5, detune, atraso)
+        # Arpejo sincopado e discreto; o motivo principal fica em primeiro plano.
+        for passo, batida in enumerate(BATIDAS_OSTINATO):
+            nota_arpejo = arpejo[PASSOS_OSTINATO[(passo + indice * 2) % len(PASSOS_OSTINATO)]]
+            acrescentar_pluck(canal, nota_arpejo, inicio + batida * segundos_batida,
+                              0.012 * crescimento, 10.0, detune, atraso)
+
         raiz_gancho = acorde[0] + 24
         if raiz_gancho < 72:
             raiz_gancho += 12
-        for indice_nota, (batida, intervalo) in enumerate(zip(BATIDAS_GANCHO, INTERVALOS_GANCHO)):
+        for indice_nota, (batida, intervalo, duracao) in enumerate(MELODIAS_SECOES[indice]):
             nota = raiz_gancho + intervalo
-            acrescentar_pluck(canal, nota, inicio + batida * segundos_batida,
-                              VOLUMES_GANCHO[indice_nota] * (0.76 + indice * 0.08),
-                              4.5 if indice_nota in (1, 2, 5, 6) else 3.6, detune, atraso)
-            if indice >= 2 and indice_nota in (1, 3, 5, 7):
-                acrescentar_pluck(canal, nota + 12, inicio + batida * segundos_batida,
-                                  0.014 * crescimento, 4.8, detune, atraso)
+            volume = (0.078 + indice * 0.009) * (1.12 if indice_nota in (0, 4) else 1.0)
+            acrescentar_nota_melodia(canal, nota, inicio + batida * segundos_batida,
+                                     duracao * segundos_batida, volume, detune, atraso)
+            if indice >= 2 and indice_nota in (3, 4, 6):
+                acrescentar_nota_melodia(canal, nota + 12, inicio + batida * segundos_batida,
+                                         duracao * segundos_batida, 0.022 * crescimento,
+                                         detune, atraso)
 
     return crossfade_loop(canal, ciclo, FADE_LOOP)
 
