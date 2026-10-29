@@ -90,6 +90,16 @@ export function usePerfil() {
     [mudar],
   );
 
+  /** Batismo do alien: mesmas regras do nome da pessoa. Texto vazio desfaz o batismo. */
+  const mudarNomeBroto = useCallback(
+    (texto: string): ErroNome | null => {
+      const erro = validarNome(texto);
+      if (!erro) mudar({ nomeBroto: normalizarNome(texto) });
+      return erro;
+    },
+    [mudar],
+  );
+
   const mudarCenario = useCallback((cenario: string) => mudar({ cenario }), [mudar]);
 
   /** Devolve o motivo da recusa para a tela explicar; com recusa, a foto anterior continua. */
@@ -109,6 +119,7 @@ export function usePerfil() {
     fotoUrl,
     aparencia,
     mudarNome,
+    mudarNomeBroto,
     mudarCenario,
     trocarFoto,
     tirarFoto,

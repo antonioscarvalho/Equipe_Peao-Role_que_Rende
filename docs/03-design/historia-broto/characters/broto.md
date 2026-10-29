@@ -2,7 +2,7 @@
 name: Broto
 role: protagonist
 status: alive
-aliases: []
+aliases: ["Alien (antes do batismo)", "pequeno (como a família chama)"]
 relationships: []
 locations:
   - praca-do-bairro
@@ -14,13 +14,15 @@ arc: ""
 
 ## Appearance
 
-Um broto de luz da Vila Estrela, pequeno, azul-claro, de olhos grandes. Fica "um pouco amassado" depois da queda, mas nunca se machuca de verdade.
+Um broto de luz da Vila Estrela, jovem adulto de uns 25 anos, azul-claro, de olhos grandes e uma folha na cabeça. Fica "um pouco amassado" depois da queda, mas nunca se machuca de verdade.
 
 ## Personality & Traits
 
-Carinhoso, teimoso, curioso. Pede conselho em vez de dar sermão. Fala do que sente sem vergonha e agradece o esforço da pessoa.
+Jovem adulto de uns 25 anos: esperto, mas ainda não é independente. Nunca tinha saído de casa, não sabe se virar sozinho e odeia ser chamado de "pequeno". Carinhoso, teimoso, curioso. Pede conselho em vez de dar sermão. Fala do que sente sem vergonha e agradece o esforço da pessoa.
 
 ## Backstory
+
+Chega sem nome: na Vila, o nome de verdade quem dá é o primeiro amigo feito longe de casa. A pessoa batiza ele no cap. 1 num comentário: "Você parece um broto. Vou te chamar de Broto." Não existe escolha de outro nome. Esperto e sarcástico com ele mesmo e com a Terra, nunca com a pessoa. Ver a skill `conversa-broto`.
 
 Viu a casa apagar lâmpada por lâmpada enquanto o pai ia ao Cometa da Sorte. Numa noite pegou a nave da família para buscar a luz de volta sozinho; a nave, sem combustível, apagou no meio do caminho e ele caiu como um meteoro na praça do bairro.
 
