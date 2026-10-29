@@ -19,7 +19,7 @@ export function ModalAcessibilidade({ children, aoTerminar }: { children: ReactN
       <div ref={caixa} className="modal-acess__caixa">
         <div className="modal-acess__selos" aria-hidden="true">
           {/* Símbolo de acessibilidade (ONU), sem fundo. O VLibras aparece logo abaixo, no botão de Libras. */}
-          <img className="modal-acess__simbolo" src="/marca/acessibilidade-onu.svg" alt="" width={64} height={64} />
+          <img className="modal-acess__simbolo" src="/marca/simbolo-acessibilidade.svg" alt="" width={64} height={64} />
         </div>
         <h2 id="modal-acess-titulo" ref={titulo} tabIndex={-1} className="modal-acess__titulo">Acessibilidade</h2>
         <p id="modal-acess-texto" className="modal-acess__texto">Ajuste antes de começar. Dá para mudar depois em Ajustes.</p>
