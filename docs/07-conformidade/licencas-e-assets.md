@@ -61,7 +61,10 @@ Avaliadas e **não instaladas** por não terem licença declarada: `brainstorm` 
 
 | Asset | Autor / fonte | Licença | Link | Gerado por IA? | Atribuição exigida | Arquivo no repo |
 |---|---|---|---|---|---|---|
-| _a preencher_ | | | | sim/não | | |
+| Cantiga da Vó (cena "musica" do cap. 1) — síntese aditiva própria (seno/harmônicos), sem sample de terceiros, exportada em Opus | Equipe Peão (gerado via Claude) | MIT (código do projeto) | — | sim (Claude, script Python próprio de síntese, convertido a Opus com ffmpeg) | Não exige | `web/public/sons/cantiga-vo.opus`, script em `web/scripts/compor-cantiga-vo.py` |
+| Trilha "alegre" do app inteiro (loop de 24s, Dó maior, baixo em groove e melodia saltitante) — síntese própria, sem sample de terceiros, exportada em Opus. Substitui a 1ª versão ("estelar", em tom menor) depois do feedback de que ficou depressiva | Equipe Peão (gerado via Claude) | MIT (código do projeto) | — | sim (Claude, script Python próprio de síntese, convertido a Opus com ffmpeg) | Não exige | `web/public/sons/trilha-alegre.opus`, script em `web/scripts/compor-trilha-alegre.py` |
+| Trilha do Pulo do Bichinho (loop de 16s, Sol maior, baixo bem saltitante) — mesma síntese própria, sem sample de terceiros, Opus | Equipe Peão (gerado via Claude) | MIT (código do projeto) | — | sim (Claude, script Python próprio de síntese, convertido a Opus com ffmpeg) | Não exige | `web/public/sons/trilha-pulo.opus`, script em `web/scripts/compor-trilha-pulo.py` |
+| Trilha do Rolê de Carrinho (loop de 20s, Ré maior, baixo em colcheias contínuas) — mesma síntese própria, sem sample de terceiros, Opus | Equipe Peão (gerado via Claude) | MIT (código do projeto) | — | sim (Claude, script Python próprio de síntese, convertido a Opus com ffmpeg) | Não exige | `web/public/sons/trilha-carrinho.opus`, script em `web/scripts/compor-trilha-carrinho.py` |
 
 ## APIs e serviços externos
 
