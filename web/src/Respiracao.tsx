@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
-import { abaixarTrilha, tocar } from "./sons";
+import { abaixarTrilha, tocar, tocarTrilha } from "./sons";
 
 const fases = [
   { nome: "Inspire", seg: 4, classe: "inspira" },
@@ -24,8 +24,23 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
   // Começa "vazio" e cresce na primeira inspiração, para a transição aparecer desde o início.
   const [montado, setMontado] = useState(false);
   useEffect(() => { const id = requestAnimationFrame(() => setMontado(true)); return () => cancelAnimationFrame(id); }, []);
-  // Mesmo ritmo calmo da respiração: a trilha alegre abaixa enquanto essa tela estiver aberta.
-  useEffect(() => { abaixarTrilha(true); return () => abaixarTrilha(false); }, []);
+  // Com o som da respiração desligado (padrão): só abaixa a trilha alegre, sem parar.
+  // Ligado: troca pra um som de fundo relaxante próprio, cujo volume sobe e desce no mesmo
+  // ritmo 4-4-6 do exercício — sem o duplo abaixamento (esse som já nasce bem baixinho).
+  // Adiado um tique por causa do StrictMode (dev), que monta/desmonta/monta de novo todo
+  // componente — ver o comentário mais detalhado em jogos/pulo/PuloDoBichinho.tsx.
+  useEffect(() => {
+    if (!comSom) { abaixarTrilha(true); return () => abaixarTrilha(false); }
+    let cancelado = false;
+    const id = window.setTimeout(() => {
+      if (!cancelado) tocarTrilha("/sons/respirar-calma.opus", { titulo: "Respire com calma", artista: "Som da respiração" });
+    }, 0);
+    return () => {
+      cancelado = true;
+      window.clearTimeout(id);
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+    };
+  }, [comSom]);
 
   useEffect(() => {
     if (terminou) return;
