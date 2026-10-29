@@ -60,11 +60,21 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   fecharRef.current = fechar;
 
   // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  // O StrictMode do React (só em dev) monta, desmonta e monta de novo todo componente pra pegar
+  // bug de efeito — sem o adiamento abaixo, isso troca de trilha 3x em sequência (pulo → alegre →
+  // pulo) e às vezes a última troca nem chega a tocar de verdade. Adiando um tique, a "desmontagem"
+  // falsa cancela antes de pedir qualquer coisa, e só a montagem de verdade troca a trilha.
   useEffect(() => {
-    console.log("[pulo] montou, pedindo trilha-pulo.opus"); // diagnóstico: prova que este efeito roda
-    tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+    let cancelado = false;
+    const id = window.setTimeout(() => {
+      if (cancelado) return;
+      console.log("[pulo] trocando pra trilha-pulo.opus");
+      tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+    }, 0);
     return () => {
-      console.log("[pulo] desmontou, voltando pra trilha-alegre.opus");
+      cancelado = true;
+      window.clearTimeout(id);
+      console.log("[pulo] saindo, voltando pra trilha-alegre.opus");
       tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
     };
   }, []);

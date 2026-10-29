@@ -69,9 +69,19 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   const [aviso, setAviso] = useState("");
 
   // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  // Adiado um tique por causa do StrictMode (dev): ele monta/desmonta/monta de novo todo componente,
+  // e sem isso a trilha trocava 3x em sequência (às vezes travando na trilha errada). Veja o mesmo
+  // comentário, mais detalhado, em jogos/pulo/PuloDoBichinho.tsx.
   useEffect(() => {
-    tocarTrilha("/sons/trilha-carrinho.opus", { titulo: "Rolê de Carrinho", artista: "Trilha do jogo" });
-    return () => tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+    let cancelado = false;
+    const id = window.setTimeout(() => {
+      if (!cancelado) tocarTrilha("/sons/trilha-carrinho.opus", { titulo: "Rolê de Carrinho", artista: "Trilha do jogo" });
+    }, 0);
+    return () => {
+      cancelado = true;
+      window.clearTimeout(id);
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+    };
   }, []);
 
   // Estado do jogo fora do React (muda 60x por segundo).
