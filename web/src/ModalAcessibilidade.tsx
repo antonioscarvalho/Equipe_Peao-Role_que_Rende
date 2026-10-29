@@ -18,9 +18,8 @@ export function ModalAcessibilidade({ children, aoTerminar }: { children: ReactN
     <div className="modal-acess" role="dialog" aria-modal="true" aria-labelledby="modal-acess-titulo" aria-describedby="modal-acess-texto">
       <div ref={caixa} className="modal-acess__caixa">
         <div className="modal-acess__selos" aria-hidden="true">
-          {/* Logo de acessibilidade da ONU (2015) e ícone oficial do VLibras (gov.br). */}
-          <img className="modal-acess__vlibras" src="/marca/acessibilidade-onu.svg" alt="" width={56} height={56} />
-          <img className="modal-acess__vlibras" src="/marca/vlibras.svg" alt="" width={56} height={56} />
+          {/* Símbolo de acessibilidade (ONU), sem fundo. O VLibras aparece logo abaixo, no botão de Libras. */}
+          <img className="modal-acess__simbolo" src="/marca/acessibilidade-onu.svg" alt="" width={64} height={64} />
         </div>
         <h2 id="modal-acess-titulo" ref={titulo} tabIndex={-1} className="modal-acess__titulo">Deixe o app do seu jeito</h2>
         <p id="modal-acess-texto" className="modal-acess__texto">
