@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
 import { tocar, tocarTrilha } from "../../sons";
+import { vibrar } from "../../tato";
 import { useAparenciaVisivel } from "../../personalizacao";
 import { BotaoTema } from "../../BotaoTema";
 import { useEsconderVLibras } from "../../vlibras";
@@ -455,6 +456,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
 
       // Caiu: pousa na grama. Nunca morre.
       if (g.y > g.h) {
+        vibrar("impacto"); // pousa na grama: um "tum" leve, o texto abaixo diz o que houve
         encerrar("caiu", `Ufa, caiu na grama macia! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas.`);
         return;
       }

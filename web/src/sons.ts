@@ -14,6 +14,8 @@ export type NomeSom =
   | "queda" | "aproximar" | "lua" | "constelacao" | "nave" | "medir" | "amanhecer" | "familia"
   | "cratera" | "bairro" | "transicao" | "pergunta" | "pouso";
 
+import { vibrar } from "./tato";
+
 let ctx: AudioContext | null = null;
 
 function contexto(): AudioContext | null {
@@ -252,6 +254,8 @@ export function tocarMissao(feitas: number, total: number) {
 }
 
 export function tocar(nome: NomeSom) {
+  // Toque leve no celular junto do clique (tato.ts): vale mesmo com o som mudo, e não vibra na crise.
+  if (nome === "clique") vibrar("toque");
   if (volumeEfeitos <= 0) { console.debug(`[sons] mudo: régua de Efeitos em 0, "${nome}" não tocou`); return; }
   tocarNotas(receitas[nome], volumeEfeitos / 10);
 }

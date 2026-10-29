@@ -1,5 +1,6 @@
 import { useRef, useState, type FocusEvent } from "react";
 import { tocar } from "../sons";
+import { vibrar } from "../tato";
 import { usePerfil, NOME_MAX } from "../personalizacao";
 import { useAparencia, useProgresso } from "../personalizacao/armazenamento";
 import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, metaCurta, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
@@ -127,7 +128,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
       if (enviado.current) return;
       tocar("clique");
       const e = mudarNome(texto);
-      if (e) { setErro(e === "longo" ? `Até ${NOME_MAX} letras.` : "Use só letras."); return; }
+      if (e) { vibrar("aviso"); setErro(e === "longo" ? `Até ${NOME_MAX} letras.` : "Use só letras."); return; }
       const nome = texto.replace(/\s+/g, " ").trim() || null;
       enviado.current = true;
       mudar({ nome });

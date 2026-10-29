@@ -8,7 +8,9 @@
 
 | Recurso | Prioridade | Status | Como demonstrar |
 |---|---|---|---|
-| Contraste mínimo WCAG AA (4,5:1 em texto) | Must | ⬜ | Mostrar a tela em alto contraste |
+| Contraste mínimo WCAG AA (4,5:1 em texto) | Must | ✅ axe-core sem falha nos 4 temas | Mostrar a tela em alto contraste |
+| Alto contraste (claro e escuro, texto ≥ 7:1, WCAG 1.4.6) | Must | ✅ Ajustes → "Alto contraste"; segue `prefers-contrast: more` na primeira vez; `forced-colors` do Windows | Ligar em Ajustes, abrir a respiração e o início |
+| Retorno tátil (vibração) | Could | ✅ Ajustes → "Vibrar"; nunca sozinho na crise; "Vibrar no ritmo" opcional na respiração (longa = inspire, duas curtas = solte) | Num Android: marcar uma missão e ligar "Vibrar no ritmo" |
 | Navegação completa por teclado | Must | ⬜ | Navegar sem mouse |
 | Textos alternativos em imagens | Must | ⬜ | _a definir_ |
 | Compatibilidade com leitor de tela (NVDA / TalkBack / VoiceOver) | Should | ⬜ | Trecho com leitor de tela |
@@ -16,7 +18,7 @@
 | Modos para daltonismo (sem depender só de cor) | Should | ⬜ | Alternar modo |
 | Tamanho de fonte ajustável | Could | ⬜ | _a definir_ |
 | Linguagem simples | Must | ⬜ | Ver [tom de voz](conteudo-e-tom-de-voz.md) |
-| Reduzir movimento / animações | Could | ⬜ | _a definir_ |
+| Reduzir movimento / animações | Could | ✅ Ajustes → "Reduzir animações", guardado no aparelho e aplicado antes do primeiro quadro | Ligar e abrir a respiração |
 | Tradução para Libras (VLibras Widget) | Should | 🟡 ligado, falta testar o avatar num aparelho | Tocar na bolha à direita, depois num texto da tela inicial |
 
 ## Checklist de verificação
