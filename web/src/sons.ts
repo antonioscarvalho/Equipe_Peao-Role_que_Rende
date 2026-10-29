@@ -177,8 +177,10 @@ const receitas: Record<NomeSom, Nota[]> = {
   ],
 };
 
-const CHAVE_VOL_EFEITOS = "rqr:volume-efeitos";
-const CHAVE_VOL_MUSICA = "rqr:volume-musica";
+// O "-v2" descarta o volume gravado antes da troca do padrão para 40%: sem ele, quem já abriu o
+// jogo continuaria com a música nos 20% antigos.
+const CHAVE_VOL_EFEITOS = "rqr:volume-efeitos-v2";
+const CHAVE_VOL_MUSICA = "rqr:volume-musica-v2";
 
 function lerVolumeGravado(chave: string, padrao: number): number {
   if (typeof window === "undefined") return padrao;
@@ -202,7 +204,7 @@ function gravarVolume(chave: string, v: number) {
 
 // Escala 0 a 10 (como a régua de vontade), não um booleano: 0 é mudo, sem precisar de outro estado.
 let volumeEfeitos = lerVolumeGravado(CHAVE_VOL_EFEITOS, 4);
-let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 2);
+let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 4);
 
 export function volumesIniciais() {
   return { efeitos: volumeEfeitos, musica: volumeMusica };
