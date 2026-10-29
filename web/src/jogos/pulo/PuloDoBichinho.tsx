@@ -55,7 +55,6 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
   // "ok" só quando chega leitura de verdade do giroscópio.
   const [sensor, setSensor] = useState<"desconhecido" | "ok" | "sem">("desconhecido");
-  const [graus, setGraus] = useState<number | null>(null);
   const [aviso, setAviso] = useState("");
   // Na história, fechar também segue para a conversa levando as folhas pegas (não existe derrota).
   const fechar = () => { tocar("clique"); return aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar(); };
@@ -152,7 +151,6 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
       const lado = angulo === 90 ? e.beta ?? 0 : angulo === 270 ? -(e.beta ?? 0) : e.gamma;
       jogo.current.inclinacao = Math.max(-1, Math.min(1, lado / 25));
       setSensor("ok");
-      setGraus(Math.round(lado));
     };
     const tecla = (e: KeyboardEvent, v: boolean) => {
       const t = jogo.current.teclas;
@@ -557,17 +555,6 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
         )}
       </div>
 
-      {estado !== "inicio" && (
-        <p className="pulo__nota">
-          {sensor === "ok"
-            ? `Inclinação ativa: ${graus ?? 0}°`
-            : sensor === "sem"
-              ? window.isSecureContext
-                ? "O sensor de inclinação não respondeu. Use as setas ou toque nos lados."
-                : "Sensor de inclinação precisa de HTTPS (porta 5443). Use as setas ou toque nos lados."
-              : "Procurando sensor de inclinação..."}
-        </p>
-      )}
       <p className="sr-only" aria-live="polite">{aviso}</p>
     </div>
   );

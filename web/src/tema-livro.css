@@ -1549,6 +1549,27 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .chip__texto { min-width: 0; }
 @media (max-height: 640px) { .historia-dialogo .especial__chips .chip { min-height: 34px; font-size: .75rem; } }
 
-/* Pulo do Bichinho: sem faixa colorida no topo, só metros e folhas e os botões. */
-.pulo__topo { background: none !important; border: 0 !important; box-shadow: none; }
-.pulo__placar { display: inline-flex; align-items: center; gap: 4px; margin-right: auto; }
+/* Pulo do Bichinho: o topo flutua transparente sobre o jogo, sem faixa nem rodapé.
+   O placar é uma etiqueta de papel, como as plataformas e os painéis do jogo. */
+.pulo { position: fixed; }
+.pulo__topo {
+  position: absolute; z-index: 3; top: 0; left: 50%; translate: -50% 0; width: min(480px, 100%);
+  padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+  background: none !important; border: 0 !important; box-shadow: none; pointer-events: none;
+}
+.pulo__topo > * { pointer-events: auto; }
+.pulo__placar {
+  display: inline-flex; align-items: center; gap: 4px; margin-right: auto; padding: 4px 12px;
+  border: 2px solid var(--livro-tinta); border-radius: 999px; color: var(--livro-tinta);
+  background: rgb(255 252 244 / .78); box-shadow: 0 3px 0 var(--livro-tinta);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); font-variant-numeric: tabular-nums;
+}
+:root[data-tema="escuro"] .pulo__placar { background: rgb(39 38 90 / .8); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+.pulo__mundo { flex: 1; }
+
+/* Mapa da história: o estado longo ("Libera amanhã · faça uma missão hoje") quebra em linha
+   própria, alinhado embaixo do título, em vez de espremer e cortar as palavras. */
+.historia-cap { flex-wrap: wrap; row-gap: 2px; }
+.historia-cap > span:first-child { flex: 1 1 auto; min-width: 0; }
+.historia-cap__estado { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: normal; word-break: normal; hyphens: none; }
+@media (max-width: 420px) { .historia-cap__estado { flex-basis: 100%; text-align: left; } }
