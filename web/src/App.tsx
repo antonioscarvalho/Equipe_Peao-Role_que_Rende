@@ -12,7 +12,7 @@ import { capitulosConcluidos } from "./historia/progresso";
 import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
-import { useAparenciaVisivel, usePerfil } from "./personalizacao";
+import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { abrirPersonalizar } from "./personalizacao/rota";
 import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
@@ -230,7 +230,7 @@ export default function App() {
             <div className="jogos rqr-escalonado">
               <button className="kb kb--roxo jogo" onClick={() => setHistoria(true)}>
                 <span className="atalho__icone"><Icone nome="bookOpen" tamanho={28} /></span>
-                <span className="jogo__texto">História do Broto<small>Conheça o Broto, capítulo por capítulo</small></span>
+                <span className="jogo__texto">História do {nomeDoBroto(perfil)}<small>Capítulo por capítulo</small></span>
               </button>
               <button className="kb kb--azul jogo" onClick={() => setJogo("inicio")}>
                 <span className="atalho__icone"><Icone nome="sprout" tamanho={28} /></span>
