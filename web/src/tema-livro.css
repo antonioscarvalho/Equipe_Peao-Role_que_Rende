@@ -31,9 +31,10 @@
   --livro-raio: 20px 24px 19px 26px / 24px 19px 26px 20px;
   --livro-raio-p: 14px 17px 13px 18px / 17px 13px 18px 14px;
 
-  --livro-cena: url("/cenarios/cap1-nave-pousada-anim.webp");
-  --livro-cena-cap1: url("/cenarios/fundo-cap1-anim.webp");
-  --livro-calma: url("/cenarios/cap4-banco-noite-anim.webp");
+  /* Começa com os fundos parados e leves; os animados entram depois (cenarios.ts). */
+  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
+  --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
 
   /* Paleta da marca suavizada para combinar com as ilustrações. */
   --rqr-amarelo: #F9DC6E;
@@ -1022,19 +1023,13 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 /* Painéis que ficam dentro dessas telas entram logo depois, com o mesmo pop. */
 .pulo__painel, .historia__caixa, .especial { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 120ms both; }
 
-/* Com "Reduzir animações" ativo ou prefers-reduced-motion, usa os fundos estáticos leves. */
-:root:has(.reduzir-animacoes) {
-  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
-  --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
-  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
+/* Fundos animados: só depois de baixados inteiros (cenarios.ts) e fora do "Reduzir animações". */
+:root.cenas-animadas:not(:has(.reduzir-animacoes)) {
+  --livro-cena: url("/cenarios/cap1-nave-pousada-anim.webp");
+  --livro-cena-cap1: url("/cenarios/fundo-cap1-anim.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite-anim.webp");
 }
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
-    --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
-    --livro-calma: url("/cenarios/cap4-banco-noite.webp");
-  }
-}
+:root.cenas-animadas[data-tema="escuro"]:not(:has(.reduzir-animacoes)) { --livro-cena: var(--livro-calma); }
 
 /* =====================================================================
    Plano de 90 dias, jogos e metas (sem demonstração)
