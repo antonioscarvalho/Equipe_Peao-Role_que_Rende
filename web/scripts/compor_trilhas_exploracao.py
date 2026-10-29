@@ -1,8 +1,8 @@
 """Gera trilhas originais com flauta percussiva grave para uma aventura de jogo.
 
 A voz principal combina timbre arredondado de ocarina com ataque de percussao de
-madeira. Baixos, tambores leves e arpejos dao movimento de aventura; a melodia e
-original e nao usa samples de terceiros.
+madeira. Um pulso sincopado, caixa no contratempo e arpejos crescentes dao
+movimento cinematografico; as melodias sao originais e nao usam samples de terceiros.
 
 Uso: python compor_trilhas_exploracao.py [leve|alegre|pulo|carrinho]
 """
@@ -18,11 +18,11 @@ SR = 32000
 BATIDAS_POR_ACORDE = 8  # dois compassos 4/4
 CAUDA = 1.4
 FADE_LOOP = 1.0
-BATIDAS_OSTINATO = (0.0, 0.75, 1.0, 2.0, 2.75, 3.0, 4.0, 4.75, 5.0, 6.0, 6.75, 7.0)
-PASSOS_OSTINATO = (0, 2, 1, 3, 2, 1, 0, 2, 3, 1, 2, 1)
-BATIDAS_BUMBO = (0.0, 2.75, 4.0, 6.5)
-BATIDAS_CAIXA = (2.0, 6.0)
-BATIDAS_CHOCALHO = (0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5)
+BATIDAS_OSTINATO = tuple(passo * 0.5 for passo in range(16))
+PASSOS_OSTINATO = (0, 2, 1, 3, 2, 1, 0, 2, 0, 2, 3, 1, 2, 3, 0, 1)
+BATIDAS_BUMBO = (0.0, 1.5, 3.0, 4.0, 5.5, 7.0)
+BATIDAS_CAIXA = (1.0, 3.0, 5.0, 7.0)
+BATIDAS_CHOCALHO = (0.5, 1.5, 1.75, 2.5, 3.5, 3.75, 4.5, 5.5, 5.75, 6.5, 7.5, 7.75)
 MELODIAS_SECOES = (
     ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
      (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 4, 1.0)),
@@ -205,34 +205,40 @@ def gerar_canal(config, detune, atraso):
             acrescentar_pluck(canal, nota, inicio, 0.018 * crescimento, 7.5,
                               detune, atraso + voz * 0.045)
 
-        # Bumbo sincopado, caixa no contratempo e chocalho nas subdivisoes.
+        # Pulso de motor em 3+3+2, com caixa firme no backbeat dos dois compassos.
         for batida in BATIDAS_BUMBO:
-            volume_bumbo = 0.023 if batida in (0, 4) else 0.015
+            volume_bumbo = 0.026 if batida in (0, 4) else (0.018 if batida in (1.5, 5.5) else 0.012)
             acrescentar_baque(canal, inicio + batida * segundos_batida,
                               volume_bumbo * crescimento, detune, atraso)
         for batida in BATIDAS_CAIXA:
             semente = int((inicio + batida) * SR) + indice * 97
+            acento = 1.0 if batida in (3, 7) else 0.68
             acrescentar_caixa(canal, inicio + batida * segundos_batida,
-                              0.038 * crescimento, semente, atraso)
+                              0.034 * acento * crescimento, semente, atraso)
         for passo, batida in enumerate(BATIDAS_CHOCALHO):
             semente = int((inicio + batida) * SR) + indice * 211 + passo
-            volume_chocalho = 0.008 if passo % 2 else 0.0055
+            antecipacao = batida % 1.0 == 0.75
+            volume_chocalho = 0.0038 if antecipacao else (0.007 if passo % 2 else 0.005)
             acrescentar_chocalho(canal, inicio + batida * segundos_batida,
                                  volume_chocalho * crescimento, semente, atraso)
-        for batida in (3.5, 7.5):
-            acrescentar_tom(canal, inicio + batida * segundos_batida,
-                            0.009 * crescimento, detune, atraso)
+        if indice > 0:
+            for batida in (3.5, 7.5):
+                acrescentar_tom(canal, inicio + batida * segundos_batida,
+                                0.006 * crescimento, detune, atraso)
 
-        # Alternancia sincopada de raiz e quinta, com espaco para a flauta responder.
-        for batida, nota_baixo in ((0, baixo[0]), (1.5, baixo[1]), (4, baixo[0]), (5.5, baixo[1])):
+        # Baixo acompanha o galope do bumbo e deixa a flauta respirar entre frases.
+        for batida, nota_baixo in ((0, baixo[0]), (1.5, baixo[1]), (3, baixo[0]),
+                                   (4, baixo[0]), (5.5, baixo[1]), (7, baixo[0])):
             acrescentar_pluck(canal, nota_baixo, inicio + batida * segundos_batida,
-                              0.028 * crescimento, 6.8, detune, atraso)
+                              (0.025 if batida in (0, 4) else 0.018) * crescimento,
+                              7.2, detune, atraso)
 
-        # Arpejo em galope alterna os acentos a cada acorde.
+        # Figura de colcheias que se repete como gancho e muda a resposta no segundo compasso.
         for passo, batida in enumerate(BATIDAS_OSTINATO):
             nota_arpejo = arpejo[PASSOS_OSTINATO[(passo + indice * 2) % len(PASSOS_OSTINATO)]]
+            acento = 1.22 if passo % 4 == 0 else (0.84 if passo % 2 else 1.0)
             acrescentar_pluck(canal, nota_arpejo, inicio + batida * segundos_batida,
-                              0.014 * crescimento, 10.0, detune, atraso)
+                              0.0105 * acento * crescimento, 10.0, detune, atraso)
 
         raiz_gancho = acorde[0]
         if raiz_gancho < 48:
