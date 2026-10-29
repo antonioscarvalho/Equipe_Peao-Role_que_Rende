@@ -184,6 +184,153 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
     canvas.width = g.w * dpr; canvas.height = g.h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+    // Cenários ilustrados para a subida: Praça/Cidade (cap1) -> Céu/Telhados/Cometa (cap2) -> Espaço e Vila Estrela.
+    const imgCidade = new Image();
+    imgCidade.src = "/cenarios/cap1-nave-pousada.webp";
+    const imgCeu = new Image();
+    imgCeu.src = "/cenarios/cap2-nave-cometa.webp";
+
+    // Estrelas do espaço profundo (geradas uma vez para a partida).
+    const estrelasEspaco = Array.from({ length: 48 }, (_, i) => ({
+      x: ((i * 73 + 19) % 100) / 100 * g.w,
+      y: ((i * 41 + 7) % 100) / 100 * g.h,
+      r: (i % 3 === 0 ? 2.2 : i % 2 === 0 ? 1.5 : 1),
+      camada: i % 2 === 0 ? 0.08 : 0.16,
+      fase: i * 0.9,
+    }));
+
+    const desenharFundoElevando = (alturaPx: number, agoraMs: number) => {
+      // Paralaxe suave: a cada ~2400px de subida (~120m), percorremos da cidade até o espaço profundo.
+      const sub = reduzir ? Math.min(2600, alturaPx) : alturaPx;
+      // pCidade: 0 na grama -> 1 aos ~1100px (~55m)
+      const pCidade = Math.min(1, sub / 1100);
+      // pCeu: começa a aparecer aos 500px (~25m) e vai subindo até 2500px (~125m)
+      const pCeu = Math.max(0, Math.min(1, (sub - 500) / 2000));
+      // pEspaco: começa aos 2000px (~100m) e domina a partir de 2700px (~135m)
+      const pEspaco = Math.max(0, Math.min(1, (sub - 2000) / 700));
+
+      // 1. Base de céu/espaço profundo
+      const grad = ctx.createLinearGradient(0, 0, 0, g.h);
+      if (pEspaco < 1) {
+        grad.addColorStop(0, "#141336");
+        grad.addColorStop(1, pCidade < 1 ? C.ceu2 : "#2A2559");
+      } else {
+        grad.addColorStop(0, "#0C0B24");
+        grad.addColorStop(0.6, "#17153D");
+        grad.addColorStop(1, "#262154");
+      }
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, g.w, g.h);
+
+      // Auxiliar para desenhar uma imagem vertical (720x1290) cobrindo a largura e deslizando na vertical:
+      // posY = 1 mostra a base da imagem (chão/telhados); posY = 0 mostra o topo (céu/cometa).
+      const desenharCenarioVertical = (img: HTMLImageElement, posY: number, alpha: number, deslocamentoExtraY = 0) => {
+        if (alpha <= 0 || !img.complete || !img.naturalWidth) return;
+        const escala = Math.max(g.w / img.naturalWidth, (g.h * 1.35) / img.naturalHeight);
+        const dw = img.naturalWidth * escala;
+        const dh = img.naturalHeight * escala;
+        const dx = (g.w - dw) / 2;
+        const maxScroll = Math.max(0, dh - g.h);
+        const dy = -maxScroll * posY + deslocamentoExtraY;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.restore();
+      };
+
+      // 2. Cenário 2 (Telhados noturnos -> Céu estrelado -> Nebulosa e Cometa dourado)
+      if (sub > 350 && pEspaco < 1) {
+        const fadeEntrada = Math.min(1, (sub - 350) / 450);
+        const fadeSaida = 1 - pEspaco;
+        // Começa mostrando a base (posY = 1, telhados) e sobe até o topo (posY = 0, cometa)
+        const posY = 1 - pCeu;
+        const sairPorBaixo = sub > 2300 ? (sub - 2300) * 0.25 : 0;
+        desenharCenarioVertical(imgCeu, posY, fadeEntrada * fadeSaida, sairPorBaixo);
+      }
+
+      // 3. Cenário 1 (Praça e Cidade ao entardecer — começo da subida)
+      if (sub < 1200) {
+        const alphaCidade = sub < 650 ? 1 : 1 - (sub - 650) / 550;
+        // Começa na base da praça (posY = 1) e sobe até o topo das árvores/casas (posY = 0), depois desce da tela
+        const posY = Math.max(0, 1 - pCidade);
+        const descerPraBaixo = sub > 700 ? (sub - 700) * 0.45 : 0;
+        desenharCenarioVertical(imgCidade, posY, alphaCidade, descerPraBaixo);
+      }
+
+      // 4. Camada de Espaço Sideral + Luas + Vila Estrela (a partir de ~80m, intensificando no espaço)
+      const visEspaco = Math.max(0, Math.min(1, (sub - 1400) / 900));
+      if (visEspaco > 0) {
+        ctx.save();
+        // Estrelas em duas camadas de paralaxe
+        for (const e of estrelasEspaco) {
+          const yEstrela = ((e.y + sub * e.camada) % (g.h + 20)) - 10;
+          const cintila = reduzir ? 0.85 : 0.55 + 0.45 * Math.sin(agoraMs * 0.003 + e.fase);
+          ctx.globalAlpha = visEspaco * cintila;
+          ctx.fillStyle = "#FFF2C6";
+          ctx.beginPath();
+          ctx.arc(e.x, yEstrela, e.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Três luas da Vila e a Vila Estrela lá no alto, descendo devagar conforme a pessoa sobe no espaço
+        const progressoEspaco = Math.max(0, sub - 2000);
+        const yVila = Math.min(g.h * 0.28, -90 + progressoEspaco * 0.14);
+        const xVila = g.w * 0.72;
+
+        ctx.globalAlpha = visEspaco;
+        // Luas pequenas
+        ctx.fillStyle = "#C9BEF0";
+        ctx.strokeStyle = "#2E2C66";
+        ctx.lineWidth = 2;
+        for (const [dx, dy, r] of [[-78, 42, 7], [-54, 56, 10], [-28, 40, 13]] as const) {
+          ctx.beginPath();
+          ctx.arc(xVila + dx, yVila + dy, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        // Halo da Vila Estrela
+        const halo = ctx.createRadialGradient(xVila, yVila, 6, xVila, yVila, 56);
+        halo.addColorStop(0, "rgba(249, 220, 110, 0.45)");
+        halo.addColorStop(1, "rgba(249, 220, 110, 0)");
+        ctx.fillStyle = halo;
+        ctx.beginPath();
+        ctx.arc(xVila, yVila, 56, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Asteroide da Vila Estrela + casinhas acesas
+        ctx.fillStyle = "#C9BEF0";
+        ctx.beginPath();
+        ctx.arc(xVila, yVila, 24, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        // Casinhas no topo do asteroide
+        ctx.fillStyle = "#F9DC6E";
+        ctx.beginPath();
+        ctx.moveTo(xVila - 12, yVila - 20);
+        ctx.lineTo(xVila - 6, yVila - 27);
+        ctx.lineTo(xVila, yVila - 20);
+        ctx.lineTo(xVila, yVila - 13);
+        ctx.lineTo(xVila - 12, yVila - 13);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(xVila + 2, yVila - 21);
+        ctx.lineTo(xVila + 7, yVila - 27);
+        ctx.lineTo(xVila + 12, yVila - 21);
+        ctx.lineTo(xVila + 12, yVila - 13);
+        ctx.lineTo(xVila + 2, yVila - 13);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    };
+
     let ultimo = performance.now();
     let id = 0;
 
@@ -297,10 +444,8 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
       const metros = Math.floor(g.altura / 20);
       if (metros > g.maisAlta) { g.maisAlta = metros; setPontos(metros); }
 
-      // Desenho.
-      const ceu = ctx.createLinearGradient(0, 0, 0, g.h);
-      ceu.addColorStop(0, C.ceu1); ceu.addColorStop(1, C.ceu2);
-      ctx.fillStyle = ceu; ctx.fillRect(0, 0, g.w, g.h);
+      // Desenho: fundo que se eleva (Praça/Cidade -> Telhados e Céu com Cometa -> Espaço e Vila Estrela).
+      desenharFundoElevando(g.altura, agora);
       g.plats.forEach(desenharPlataforma);
       g.folhas.forEach(desenharFolha);
 

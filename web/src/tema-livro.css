@@ -31,8 +31,9 @@
   --livro-raio: 20px 24px 19px 26px / 24px 19px 26px 20px;
   --livro-raio-p: 14px 17px 13px 18px / 17px 13px 18px 14px;
 
-  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
-  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
+  --livro-cena: url("/cenarios/cap1-nave-pousada-anim.webp");
+  --livro-cena-cap1: url("/cenarios/fundo-cap1-anim.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite-anim.webp");
 
   /* Paleta da marca suavizada para combinar com as ilustrações. */
   --rqr-amarelo: #F9DC6E;
@@ -445,12 +446,12 @@ body, .palco, .celular {
 .historia--inicio {
   background:
     linear-gradient(180deg, rgb(27 26 69 / .25), rgb(27 26 69 / .55)),
-    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat, var(--livro-tinta);
+    var(--livro-cena-cap1) center / cover no-repeat, var(--livro-tinta);
 }
 .historia {
   background:
     linear-gradient(180deg, rgb(251 246 232 / .35), rgb(251 246 232 / .6)),
-    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat, var(--livro-papel);
+    var(--livro-cena-cap1) center / cover no-repeat, var(--livro-papel);
 }
 :root[data-tema="escuro"] .historia {
   background:
@@ -462,14 +463,14 @@ body, .palco, .celular {
 .historia-dialogo__ceu {
   background:
     linear-gradient(180deg, rgb(27 26 69 / .15), rgb(27 26 69 / .35)),
-    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat;
+    var(--livro-cena-cap1) center / cover no-repeat;
 }
 
 /* Jogos: fundo de papel noturno em volta do mundo do jogo, painel como cartão de livro. */
 .pulo {
   background:
     linear-gradient(180deg, rgb(27 26 69 / .3), rgb(27 26 69 / .55)),
-    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat, var(--livro-tinta);
+    var(--livro-cena-cap1) center / cover no-repeat, var(--livro-tinta);
 }
 .pulo__topo { background: var(--livro-grao), var(--livro-papel); border-bottom-width: 2.5px; }
 .pulo__painel { background-color: var(--livro-cartao); border-width: 2.5px; }
@@ -533,10 +534,10 @@ body, .palco, .celular {
    as estrelas, as luas, a Vila e o Broto por cima. */
 .historia-dialogo { background: var(--livro-tinta); }
 .historia-dialogo__palco, .queda.queda {
-  background: url("/cenarios/cap1-nave-pousada.webp") center bottom / cover no-repeat, var(--livro-tinta);
+  background: var(--livro-cena-cap1) center bottom / cover no-repeat, var(--livro-tinta);
 }
-.cena__ceu-topo { stop-color: #1B1A45; stop-opacity: .82; }
-.cena__ceu-base { stop-color: #4A3F8C; stop-opacity: .3; }
+.cena__ceu-topo { stop-color: #1B1A45; stop-opacity: .18; }
+.cena__ceu-base { stop-color: #4A3F8C; stop-opacity: .08; }
 .cena--ceu .cena__ceu-base { stop-color: #1B1A45; stop-opacity: .7; }
 .cena--amanhecer .cena__ceu-topo { stop-color: #7B6AC4; stop-opacity: .35; }
 .cena--amanhecer .cena__ceu-base { stop-color: #F7BED0; stop-opacity: .05; }
@@ -1020,6 +1021,20 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .celular > .atalhos { animation-delay: 150ms; }
 /* Painéis que ficam dentro dessas telas entram logo depois, com o mesmo pop. */
 .pulo__painel, .historia__caixa, .especial { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 120ms both; }
+
+/* Com "Reduzir animações" ativo ou prefers-reduced-motion, usa os fundos estáticos leves. */
+:root:has(.reduzir-animacoes) {
+  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
+  --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
+}
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
+    --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
+    --livro-calma: url("/cenarios/cap4-banco-noite.webp");
+  }
+}
 
 /* =====================================================================
    Plano de 90 dias, jogos e metas (sem demonstração)
