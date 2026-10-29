@@ -1,6 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { BotaoLibras } from "./BotaoLibras";
-import { Icone } from "./Icone";
 import { useModal } from "./historia/useModal";
 import { tocar } from "./sons";
 
@@ -19,8 +18,8 @@ export function ModalAcessibilidade({ children, aoTerminar }: { children: ReactN
     <div className="modal-acess" role="dialog" aria-modal="true" aria-labelledby="modal-acess-titulo" aria-describedby="modal-acess-texto">
       <div ref={caixa} className="modal-acess__caixa">
         <div className="modal-acess__selos" aria-hidden="true">
-          <span className="modal-acess__selo"><Icone nome="acessibilidade" tamanho={30} /></span>
-          <span className="modal-acess__selo"><Icone nome="linguaDeSinais" tamanho={30} /></span>
+          {/* Ícone oficial do VLibras (gov.br), o mesmo do botão de Libras. */}
+          <img className="modal-acess__vlibras" src="/marca/vlibras.svg" alt="" width={56} height={56} />
         </div>
         <h2 id="modal-acess-titulo" ref={titulo} tabIndex={-1} className="modal-acess__titulo">Deixe o app do seu jeito</h2>
         <p id="modal-acess-texto" className="modal-acess__texto">
