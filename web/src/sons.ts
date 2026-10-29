@@ -207,6 +207,14 @@ function gravarVolume(chave: string, v: number) {
   }
 }
 
+/**
+ * Régua (0 a 10) para ganho. Em raiz quadrada, e não linear: o ouvido não percebe volume em linha
+ * reta, e no linear os 40% padrão viravam -8 dB, baixo demais. Assim 40% dá -4 dB e 100% segue 1.
+ */
+function ganhoDaRegua(v: number): number {
+  return Math.sqrt(Math.max(0, v) / 10);
+}
+
 // Escala 0 a 10 (como a régua de vontade), não um booleano: 0 é mudo, sem precisar de outro estado.
 let volumeEfeitos = lerVolumeGravado(CHAVE_VOL_EFEITOS, 4);
 let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 4);
@@ -257,14 +265,14 @@ export function tocarMissao(feitas: number, total: number) {
       notas.push({ freq: f, inicio: t, dur: 0.9, volume: 0.045, tipo: "sine", ataque: 0.03 });
     }
   }
-  tocarNotas(notas, volumeEfeitos / 10);
+  tocarNotas(notas, ganhoDaRegua(volumeEfeitos));
 }
 
 export function tocar(nome: NomeSom) {
   // Toque leve no celular junto do clique (tato.ts): vale mesmo com o som mudo, e não vibra na crise.
   if (nome === "clique") vibrar("toque");
   if (volumeEfeitos <= 0) { console.debug(`[sons] mudo: régua de Efeitos em 0, "${nome}" não tocou`); return; }
-  tocarNotas(receitas[nome], volumeEfeitos / 10);
+  tocarNotas(receitas[nome], ganhoDaRegua(volumeEfeitos));
 }
 
 /** Vocalizações breves e suaves do Broto, chamadas durante o texto progressivo. */
@@ -278,7 +286,7 @@ export function vocalizarBroto() {
   tocarNotas([
     { freq: base, freqFim: base * (0.82 + Math.random() * 0.28), inicio: 0, dur: 0.11 + Math.random() * 0.06, volume: 0.045, tipo: "triangle", ataque: 0.025 },
     { freq: base * 1.42, freqFim: base * 1.1, inicio: 0.035, dur: 0.1, volume: 0.018, ataque: 0.025 },
-  ], volumeEfeitos / 10);
+  ], ganhoDaRegua(volumeEfeitos));
 }
 
 /** Tique de digitação deliberadamente discreto, sintetizado e espaçado para não competir com a fala. */
@@ -289,7 +297,7 @@ export function tocarTecla() {
   if (agoraMs - ultimoTique < 55) return;
   ultimoTique = agoraMs;
   const freq = 1500 + Math.random() * 450;
-  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.022, volume: 0.016, tipo: "triangle", ataque: 0.002 }], volumeEfeitos / 10);
+  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.022, volume: 0.016, tipo: "triangle", ataque: 0.002 }], ganhoDaRegua(volumeEfeitos));
 }
 
 let motorOsc: OscillatorNode | null = null;
@@ -322,7 +330,7 @@ export function atualizarMotor(velocidade: number) {
   if (!ac) return;
   const v = Math.max(0, Math.min(1, velocidade));
   const freq = 55 + v * 150; // parado ≈ 55Hz, no máximo ≈ 205Hz — grave, nunca agudo/irritante
-  const alvoVol = v < 0.02 ? 0.0001 : (0.012 + v * 0.05) * (volumeEfeitos / 10);
+  const alvoVol = v < 0.02 ? 0.0001 : (0.012 + v * 0.05) * ganhoDaRegua(volumeEfeitos);
   const t = ac.currentTime;
   motorOsc.frequency.setTargetAtTime(freq, t, 0.09);
   motorGanho.gain.setTargetAtTime(alvoVol, t, 0.12);
@@ -496,7 +504,7 @@ let trilhaUrlAtual: string | null = null;
 let pedidosDeAbaixar = 0;
 
 function volumeAlvoTrilha(): number {
-  return (volumeMusica / 10) * (pedidosDeAbaixar > 0 ? 0.3 : 1);
+  return ganhoDaRegua(volumeMusica) * (pedidosDeAbaixar > 0 ? 0.3 : 1);
 }
 
 function aplicarVolumeNaTrilhaAoVivo() {
@@ -560,7 +568,7 @@ export function tocarMusica(url: string, volume = 1) {
   if (nivel <= 0) { console.debug(`[sons] mudo: Música e Efeitos em 0, "${url}" não tocou`); return; }
   musicaAtual?.pause();
   const audio = new Audio(url);
-  audio.volume = Math.min(1, (nivel / 10) * volume);
+  audio.volume = Math.min(1, ganhoDaRegua(nivel) * volume);
   audio.loop = false;
   musicaAtual = audio;
   abaixarTrilha(true);
