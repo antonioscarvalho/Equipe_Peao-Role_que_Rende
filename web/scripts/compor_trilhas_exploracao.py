@@ -19,49 +19,52 @@ CAUDA = 1.4
 FADE_LOOP = 1.0
 BATIDAS_OSTINATO = tuple(passo * 0.5 for passo in range(16))
 PASSOS_OSTINATO = (0, 2, 1, 2, 0, 2, 3, 2, 0, 2, 1, 2, 3, 2, 1, 2)
-BATIDAS_MELODIA = (0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5)
+BATIDAS_GANCHO = (0.0, 1.25, 1.75, 2.5, 4.0, 5.25, 5.75, 6.5)
+INTERVALOS_GANCHO = (0, 7, 9, 7, 12, 9, 7, 4)
+VOLUMES_GANCHO = (0.057, 0.045, 0.044, 0.050, 0.062, 0.046, 0.044, 0.053)
 
 
-# Cada secao: notas do acorde, baixo (raiz/quinta), ostinato e motivo melodico ascendente.
+# Cada secao define o acorde, o baixo e o ostinato. O mesmo gancho ascendente volta
+# sobre cada acorde para ficar facil de reconhecer e cantarolar.
 TRILHAS = {
     "leve": {
         "arquivo": "trilha-leve",
         "bpm": 92,
         "secoes": [
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81], [79, 83, 86, 88, 86, 83, 81, 79]),
-            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74], [84, 86, 88, 91, 88, 86, 83, 84]),
-            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76], [86, 88, 90, 93, 90, 88, 86, 83]),
-            ([55, 62, 67, 71, 76], (43, 50), [67, 71, 76, 79], [79, 83, 88, 86, 83, 81, 83, 79]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81]),
+            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74]),
+            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
+            ([55, 62, 67, 71, 76], (43, 50), [67, 71, 76, 79]),
         ],
     },
     "alegre": {
         "arquivo": "trilha-alegre",
         "bpm": 102,
         "secoes": [
-            ([48, 55, 60, 64, 67], (36, 43), [60, 64, 67, 74], [76, 79, 84, 86, 84, 79, 81, 76]),
-            ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77], [77, 81, 84, 86, 84, 81, 79, 77]),
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79], [79, 83, 86, 88, 86, 83, 81, 79]),
-            ([48, 55, 60, 64, 69], (36, 43), [60, 64, 69, 76], [76, 79, 84, 88, 86, 84, 81, 76]),
+            ([48, 55, 60, 64, 67], (36, 43), [60, 64, 67, 74]),
+            ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
+            ([48, 55, 60, 64, 69], (36, 43), [60, 64, 69, 76]),
         ],
     },
     "pulo": {
         "arquivo": "trilha-pulo",
         "bpm": 112,
         "secoes": [
-            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78], [76, 80, 83, 88, 83, 80, 78, 76]),
-            ([45, 52, 57, 59, 61], (33, 40), [69, 73, 76, 81], [81, 85, 88, 90, 88, 85, 83, 81]),
-            ([47, 54, 59, 61, 63], (35, 42), [71, 75, 78, 83], [83, 87, 90, 92, 90, 87, 85, 83]),
-            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78], [76, 80, 83, 88, 86, 83, 80, 76]),
+            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78]),
+            ([45, 52, 57, 59, 61], (33, 40), [69, 73, 76, 81]),
+            ([47, 54, 59, 61, 63], (35, 42), [71, 75, 78, 83]),
+            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78]),
         ],
     },
     "carrinho": {
         "arquivo": "trilha-carrinho",
         "bpm": 98,
         "secoes": [
-            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76], [74, 78, 81, 86, 83, 81, 78, 76]),
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79], [79, 81, 86, 88, 86, 83, 81, 79]),
-            ([57, 64, 69, 71, 73], (45, 52), [69, 73, 76, 81], [81, 85, 88, 90, 88, 85, 83, 81]),
-            ([50, 57, 62, 66, 69], (38, 45), [62, 66, 69, 74], [74, 78, 81, 86, 83, 81, 78, 74]),
+            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
+            ([57, 64, 69, 71, 73], (45, 52), [69, 73, 76, 81]),
+            ([50, 57, 62, 66, 69], (38, 45), [62, 66, 69, 74]),
         ],
     },
 }
@@ -117,7 +120,7 @@ def gerar_canal(config, detune, atraso):
     total = int((ciclo + CAUDA) * SR)
     canal = [0.0] * total
 
-    for indice, (acorde, baixo, arpejo, melodia) in enumerate(config["secoes"]):
+    for indice, (acorde, baixo, arpejo) in enumerate(config["secoes"]):
         inicio = indice * duracao_secao
         crescimento = 0.58 + indice * 0.12
 
@@ -144,9 +147,14 @@ def gerar_canal(config, detune, atraso):
         for batida, passo in zip(BATIDAS_OSTINATO, PASSOS_OSTINATO):
             acrescentar_pluck(canal, arpejo[passo], inicio + batida * segundos_batida,
                               0.024 * crescimento, 8.5, detune, atraso)
-        for indice_nota, (batida, nota) in enumerate(zip(BATIDAS_MELODIA, melodia)):
+        raiz_gancho = acorde[0] + 24
+        if raiz_gancho < 72:
+            raiz_gancho += 12
+        for indice_nota, (batida, intervalo) in enumerate(zip(BATIDAS_GANCHO, INTERVALOS_GANCHO)):
+            nota = raiz_gancho + intervalo
             acrescentar_pluck(canal, nota, inicio + batida * segundos_batida,
-                              0.034 + indice * 0.007, 3.8, detune, atraso)
+                              VOLUMES_GANCHO[indice_nota] * (0.76 + indice * 0.08),
+                              4.5 if indice_nota in (1, 2, 5, 6) else 3.6, detune, atraso)
             if indice >= 2 and indice_nota in (1, 3, 5, 7):
                 acrescentar_pluck(canal, nota + 12, inicio + batida * segundos_batida,
                                   0.014 * crescimento, 4.8, detune, atraso)
