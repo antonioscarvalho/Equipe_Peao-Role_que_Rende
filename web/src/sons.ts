@@ -376,8 +376,8 @@ export function tocarTrilha(url: string, info?: InfoTrilha) {
       .then(() => console.debug(`[sons] trilha "${url}" tocando`))
       .catch((erro) => console.warn(`[sons] trilha não tocou ${url}:`, erro));
   } else console.debug(`[sons] trilha "${url}" carregada, mas muda (régua de Música em 0)`);
-  animarVolume(nova, volumeAlvoTrilha(), 900);
-  if (antiga) animarVolume(antiga, 0, 600, () => antiga.pause());
+  animarVolume(nova, volumeAlvoTrilha(), 450);
+  if (antiga) animarVolume(antiga, 0, 300, () => antiga.pause());
   if (info) {
     infoTrilhaAtual = info;
     window.dispatchEvent(new CustomEvent<InfoTrilha>(EVENTO_TRILHA_INFO, { detail: info }));
@@ -396,6 +396,7 @@ export const URLS_TRILHAS = [
   "/sons/trilha-pulo.opus",
   "/sons/trilha-carrinho.opus",
   "/sons/cantiga-vo.opus",
+  "/sons/respirar-calma.opus",
 ] as const;
 
 const precarregados = new Set<string>();
@@ -427,11 +428,15 @@ if (typeof document !== "undefined") {
     if (document.hidden) trilhaAudio.pause();
     else if (volumeMusica > 0) void trilhaAudio.play().catch(() => {});
   });
-  // Autoplay sem gesto nenhum (ex.: trilha ligada automaticamente no primeiro acesso) costuma
-  // ser bloqueado; o primeiro toque em qualquer lugar da página libera e a trilha retoma.
+  // Autoplay sem gesto nenhum (ex.: trilha ligada automaticamente ao abrir o app) é bloqueado
+  // pelo navegador — é esperado ver o aviso "NotAllowedError" no console nesse momento, não é
+  // erro de verdade. O primeiro toque em qualquer lugar da página libera e a trilha retoma;
+  // "touchend" entra também porque o Safari do iPhone só libera áudio nesse evento, não no
+  // "touchstart"/"pointerdown".
   const tentarDesbloquear = () => {
     if (trilhaAudio?.paused && volumeMusica > 0 && !document.hidden) void trilhaAudio.play().catch(() => {});
   };
   document.addEventListener("pointerdown", tentarDesbloquear, { passive: true });
+  document.addEventListener("touchend", tentarDesbloquear, { passive: true });
   document.addEventListener("keydown", tentarDesbloquear);
 }
