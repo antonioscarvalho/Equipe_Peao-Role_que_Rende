@@ -159,8 +159,18 @@ export default function App() {
     );
   }, [aba, abrindo]);
 
-  // Prepara trilhas de fundo sem tocá-las; as trocas durante a navegação ficam rápidas.
-  useEffect(() => { precarregarTrilhas(); }, []);
+  // Pré-carrega apenas o que a pessoa provavelmente vai abrir a seguir; evita baixar a OST inteira no início.
+  useEffect(() => {
+    if (abrindo) return;
+    if (aba === "jogos") {
+      precarregarTrilhas([
+        "/sons/trilha-pulo.opus",
+        "/sons/trilha-carrinho.opus",
+      ]);
+    }
+    if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
+    if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
+  }, [aba, abrindo, historia, crise]);
 
   // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
   const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);

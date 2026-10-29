@@ -444,7 +444,7 @@ export function pararTrilha() {
   trilhaUrlAtual = null;
 }
 
-/** Todas as músicas do app (tema, cada mini jogo, a cantiga) — fonte única pro pré-carregamento. */
+/** Catálogo das músicas do app (tema, cada mini jogo, cantiga e respiração). */
 export const URLS_TRILHAS = [
   "/sons/trilha-alegre.opus",
   "/sons/trilha-leve.opus",
@@ -457,13 +457,11 @@ export const URLS_TRILHAS = [
 const precarregados = new Set<string>();
 
 /**
- * Baixa e decodifica as músicas com antecedência (ex.: assim que o app abre), pra entrar num
- * mini jogo ou numa cena não esperar o primeiro carregamento — sem isso, a troca de trilha podia
- * "flicar" (um instante de silêncio ou corte) na primeira vez que cada arquivo era pedido.
- * `<audio preload="auto">` baixa sem tocar (sem precisar de gesto nenhum pra isso) e o navegador
- * guarda em cache; `tocarTrilha`/`tocarMusica` reaproveitam esse cache ao criar o `<audio>` real.
+ * Baixa com antecedência apenas as faixas que devem ser usadas em seguida. O áudio fica no
+ * pipeline nativo do navegador via `<audio>`; não criamos buffers PCM grandes em JavaScript.
+ * A lista é obrigatória para evitar baixar todas as trilhas sem necessidade em dispositivos móveis.
  */
-export function precarregarTrilhas(urls: readonly string[] = URLS_TRILHAS) {
+export function precarregarTrilhas(urls: readonly string[]) {
   if (typeof window === "undefined") return;
   for (const url of urls) {
     if (precarregados.has(url)) continue;
