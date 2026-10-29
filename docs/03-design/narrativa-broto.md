@@ -174,15 +174,90 @@ As perguntas são da pessoa para o Broto. Ele pode contar a idade dele, mas nunc
 **Lição:** "Não dá pra voltar pro céu num pulo só. É uma plataforma de cada vez. E cair não apaga o caminho que você já fez."
 
 ### Capítulo 2: O Cometa da Sorte
+**Duração:** 6 a 10 minutos com o jogo. **Estágio:** contemplação. O Broto cumpre a promessa do capítulo 1 ("lá na Vila aconteceu uma coisa com aposta, um dia eu te conto") e conta a história do pai e do Cometa. A pessoa olha para a aposta **pela família dele**, sem precisar falar de si.
+
 **Jogo novo, Desvia dos Cometas:** cometas dourados caem prometendo "+2 luzes", e encostar neles apaga uma luz do Broto. As sementes verdes são simples, ficam sempre no mesmo lugar e fazem ele crescer.
+
+**O que o capítulo trabalha** (skill `tcc-reestruturacao-cognitiva`, sempre como pergunta ou história, nunca sermão):
+
+| Distorção | Onde aparece |
+|---|---|
+| Quase-ganho | "Foi quase, filho. Na próxima vem." e o dourado que brilha mais quando chega perto |
+| Ganho no começo e ilusão de controle | O pai ganhou no começo e "achou que tinha descoberto o jeito"; "sabia a hora certa de ir" |
+| Atribuição enviesada | "Toda perda parecia azar, e todo ganho parecia talento dele" |
+| Memória seletiva | "De quem ganhava a Vila inteira ficava sabendo. De quem perdia, ninguém falava" |
+| Margem da casa | "O cometa sempre ia embora mais brilhante do que tinha chegado" |
+| Aposta como solução financeira | "Quando a conta da casa aperta, uma promessa fácil soa como saída" |
+
+**Balança decisória** (skill `entrevista-motivacional`): primeiro sobre o pai ("o que o cometa dava, e o que tirava"), reconhecendo o lado bom ("um alívio rápido quando a conta apertava"). Depois, só um convite para a pessoa pensar nisso para ela, **sem responder nem guardar nada**.
+
+**O que vem do capítulo 1:** a promessa de contar sobre a aposta, a cantiga da Vó ("a luz vem devagar", agora contra a "luz rápida" do cometa), as três luas, o "apertar um botão" (da piada sobre a luz na Terra, agora como o jeito do cometa), o nome que a pessoa deu e o apelido dela. **Ganchos para os próximos:** "amanhã recuperava tudo" (cap. 3), "sua mãe sabia? No começo, não" (cap. 4) e o pai que "não é uma pessoa ruim" (cap. 5).
+
+**Dados (LGPD, skills `conformidade-legal-br` e `design-etico-saude-digital`):** o capítulo **não lê** o motivo nem a meta guardados no capítulo 1 e **não guarda nada**. A finalidade combinada foi "lembrar de você quando a vontade apertar", e mostrar isso na história poderia expor a pessoa a quem estiver olhando o celular. Só o apelido do perfil entra na fala.
+
+**Proteções:** o cometa aparece sempre de longe ("eu só via do quintal"); nada descreve o lado divertido da aposta por dentro; o pai não é vilão; "Tá pesado ouvir isso" abre o protocolo de crise; o "Agora não" do topo vale para a conversa toda.
+
+#### Antes do jogo
+
+- **Broto:** Oi, {nome}. Você voltou. Ainda tô me acostumando com o nome. Broto. Combina comigo, admito.
+- **Broto:** Da outra vez eu falei que lá na Vila aconteceu uma coisa com aposta, e que um dia eu te contava. Acho que hoje dá.
+  - "Pode contar." → "Tá. Vou contar do meu jeito, devagar."
+  - "Só se você quiser." → "Eu quero. Acho que contar ajuda a entender."
+- **Broto:** Lembra da cantiga da Vó? "A luz vem devagar." Lá na Vila todo mundo sabia ela de cor.
+- **Broto:** Aí um dia apareceu no céu uma coisa que prometia o contrário: luz rápida. A gente chamava de Cometa da Sorte.
+- **Broto:** Era uma estação enorme, passando bem no meio das três luas. Cheia de cor e de música. Dava pra ver de qualquer quintal.
+- **Broto:** A promessa era simples: você dava um pouco da sua luz e ele devolvia o dobro. Era só apertar um botão.
+  - "Parece bom demais." → "Lá na Vila ninguém tinha estudado conta de cometa. Mas a Vó desconfiou na hora."
+  - "E as pessoas acreditavam?" → "Muita gente. Quando a conta da casa aperta, uma promessa fácil soa como saída."
+- **Broto:** Meu pai foi um dos primeiros. Dizia que era só pra dar uma força nas contas. E ele não é uma pessoa ruim, tá? Conserta a nave de meio mundo sem cobrar nada.
+- **Broto:** No começo ele ganhou. Chegou em casa com o pote cheio, e todo mundo comemorou.
+- **Broto:** Hoje eu acho que foi a pior coisa que podia ter acontecido. Ele achou que tinha descoberto o jeito.
+  - "Por que a pior?" → "Porque depois daquele dia, toda perda parecia azar, e todo ganho parecia talento dele."
+  - "Ele entendia do cometa?" → "Ele achava que sim. Dizia que sabia a hora certa de ir. O cometa não tava nem aí pra hora dele."
+- **Broto:** Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles apaga uma luz minha.
+- **Broto:** As sementes verdes são o contrário: simples e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?
+  - "Bora." → "Então eu desvio do brilho, e você me avisa quando eu me distrair."
+  - "Como funciona?" → "Você me guia pros lados. O dourado a gente deixa passar, o verde a gente pega. Dá pra parar quando quiser."
+
+#### Depois do jogo (logo após a fala de abertura)
+
+`{folhas}` é uma frase sobre as folhas pegas no jogo.
+
+- **Broto:** {folhas}
+- **Broto:** Reparou? O dourado brilha mais justo quando chega perto. É de propósito.
+- **Broto:** Com meu pai era assim. Toda vez ele voltava dizendo: "Foi quase, filho. Na próxima vem."
+- **Broto:** Só que o quase nunca acendeu uma lâmpada lá em casa. Quase ganhar é só um jeito bonito de perder.
+  - "Faz sentido." → "Eu demorei pra entender. O cometa fazia o quase parecer um prêmio."
+  - "Às vezes o quase dá esperança." → "Dá. E era isso que o cometa queria: que a esperança voltasse no dia seguinte, com mais luz."
+- **Broto:** E tem uma coisa que ninguém comentava: o cometa sempre ia embora mais brilhante do que tinha chegado. Aquela luz vinha de algum lugar.
+- **Broto:** Vocês aqui na Terra têm novela, né? Era igual: a vila inteira via que a vilã ia aprontar. Menos o meu pai.
+- **Broto:** Fiquei pensando numa coisa. O que o cometa dava pro meu pai? E o que ele tirava?
+  - "Dava esperança." → "Dava. E um alívio rápido quando a conta apertava. Isso é verdade, não vou fingir que não."
+  - "Tirava a luz da casa." → "Tirava. E tirava ele da gente: tava em casa, mas com a cabeça no céu."
+  - "As duas coisas." → "É isso que deixa tudo difícil. Se o cometa só tirasse, ninguém voltava lá."
+- **Broto:** Quer pensar nisso pra você também? Só pensar. Não precisa me contar nada.
+  - "Quero pensar." → "Então pensa com calma: o que a aposta te dá, e o que ela te tira. Fica só com você. Eu não guardo nada disso."
+  - "Hoje não." → "Justo. A pergunta fica aí pra quando fizer sentido."
+  - "Tá pesado ouvir isso." → "Obrigado por me dizer. A gente pode parar aqui. Olha quem pode te ajudar agora. Eu espero." **(abre o protocolo de crise)**
+- **Broto:** Ainda tem uma parte que eu não contei: o que aconteceu com as luzes lá de casa depois disso.
+- **Broto:** Meu pai dizia que amanhã recuperava tudo. Essa eu conto da próxima vez. Hoje já foi bastante.
+- **Broto:** Obrigado por escutar. Aqui na Terra, você é a primeira pessoa pra quem eu conto isso.
+
+#### Fala de abertura, perguntas e lição
+
+> **Broto:** Ufa. Desviar do brilho cansa mais do que parece.
 
 | Pergunta | Resposta do Broto |
 |---|---|
-| "O que era o Cometa da Sorte?" | "Uma estação brilhante que passava no céu. Prometia devolver o dobro da luz. Tinha música, cor, todo mundo parecia feliz lá." |
-| "Seu pai ganhou alguma vez?" | "Ganhou, no começo. E aquilo foi o pior que podia acontecer, porque ele achou que tinha descoberto o jeito." |
-| "Por que ele continuou indo?" | "Toda vez ele dizia: 'Foi quase, filho. Na próxima vem.' Só que o quase nunca enchia a nossa casa de luz." |
+| "Alguém ganhava de verdade?" | "Ganhava um aqui, outro ali, e a Vila inteira ficava sabendo. De quem perdia, ninguém falava." |
+| "Você chegou a ir no cometa?" | "Não. Eu só via do quintal. De longe parecia uma festa. De perto, eu nunca quis saber." |
+| "O que a Vó Vega achava?" | "Ela dizia que luz de verdade vem devagar, igual na cantiga. E que promessa que precisa de tanta música não se sustenta sozinha." |
+| "Sua mãe sabia?" | "No começo, não. Essa é uma história pra outro dia." |
 
-**O Broto pergunta:** "O que o cometa dava pro meu pai? E o que ele tirava?" (abre a balança decisória como opção: "Quer pensar nisso pra você também?")
+**O Broto pergunta:** "Se meu pai te perguntasse se "quase ganhar" é meio caminho andado, o que você diria pra ele?"
+- "Que quase é perder." → "Eu ia gostar que ele ouvisse isso de você. Às vezes, de fora, a gente enxerga melhor."
+- "Que eu entendo ele." → "Eu também entendo. Entender não é concordar. Dá pra entender e mesmo assim dizer que não é por aí."
+- "Não sei." → "Tudo bem. Eu demorei um tempão pra saber."
 
 **Lição:** "Quase ganhar não é meio ganhar. O cometa brilha de propósito pra parecer que tá perto. O que faz a gente crescer é a semente simples, que tá sempre ali."
 
