@@ -33,7 +33,7 @@ export default defineConfig({
         start_url: "/",
         scope: "/",
         display: "standalone",
-        orientation: "portrait",
+        orientation: "any", // WCAG 1.3.4: funciona deitado também (quem usa o celular preso em suporte)
         background_color: "#F9DC6E",
         theme_color: "#FCFC30",
         icons: [
@@ -45,7 +45,7 @@ export default defineConfig({
       workbox: {
         // O app em si (código, estilos, fontes, ícones) fica guardado na instalação: a tela de
         // ajuda (CVV 188, SAMU 192) e o "Deu vontade" abrem sem internet.
-        globPatterns: ["**/*.{js,css,html,svg,png,woff,woff2,ttf}"],
+        globPatterns: ["**/*.{js,css,html,svg,png,woff,woff2,ttf}", "marca/*.webp"], // logo da abertura também offline
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         navigateFallback: "/index.html",
         // Cenários (13 MB) e sons ficam guardados só depois da primeira vez que aparecem.

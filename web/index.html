@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#FCFC30" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#13133A" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FCFC30" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href="/icones/broto.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/icones/apple-touch-icon.png" />
     <!-- iPhone: abre em tela cheia quando adicionado à Tela de Início, com o nome curto embaixo do ícone. -->
@@ -16,10 +16,19 @@
     <script>
       // Aplica o tema antes do React (mesma regra de src/tema.ts), para a tela não piscar.
       (function () {
-        var p = "auto";
-        try { p = localStorage.getItem("rqr-tema") || "auto"; } catch (e) {}
-        var escuro = p === "escuro" || (p !== "claro" && matchMedia("(prefers-color-scheme: dark)").matches);
+        // Padrão: claro para todo mundo. "auto" só se a pessoa escolher no botão de tema.
+        var p = "claro";
+        try { p = localStorage.getItem("rqr-tema") || "claro"; } catch (e) {}
+        var escuro = p === "escuro" || (p === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.tema = escuro ? "escuro" : "claro";
+        // Alto contraste (src/tema.ts): a escolha guardada vence; sem escolha, segue o aparelho.
+        var c = null;
+        try { c = localStorage.getItem("rqr-contraste"); } catch (e) {}
+        if (c === "alto" || (c !== "normal" && matchMedia("(prefers-contrast: more)").matches)) {
+          document.documentElement.dataset.contraste = "alto";
+        }
+        // Reduzir animações guardado em Ajustes: vale já no primeiro quadro.
+        try { if (localStorage.getItem("rqr-reduzir") === "1") document.documentElement.classList.add("reduzir-animacoes"); } catch (e) {}
       })();
     </script>
     <title>Meu amigo Broto!</title>

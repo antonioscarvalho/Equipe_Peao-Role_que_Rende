@@ -5,7 +5,7 @@ import { NOME_TEMA, ORDEM_TEMA, useTema } from "./tema";
 const ICONE = { auto: "sunMoon", claro: "sun", escuro: "moon" } as const;
 
 /**
- * Botão de tema: cada toque passa para o próximo (Automático → Claro → Escuro).
+ * Botão de tema: cada toque passa para o próximo (Claro → Escuro → Automático; o padrão é Claro).
  * `compacto` mostra só o ícone (topo dos jogos e da personalização); o nome do tema
  * continua no aria-label e no title.
  */

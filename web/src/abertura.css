@@ -1,4 +1,9 @@
-/* Abertura discreta (cerca de 4 s):
+/* Abertura (cerca de 6 s), sempre sobre o fundo preto.
+   Etapa 1, a marca (2 s):
+   0–500 ms     o logo do Rolê que Rende aparece
+   500–1600 ms  fica parado
+   1600–2000 ms some
+   Etapa 2, a logo do app (4 s, contados a partir do fim da etapa 1):
    0–350 ms     tela preta
    350–1450 ms  o contorno do Broto se desenha em traço claro (logo em esboço)
    1450–2450 ms o esboço pronto fica 1 s na tela escura
@@ -7,8 +12,21 @@
    3550–4000 ms tudo some, revelando o app */
 .abertura {
   position: fixed; inset: 0; z-index: 90; overflow: hidden; display: grid; place-items: center;
-  background: #0E0D1C; color: var(--livro-tinta);
-  animation: abertura-sai 450ms ease-in 3.55s forwards;
+  background: #000000; color: var(--livro-tinta);
+}
+/* A saída só conta a partir da etapa 2 (a animação começa quando a classe entra). */
+.abertura--app { animation: abertura-sai 450ms ease-in 3.55s forwards; }
+
+/* Etapa 1: o logo do Rolê que Rende no preto, com a área de proteção em volta. */
+.abertura__marca {
+  width: min(56vw, 250px); height: auto; opacity: 0;
+  animation: abertura-marca 2s cubic-bezier(.2, .8, .2, 1) forwards;
+}
+@keyframes abertura-marca {
+  0% { opacity: 0; transform: scale(.94); }
+  25% { opacity: 1; transform: scale(1); }
+  80% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.02); }
 }
 @keyframes abertura-sai { to { opacity: 0; visibility: hidden; } }
 
@@ -51,11 +69,13 @@
 /* Reduzir animações: já aparece pronta (amarelo, Broto colorido e nome), sem movimento. */
 .abertura--parada, .abertura--parada * { animation: none !important; }
 .abertura--parada .abertura__amarelo { transform: scale(1); }
+.abertura--parada .abertura__marca { opacity: 1; }
 .abertura--parada .abertura__esboco { display: none; }
 .abertura--parada .abertura__broto, .abertura--parada .abertura__nome { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .abertura, .abertura * { animation: none !important; }
   .abertura__amarelo { transform: scale(1); }
+  .abertura__marca { opacity: 1; }
   .abertura__esboco { display: none; }
   .abertura__broto, .abertura__nome { opacity: 1; transform: none; }
 }
