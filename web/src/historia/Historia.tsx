@@ -5,7 +5,7 @@ import { PainelCrise } from "../AjudaAgora";
 import { nomeDoBroto, usePerfil } from "../personalizacao";
 import { capitulos, TITULOS } from "./capitulos";
 import {
-  ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, marcarAvisoVisto, marcarParte, parteDoCapitulo,
+  ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, liberaAmanha, marcarAvisoVisto, marcarParte, parteDoCapitulo,
 } from "./progresso";
 import { useModal } from "./useModal";
 import { tocar } from "../sons";
@@ -111,13 +111,13 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
                   Este app é para maiores de 18 anos. Se quiser conversar com alguém, procure um adulto de confiança ou a unidade
                   de saúde do seu bairro. O CVV atende de graça, a qualquer hora, no 188. A história continua aberta para você.
                 </p>
-                <button className="rqr-botao" onClick={() => comecar(tela.id, true)}>Continuar</button>
+                <button className="rqr-botao" onClick={() => { tocar("clique"); comecar(tela.id, true); }}>Continuar</button>
               </>
             ) : (
               <>
                 <p className="historia__aviso">Antes de começar: você tem 18 anos ou mais?</p>
-                <button className="rqr-botao" onClick={() => { setMenor(false); comecar(tela.id, true); }}>Sim</button>
-                <button className="rqr-botao" onClick={() => { setMenor(true); setTela({ ...tela, menorDeIdade: true }); }}>Não</button>
+                <button className="rqr-botao" onClick={() => { tocar("clique"); setMenor(false); comecar(tela.id, true); }}>Sim</button>
+                <button className="rqr-botao" onClick={() => { tocar("clique"); setMenor(true); setTela({ ...tela, menorDeIdade: true }); }}>Não</button>
               </>
             )
           ) : aviso ? (
@@ -133,7 +133,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
                 const ok = feitos.includes(id);
                 const livre = pronto && estaDesbloqueado(id);
                 const meio = !ok && livre && parteDoCapitulo(id);
-                const estado = ok ? "Concluído · ler de novo" : !pronto ? "Em breve" : meio ? "Continuar" : livre ? "Disponível" : "Depois do anterior";
+                const estado = ok ? "Concluído · ler de novo" : !pronto ? "Em breve" : meio ? "Continuar" : livre ? "Disponível" : liberaAmanha(id) ? "Libera amanhã · faça uma missão hoje" : "Depois do anterior";
                 return (
                   <li key={id}>
                     <button className={`historia-cap ${ok ? "is-ok" : ""}`} disabled={!livre} onClick={() => { tocar("clique"); abrir(id); }}>

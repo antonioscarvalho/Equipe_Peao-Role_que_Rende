@@ -35,7 +35,7 @@ function aleatorio(a: number, b: number) { return a + Math.random() * (b - a); }
 
 /**
  * Segue o contrato `PropsJogo` da história. `aoTerminar` é opcional para manter os usos antigos
- * (início e "Deu vontade"): sem ele, "Voltar pro meu rolê" só fecha.
+ * (início e "Deu vontade"): sem ele, "Voltar pro início" só fecha.
  * `chamada` troca o convite do início (o "Deu vontade" abre o jogo com "3 minutos para a onda passar").
  */
 type Props = Omit<PropsJogo, "aoTerminar"> & Partial<Pick<PropsJogo, "aoTerminar">> & { chamada?: string };
@@ -55,17 +55,27 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const [graus, setGraus] = useState<number | null>(null);
   const [aviso, setAviso] = useState("");
   // Na história, fechar também segue para a conversa levando as folhas pegas (não existe derrota).
-  const fechar = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
+  const fechar = () => { tocar("clique"); return aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar(); };
   const fecharRef = useRef(fechar);
   fecharRef.current = fechar;
 
   // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  // O StrictMode do React (só em dev) monta, desmonta e monta de novo todo componente pra pegar
+  // bug de efeito — sem o adiamento abaixo, isso troca de trilha 3x em sequência (pulo → alegre →
+  // pulo) e às vezes a última troca nem chega a tocar de verdade. Adiando um tique, a "desmontagem"
+  // falsa cancela antes de pedir qualquer coisa, e só a montagem de verdade troca a trilha.
   useEffect(() => {
-    console.log("[pulo] montou, pedindo trilha-pulo.opus"); // diagnóstico: prova que este efeito roda
-    tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+    let cancelado = false;
+    const id = window.setTimeout(() => {
+      if (cancelado) return;
+      console.log("[pulo] trocando pra trilha-pulo.opus");
+      tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+    }, 0);
     return () => {
-      console.log("[pulo] desmontou, voltando pra trilha-alegre.opus");
-      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+      cancelado = true;
+      window.clearTimeout(id);
+      console.log("[pulo] saindo, voltando pra trilha-alegre.opus");
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Um Passo de Cada Vez", artista: "Tema do app" });
     };
   }, []);
 
@@ -464,7 +474,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
       }
       // 3 minutos: termina com calma, sem cortar no meio de uma queda.
       if (g.tempo >= DURACAO_PARTIDA_MS) {
-        encerrar("tempo", `3 minutos de rolê! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
+        encerrar("tempo", `3 minutos de passeio! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
         return;
       }
       id = requestAnimationFrame(passoSeguro);
@@ -491,8 +501,8 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const soltar = () => { jogo.current.toque = 0; };
 
   // Saída gentil depois da partida: na história, segue para a conversa com as folhas pegas.
-  const sair = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
-  const rotuloSair = aoTerminar ? "Conversar com o Broto" : "Voltar pro meu rolê";
+  const sair = () => { tocar("clique"); return aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar(); };
+  const rotuloSair = aoTerminar ? "Conversar com o Broto" : "Voltar pro início";
 
   const novoRecorde = estado === "caiu" && pontos > 0 && pontos >= recorde;
 
@@ -544,7 +554,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
         {estado === "tempo" && (
           <div className="pulo__painel rqr-pop">
             <Bichinho humor="feliz" nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={90} reduzir={reduzir} aparencia={aparencia} />
-            <p className="pulo__chamada">3 minutos de rolê!</p>
+            <p className="pulo__chamada">3 minutos de passeio!</p>
             <p className="pulo__resultado"><b>{pontos} m</b> de altura · 🍃 {folhas} folhas</p>
             <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai descansar.</p>
             <button className="rqr-botao" onClick={sair}>{rotuloSair}</button>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /** Número que sobe suavemente até o valor (requestAnimationFrame, sem travar). */
-export function Contador({ valor, reduzir }: { valor: number; reduzir: boolean }) {
+export function Contador({ valor, reduzir, formato = "moeda" }: { valor: number; reduzir: boolean; formato?: "moeda" | "numero" }) {
   const [mostrado, setMostrado] = useState(valor);
   const anterior = useRef(valor);
 
@@ -25,5 +25,7 @@ export function Contador({ valor, reduzir }: { valor: number; reduzir: boolean }
     return () => cancelAnimationFrame(id);
   }, [valor, reduzir]);
 
-  return <>{mostrado.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })}</>;
+  return <>{formato === "numero"
+    ? mostrado.toLocaleString("pt-BR")
+    : mostrado.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 })}</>;
 }

@@ -117,6 +117,37 @@ export function Roupa({ id, cor, recorte, pincel }: CamadaProps) {
         </g>
       )
     }
+    case 'capa':
+      // Halloween: capa de vampiro com gola alta e forro vermelho.
+      return (
+        <g className="bicho__roupa" data-item="capa" filter={filtro(pincel)}>
+          <path d="M44 136 L30 112 L58 128Z" fill="#C2405A" {...traco} />
+          <path d="M156 136 L170 112 L142 128Z" fill="#C2405A" {...traco} />
+          <g clipPath={`url(#${recorte})`}>
+            <path d="M20 146 Q100 132 180 146 L180 200 L20 200Z" fill="#3B2E5A" {...traco} />
+            <path d="M100 150 L84 200 L116 200Z" fill="#C2405A" {...fino} />
+            <path d="M20 176 Q100 166 180 176 L180 200 L20 200Z" fill={SOMBRA} />
+          </g>
+          <path d="M60 144 Q100 132 140 144" {...linha(LUZ, 3)} />
+          <circle cx="100" cy="148" r="6" fill="var(--rqr-amarelo)" {...fino} />
+        </g>
+      )
+    case 'sueter':
+      // Natal: suéter vermelho com faixa de zigue-zague e uma arvorezinha.
+      return (
+        <g className="bicho__roupa" data-item="sueter" filter={filtro(pincel)}>
+          <g clipPath={`url(#${recorte})`}>
+            <path d="M20 148 Q100 134 180 148 L180 200 L20 200Z" fill="#D9534F" {...traco} />
+            <path d="M20 160 Q100 148 180 160 L180 168 Q100 156 20 168Z" fill={CREME} />
+            <path d="M24 166 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6"
+              {...linha("#3F8C5A", 2.5)} />
+            <path d="M20 182 Q100 172 180 182 L180 200 L20 200Z" fill={SOMBRA} />
+          </g>
+          <path d="M80 144 Q100 158 120 144 Q100 152 80 144Z" fill="#3F8C5A" {...fino} />
+          <path d="M100 168 L92 182 H108Z" fill="#3F8C5A" {...fino} strokeWidth={2} />
+          <circle cx="100" cy="166" r="2.5" fill="var(--rqr-amarelo)" />
+        </g>
+      )
     default:
       return null
   }
@@ -185,6 +216,41 @@ export function Cabeca({ id, cor, pincel }: Omit<CamadaProps, 'recorte'>) {
           <path d="M30 100 V112 M170 100 V112" {...linha(LUZ, 2.5)} />
         </g>
       )
+    case 'bruxa':
+      // Halloween: chapéu de bruxa, ponta dobrada pro lado.
+      return (
+        <g className="bicho__cabeca" data-item="bruxa" filter={filtro(pincel)}>
+          <path d="M70 70 C80 46 92 20 112 6 C116 18 120 30 124 40 C132 40 140 46 146 52 L134 72Z" fill="#5B4A9A" {...traco} />
+          <path d="M112 6 C124 2 136 8 140 18" fill="none" {...traco} />
+          <ellipse cx="102" cy="74" rx="62" ry="12" fill="#5B4A9A" {...traco} />
+          <path d="M74 66 Q102 74 132 66 L134 74 Q102 82 72 74Z" fill="#E59A7A" {...fino} />
+          <rect x="96" y="66" width="12" height="10" rx="2" fill="var(--rqr-amarelo)" {...fino} strokeWidth={2} />
+          <path d="M84 58 Q90 40 102 26" {...linha(LUZ, 3)} />
+        </g>
+      )
+    case 'noel':
+      // Natal: gorro de Papai Noel caindo de lado, barra e pompom de pelúcia.
+      return (
+        <g className="bicho__cabeca" data-item="noel" filter={filtro(pincel)}>
+          <path d="M56 78 C56 40 104 30 136 42 C152 48 160 62 164 80 L150 82 C146 66 140 58 132 56 L146 78Z" fill="#D9534F" {...traco} />
+          <path d="M70 60 C84 46 104 42 120 44" {...linha(LUZ, 3)} />
+          <path d="M48 72 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0 q8 -6 16 0 q8 -2 10 6 q2 10 -8 12 q-8 6 -16 0 q-8 6 -16 0 q-8 6 -16 0 q-8 6 -16 0 q-8 6 -16 0 q-8 6 -16 0 q-10 0 -10 -10 q0 -6 4 -8Z"
+            fill={CREME} {...fino} />
+          <path d="M164 74 q8 -2 10 6 q8 4 2 12 q2 8 -8 8 q-6 6 -12 0 q-8 0 -6 -8 q-6 -6 2 -12 q2 -8 12 -6Z" fill={CREME} {...fino} />
+        </g>
+      )
+    case 'palha':
+      // São João: chapéu de palha com aba larga, trama e fita colorida.
+      return (
+        <g className="bicho__cabeca" data-item="palha" filter={filtro(pincel)}>
+          <ellipse cx="100" cy="72" rx="72" ry="14" fill="#E8C46A" {...traco} />
+          <path d="M64 72 C62 42 138 42 136 72Z" fill="#E8C46A" {...traco} />
+          <path d="M66 64 Q100 58 134 64 L135 72 Q100 66 65 72Z" fill={cor} {...fino} />
+          {[44, 60, 140, 156].map((x) => <path key={x} d={`M${x} 66 L${x + 4} 80`} {...linha("#B98E34", 2)} />)}
+          {[78, 92, 108, 122].map((x) => <path key={x} d={`M${x} 50 L${x + 2} 60`} {...linha("#B98E34", 2)} />)}
+          <path d="M70 76 Q100 84 130 76" {...linha(SOMBRA, 3)} />
+        </g>
+      )
     case 'flor':
       return (
         <g className="bicho__cabeca" data-item="flor" filter={filtro(pincel)}>
@@ -203,6 +269,20 @@ export function Cabeca({ id, cor, pincel }: Omit<CamadaProps, 'recorte'>) {
 
 /** Acessório de rosto. As lentes são translúcidas para os olhos (e o humor) continuarem visíveis. */
 export function Rosto({ id }: { id: string }) {
+  if (id === 'mascara') {
+    // Carnaval: máscara de baile com brilhos e uma pena.
+    return (
+      <g className="bicho__rosto-item" data-item="mascara">
+        <path d="M54 100 Q60 88 78 92 Q92 96 100 104 Q108 96 122 92 Q140 88 146 100 Q150 118 130 122 Q114 124 100 114 Q86 124 70 122 Q50 118 54 100Z"
+          fill="#9A88D8" {...traco} />
+        <ellipse cx="78" cy="108" rx="11" ry="8" fill={CREME} fillOpacity={0.25} stroke={CONTORNO} strokeWidth={2.5} />
+        <ellipse cx="122" cy="108" rx="11" ry="8" fill={CREME} fillOpacity={0.25} stroke={CONTORNO} strokeWidth={2.5} />
+        <path d="M146 98 C156 80 166 72 176 70 C170 82 162 92 150 102" fill="#EE8AA6" {...fino} />
+        <circle cx="62" cy="98" r="2.2" fill="var(--rqr-amarelo)" /><circle cx="100" cy="102" r="2.2" fill="var(--rqr-amarelo)" />
+        <circle cx="138" cy="98" r="2.2" fill="var(--rqr-amarelo)" />
+      </g>
+    )
+  }
   if (id !== 'oculos' && id !== 'oculos-sol') return null
   const escuro = id === 'oculos-sol'
   const lente = escuro ? { fill: 'var(--rqr-azul-escuro)', fillOpacity: 0.5 } : { fill: CREME, fillOpacity: 0.22 }
@@ -228,6 +308,16 @@ export function Peito({ id }: { id: string }) {
             fill="var(--rqr-rosa-escuro)" {...traco} strokeWidth={3}
           />
           <path d="M132 155 Q133 152 136 152" {...linha(LUZ, 2)} />
+        </g>
+      )
+    case 'abobora':
+      // Halloween: abobrinha sorridente.
+      return (
+        <g className="bicho__peito" data-item="abobora">
+          <ellipse cx="138" cy="162" rx="12" ry="10" fill="#E8893A" {...traco} strokeWidth={3} />
+          <path d="M138 152 V172 M130 154 Q127 162 130 170 M146 154 Q149 162 146 170" {...linha("rgb(27 26 69 / .35)", 1.8)} />
+          <path d="M138 152 q1 -6 5 -7" {...linha("#3F8C5A", 3)} />
+          <path d="M132 160 l2 -2 l2 2 M140 160 l2 -2 l2 2 M133 165 q5 4 10 0" {...linha(CONTORNO, 1.6)} />
         </g>
       )
     case 'estrela':
