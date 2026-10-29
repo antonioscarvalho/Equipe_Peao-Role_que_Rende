@@ -9,7 +9,7 @@ ver cenas/CenaCap1.tsx) + eco curto pra dar corpo. So stdlib (math/array/wave).
 
 Uso:
     python3 compor-cantiga-vo.py
-    ffmpeg -y -i ../public/sons/cantiga-vo.wav -c:a libopus -b:a 48k -vbr on ../public/sons/cantiga-vo.opus
+    ffmpeg -y -i ../public/sons/cantiga-vo.wav -c:a libopus -b:a 64k -vbr on ../public/sons/cantiga-vo.opus
     rm ../public/sons/cantiga-vo.wav   # o .wav e so material de trabalho; o jogo serve o .opus
 """
 import math
@@ -18,7 +18,7 @@ import wave
 from array import array
 
 SR = 48000
-DUR_TOTAL = 13.0  # segundos, com cauda do eco incluida
+DUR_TOTAL = 15.0  # segundos, com final sustentado e cauda do eco
 N = int(SR * DUR_TOTAL)
 
 # (frequencia, inicio_s, taxa_de_decaimento, amplitude, vibrato_hz, vibrato_prof)
@@ -36,6 +36,22 @@ NOTAS = [
     (880.00, 6.60, 2.0, 0.12, 6.0, 0.005),   # de
     (739.99, 7.05, 1.4, 0.13, 5.0, 0.004),   # va
     (587.33, 7.80, 0.55, 0.14, 4.5, 0.004),  # gar -- decai bem devagar
+]
+
+# Acompanhamento em arpejo, baixo e macio: dá chão à melodia sem competir com ela.
+# A harmonia passeia por Ré, Lá e Sol, como uma cantiga simples que a família saberia cantar junto.
+ACOMPANHAMENTO = [
+    (146.83, 0.00, 3.8, 0.045, 3.8, 0.002),  # Ré
+    (220.00, 0.82, 4.2, 0.032, 4.0, 0.002),  # Lá
+    (185.00, 1.65, 3.8, 0.036, 3.8, 0.002),  # Fá sustenido
+    (220.00, 2.45, 4.2, 0.030, 4.0, 0.002),  # Lá
+    (146.83, 3.00, 3.8, 0.043, 3.8, 0.002),  # Ré
+    (220.00, 3.80, 4.2, 0.030, 4.0, 0.002),  # Lá
+    (196.00, 5.00, 3.8, 0.038, 3.8, 0.002),  # Sol
+    (246.94, 5.85, 4.0, 0.030, 4.0, 0.002),  # Si
+    (146.83, 6.60, 3.8, 0.038, 3.8, 0.002),  # Ré
+    (220.00, 7.05, 4.2, 0.028, 4.0, 0.002),  # Lá
+    (146.83, 7.80, 0.65, 0.040, 3.8, 0.002), # Ré final
 ]
 
 PAD_FREQ = 73.42  # D2, bem grave e discreto
@@ -71,6 +87,8 @@ def gerar_canal(detune, atraso):
     canal = [0.0] * N
     for freq, t0, dec, amp, vhz, vprof in NOTAS:
         somar(canal, sininho(freq, t0, dec, amp, vhz, vprof, detune=detune, atraso=atraso))
+    for freq, t0, dec, amp, vhz, vprof in ACOMPANHAMENTO:
+        somar(canal, sininho(freq, t0, dec, amp, vhz, vprof, detune=detune * 0.6, atraso=atraso))
     # Drone grave, com leve atraso de entrada (as estrelas pulsam, devagar).
     for i in range(N):
         t = i / SR
