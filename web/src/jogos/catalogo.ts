@@ -13,7 +13,8 @@ export type Jogo =
 
 export const JOGOS: Jogo[] = [
   { tipo: "pronto", id: "pulo", nome: "Pulo do Bichinho", descricao: "Pule cada vez mais alto", icone: "sprout", libera: "cap1" },
-  { tipo: "pronto", id: "carrinho", nome: "Carrinho no Morro", descricao: "Suba os morros e pegue folhas", icone: "gamepad", libera: "cap1" },
+  // Carrinho no Morro ainda não está completo: volta para cá quando estiver.
+  // { tipo: "pronto", id: "carrinho", nome: "Carrinho no Morro", descricao: "Suba os morros e pegue folhas", icone: "gamepad", libera: "cap1" },
   { tipo: "oculto", id: "oculto-2", libera: "cap2" },
   { tipo: "oculto", id: "oculto-3", libera: "cap3" },
   { tipo: "oculto", id: "oculto-4", libera: "cap4" },

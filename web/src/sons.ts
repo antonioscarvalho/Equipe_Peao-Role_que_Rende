@@ -639,11 +639,10 @@ export function precarregarTrilhas(urls: readonly string[]) {
   for (const url of urls) {
     if (precarregados.has(url)) continue;
     precarregados.add(url);
-    const audio = new Audio();
-    audio.preload = "auto";
-    audio.muted = true; // nunca deve ser ouvido — é só pra encher o cache do navegador
-    audio.src = url;
-    audio.load();
+    // O arquivo inteiro vai para o cache HTTP (com `<audio preload>` o navegador pode baixar só os
+    // metadados). Na hora de tocar, a trilha lê do cache, sem esperar a rede.
+    fetch(url).then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.arrayBuffer(); })
+      .catch(() => { precarregados.delete(url); /* sem internet ou erro: toca direto da rede depois */ });
   }
 }
 

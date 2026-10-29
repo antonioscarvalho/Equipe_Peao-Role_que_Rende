@@ -97,8 +97,8 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
   return (
     <div className="crise respiro" role="dialog" aria-modal="true" aria-labelledby="crise-titulo">
       <div className="tela-libras"><BotaoLibras /></div>
-      <button className="botao-topo respiro__fechar" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">
-        <span className="botao-topo__icone" aria-hidden="true">×</span>
+      <button className="respiro__fechar botao-fechar-gov" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">
+        <Icone nome="fechar" tamanho={20} />
       </button>
       {!terminou ? (
         <div className="respiro__conteudo">

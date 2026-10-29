@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Icone } from "./Icone";
 import { tocar } from "./sons";
 
 const acharBotaoVLibras = () =>
@@ -28,7 +27,7 @@ export function BotaoLibras() {
     <button type="button" className="botao-topo botao-libras" onClick={() => { tocar("clique"); acharBotaoVLibras()?.click(); }}
       aria-label="Traduzir para Libras com o VLibras" title="Traduzir para Libras"
       data-vlibras-gloss="LIBRAS">
-      <span className="botao-topo__icone" aria-hidden="true"><Icone nome="libras" tamanho={24} /></span>
+      <span className="botao-topo__icone" aria-hidden="true"><img src="/marca/vlibras.svg" alt="" width={26} height={26} /></span>
     </button>
   );
 }

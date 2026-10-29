@@ -1,9 +1,11 @@
 import { Icone } from "../../Icone";
+import { TRILHA_PULO, imagemCenarioPulo } from "./precarregar";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
 import { pararTrilha, tocar, tocarTrilha } from "../../sons";
 import { vibrar } from "../../tato";
+import { gravarGuardado, lerRecorde } from "../../guardado";
 import { useAparenciaVisivel } from "../../personalizacao";
 import { BotaoTema } from "../../BotaoTema";
 import { useEsconderVLibras } from "../../vlibras";
@@ -51,10 +53,14 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   useEsconderVLibras(estado === "jogando");
   const [pontos, setPontos] = useState(0);
   const [folhas, setFolhas] = useState(0);
-  const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
+  const [recorde, setRecorde] = useState(() => lerRecorde(CHAVE_RECORDE));
+  const guardarRecorde = (final: number) => {
+    const novo = Math.max(lerRecorde(CHAVE_RECORDE), final);
+    gravarGuardado(CHAVE_RECORDE, String(novo));
+    setRecorde(novo);
+  };
   // "ok" só quando chega leitura de verdade do giroscópio.
   const [sensor, setSensor] = useState<"desconhecido" | "ok" | "sem">("desconhecido");
-  const [graus, setGraus] = useState<number | null>(null);
   const [aviso, setAviso] = useState("");
   // Na história, fechar também segue para a conversa levando as folhas pegas (não existe derrota).
   const fechar = () => { tocar("clique"); return aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar(); };
@@ -75,7 +81,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     const id = window.setTimeout(() => {
       if (cancelado) return;
       console.log("[pulo] trocando pra trilha-pulo.opus");
-      tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+      tocarTrilha(TRILHA_PULO, { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
     }, 0);
     return () => {
       cancelado = true;
@@ -156,7 +162,6 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
       const lado = angulo === 90 ? e.beta ?? 0 : angulo === 270 ? -(e.beta ?? 0) : e.gamma;
       jogo.current.inclinacao = Math.max(-1, Math.min(1, lado / 25));
       setSensor("ok");
-      setGraus(Math.round(lado));
     };
     const tecla = (e: KeyboardEvent, v: boolean) => {
       const t = jogo.current.teclas;
@@ -196,8 +201,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     // Cenários ilustrados para a subida: Praça/Cidade (cap1) -> Céu/Telhados/Cometa (cap2) -> Espaço e Vila Estrela.
-    const imgCidade = new Image();
-    imgCidade.src = "/cenarios/cap1-nave-pousada.webp";
+    const imgCidade = imagemCenarioPulo(); // já baixada na abertura do app (precarregar.ts)
 
     // Estrelas do espaço profundo (geradas uma vez para a partida).
     const estrelasEspaco = Array.from({ length: 48 }, (_, i) => ({
@@ -450,11 +454,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
 
       const encerrar = (fim: "caiu" | "tempo", aviso: string) => {
         const final = g.maisAlta;
-        setRecorde((r) => {
-          const novo = Math.max(r, final);
-          localStorage.setItem(CHAVE_RECORDE, String(novo));
-          return novo;
-        });
+        guardarRecorde(final);
         setAviso(aviso);
         setEstado(fim);
       };
@@ -500,7 +500,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   const novoRecorde = estado === "caiu" && pontos > 0 && pontos >= recorde;
 
   return (
-    <div className="pulo" role="dialog" aria-modal="true" aria-labelledby="pulo-titulo">
+    <div className={`pulo ${chamada ? "sem-pop" : ""}`} role="dialog" aria-modal="true" aria-labelledby="pulo-titulo">
       <div className="pulo__topo">
         <h2 id="pulo-titulo" className="sr-only">Pulo do Bichinho</h2>
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>
@@ -508,7 +508,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
         </span>
         <BotaoLibras />
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
+        <button className="crise__fechar pulo__fechar botao-fechar-gov" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO"><Icone nome="fechar" tamanho={20} /></button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"
@@ -562,17 +562,6 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
         )}
       </div>
 
-      {estado !== "inicio" && (
-        <p className="pulo__nota">
-          {sensor === "ok"
-            ? `Inclinação ativa: ${graus ?? 0}°`
-            : sensor === "sem"
-              ? window.isSecureContext
-                ? "O sensor de inclinação não respondeu. Use as setas ou toque nos lados."
-                : "Sensor de inclinação precisa de HTTPS (porta 5443). Use as setas ou toque nos lados."
-              : "Procurando sensor de inclinação..."}
-        </p>
-      )}
       <p className="sr-only" aria-live="polite">{aviso}</p>
     </div>
   );
