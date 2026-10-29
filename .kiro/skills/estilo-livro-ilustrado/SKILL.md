@@ -112,6 +112,8 @@ Itens do bichinho, ícones grandes e cenas seguem o traço dos cenários:
 
 ## Movimento
 
+- **Troca de tela:** sempre o pop do livro (skill `transicao-pop`).
+
 - Entradas com quique curto (`kb-entra`, `kb-salto`, `abertura-pop`), até 600ms.
 - Ambiente lento: câmera que se afasta, luzes que acendem, poeira de luz. Nada piscando rápido.
 - **Sem** moeda girando, roleta, contagem regressiva ou brilho de prêmio.

@@ -847,3 +847,30 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
   animation: livro-abre 380ms cubic-bezier(.3, 1.6, .5, 1) both;
 }
 @keyframes livro-abre { from { opacity: 0; transform: scale(.7) translateY(24px); } to { opacity: 1; transform: none; } }
+
+/* =====================================================================
+   Transição padrão de TODAS as telas: o "pop do livro" (o mesmo da História e
+   do menu da engrenagem). A tela cresce de 70% para 100% com um quique curto,
+   a partir do ponto de onde foi chamada. Skill: transicao-pop.
+   - Telas por cima (história, respiração, ajuda, jogos, personalizar): da barra de baixo.
+   - Abas: o conteúdo novo dá o pop a partir da aba tocada (embaixo).
+   - Classe .tela-pop para qualquer tela nova.
+   Com "reduzir animações", vira instantânea (regra global).
+   ===================================================================== */
+@keyframes tela-pop { from { opacity: 0; transform: scale(.7) translateY(24px); } to { opacity: 1; transform: none; } }
+.tela-pop,
+.historia, .historia-dialogo, .queda, .crise, .pulo, .celular.personalizar,
+.aba-missoes, .aba-jogos, .aba-ajustes {
+  transform-origin: 50% calc(100% - 40px);
+  animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+/* Tela inicial: os blocos dão o pop um depois do outro, de cima para baixo. */
+.celular > .cena, .celular > .cards, .celular > .proxima, .celular > .atalhos {
+  transform-origin: 50% 100%;
+  animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+.celular > .cards { animation-delay: 50ms; }
+.celular > .proxima { animation-delay: 100ms; }
+.celular > .atalhos { animation-delay: 150ms; }
+/* Painéis que ficam dentro dessas telas entram logo depois, com o mesmo pop. */
+.pulo__painel, .historia__caixa, .especial { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 120ms both; }
