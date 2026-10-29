@@ -28,6 +28,7 @@ import { BotaoLibras } from "./BotaoLibras";
 import { PainelCrise } from "./AjudaAgora";
 import { ModalAcessibilidade } from "./ModalAcessibilidade";
 import { ehMenorDeIdade } from "./menor";
+import { gravarGuardado, lerGuardado } from "./guardado";
 import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
@@ -191,10 +192,7 @@ export default function App() {
   useEffect(() => {
     if (abrindo) return;
     if (aba === "jogos") {
-      precarregarTrilhas([
-        "/sons/trilha-pulo.opus",
-        "/sons/trilha-carrinho.opus",
-      ]);
+      precarregarTrilhas(["/sons/trilha-pulo.opus"]);
     }
     if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
     if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
@@ -532,8 +530,8 @@ export default function App() {
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);
         // Primeiro acesso: o capítulo 1 apresenta o Broto e o app conhece a pessoa.
-        if (!capitulosConcluidos().includes("cap1") && !localStorage.getItem(CHAVE_PRIMEIRO_ACESSO)) {
-          try { localStorage.setItem(CHAVE_PRIMEIRO_ACESSO, "1"); } catch { /* modo privado */ }
+        if (!capitulosConcluidos().includes("cap1") && !lerGuardado(CHAVE_PRIMEIRO_ACESSO)) {
+          gravarGuardado(CHAVE_PRIMEIRO_ACESSO, "1");
           setConvite(true);
         }
       }} />}
