@@ -508,8 +508,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {historia && <Historia aoFechar={() => setHistoria(false)} aoMenorDeIdade={() => { setHistoria(false); setMenorDeIdade(true); }} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
-        trilhaRetorno={aba === "jogos" ? "jogos" : "app"} />}
+      {historia && <Historia aoFechar={() => setHistoria(false)} aoMenorDeIdade={() => { setHistoria(false); setMenorDeIdade(true); }} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined} />}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);
         // Primeiro acesso: o capítulo 1 apresenta o Broto e o app conhece a pessoa.

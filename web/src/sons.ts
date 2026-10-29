@@ -1,6 +1,7 @@
 /**
  * Sons: efeitos sintetizados com Web Audio (sem arquivo, sem licença, offline) e as músicas
- * (arquivo próprio: a cantiga da Vó, o tema do app e a trilha de cada mini jogo) por `<audio>`.
+ * (arquivo próprio: a cantiga da Vó, o tema do app e a trilha de cada mini jogo). A cantiga toca
+ * por `<audio>`; as trilhas em loop, pela Web Audio, para a volta não deixar buraco.
  * Regras (spec 003 CA-3 e design-etico-saude-digital):
  * - Volume baixo, timbres suaves (seno/triângulo), nada de "jackpot", sirene ou som de cassino.
  * - Som de recompensa só em missões (esforço). Na respiração, apenas tons calmos de ritmo.
@@ -44,6 +45,10 @@ type Nota = {
   ataque?: number;
 };
 
+// As receitas foram afinadas sem música por baixo. Com a trilha a 40%, a transição saía 21 dB
+// abaixo dela e o tique da tecla 33 dB (medido no Chromium): estavam tocando, mas ninguém ouvia.
+const REFORCO_EFEITOS = 4;
+
 function tocarNotas(notas: Nota[], volumeGeral = 1) {
   const ac = contexto();
   if (!ac) return;
@@ -53,7 +58,7 @@ function tocarNotas(notas: Nota[], volumeGeral = 1) {
     const ganho = ac.createGain();
     const t0 = agora + n.inicio;
     const t1 = t0 + n.dur;
-    const pico = (n.volume ?? 0.1) * volumeGeral;
+    const pico = Math.min(0.5, (n.volume ?? 0.1) * volumeGeral * REFORCO_EFEITOS);
     const ataque = n.ataque ?? 0.01;
     osc.type = n.tipo ?? "sine";
     osc.frequency.setValueAtTime(n.freq, t0);
@@ -202,6 +207,14 @@ function gravarVolume(chave: string, v: number) {
   }
 }
 
+/**
+ * Régua (0 a 10) para ganho. Em raiz quadrada, e não linear: o ouvido não percebe volume em linha
+ * reta, e no linear os 40% padrão viravam -8 dB, baixo demais. Assim 40% dá -4 dB e 100% segue 1.
+ */
+function ganhoDaRegua(v: number): number {
+  return Math.sqrt(Math.max(0, v) / 10);
+}
+
 // Escala 0 a 10 (como a régua de vontade), não um booleano: 0 é mudo, sem precisar de outro estado.
 let volumeEfeitos = lerVolumeGravado(CHAVE_VOL_EFEITOS, 4);
 let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 4);
@@ -252,14 +265,14 @@ export function tocarMissao(feitas: number, total: number) {
       notas.push({ freq: f, inicio: t, dur: 0.9, volume: 0.045, tipo: "sine", ataque: 0.03 });
     }
   }
-  tocarNotas(notas, volumeEfeitos / 10);
+  tocarNotas(notas, ganhoDaRegua(volumeEfeitos));
 }
 
 export function tocar(nome: NomeSom) {
   // Toque leve no celular junto do clique (tato.ts): vale mesmo com o som mudo, e não vibra na crise.
   if (nome === "clique") vibrar("toque");
   if (volumeEfeitos <= 0) { console.debug(`[sons] mudo: régua de Efeitos em 0, "${nome}" não tocou`); return; }
-  tocarNotas(receitas[nome], volumeEfeitos / 10);
+  tocarNotas(receitas[nome], ganhoDaRegua(volumeEfeitos));
 }
 
 /** Vocalizações breves e suaves do Broto, chamadas durante o texto progressivo. */
@@ -273,7 +286,7 @@ export function vocalizarBroto() {
   tocarNotas([
     { freq: base, freqFim: base * (0.82 + Math.random() * 0.28), inicio: 0, dur: 0.11 + Math.random() * 0.06, volume: 0.045, tipo: "triangle", ataque: 0.025 },
     { freq: base * 1.42, freqFim: base * 1.1, inicio: 0.035, dur: 0.1, volume: 0.018, ataque: 0.025 },
-  ], volumeEfeitos / 10);
+  ], ganhoDaRegua(volumeEfeitos));
 }
 
 /** Tique de digitação deliberadamente discreto, sintetizado e espaçado para não competir com a fala. */
@@ -284,7 +297,7 @@ export function tocarTecla() {
   if (agoraMs - ultimoTique < 55) return;
   ultimoTique = agoraMs;
   const freq = 1500 + Math.random() * 450;
-  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.018, volume: 0.009, tipo: "triangle", ataque: 0.002 }], volumeEfeitos / 10);
+  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.022, volume: 0.016, tipo: "triangle", ataque: 0.002 }], ganhoDaRegua(volumeEfeitos));
 }
 
 let motorOsc: OscillatorNode | null = null;
@@ -317,7 +330,7 @@ export function atualizarMotor(velocidade: number) {
   if (!ac) return;
   const v = Math.max(0, Math.min(1, velocidade));
   const freq = 55 + v * 150; // parado ≈ 55Hz, no máximo ≈ 205Hz — grave, nunca agudo/irritante
-  const alvoVol = v < 0.02 ? 0.0001 : (0.012 + v * 0.05) * (volumeEfeitos / 10);
+  const alvoVol = v < 0.02 ? 0.0001 : (0.012 + v * 0.05) * ganhoDaRegua(volumeEfeitos);
   const t = ac.currentTime;
   motorOsc.frequency.setTargetAtTime(freq, t, 0.09);
   motorGanho.gain.setTargetAtTime(alvoVol, t, 0.12);
@@ -333,15 +346,165 @@ export function pararMotor() {
   motorGanho = null;
 }
 
+/** O pedaço do `<audio>` que a trilha de fundo usa; `TrilhaEmLoop` cumpre o mesmo contrato. */
+type Reprodutor = {
+  volume: number;
+  readonly paused: boolean;
+  play(): Promise<void>;
+  pause(): void;
+  descartar?(): void;
+};
+
+// Duas trilhas decodificadas cabem (a do menu e a do jogo aberto a partir dele): ir e voltar entre
+// as duas não decodifica de novo, e a memória fica em ~25 MB no pior caso, com a de 48 s.
+const buffersDecodificados = new Map<string, Promise<AudioBuffer>>();
+
+function decodificar(ac: AudioContext, url: string): Promise<AudioBuffer> {
+  const pronto = buffersDecodificados.get(url);
+  if (pronto) {
+    buffersDecodificados.delete(url);
+    buffersDecodificados.set(url, pronto);
+    return pronto;
+  }
+  const novo = fetch(url)
+    .then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.arrayBuffer();
+    })
+    .then((dados) => ac.decodeAudioData(dados));
+  novo.catch(() => buffersDecodificados.delete(url));
+  buffersDecodificados.set(url, novo);
+  while (buffersDecodificados.size > 2) {
+    const maisVelha = buffersDecodificados.keys().next().value as string;
+    buffersDecodificados.delete(maisVelha);
+  }
+  return novo;
+}
+
+/**
+ * Trilha em loop pela Web Audio. O `<audio loop>` deixa um buraco a cada volta (13 ms medidos no
+ * Chrome com a trilha-leve), que soa como um soluço no meio da música; o AudioBufferSourceNode
+ * emenda amostra a amostra. Se o navegador não decodificar o Opus pela Web Audio, cai para o
+ * `<audio>` de antes, com o buraco, mas tocando.
+ */
+class TrilhaEmLoop implements Reprodutor {
+  private readonly ganho: GainNode;
+  private buffer: AudioBuffer | null = null;
+  private fonte: AudioBufferSourceNode | null = null;
+  private reserva: HTMLAudioElement | null = null;
+  private inicioNoContexto = 0;
+  private posicao = 0;
+  private querTocar = false;
+  private volumeAtual = 0;
+
+  constructor(private readonly ac: AudioContext, private readonly url: string) {
+    this.ganho = ac.createGain();
+    this.ganho.gain.value = 0;
+    this.ganho.connect(ac.destination);
+    ac.addEventListener("statechange", this.aoMudarEstado);
+    decodificar(ac, url)
+      .then((b) => {
+        this.buffer = b;
+        this.iniciar();
+      })
+      .catch((erro) => {
+        console.warn(`[sons] Web Audio não decodificou ${url}, voltando ao <audio>:`, erro);
+        this.usarReserva();
+      });
+  }
+
+  get volume() {
+    return this.volumeAtual;
+  }
+
+  set volume(v: number) {
+    this.volumeAtual = v;
+    if (this.reserva) this.reserva.volume = v;
+    else this.ganho.gain.setTargetAtTime(v, this.ac.currentTime, 0.01);
+  }
+
+  get paused() {
+    if (this.reserva) return this.reserva.paused;
+    return !this.querTocar || this.ac.state !== "running";
+  }
+
+  async play() {
+    this.querTocar = true;
+    if (this.reserva) return this.reserva.play();
+    // Sem gesto da pessoa o navegador segura o contexto suspenso; o primeiro toque chama de novo.
+    if (this.ac.state !== "running") await this.ac.resume();
+    this.iniciar();
+  }
+
+  pause() {
+    this.querTocar = false;
+    this.reserva?.pause();
+    if (!this.fonte || !this.buffer) return;
+    this.posicao = (this.ac.currentTime - this.inicioNoContexto) % this.buffer.duration;
+    this.fonte.onended = null;
+    this.fonte.stop();
+    this.fonte.disconnect();
+    this.fonte = null;
+  }
+
+  descartar() {
+    this.pause();
+    this.ac.removeEventListener("statechange", this.aoMudarEstado);
+    this.ganho.disconnect();
+    this.buffer = null;
+    if (this.reserva) {
+      this.reserva.removeAttribute("src");
+      this.reserva.load();
+      this.reserva = null;
+    }
+  }
+
+  private readonly aoMudarEstado = () => this.iniciar();
+
+  private iniciar() {
+    if (this.fonte || !this.buffer || !this.querTocar || this.ac.state !== "running") return;
+    const fonte = this.ac.createBufferSource();
+    fonte.buffer = this.buffer;
+    fonte.loop = true;
+    fonte.connect(this.ganho);
+    // A decodificação pode terminar depois da animação de entrada; a subida aqui evita que a
+    // música entre seca quando isso acontece.
+    const agora = this.ac.currentTime;
+    this.ganho.gain.cancelScheduledValues(agora);
+    this.ganho.gain.setValueAtTime(0, agora);
+    this.ganho.gain.linearRampToValueAtTime(this.volumeAtual, agora + 0.4);
+    fonte.start(0, this.posicao);
+    this.inicioNoContexto = agora - this.posicao;
+    this.fonte = fonte;
+  }
+
+  private usarReserva() {
+    if (this.reserva) return;
+    const audio = new Audio(this.url);
+    audio.loop = true;
+    audio.volume = this.volumeAtual;
+    this.reserva = audio;
+    if (this.querTocar) void audio.play().catch(() => {});
+  }
+}
+
+function criarTrilha(url: string): Reprodutor {
+  const ac = contexto();
+  if (ac) return new TrilhaEmLoop(ac, url);
+  const audio = new Audio(url);
+  audio.loop = true;
+  return audio;
+}
+
 let musicaAtual: HTMLAudioElement | null = null;
-let trilhaAudio: HTMLAudioElement | null = null;
+let trilhaAudio: Reprodutor | null = null;
 let trilhaUrlAtual: string | null = null;
 // Contador, não booleano: duas coisas podem pedir "mais baixo" ao mesmo tempo (ex.: a cantiga
 // toca durante uma tela de crise); só volta ao normal quando a última delas devolver.
 let pedidosDeAbaixar = 0;
 
 function volumeAlvoTrilha(): number {
-  return (volumeMusica / 10) * (pedidosDeAbaixar > 0 ? 0.3 : 1);
+  return ganhoDaRegua(volumeMusica) * (pedidosDeAbaixar > 0 ? 0.3 : 1);
 }
 
 function aplicarVolumeNaTrilhaAoVivo() {
@@ -350,9 +513,9 @@ function aplicarVolumeNaTrilhaAoVivo() {
 
 // Uma "geração" por elemento: se outra animação assumir o mesmo <audio> (raro, só numa troca bem
 // rápida), a antiga para de escrever o volume sem precisar cancelar nada mais.
-const geracaoAnimacao = new WeakMap<HTMLAudioElement, number>();
+const geracaoAnimacao = new WeakMap<Reprodutor, number>();
 
-function animarVolume(audio: HTMLAudioElement, ateVolume: number, duracaoMs: number, aoAcabar?: () => void) {
+function animarVolume(audio: Reprodutor, ateVolume: number, duracaoMs: number, aoAcabar?: () => void) {
   const minhaGeracao = (geracaoAnimacao.get(audio) ?? 0) + 1;
   geracaoAnimacao.set(audio, minhaGeracao);
   const inicio = audio.volume;
@@ -405,7 +568,7 @@ export function tocarMusica(url: string, volume = 1) {
   if (nivel <= 0) { console.debug(`[sons] mudo: Música e Efeitos em 0, "${url}" não tocou`); return; }
   musicaAtual?.pause();
   const audio = new Audio(url);
-  audio.volume = Math.min(1, (nivel / 10) * volume);
+  audio.volume = Math.min(1, ganhoDaRegua(nivel) * volume);
   audio.loop = false;
   musicaAtual = audio;
   abaixarTrilha(true);
@@ -430,8 +593,7 @@ export function tocarTrilha(url: string, info?: InfoTrilha) {
     return;
   }
   const antiga = trilhaAudio;
-  const nova = new Audio(url);
-  nova.loop = true;
+  const nova = criarTrilha(url);
   nova.volume = 0;
   trilhaUrlAtual = url;
   trilhaAudio = nova;
@@ -441,7 +603,7 @@ export function tocarTrilha(url: string, info?: InfoTrilha) {
       .catch((erro) => console.warn(`[sons] trilha não tocou ${url}:`, erro));
   } else console.debug(`[sons] trilha "${url}" carregada, mas muda (régua de Música em 0)`);
   animarVolume(nova, volumeAlvoTrilha(), 450);
-  if (antiga) animarVolume(antiga, 0, 300, () => antiga.pause());
+  if (antiga) animarVolume(antiga, 0, 300, () => (antiga.descartar ? antiga.descartar() : antiga.pause()));
   if (info) {
     infoTrilhaAtual = info;
     window.dispatchEvent(new CustomEvent<InfoTrilha>(EVENTO_TRILHA_INFO, { detail: info }));
@@ -449,7 +611,8 @@ export function tocarTrilha(url: string, info?: InfoTrilha) {
 }
 
 export function pararTrilha() {
-  trilhaAudio?.pause();
+  if (trilhaAudio?.descartar) trilhaAudio.descartar();
+  else trilhaAudio?.pause();
   trilhaAudio = null;
   trilhaUrlAtual = null;
 }
@@ -467,8 +630,8 @@ export const URLS_TRILHAS = [
 const precarregados = new Set<string>();
 
 /**
- * Baixa com antecedência apenas as faixas que devem ser usadas em seguida. O áudio fica no
- * pipeline nativo do navegador via `<audio>`; não criamos buffers PCM grandes em JavaScript.
+ * Baixa com antecedência apenas as faixas que devem ser usadas em seguida. Só enche o cache HTTP:
+ * decodificar em PCM fica para quando a trilha tocar, e só as duas últimas ficam na memória.
  * A lista é obrigatória para evitar baixar todas as trilhas sem necessidade em dispositivos móveis.
  */
 export function precarregarTrilhas(urls: readonly string[]) {
