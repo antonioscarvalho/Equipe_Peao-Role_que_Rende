@@ -13,6 +13,9 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 | TypeScript | 5.x | Apache 2.0 | https://github.com/microsoft/TypeScript | Linguagem de todo o projeto |
 | React | 19.x | MIT | https://github.com/facebook/react | Interface do web e do mobile |
 | Vite | a definir no setup | MIT | https://github.com/vitejs/vite | Dev server e build do web |
+| vite-plugin-pwa | 0.21.x | MIT | https://github.com/vite-pwa/vite-plugin-pwa | App instalável no celular (manifesto e service worker) |
+| Workbox (via vite-plugin-pwa) | 7.x | MIT | https://github.com/GoogleChrome/workbox | Guarda o app no aparelho para abrir sem internet |
+| @resvg/resvg-js (só para gerar os ícones, fora do app) | 2.x | MPL 2.0 | https://github.com/thx/resvg-js | `web/scripts/gerar-icones.cjs`: transforma `icones/broto.svg` nos PNGs do ícone |
 | React Native | 0.88 | MIT | https://github.com/facebook/react-native | App mobile |
 | Expo | SDK 58 | MIT | https://github.com/expo/expo | Framework do app mobile |
 | Supabase (plataforma e CLI) | a definir no setup | Apache 2.0 | https://github.com/supabase/supabase | Backend inicial: Auth, API, Storage, Edge Functions |
