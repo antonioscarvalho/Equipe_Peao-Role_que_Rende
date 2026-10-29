@@ -56,7 +56,7 @@ type Props = {
 };
 
 function frasesDeFolhas(n: number | undefined) {
-  if (!n) return "Não deu pra pegar folha dessa vez. Tudo bem: o pulo conta igual.";
+  if (!n) return "Não deu pra pegar folha dessa vez. Tudo bem: a tentativa conta igual.";
   return n === 1 ? "A gente pegou uma folha no caminho! Vou guardar ela aqui." : `A gente pegou ${n} folhas no caminho! Vou guardar todas aqui.`;
 }
 
