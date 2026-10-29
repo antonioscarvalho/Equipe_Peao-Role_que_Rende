@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "./BotaoLibras";
 import { Icone } from "./Icone";
+import { abaixarTrilha, tocar } from "./sons";
 
 /**
  * "Preciso de ajuda agora": ajuda humana a 1 toque, em qualquer tela, sem internet.
@@ -20,7 +21,7 @@ export function AjudaAgora() {
 
   return (
     <>
-      <button ref={botao} className="ajuda-agora" onClick={() => setAberto(true)} aria-haspopup="dialog">
+      <button ref={botao} className="ajuda-agora" onClick={() => { tocar("clique"); setAberto(true); }} aria-haspopup="dialog">
         <Icone nome="phone" /> Preciso de ajuda agora
       </button>
       {aberto && <PainelCrise aoFechar={fechar} />}
@@ -45,10 +46,17 @@ export function PainelCrise({ aoFechar }: { aoFechar: () => void }) {
     return () => window.removeEventListener("keydown", esc);
   }, []);
 
+  // A trilha de fundo (alegre e energética) não combina com o momento de crise: abaixa
+  // enquanto este painel estiver aberto, em qualquer tela do app, e devolve ao fechar.
+  useEffect(() => {
+    abaixarTrilha(true);
+    return () => abaixarTrilha(false);
+  }, []);
+
   return (
     <div className="crise ajuda-agora__painel" role="dialog" aria-modal="true" aria-labelledby="ajuda-agora-titulo">
       <div className="tela-libras"><BotaoLibras /></div>
-      <button className="crise__fechar" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
+      <button className="crise__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
       <h2 id="ajuda-agora-titulo" ref={titulo} tabIndex={-1} className="crise__titulo">
         Você não precisa passar por isso sozinho(a).
       </h2>
@@ -58,7 +66,7 @@ export function PainelCrise({ aoFechar }: { aoFechar: () => void }) {
       <a className="ajuda" href="https://cvv.org.br" target="_blank" rel="noreferrer"><Icone nome="heartHandshake" /> Chat do CVV (precisa de internet)</a>
       <p>Você também pode ir à unidade de saúde (UBS) do seu bairro ou ao CAPS.</p>
       <small>O Guardião é um apoio e não substitui atendimento profissional nem serviço de emergência.</small>
-      <button className="rqr-botao" onClick={aoFechar}>Voltar, sem pressa</button>
+      <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar, sem pressa</button>
     </div>
   );
 }

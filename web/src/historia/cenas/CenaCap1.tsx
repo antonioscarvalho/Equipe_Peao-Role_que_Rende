@@ -26,18 +26,18 @@ const CONSTELACAO = "M90 140 L150 100 L210 120 L250 60 L320 90 L360 70";
 const CEU = ["vila", "colheita", "familia", "nave", "lua"];
 
 const ROTULOS: Record<string, string> = {
-  cratera: "Noite na praça do bairro. O Broto está no meio do gramado, ao lado da cratera onde caiu.",
+  cratera: "Noite na praça. As casas do bairro estão apagadas. Um alien está ao lado da cratera onde caiu. Lá no alto, a Vila Estrela.",
   bairro: "As casas em volta da praça, quase todas com as janelas apagadas.",
-  vila: "Lá no alto brilha a Vila Estrela, um asteroide pequenininho com casinhas.",
-  colheita: "Na Vila Estrela, pontinhos de poeira de luz sobem das pedras.",
-  familia: "As janelas das casinhas da Vila Estrela acendem, uma a uma.",
-  musica: "Notas de música flutuam em volta do Broto, e as estrelas pulsam devagar.",
+  vila: "Lá no alto brilha a Vila Estrela, um asteroide pequeno com casas.",
+  colheita: "Na Vila Estrela, pontos de poeira de luz sobem das pedras.",
+  familia: "As janelas das casas da Vila Estrela acendem, uma a uma.",
+  musica: "Notas de música flutuam em volta do alien, e as estrelas pulsam devagar.",
   lua: "Uma lua grande sobre a praça e, ao lado, as três luas pequenas da Vila Estrela.",
   estrelas: "Estrelas se ligam por linhas e formam um desenho no céu.",
   nave: "A nave da família, sem combustível, perto da Vila Estrela. Uma linha tracejada mostra a queda até a cratera.",
-  regua: "Uma régua vai da grama até o alto e marca a altura que o Broto já subiu.",
-  queda: "Uma estrelinha risca o céu da noite e cai na grama da praça, ao lado da cratera. É o Broto.",
-  amanhecer: "Amanhece na praça. Plataformas sobem, uma de cada vez, da grama até o céu.",
+  regua: "Uma régua vai da grama até o alto e marca a altura que ele já subiu.",
+  queda: "Uma estrela risca o céu da noite e cai na grama da praça, ao lado da cratera.",
+  amanhecer: "Amanhece na praça. Plataformas sobem, uma de cada vez, da grama até o céu. Uma janela do bairro acende.",
 };
 
 const PERGUNTA_CENA = ["vila", "nave", "regua"];
