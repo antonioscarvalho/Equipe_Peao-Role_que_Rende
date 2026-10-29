@@ -1,11 +1,14 @@
 """
 Compoe a cantiga da Vo Vega (cena "musica", capitulo 1 do modo historia):
-o roteiro (capitulos/cap1.ts) diz "tum-tum, ta-ra, tum-tum... a luz vem devagar...".
+o roteiro (capitulos/cap1.ts) diz "a luz vem devagar...".
 
-Sintese 100% propria (nenhum sample de terceiro): tom de caixinha de musica
-(harmonicos de seno com decaimento exponencial, leve vibrato) + um drone grave
-bem baixinho que pulsa devagar (ecoando "as estrelas pulsam devagar" da cena,
-ver cenas/CenaCap1.tsx) + eco curto pra dar corpo. So stdlib (math/array/wave).
+Versao "bem fofa": o timbre de caixinha de musica ficou mais redondo (menos
+harmonico, ataque mais suave), ganhou um arrulho grave por baixo da melodia
+(como alguem cantarolando de boca fechada junto, "mmm") e uma chuvinha de
+sininhos esparsos entre as frases (brilho de pingente de berco, nao e efeito
+de jogo). O drone grave que pulsa devagar (ecoando "as estrelas pulsam
+devagar", ver cenas/CenaCap1.tsx) e o eco continuam dando corpo e aconchego.
+Sintese 100% propria (nenhum sample de terceiro), so stdlib (math/array/wave).
 
 Uso:
     python3 compor-cantiga-vo.py
@@ -62,18 +65,61 @@ PAD_LFO_HZ = 0.12  # "as estrelas pulsam devagar"
 def sininho(freq, t0, decaimento, amp, vib_hz, vib_prof, detune=0.0, atraso=0.0):
     f = freq * (1 + detune)
     buf = [0.0] * N
-    ataque = 0.009
+    ataque = 0.015  # mais suave que um sino "de verdade": fica mais fofo, menos metalico
     i0 = max(0, int((t0 + atraso) * SR))
     for i in range(i0, N):
         t = i / SR - (t0 + atraso)
         if t < 0:
             continue
-        env = (t / ataque) if t < ataque else math.exp(-(t - ataque) * decaimento)
+        env = (0.5 - 0.5 * math.cos(math.pi * min(1.0, t / ataque))) if t < ataque else math.exp(-(t - ataque) * decaimento)
         if env < 0.0005:
             break
         f_mod = f * (1 + vib_prof * math.sin(2 * math.pi * vib_hz * t))
         fase = 2 * math.pi * f_mod * t
-        valor = 0.78 * math.sin(fase) + 0.26 * math.sin(2 * fase) + 0.10 * math.sin(3 * fase)
+        valor = 0.88 * math.sin(fase) + 0.10 * math.sin(2 * fase) + 0.02 * math.sin(3 * fase)
+        buf[i] = amp * env * valor
+    return buf
+
+
+def arrulho(freq, t0, dur, amp, atraso=0.0):
+    """Um 'mmm' cantarolado de boca fechada, bem baixinho, uma oitava abaixo da
+    melodia: e a Vo acompanhando por baixo, o que da o aconchego de verdade."""
+    buf = [0.0] * N
+    ataque = 0.12
+    solte = 0.22
+    i0 = max(0, int((t0 + atraso) * SR))
+    i1 = min(N, int((t0 + atraso + dur + solte) * SR))
+    for i in range(i0, i1):
+        t = i / SR - (t0 + atraso)
+        if t < 0:
+            continue
+        if t < ataque:
+            env = 0.5 - 0.5 * math.cos(math.pi * t / ataque)
+        elif t < dur:
+            env = 1.0
+        else:
+            env = max(0.0, 1.0 - (t - dur) / solte)
+        fase = 2 * math.pi * freq * t
+        # Par de formantes bem suaves pra lembrar "mmm" fechado, sem ficar nasal.
+        valor = 0.70 * math.sin(fase) + 0.18 * math.sin(2.02 * fase) + 0.06 * math.sin(3.0 * fase)
+        buf[i] = amp * env * valor
+    return buf
+
+
+def sininho_pingente(freq, t0, amp, atraso=0.0):
+    """Sininho esparso com parciais inarmonicos (brilho de pingente de berco),
+    pra salpicar entre as frases sem virar efeito de jogo."""
+    buf = [0.0] * N
+    decaimento = 2.6
+    i0 = max(0, int((t0 + atraso) * SR))
+    i1 = min(N, int((t0 + atraso + 2.2) * SR))
+    for i in range(i0, i1):
+        t = i / SR - (t0 + atraso)
+        if t < 0:
+            continue
+        env = math.exp(-decaimento * t)
+        fase = 2 * math.pi * freq * t
+        valor = 0.6 * math.sin(fase) + 0.22 * math.sin(2.76 * fase) + 0.12 * math.sin(5.4 * fase)
         buf[i] = amp * env * valor
     return buf
 
@@ -89,6 +135,14 @@ def gerar_canal(detune, atraso):
         somar(canal, sininho(freq, t0, dec, amp, vhz, vprof, detune=detune, atraso=atraso))
     for freq, t0, dec, amp, vhz, vprof in ACOMPANHAMENTO:
         somar(canal, sininho(freq, t0, dec, amp, vhz, vprof, detune=detune * 0.6, atraso=atraso))
+    # Arrulho de "mmm" uma oitava abaixo, só no trecho "a luz vem devagar" (índices 6–11
+    # de NOTAS): é a frase em que, no roteiro, a Nina sempre entra cantando junto.
+    for freq, t0, dec, amp, vhz, vprof in NOTAS[6:]:
+        dur = max(0.5, 1.6 / dec)
+        somar(canal, arrulho(freq / 2.0, t0, dur, amp * 0.55, atraso=atraso))
+    # Sininhos esparsos (pingente de berço), salpicados entre as frases.
+    for freq, t0, amp in ((1174.66, 4.55, 0.045), (1318.51, 6.30, 0.04), (987.77, 9.60, 0.05)):
+        somar(canal, sininho_pingente(freq, t0, amp, atraso=atraso))
     # Drone grave, com leve atraso de entrada (as estrelas pulsam, devagar).
     for i in range(N):
         t = i / SR
