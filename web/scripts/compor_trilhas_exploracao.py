@@ -13,7 +13,8 @@ vibrato e o balanco de volume por secao foram os dois suspeitos cortados.
 Cada trilha tem um "perfil" (pad/bateria/melodia/sino) que decide o quanto pesa cada
 camada: `leve` fica mais pad/atmosferica, `carrinho` fica mais bateria.
 
-Uso: python compor_trilhas_exploracao.py [leve|alegre|pulo|carrinho]
+Uso: python compor_trilhas_exploracao.py [alegre|pulo|carrinho]
+(a trilha-leve tem compositor proprio: compor-trilha-leve.py)
 """
 import math
 import os
@@ -43,7 +44,6 @@ MELODIAS_SECOES = (
 
 # Peso de cada camada por trilha: quanto mais "pad", mais colchao sustentado/Interstellar.
 PERFIS = {
-    "leve":     dict(pad=1.30, bateria=0.70, melodia=1.00, sino=1.15),
     "alegre":   dict(pad=1.00, bateria=1.00, melodia=1.05, sino=1.00),
     "pulo":     dict(pad=0.95, bateria=1.00, melodia=1.00, sino=0.85),
     "carrinho": dict(pad=0.85, bateria=1.15, melodia=0.95, sino=0.75),
@@ -53,17 +53,6 @@ PERFIS = {
 # Cada secao define o acorde (voicing espalhado), o baixo e o ostinato. A melodia tem
 # frase, resposta, subida para o climax e retorno do tema com resolucao.
 TRILHAS = {
-    "leve": {
-        "arquivo": "trilha-leve",
-        "bpm": 92,
-        "perfil": "leve",
-        "secoes": [
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81]),
-            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
-            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74]),
-            ([55, 62, 67, 71, 76], (43, 50), [67, 71, 76, 79]),
-        ],
-    },
     "alegre": {
         "arquivo": "trilha-alegre",
         "bpm": 112,
