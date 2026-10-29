@@ -5,7 +5,7 @@ import { Icone } from "../Icone";
 import { BotaoLibras } from "../BotaoLibras";
 import { nomeDoBroto, useAparenciaVisivel } from "../personalizacao";
 import { lerPerfil } from "../personalizacao/armazenamento-perfil";
-import { tocar, tocarMusica, type NomeSom } from "../sons";
+import { tocar, tocarMusica, tocarTecla, vocalizarBroto, type NomeSom } from "../sons";
 import { useModal } from "./useModal";
 import { Especial, type Conversa } from "./Especial";
 import type { Capitulo, Passo } from "./tipos";
@@ -33,6 +33,8 @@ const SOM_DA_CENA: Partial<Record<string, NomeSom>> = {
   vila: "aproximar",
   colheita: "folha",
   familia: "familia",
+  cratera: "cratera",
+  bairro: "bairro",
   lua: "lua",
   estrelas: "constelacao",
   nave: "nave",
@@ -69,16 +71,24 @@ function interpolar(fala: string, nome: string | null, folhas: number | undefine
 }
 
 /** Texto aparecendo aos poucos; com `reduzir`, aparece inteiro na hora. Toque no balão completa. */
-function useDigitando(texto: string, reduzir: boolean) {
+function useDigitando(texto: string, reduzir: boolean, vozBroto: boolean) {
   const [n, setN] = useState(reduzir ? texto.length : 0);
   useEffect(() => {
     if (reduzir) { setN(texto.length); return; }
     setN(0);
     const id = window.setInterval(() => {
-      setN((v) => { if (v >= texto.length) { window.clearInterval(id); return v; } return v + 1; });
+      setN((v) => {
+        if (v >= texto.length) { window.clearInterval(id); return v; }
+        const proximo = v + 1;
+        if (!/\s/.test(texto[v] ?? "")) {
+          tocarTecla();
+          if (vozBroto && proximo % 3 === 0) vocalizarBroto();
+        }
+        return proximo;
+      });
     }, 22);
     return () => window.clearInterval(id);
-  }, [texto, reduzir]);
+  }, [texto, reduzir, vozBroto]);
   return { visivel: texto.slice(0, n), completo: n >= texto.length, completar: () => setN(texto.length) };
 }
 
@@ -128,7 +138,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
   // Antes não acabou e o roteiro está vazio: nada a dizer.
   useEffect(() => { if (parte === "antes" && !roteiro.length) aoConcluir(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { visivel, completo, completar } = useDigitando(fala, reduzir);
+  const { visivel, completo, completar } = useDigitando(fala, reduzir, etapa !== "perguntas");
 
   const fecharCrise = useCallback(() => { setCrise(false); window.setTimeout(() => seguirRef.current?.focus(), 0); }, []);
 
@@ -137,6 +147,8 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
     setFala(novaFala);
     setRespondeu(false);
     if (proxima === "licao") tocar("amanhecer"); // acorde de esperança, não é recompensa de missão
+    else if (proxima === "broto") tocar("pergunta");
+    else if (proxima === "perguntas" || proxima === "oferta") tocar("transicao");
   };
 
   const passo = etapa === "roteiro" ? roteiro[i] : undefined;

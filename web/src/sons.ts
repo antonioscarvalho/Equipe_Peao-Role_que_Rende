@@ -11,7 +11,8 @@ export type NomeSom =
   | "missao" | "moeda" | "folha" | "inspira" | "expira" | "clique" | "conquista" | "pulo"
   // Cenas do modo história (ver SOM_DA_CENA em Dialogo.tsx): um toque curto por cena, pra combinar
   // com a arte de fundo. "musica" tem a sua própria cantiga (tocarMusica), não entra aqui.
-  | "queda" | "aproximar" | "lua" | "constelacao" | "nave" | "medir" | "amanhecer" | "familia";
+  | "queda" | "aproximar" | "lua" | "constelacao" | "nave" | "medir" | "amanhecer" | "familia"
+  | "cratera" | "bairro" | "transicao" | "pergunta" | "pouso";
 
 let ctx: AudioContext | null = null;
 
@@ -99,10 +100,17 @@ const receitas: Record<NomeSom, Nota[]> = {
   pulo: [{ freq: 330, freqFim: 520, inicio: 0, dur: 0.14, volume: 0.09, ataque: 0.008 }],
   clique: [{ freq: 660, inicio: 0, dur: 0.05, volume: 0.04, tipo: "triangle" }],
 
-  // Queda do Broto: um "vento" descendo (grave) com um fiapo de ar mais agudo por cima.
+  // Queda da nave: descida rápida, impacto grave e um breve brilho de alerta no pouso.
   queda: [
-    { freq: 900, freqFim: 300, inicio: 0, dur: 0.9, volume: 0.05, ataque: 0.05 },
-    { freq: 1800, freqFim: 1200, inicio: 0.05, dur: 0.6, volume: 0.02 },
+    { freq: 760, freqFim: 95, inicio: 0, dur: 1.65, volume: 0.13, tipo: "sawtooth", ataque: 0.08 },
+    { freq: 1500, freqFim: 520, inicio: 0.1, dur: 1.55, volume: 0.07, tipo: "triangle", ataque: 0.04 },
+  ],
+  // O impacto é disparado junto ao fim da queda visual (Queda.tsx: 1700 ms).
+  pouso: [
+    { freq: 115, freqFim: 48, inicio: 0, dur: 0.62, volume: 0.2, tipo: "triangle", ataque: 0.012 },
+    { freq: 220, freqFim: 72, inicio: 0, dur: 0.48, volume: 0.12, tipo: "sawtooth", ataque: 0.008 },
+    { freq: 880, freqFim: 660, inicio: 0.08, dur: 0.52, volume: 0.08, tipo: "triangle", ataque: 0.012 },
+    { freq: 1320, freqFim: 990, inicio: 0.2, dur: 0.38, volume: 0.045, tipo: "sine", ataque: 0.02 },
   ],
   // Aproximação da Vila Estrela: dois glissandos subindo de leve, como a câmera se aproximando.
   aproximar: [
@@ -144,6 +152,27 @@ const receitas: Record<NomeSom, Nota[]> = {
     { freq: 783.99, inicio: 0.22, dur: 0.35, volume: 0.038, tipo: "triangle" },
     { freq: 987.77, inicio: 0.44, dur: 0.5, volume: 0.035, tipo: "triangle" },
   ],
+  // Cratera: um sopro oco e curto, como a fumaça se dissipando depois do pouso.
+  cratera: [
+    { freq: 420, freqFim: 170, inicio: 0, dur: 0.48, volume: 0.045, tipo: "triangle", ataque: 0.08 },
+    { freq: 820, freqFim: 360, inicio: 0.04, dur: 0.36, volume: 0.018, tipo: "sine", ataque: 0.06 },
+  ],
+  // Bairro: notas quentes e discretas, marcando a chegada à praça da Vila.
+  bairro: [
+    { freq: 392, inicio: 0, dur: 0.32, volume: 0.035, tipo: "triangle" },
+    { freq: 523.25, inicio: 0.12, dur: 0.38, volume: 0.032, tipo: "triangle" },
+    { freq: 659.25, inicio: 0.24, dur: 0.48, volume: 0.028, tipo: "sine" },
+  ],
+  // Transições de capítulo e de atividade: sopro ascendente, sem cara de recompensa.
+  transicao: [
+    { freq: 280, freqFim: 440, inicio: 0, dur: 0.24, volume: 0.035, tipo: "sine", ataque: 0.04 },
+    { freq: 440, freqFim: 660, inicio: 0.12, dur: 0.3, volume: 0.03, tipo: "triangle", ataque: 0.04 },
+  ],
+  // Marcador de pergunta: dois toques macios para sinalizar a nova etapa da conversa.
+  pergunta: [
+    { freq: 587.33, inicio: 0, dur: 0.16, volume: 0.035, tipo: "sine" },
+    { freq: 783.99, inicio: 0.14, dur: 0.24, volume: 0.03, tipo: "triangle" },
+  ],
 };
 
 const CHAVE_VOL_EFEITOS = "rqr:volume-efeitos";
@@ -168,7 +197,7 @@ function gravarVolume(chave: string, v: number) {
 }
 
 // Escala 0 a 10 (como a régua de vontade), não um booleano: 0 é mudo, sem precisar de outro estado.
-let volumeEfeitos = lerVolumeGravado(CHAVE_VOL_EFEITOS, 10);
+let volumeEfeitos = lerVolumeGravado(CHAVE_VOL_EFEITOS, 4);
 let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 4);
 
 export function volumesIniciais() {
@@ -223,6 +252,31 @@ export function tocarMissao(feitas: number, total: number) {
 export function tocar(nome: NomeSom) {
   if (volumeEfeitos <= 0) { console.debug(`[sons] mudo: régua de Efeitos em 0, "${nome}" não tocou`); return; }
   tocarNotas(receitas[nome], volumeEfeitos / 10);
+}
+
+/** Vocalizações breves e suaves do Broto, chamadas durante o texto progressivo. */
+let ultimaVocalizacao = 0;
+export function vocalizarBroto() {
+  if (volumeEfeitos <= 0) return;
+  const agoraMs = typeof performance === "undefined" ? Date.now() : performance.now();
+  if (agoraMs - ultimaVocalizacao < 150) return;
+  ultimaVocalizacao = agoraMs;
+  const base = 260 + Math.random() * 90;
+  tocarNotas([
+    { freq: base, freqFim: base * (0.82 + Math.random() * 0.28), inicio: 0, dur: 0.11 + Math.random() * 0.06, volume: 0.045, tipo: "triangle", ataque: 0.025 },
+    { freq: base * 1.42, freqFim: base * 1.1, inicio: 0.035, dur: 0.1, volume: 0.018, ataque: 0.025 },
+  ], volumeEfeitos / 10);
+}
+
+/** Tique de digitação deliberadamente discreto, sintetizado e espaçado para não competir com a fala. */
+let ultimoTique = 0;
+export function tocarTecla() {
+  if (volumeEfeitos <= 0) return;
+  const agoraMs = typeof performance === "undefined" ? Date.now() : performance.now();
+  if (agoraMs - ultimoTique < 55) return;
+  ultimoTique = agoraMs;
+  const freq = 1500 + Math.random() * 450;
+  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.018, volume: 0.009, tipo: "triangle", ataque: 0.002 }], volumeEfeitos / 10);
 }
 
 let motorOsc: OscillatorNode | null = null;
@@ -393,6 +447,7 @@ export function pararTrilha() {
 /** Todas as músicas do app (tema, cada mini jogo, a cantiga) — fonte única pro pré-carregamento. */
 export const URLS_TRILHAS = [
   "/sons/trilha-alegre.opus",
+  "/sons/trilha-leve.opus",
   "/sons/trilha-pulo.opus",
   "/sons/trilha-carrinho.opus",
   "/sons/cantiga-vo.opus",

@@ -47,4 +47,6 @@ export interface PropsJogo {
   aoTerminar: (resultado: { folhas: number }) => void
   aoFechar: () => void
   reduzir: boolean
+  /** Menu cuja trilha deve voltar quando a partida termina. */
+  trilhaRetorno?: 'app' | 'jogos'
 }
