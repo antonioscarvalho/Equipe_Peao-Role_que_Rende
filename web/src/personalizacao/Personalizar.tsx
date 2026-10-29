@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { BotaoLibras } from "../BotaoLibras";
 import { Bichinho } from "../Bichinho";
 import {
   APARENCIA_PADRAO, CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS,
@@ -55,6 +56,7 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
         <div className="personalizar__topo">
           <button className="link personalizar__voltar" onClick={aoVoltar}>← Voltar</button>
           <span className="personalizar__acoes">
+            <BotaoLibras />
             <BotaoTema compacto />
             <button className="rqr-botao personalizar__pronto" onClick={aoVoltar}>Pronto</button>
           </span>
@@ -94,16 +96,16 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
           )}
           {aba === "roupa" && (
             <>
-              <Itens titulo="Roupa" nome="roupa" opcoes={ROUPAS} valor={aparencia.roupa} dias={dias} aoMudar={(roupa) => mudar({ roupa })} />
+              <Itens titulo="Roupa" nome="roupa" base={visivel} opcoes={ROUPAS} valor={aparencia.roupa} dias={dias} aoMudar={(roupa) => mudar({ roupa })} />
               <fieldset className="personalizar__grupo">
                 <legend>Cor da roupa e dos acessórios</legend>
                 <Cores nome="corRoupa" opcoes={CORES_ROUPA} valor={aparencia.corRoupa} aoMudar={(corRoupa) => mudar({ corRoupa })} />
               </fieldset>
             </>
           )}
-          {aba === "cabeca" && <Itens titulo="Cabeça" nome="cabeca" opcoes={CABECA} valor={aparencia.cabeca} dias={dias} aoMudar={(cabeca) => mudar({ cabeca })} />}
-          {aba === "rosto" && <Itens titulo="Rosto" nome="rosto" opcoes={ROSTO} valor={aparencia.rosto} dias={dias} aoMudar={(rosto) => mudar({ rosto })} />}
-          {aba === "peito" && <Itens titulo="Peito" nome="peito" opcoes={PEITO} valor={aparencia.peito} dias={dias} aoMudar={(peito) => mudar({ peito })} />}
+          {aba === "cabeca" && <Itens titulo="Cabeça" nome="cabeca" base={visivel} opcoes={CABECA} valor={aparencia.cabeca} dias={dias} aoMudar={(cabeca) => mudar({ cabeca })} />}
+          {aba === "rosto" && <Itens titulo="Rosto" nome="rosto" base={visivel} opcoes={ROSTO} valor={aparencia.rosto} dias={dias} aoMudar={(rosto) => mudar({ rosto })} />}
+          {aba === "peito" && <Itens titulo="Peito" nome="peito" base={visivel} opcoes={PEITO} valor={aparencia.peito} dias={dias} aoMudar={(peito) => mudar({ peito })} />}
         </div>
 
       </main>
@@ -128,10 +130,11 @@ function Cores({ nome, opcoes, valor, aoMudar }: CoresProps) {
 }
 
 type ItensProps = {
-  titulo: string; nome: keyof Aparencia; opcoes: OpcaoItem[]; valor: string; dias: number; aoMudar: (id: string) => void;
+  titulo: string; nome: keyof Aparencia; base: Aparencia; opcoes: OpcaoItem[]; valor: string; dias: number; aoMudar: (id: string) => void;
 };
 
-function Itens({ titulo, nome, opcoes, valor, dias, aoMudar }: ItensProps) {
+/** Cada opção é um cartão com o bichinho já usando o item, para escolher olhando, não lendo. */
+function Itens({ titulo, nome, base, opcoes, valor, dias, aoMudar }: ItensProps) {
   return (
     <fieldset className="personalizar__grupo">
       <legend>{titulo}</legend>
@@ -143,7 +146,11 @@ function Itens({ titulo, nome, opcoes, valor, dias, aoMudar }: ItensProps) {
             <label key={item.id} className={`opcao-item ${livre ? "" : "is-bloqueado"}`}>
               <input type="radio" name={nome} value={item.id} checked={valor === item.id && livre}
                 disabled={!livre} aria-describedby={livre ? undefined : idDica} onChange={() => aoMudar(item.id)} />
-              <span>{item.nome}</span>
+              <span className="opcao-item__previa" aria-hidden="true">
+                <Bichinho humor="calmo" nivel={3} tamanho={56} reduzir aparencia={{ ...base, [nome]: item.id }} />
+              </span>
+              <span className="opcao-item__nome">{item.nome}</span>
+              {!livre && <span className="opcao-item__marco" aria-hidden="true">{plural(item.marco ?? 0)}</span>}
               {!livre && (
                 <span id={idDica} className="sr-only">
                   Com {plural(item.marco ?? 0)} · faltam {plural(diasQueFaltam(item, dias))}

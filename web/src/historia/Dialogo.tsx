@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bichinho, type Humor } from "../Bichinho";
 import { PainelCrise } from "../AjudaAgora";
+import { Icone } from "../Icone";
+import { BotaoLibras } from "../BotaoLibras";
 import { nomeDoBroto, useAparenciaVisivel } from "../personalizacao";
 import { lerPerfil } from "../personalizacao/armazenamento-perfil";
+import { tocar, tocarMusica, type NomeSom } from "../sons";
 import { useModal } from "./useModal";
 import { Especial, type Conversa } from "./Especial";
 import type { Capitulo, Passo } from "./tipos";
@@ -21,6 +24,20 @@ import "./historia.css";
  */
 /** Fala de transição da base, igual para todos os capítulos. REVISÃO CLÍNICA PENDENTE. */
 const CONVITE_PERGUNTAS = "Pode me perguntar o que quiser. Ou a gente segue.";
+
+/** Um efeito por cena (combina com a arte de fundo em `cenas/`). "musica" tem sua própria
+ * cantiga (tocarMusica, mais abaixo); "cratera", "bairro" e "amanhecer" ficam fora daqui —
+ * a última toca ao entrar na lição, não por cena (ver `ir`). Nem toda cena precisa de som. */
+const SOM_DA_CENA: Partial<Record<string, NomeSom>> = {
+  queda: "queda",
+  vila: "aproximar",
+  colheita: "folha",
+  familia: "familia",
+  lua: "lua",
+  estrelas: "constelacao",
+  nave: "nave",
+  regua: "medir",
+};
 
 type Etapa = "roteiro" | "abertura" | "perguntas" | "broto" | "oferta" | "licao";
 
@@ -86,6 +103,18 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
   const [ouvidas, setOuvidas] = useState<number[]>([]);
   const [pergunta, setPergunta] = useState<number | null>(null);
   const [crise, setCrise] = useState(false);
+  // Menu de ajustes do topo: título do capítulo, ajuda e sair. Esc fecha o menu antes da história.
+  const [menu, setMenu] = useState(false);
+  const botaoMenu = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!menu) return;
+    const esc = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault(); e.stopPropagation(); setMenu(false); botaoMenu.current?.focus();
+    };
+    window.addEventListener("keydown", esc, true);
+    return () => window.removeEventListener("keydown", esc, true);
+  }, [menu]);
   const [cenaAtual, setCenaAtual] = useState<string | undefined>(parte === "antes" ? roteiro[0]?.cena : undefined);
 
   useModal(caixa, aoFechar, !crise);
@@ -107,9 +136,23 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
     setEtapa(proxima);
     setFala(novaFala);
     setRespondeu(false);
+    if (proxima === "licao") tocar("amanhecer"); // acorde de esperança, não é recompensa de missão
   };
 
   const passo = etapa === "roteiro" ? roteiro[i] : undefined;
+
+  // Um efeito por cena, tocado direto no clique (não num useEffect): o play() de áudio só é
+  // confiável dentro do mesmo gesto do usuário — em alguns navegadores, um play() disparado
+  // depois, numa reação de estado, é bloqueado pela política de autoplay. Respeita os volumes
+  // de efeitos/música; a cena já descreve o momento em `aria-label` (sem som, não perde informação).
+  const ultimaCenaComSom = useRef<string | undefined>(undefined);
+  const tocarSomDaCena = (c: string | undefined) => {
+    if (c && c !== ultimaCenaComSom.current) {
+      if (c === "musica") tocarMusica("/sons/cantiga-vo.opus");
+      else if (SOM_DA_CENA[c]) tocar(SOM_DA_CENA[c]!);
+    }
+    ultimaCenaComSom.current = c;
+  };
 
   const irParaPasso = (n: number) => {
     // Batismo só uma vez: com o alien já batizado, o passo some (inclusive ao reler o capítulo).
@@ -122,7 +165,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
       return;
     }
     setI(n);
-    if (p.cena) setCenaAtual(p.cena);
+    if (p.cena) { setCenaAtual(p.cena); tocarSomDaCena(p.cena); }
     setEtapa("roteiro");
     setRespondeu(false);
     setFala(dizer(p.fala));
@@ -145,9 +188,26 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
       </div>
 
       <header className="historia-dialogo__topo">
-        <h2 id="dialogo-titulo" ref={titulo} tabIndex={-1} className="historia-dialogo__titulo">{capitulo.titulo}</h2>
-        <button className="historia-topo__botao historia-topo__botao--ajuda" onClick={() => setCrise(true)}>Preciso de ajuda agora</button>
-        <button className="historia-topo__botao" onClick={aoFechar}>Agora não</button>
+        <h2 id="dialogo-titulo" ref={titulo} tabIndex={-1} className="sr-only">{capitulo.titulo}</h2>
+        <BotaoLibras />
+        <button ref={botaoMenu} className="historia-menu__botao" aria-label="Ajustes da história" aria-expanded={menu}
+          aria-controls="historia-menu" data-vlibras-gloss="AJUSTES" onClick={() => { tocar("clique"); setMenu((m) => !m); }}>
+          <span className="historia-menu__icone" aria-hidden="true"><Icone nome="settings" tamanho={22} /></span>
+        </button>
+        {menu && (
+          <div id="historia-menu" className="historia-menu" role="group" aria-label="Ajustes da história">
+            <p className="historia-menu__titulo">{capitulo.titulo}</p>
+            <button className="historia-menu__item historia-menu__item--ajuda" onClick={() => { tocar("clique"); setMenu(false); setCrise(true); }}>
+              <Icone nome="phone" tamanho={20} /> Preciso de ajuda agora
+            </button>
+            <button className="historia-menu__item" onClick={() => { tocar("clique"); aoFechar(); }}>
+              <Icone nome="house" tamanho={20} /> Parar por agora
+            </button>
+            <small className="historia-menu__nota">
+              {nomeAlien} é um apoio, não um terapeuta. Seu lugar na história fica salvo; o que você escolhe nas conversas, não.
+            </small>
+          </div>
+        )}
       </header>
 
       <div className="historia-dialogo__baixo">
@@ -160,9 +220,11 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             ) : (
               passo.opcoes!.map((o) => (
                 <button key={o.rotulo} className="historia-opcao" onClick={() => {
+                  tocar("clique");
                   setRespondeu(true);
                   if (o.resposta) setFala(dizer(o.resposta));
                   if (o.abreCrise) setCrise(true);
+                  if (o.som === "cantiga") tocarMusica("/sons/cantiga-vo.opus");
                   if (!o.resposta && !o.abreCrise) irParaPasso(i + 1);
                 }}>{dizer(o.rotulo)}</button>
               ))
@@ -173,11 +235,11 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             <>
               {capitulo.perguntas.map((p, n) => (
                 <button key={p.pergunta} className="historia-opcao" aria-pressed={ouvidas.includes(n)}
-                  onClick={() => { setOuvidas((o) => (o.includes(n) ? o : [...o, n])); setPergunta(n); setFala(dizer(p.resposta)); }}>
+                  onClick={() => { tocar("clique"); setOuvidas((o) => (o.includes(n) ? o : [...o, n])); setPergunta(n); setFala(dizer(p.resposta)); }}>
                   {p.pergunta}
                 </button>
               ))}
-              <button className="historia-opcao historia-opcao--seguir" onClick={() => ir("broto", capitulo.perguntaDoBroto.texto)}>Seguir ›</button>
+              <button className="historia-opcao historia-opcao--seguir" onClick={() => { tocar("clique"); ir("broto", capitulo.perguntaDoBroto.texto); }}>Seguir ›</button>
             </>
           )}
 
@@ -185,16 +247,16 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             <>
               {capitulo.perguntaDoBroto.opcoes.map((o) => (
                 <button key={o.rotulo} className="historia-opcao"
-                  onClick={() => { setRespondeu(true); setFala(dizer(o.resposta)); if (o.abreCrise) setCrise(true); }}>
+                  onClick={() => { tocar("clique"); setRespondeu(true); setFala(dizer(o.resposta)); if (o.abreCrise) setCrise(true); }}>
                   {dizer(o.rotulo)}
                 </button>
               ))}
-              <button className="historia-opcao historia-opcao--leve" onClick={depoisDoBroto}>Prefiro não responder</button>
+              <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); depoisDoBroto(); }}>Prefiro não responder</button>
             </>
           )}
 
           {etapa === "oferta" && capitulo.oferta && (
-            <button className="historia-opcao" onClick={() => aoOferta?.(capitulo.oferta!.acao)}>{capitulo.oferta.rotulo}</button>
+            <button className="historia-opcao" onClick={() => { tocar("clique"); aoOferta?.(capitulo.oferta!.acao); }}>{capitulo.oferta.rotulo}</button>
           )}
       </div>
 
@@ -217,11 +279,10 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             : etapa === "broto" && respondeu ? depoisDoBroto
             : etapa === "oferta" ? () => ir("licao", capitulo.licao)
             : null;
-          if (etapa === "licao") return <button ref={seguirRef} className="historia-caixa__seguir" onClick={aoConcluir}>Concluir capítulo ▸</button>;
-          return seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => (completo ? seguir() : completar())}>
+          if (etapa === "licao") return <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); aoConcluir(); }}>Concluir capítulo ▸</button>;
+          return seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); completo ? seguir() : completar(); }}>
             {completo ? "Continuar ▸" : "Mostrar tudo ▸"}</button>;
         })()}
-        <small className="historia-nota">{nomeAlien} é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
       </div>
       </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}

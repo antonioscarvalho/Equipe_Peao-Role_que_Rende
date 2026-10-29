@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { BotaoLibras } from "./BotaoLibras";
 import { Bichinho } from "./Bichinho";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
-import { tocar } from "./sons";
+import { abaixarTrilha, tocar } from "./sons";
 
 const fases = [
   { nome: "Inspire", seg: 4, classe: "inspira" },
@@ -24,6 +25,8 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
   // Começa "vazio" e cresce na primeira inspiração, para a transição aparecer desde o início.
   const [montado, setMontado] = useState(false);
   useEffect(() => { const id = requestAnimationFrame(() => setMontado(true)); return () => cancelAnimationFrame(id); }, []);
+  // Mesmo ritmo calmo da respiração: a trilha alegre abaixa enquanto essa tela estiver aberta.
+  useEffect(() => { abaixarTrilha(true); return () => abaixarTrilha(false); }, []);
 
   useEffect(() => {
     if (terminou) return;
@@ -56,6 +59,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
 
   return (
     <div className="crise" role="dialog" aria-modal="true" aria-labelledby="crise-titulo">
+      <div className="tela-libras"><BotaoLibras /></div>
       <button className="crise__fechar" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
       {!terminou ? (
         <>

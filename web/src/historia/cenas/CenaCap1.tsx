@@ -125,7 +125,7 @@ export function CenaCap1({ momento, ator }: PropsCena) {
       {/* Chão: a praça, o bairro e o Broto. Desce um pouco quando o olhar sobe, e o Broto continua à vista. */}
       <g className="cena__chao">
         {/* Caminho da queda: termina na cratera, por isso fica no chão. */}
-        <path d="M244 150 C 200 300, 120 380, 120 520" className="cena__rastro cena__nave-rastro" />
+        <path d="M244 150 C 230 260, 200 340, 200 430" className="cena__rastro cena__nave-rastro" />
 
         {/* Régua da altura já subida. */}
         <g className="cena__regua">
@@ -153,9 +153,9 @@ export function CenaCap1({ momento, ator }: PropsCena) {
 
         {/* Chão: morro de grama com a cratera da queda. */}
         <path d="M-200 545 Q -100 520 0 560 Q 100 520 200 540 T 400 530 T 600 540 V 900 H -200 Z" className="cena__grama" />
-        <ellipse cx="120" cy="552" rx="54" ry="12" className="cena__cratera" />
+        <ellipse cx="200" cy="442" rx="54" ry="12" className="cena__cratera" />
         <g className="cena__fumaca">
-          <circle cx="104" cy="530" r="9" /><circle cx="124" cy="518" r="11" /><circle cx="142" cy="532" r="8" />
+          <circle cx="168" cy="432" r="9" /><circle cx="236" cy="420" r="11" /><circle cx="250" cy="434" r="8" />
         </g>
 
         {/* Música: notas que sobem perto do Broto. */}
@@ -166,11 +166,11 @@ export function CenaCap1({ momento, ator }: PropsCena) {
           ))}
         </g>
       {/* Rastro da queda (abertura do capítulo). */}
-        <path d="M640 -40 C 420 120, 200 300, 120 520" className="cena__queda-rastro" pathLength={1} />
+        <path d="M640 -40 C 440 100, 260 260, 200 430" className="cena__queda-rastro" pathLength={1} />
 
         {/* O Broto: no chão, ao lado da cratera. A câmera leva ele junto. */}
         {ator && (
-          <foreignObject x="58" y="440" width="124" height="120" className="cena__ator">
+          <foreignObject x="138" y="326" width="124" height="120" className="cena__ator">
             <div className="cena__ator-caixa">{ator}</div>
           </foreignObject>
         )}

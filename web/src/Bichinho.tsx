@@ -117,7 +117,7 @@ export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false, aparenc
             fill={`url(#${idBrilho})`}
           />
 
-          {aparencia && <Roupa id={aparencia.roupa} cor={corRoupa} recorte={idCorpo} />}
+          {aparencia && <Roupa id={aparencia.roupa} cor={corRoupa} recorte={idCorpo} pincel={idPincel} />}
           {aparencia && <Peito id={aparencia.peito} />}
 
           <g className="bicho__rosto">
@@ -147,7 +147,7 @@ export function Bichinho({ humor, nivel, tamanho = 220, reduzir = false, aparenc
           </g>
 
           {aparencia && <Rosto id={aparencia.rosto} />}
-          {aparencia && <Cabeca id={aparencia.cabeca} cor={corRoupa} />}
+          {aparencia && <Cabeca id={aparencia.cabeca} cor={corRoupa} pincel={idPincel} />}
         </g>
       </svg>
     </div>

@@ -23,21 +23,23 @@ export interface OpcaoItem {
 }
 
 export const CORES: OpcaoCor[] = [
-  { id: 'azul', nome: 'Azul-céu', valor: '#54DCFC' },
-  { id: 'rosa', nome: 'Rosa', valor: '#FFA7D3' },
-  { id: 'menta', nome: 'Menta', valor: '#83FFEA' },
-  { id: 'lilas', nome: 'Lilás', valor: '#BDB6FF' },
-  { id: 'baunilha', nome: 'Baunilha', valor: '#FFF7B5' },
-  { id: 'verde', nome: 'Verde-água', valor: '#00EBD0' },
+  { id: 'azul', nome: 'Azul-céu', valor: '#79D3EE' },
+  { id: 'rosa', nome: 'Rosa', valor: '#F7BED0' },
+  { id: 'menta', nome: 'Menta', valor: '#A4DFCF' },
+  { id: 'lilas', nome: 'Lilás', valor: '#C9BEF0' },
+  { id: 'baunilha', nome: 'Baunilha', valor: '#FFF2C6' },
+  { id: 'verde', nome: 'Verde-água', valor: '#86D3B2' },
 ]
 
-/** Cor das roupas e acessórios de tecido. */
+/** Cor das roupas e acessórios de tecido. Tons dos cenários (estilo livro ilustrado). */
 export const CORES_ROUPA: OpcaoCor[] = [
-  { id: 'rosa', nome: 'Rosa-forte', valor: '#FF6E91' },
-  { id: 'azul', nome: 'Azul', valor: '#465EFF' },
-  { id: 'roxo', nome: 'Roxo', valor: '#735CC6' },
-  { id: 'amarelo', nome: 'Amarelo', valor: '#FCFC30' },
-  { id: 'branco', nome: 'Branco', valor: '#FFFFFF' },
+  { id: 'rosa', nome: 'Rosa', valor: '#EE8AA6' },
+  { id: 'azul', nome: 'Azul', valor: '#6F86E3' },
+  { id: 'roxo', nome: 'Lavanda', valor: '#9A88D8' },
+  { id: 'amarelo', nome: 'Amarelo', valor: '#F9DC6E' },
+  { id: 'verde', nome: 'Verde-sálvia', valor: '#9CCB86' },
+  { id: 'terracota', nome: 'Terracota', valor: '#E59A7A' },
+  { id: 'branco', nome: 'Creme', valor: '#FFFCF4' },
 ]
 
 export const ROUPAS: OpcaoItem[] = [

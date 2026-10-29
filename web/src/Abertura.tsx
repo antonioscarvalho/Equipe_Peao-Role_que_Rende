@@ -4,11 +4,12 @@ import { useAparenciaVisivel } from "./personalizacao";
 import "./abertura.css";
 
 /**
- * Abertura do app, toda vez que ele abre: a carinha do Broto como logo, a poeira de luz em volta
- * e o nome do app. Cerca de 2,6 s (skill motion-design: entrada que desacelera, um herói, camada
- * secundária e ambiente). "Pular", Enter ou Esc pulam. Com reduzir, fica parada e some em 1,2 s.
+ * Abertura do app, toda vez que ele abre (estilo livro ilustrado, skill estilo-livro-ilustrado):
+ * a praça do capítulo 1 com as luzes acendendo, a placa de papel com o nome do app e o Broto
+ * saltando da navezinha. Cerca de 2,8 s. "Pular", Enter ou Esc pulam. Com reduzir, fica parada
+ * e some em 1,2 s.
  */
-const DURACAO_MS = 2600;
+const DURACAO_MS = 2800;
 
 export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean }) {
   const aparencia = useAparenciaVisivel();
@@ -27,17 +28,20 @@ export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boole
 
   return (
     <div className={`abertura ${reduzir ? "abertura--parada" : ""}`}>
-      <div className="abertura__logo" aria-hidden="true">
-        <span className="abertura__anel" />
-        {Array.from({ length: 8 }, (_, i) => <i key={i} className="abertura__poeira" style={{ ["--i" as string]: i }} />)}
-        <div className="abertura__rosto">
-          <Bichinho humor="feliz" nivel={2} tamanho={150} reduzir aparencia={aparencia} />
-        </div>
+      {/* A praça do capítulo 1 ao entardecer: as luzes acendem e a "câmera" se afasta devagar. */}
+      <div className="abertura__cenario" aria-hidden="true" />
+      <div className="abertura__veu" aria-hidden="true" />
+      <div className="abertura__placa">
+        <h1 className="abertura__nome">Guardião</h1>
+        <p className="abertura__frase">Um passo de cada vez, com alguém do seu lado.</p>
       </div>
-      <h1 className="abertura__nome">Guardião</h1>
-      <p className="abertura__frase">Um passo de cada vez, com alguém do seu lado.</p>
+      {/* O Broto sai da navezinha pousada na grama. */}
+      <div className="abertura__broto" aria-hidden="true">
+        {Array.from({ length: 8 }, (_, i) => <i key={i} className="abertura__poeira" style={{ ["--i" as string]: i }} />)}
+        <Bichinho humor="feliz" nivel={2} tamanho={132} reduzir aparencia={aparencia} />
+      </div>
       <p className="sr-only" role="status">Abrindo o Guardião.</p>
-      <button className="abertura__pular" onClick={terminar}>Pular</button>
+      <button className="kb kb--amarelo abertura__pular" onClick={terminar}>Pular</button>
     </div>
   );
 }

@@ -1,0 +1,876 @@
+/* =====================================================================
+   Tema "livro ilustrado": a cara do app inteiro.
+   Vem dos cenários em assets/cenarios (docs/03-design/prompts-cenarios-capitulos.md):
+   papel com textura, contorno de tinta azul-noite, cores pastel de entardecer
+   (sálvia, lavanda, amarelo de poste, rosa) e as próprias ilustrações de fundo.
+   Botões no estilo Kahoot: bloco de cor com degrau de tinta embaixo, afunda ao
+   tocar e volta com um quique curto.
+   Carregado por último (main.tsx): só sobrescreve tokens e acabamento, sem mudar layout.
+   ===================================================================== */
+
+:root {
+  /* Tinta e papel */
+  --livro-tinta: #2E2C66;
+  --livro-tinta-funda: #1B1A45;
+  --livro-papel: #FBF6E8;
+  --livro-cartao: #FFFCF4;
+  --livro-papel-suave: #F1E9D4;
+
+  /* Pastéis tirados dos cenários */
+  --livro-sol: #F9DC6E;
+  --livro-salvia: #B9DCA0;
+  --livro-ceu: #AFC8F2;
+  --livro-lavanda: #C9BEF0;
+  --livro-rosa: #F7BED0;
+  --livro-menta: #A4DFCF;
+  --livro-terracota: #EBA585;
+
+  /* Textura de papel (ruído bem fraco), usada em fundos e blocos. */
+  --livro-grao: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .18  0 0 0 0 .17  0 0 0 0 .4  0 0 0 .1 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  /* Cantos levemente tortos, como recortados à mão. */
+  --livro-raio: 20px 24px 19px 26px / 24px 19px 26px 20px;
+  --livro-raio-p: 14px 17px 13px 18px / 17px 13px 18px 14px;
+
+  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
+
+  /* Paleta da marca suavizada para combinar com as ilustrações. */
+  --rqr-amarelo: #F9DC6E;
+  --rqr-azul-escuro: var(--livro-tinta);
+  --rqr-azul: #6F86E3;
+  --rqr-azul-claro: #79D3EE;
+  --rqr-roxo: #7B6AC4;
+  --rqr-rosa-escuro: #E98AA5;
+  --rqr-rosa-claro: var(--livro-rosa);
+  --rqr-verde-agro: #86D3B2;
+  --rqr-verde-claro: #CDEBC2;
+  --rqr-amarelo-claro: #FFF2C6;
+  --rqr-roxo-claro: var(--livro-lavanda);
+
+  /* Papéis semânticos */
+  --rqr-fundo: var(--livro-papel);
+  --rqr-fundo-conteudo: var(--livro-cartao);
+  --rqr-fundo-suave: var(--livro-papel-suave);
+  --rqr-fundo-destaque: #FFF0C2;
+  --rqr-texto: var(--livro-tinta);
+  --rqr-texto-suave: #55527A;
+  --rqr-texto-fraco: #67648A;
+  --rqr-borda: var(--livro-tinta);
+  --rqr-sombra-cor: var(--livro-tinta);
+  --rqr-foco: var(--livro-tinta);
+  --rqr-ativo-fundo: var(--livro-tinta);
+  --rqr-ativo-texto: var(--livro-sol);
+  --rqr-valor: #6A4FB0;
+  --rqr-cena-topo: #DCE8F6;
+  --rqr-cena-base: #CFE6B8;
+  --rqr-ceu-topo: #BFD3F4;
+  --rqr-ceu-base: #FBEFD0;
+  --rqr-terra: #EADDBF;
+}
+
+:root[data-tema="escuro"] {
+  --livro-papel: #1C1B40;
+  --livro-cartao: #27265A;
+  --livro-papel-suave: #33326E;
+  --livro-cena: var(--livro-calma);
+  --rqr-fundo: var(--livro-papel);
+  --rqr-fundo-conteudo: var(--livro-cartao);
+  --rqr-fundo-suave: var(--livro-papel-suave);
+  --rqr-fundo-destaque: #3A3878;
+  --rqr-texto: #F7F1E3;
+  --rqr-texto-suave: #D3CDE9;
+  --rqr-texto-fraco: #B9B3D6;
+  --rqr-borda: #CFC5F2;
+  --rqr-sombra-cor: #0C0B26;
+  --rqr-foco: var(--livro-sol);
+  --rqr-ativo-fundo: var(--livro-sol);
+  --rqr-ativo-texto: var(--livro-tinta);
+  --rqr-valor: #D9CCFF;
+  --rqr-cena-topo: #26255A;
+  --rqr-cena-base: #3C3A7E;
+  --rqr-ceu-topo: #26255A;
+  --rqr-ceu-base: #4A4790;
+  --rqr-terra: #33326E;
+}
+
+/* ---------- Papel ---------- */
+body, .palco, .celular {
+  background-color: var(--livro-papel);
+  background-image: var(--livro-grao);
+}
+.rqr-card, .proxima, .missao, .ajustes, .seu-motivo, .historia__caixa, .historia-caixa, .pulo__painel, .especial {
+  background-image: var(--livro-grao);
+}
+
+/* ---------- Contornos e cantos de recorte ---------- */
+.rqr-card, .mini, .proxima, .celular > .cena, .ajustes, .missao, .atalho-missoes, .pulo__painel { border-radius: var(--livro-raio); }
+.rqr-card, .mini { border-width: 2.5px; }
+
+/* =====================================================================
+   Botões estilo Kahoot
+   ===================================================================== */
+.kb {
+  --kb-fundo: var(--livro-sol);
+  --kb-tinta: var(--livro-tinta);
+  --kb-altura: 6px;
+  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 12px 18px; cursor: pointer;
+  border: 2.5px solid var(--kb-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), var(--kb-fundo); color: var(--livro-tinta);
+  font: 900 1rem/1.15 var(--rqr-font-titulo); letter-spacing: .01em;
+  box-shadow: 0 var(--kb-altura) 0 var(--kb-tinta);
+  transform: translateY(0);
+  /* Voltar: rápido e com um quique pequeno. */
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1), filter 150ms;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Luz de cima, como nos cenários ao entardecer. */
+.kb::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: linear-gradient(180deg, rgb(255 255 255 / .35), rgb(255 255 255 / 0) 50%);
+}
+@media (hover: hover) {
+  .kb:hover { transform: translateY(-2px); box-shadow: 0 calc(var(--kb-altura) + 2px) 0 var(--kb-tinta); filter: brightness(1.04); }
+}
+/* Afundar: instantâneo, sem quique. */
+.kb:active { transform: translateY(var(--kb-altura)); box-shadow: 0 0 0 var(--kb-tinta); filter: brightness(.97); transition-duration: 60ms; transition-timing-function: linear; }
+.kb:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 4px; }
+:root[data-tema="escuro"] .kb { --kb-tinta: var(--livro-tinta-funda); }
+
+/* Pastel com texto em tinta: contraste acima de 7:1 em todos. */
+.kb--amarelo { --kb-fundo: var(--livro-sol); }
+.kb--azul    { --kb-fundo: var(--livro-ceu); }
+.kb--roxo    { --kb-fundo: var(--livro-lavanda); }
+.kb--rosa    { --kb-fundo: var(--livro-rosa); }
+.kb--verde   { --kb-fundo: var(--livro-salvia); }
+.kb--menta   { --kb-fundo: var(--livro-menta); }
+.kb--escuro  { --kb-fundo: var(--livro-tinta); color: var(--livro-sol); }
+
+/* O botão padrão do app (rqr-botao) vira um bloco Kahoot amarelo. */
+.rqr-botao {
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta);
+  font-weight: 900; box-shadow: 0 5px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1), filter 150ms;
+}
+@media (hover: hover) { .rqr-botao:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--livro-tinta); } }
+.rqr-botao:active { transform: translateY(5px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.rqr-botao--escuro { background: var(--livro-grao), var(--livro-tinta); color: var(--livro-sol); }
+:root[data-tema="escuro"] .rqr-botao { box-shadow: 0 5px 0 var(--livro-tinta-funda); border-color: var(--livro-tinta-funda); }
+:root[data-tema="escuro"] .rqr-botao:active { box-shadow: 0 0 0 var(--livro-tinta-funda); }
+
+/* Mesma física de toque nos outros botões "de bloco". */
+.missao, .chip, .atalho-missoes, .botao-tema__icone, .botao-topo__icone, .tabbar__sos-circulo, .botao-personalizar,
+.historia-opcao, .historia-cap, .personalizar__aba, .especial__aba, .carrinho__pedal, .amostra, .opcao-item {
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1), background var(--rqr-dur-base);
+}
+.missao:active, .atalho-missoes:active, .historia-opcao:active, .historia-cap:not(:disabled):active {
+  transform: translateY(4px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms;
+}
+.chip { box-shadow: 0 3px 0 var(--rqr-sombra-cor); border-width: 2.5px; }
+.chip:active { transform: translateY(3px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+.botao-tema:active .botao-tema__icone, .botao-topo:active .botao-topo__icone { transform: translateY(3px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+.tabbar__sos:active .tabbar__sos-circulo { transform: translateY(4px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+.tabbar__item { transition: background var(--rqr-dur-base), transform 220ms cubic-bezier(.3, 1.6, .5, 1); }
+.tabbar__item:active { transform: scale(.92); transition-duration: 60ms; }
+.tabbar__item.is-active svg { animation: kb-salto 360ms cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes kb-salto { 0% { transform: translateY(0); } 40% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
+
+/* ---------- Topo: título à esquerda, botões redondos à direita ---------- */
+.topo { align-items: center; }
+.topo__acoes { display: flex; align-items: center; gap: 10px; }
+.botao-topo { padding: 0; border: 0; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.botao-topo__icone, .botao-tema--compacto .botao-tema__icone {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--livro-grao), var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border: 2.5px solid var(--rqr-borda); box-shadow: 0 3px 0 var(--rqr-sombra-cor);
+}
+.botao-topo__icone img { width: 26px; height: 26px; border-radius: 6px; }
+.botao-topo:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; border-radius: 50%; }
+/* Com o botão de Libras no topo, a bolha flutuante some, menos nas telas por cima (diálogos). */
+/* Um só desenho de botão de Libras no app inteiro: a bolha do VLibras fica sempre escondida
+   e o nosso botão (BotaoLibras) aciona o botão dela por baixo. */
+#vlibras-access-wrapper { display: none !important; }
+.tela-libras { position: absolute; z-index: 5; top: max(16px, env(safe-area-inset-top)); left: 16px; }
+
+/* ---------- Cena do bichinho: o cenário do capítulo 1 de fundo ---------- */
+.celular > .cena {
+  flex: none; border-width: 2.5px; padding-top: 58px;
+  background: var(--livro-cena) center 46% / cover no-repeat, var(--rqr-cena-base);
+}
+.celular > .cena::after { /* leve véu embaixo para o bichinho e o bairro se destacarem */
+  content: ""; position: absolute; inset: auto 0 0; height: 45%; pointer-events: none;
+  background: linear-gradient(transparent, rgb(251 246 232 / .35));
+}
+:root[data-tema="escuro"] .celular > .cena::after { background: linear-gradient(transparent, rgb(28 27 64 / .35)); }
+.balao { border-width: 2.5px; border-radius: var(--livro-raio-p); background: var(--livro-grao), var(--livro-cartao); box-shadow: 0 3px 0 var(--rqr-sombra-cor); }
+.bairro { position: relative; z-index: 1; }
+.bairro__chao { fill: transparent; }
+.bairro__vaga { stroke: var(--livro-tinta); opacity: .55; }
+
+/* ---------- Início ---------- */
+.mini__icone { border-width: 2.5px; }
+.proxima {
+  display: grid; gap: 10px; padding: 14px;
+  background-color: var(--rqr-fundo-conteudo); border: 2.5px solid var(--rqr-borda); box-shadow: 0 5px 0 var(--rqr-sombra-cor);
+}
+.proxima__cabeca { display: flex; align-items: baseline; justify-content: space-between; }
+.proxima__titulo { font-size: 1.05rem; font-weight: 900; }
+.proxima__conta { font-weight: 900; font-variant-numeric: tabular-nums; color: var(--rqr-texto-suave); }
+.progresso { border-width: 2.5px; }
+.progresso span { background: var(--rqr-verde-agro); }
+.progresso--cheio { max-width: none; width: 100%; flex: none; }
+.proxima__corpo { display: flex; align-items: center; gap: 12px; animation: kb-entra 320ms cubic-bezier(.3, 1.4, .5, 1) both; }
+.proxima__icone {
+  flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--livro-ceu); color: var(--livro-tinta); border: 2.5px solid var(--livro-tinta);
+}
+.proxima__texto { flex: 1; margin: 0; font-weight: 800; line-height: 1.25; }
+.proxima__texto small { display: block; margin-top: 2px; font-size: .8rem; font-weight: 700; color: var(--rqr-valor); }
+.proxima__botao { flex: none; min-height: 48px; padding-inline: 16px; }
+.proxima__fim { margin: 0; font-weight: 800; }
+@keyframes kb-entra { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+
+.atalhos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; padding-bottom: 6px; }
+.atalho { justify-content: flex-start; gap: 10px; min-height: 76px; padding: 12px; text-align: left; }
+.atalho__icone {
+  flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center;
+  background: #FFFCF4; color: var(--livro-tinta); border: 2px solid var(--livro-tinta);
+}
+.atalho__texto { display: grid; gap: 2px; min-width: 0; font-size: 1.02rem; }
+.atalho__texto small { font: 700 .75rem/1.2 var(--rqr-font-texto); }
+.seu-motivo { border-left-color: var(--rqr-borda); border-radius: var(--livro-raio-p); }
+.celular > :nth-last-child(3) { margin-bottom: 16px; }
+
+/* ---------- Missões ---------- */
+.missao { border-width: 2.5px; background-color: var(--rqr-fundo-conteudo); }
+.missao__icone { background: var(--livro-ceu); color: var(--livro-tinta); border: 2px solid var(--livro-tinta); }
+.missao.is-ok { background-color: var(--livro-salvia); color: var(--livro-tinta); }
+.missao.is-ok .missao__icone { background: #FFFCF4; }
+.missao.is-ok .missao__valor { color: var(--livro-tinta); }
+
+/* ---------- Jogos ---------- */
+.jogos { display: grid; gap: 16px; }
+.jogo { justify-content: flex-start; gap: 14px; min-height: 84px; padding: 14px 16px; text-align: left; width: 100%; }
+.jogo .atalho__icone { width: 52px; height: 52px; }
+.jogo__texto { display: grid; gap: 3px; font-size: 1.15rem; }
+.jogo__texto small { font: 700 .82rem/1.25 var(--rqr-font-texto); }
+
+/* ---------- Ajustes ---------- */
+.ajustes__grupo { margin: 4px 0 -4px; font-size: .8rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--rqr-texto-suave); }
+.ajustes { display: grid; overflow: hidden; background-color: var(--rqr-fundo-conteudo); border: 2.5px solid var(--rqr-borda); box-shadow: 0 4px 0 var(--rqr-sombra-cor); }
+.ajuste {
+  position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 64px; padding: 10px 16px; cursor: pointer; text-align: left;
+  border: 0; background: transparent; color: var(--rqr-texto); font: inherit;
+}
+.ajuste + .ajuste { border-top: 2px dashed color-mix(in srgb, var(--rqr-borda) 35%, transparent); }
+.ajuste__texto { display: grid; gap: 2px; font-weight: 800; }
+.ajuste__texto small { font-weight: 600; font-size: .8rem; color: var(--rqr-texto-suave); }
+.ajuste input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ajuste .interruptor__trilho { flex: none; }
+.ajuste input:checked + .interruptor__trilho { background: var(--livro-salvia); }
+.ajuste input:checked + .interruptor__trilho::after { transform: translateX(18px); background: var(--livro-tinta); }
+.ajuste input:focus-visible + .interruptor__trilho { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+.ajuste--link:active { background: var(--rqr-fundo-destaque); }
+.ajuste--link:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: -3px; }
+.ajuste__seta { font-size: 1.6rem; font-weight: 900; }
+.interruptor__trilho { border-width: 2.5px; }
+
+/* ---------- Menu de abas ---------- */
+.tabbar { border-top-width: 2.5px; background: var(--livro-grao), var(--livro-cartao); }
+.tabbar__item.is-active { background: var(--rqr-fundo-destaque); border-color: var(--rqr-borda); border-radius: var(--livro-raio-p); }
+.tabbar__sos-circulo { background: var(--livro-grao), var(--livro-tinta); color: var(--livro-sol); border: 2.5px solid var(--livro-tinta); }
+:root[data-tema="escuro"] .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+
+/* =====================================================================
+   Telas por cima: os cenários de fundo, com um véu para o texto ler bem.
+   ===================================================================== */
+/* Respiração e painel de crise: o banco sob o poste (capítulo 4), calmo. */
+.crise {
+  background:
+    linear-gradient(180deg, rgb(27 26 69 / .62), rgb(27 26 69 / .82)),
+    var(--livro-calma) center / cover no-repeat, var(--livro-tinta-funda);
+}
+.crise__titulo { color: var(--livro-sol); }
+.ajuda { border-radius: var(--livro-raio-p); background: rgb(255 252 244 / .12); }
+
+/* Abertura e início da história: a praça do capítulo 1. */
+.historia--inicio {
+  background:
+    linear-gradient(180deg, rgb(27 26 69 / .25), rgb(27 26 69 / .55)),
+    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat, var(--livro-tinta);
+}
+.historia {
+  background:
+    linear-gradient(180deg, rgb(251 246 232 / .35), rgb(251 246 232 / .6)),
+    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat, var(--livro-papel);
+}
+:root[data-tema="escuro"] .historia {
+  background:
+    linear-gradient(180deg, rgb(28 27 64 / .55), rgb(28 27 64 / .75)),
+    var(--livro-calma) center / cover no-repeat, var(--livro-papel);
+}
+.historia__caixa { border-width: 2.5px; border-radius: var(--livro-raio); box-shadow: 0 6px 0 var(--rqr-sombra-cor); }
+.historia-caixa, .historia-cap, .historia-opcao, .especial { border-radius: var(--livro-raio-p); }
+.historia-dialogo__ceu {
+  background:
+    linear-gradient(180deg, rgb(27 26 69 / .15), rgb(27 26 69 / .35)),
+    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat;
+}
+
+/* Jogos: fundo de papel noturno em volta do mundo do jogo, painel como cartão de livro. */
+.pulo {
+  background:
+    linear-gradient(180deg, rgb(27 26 69 / .3), rgb(27 26 69 / .55)),
+    url("/cenarios/cap1-nave-pousada.webp") center / cover no-repeat, var(--livro-tinta);
+}
+.pulo__topo { background: var(--livro-grao), var(--livro-papel); border-bottom-width: 2.5px; }
+.pulo__painel { background-color: var(--livro-cartao); border-width: 2.5px; }
+.pulo__placar { border-width: 2.5px; }
+
+/* Personalizar */
+.personalizar__abas { border-width: 2.5px; }
+
+/* =====================================================================
+   Tela inicial sem rolagem: tudo cabe na altura do aparelho.
+   A cena do bichinho é a parte elástica: cresce ou encolhe com a tela.
+   ===================================================================== */
+.celular:has(> .cena) { height: 100dvh; min-height: 0; gap: 12px; overflow: hidden; }
+.celular > .cena {
+  flex: 1 1 auto; min-height: 120px; padding: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+}
+.celular > .cena > .bicho {
+  width: clamp(84px, 19dvh, 180px) !important; height: clamp(84px, 19dvh, 180px) !important;
+  margin-bottom: clamp(18px, 4dvh, 34px);
+}
+.celular > .cena > .bairro { position: absolute; left: 0; bottom: 0; margin: 0; z-index: 0; }
+.celular > .cena > .bicho { z-index: 1; }
+.celular > .cena .balao { top: 10px; }
+.celular:has(> .cena) .topo__titulo { font-size: 1.35rem; }
+.celular:has(> .cena) .mini { padding: 8px 10px; }
+.celular:has(> .cena) .mini__icone { width: 36px; height: 36px; }
+.celular:has(> .cena) .mini__valor { font-size: 1.1rem; }
+.proxima { gap: 8px; padding: 10px 12px; }
+.proxima__cabeca { align-items: center; gap: 10px; }
+.proxima__cabeca .progresso { flex: 1; width: auto; }
+.proxima__titulo { white-space: nowrap; font-size: 1rem; }
+.atalhos { gap: 12px 10px; padding-bottom: 0; }
+.atalho { min-height: 64px; padding: 9px 10px; }
+.atalho__icone { width: 38px; height: 38px; }
+.celular:has(> .cena) > :nth-last-child(3) { margin-bottom: 4px; }
+.seu-motivo { padding: 6px 12px; font-size: .9rem; }
+
+/* =====================================================================
+   Modo história
+   ===================================================================== */
+/* Mapa de capítulos: cada capítulo é um bloco Kahoot. */
+.historia__caixa { gap: 12px; }
+.historia__titulo { font-size: 1.6rem; }
+.historia__fechar, .historia-dialogo .historia-caixa__seguir { -webkit-tap-highlight-color: transparent; }
+.historia__fechar {
+  border-width: 2.5px; box-shadow: 0 3px 0 var(--rqr-sombra-cor);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.historia__fechar:active { transform: translateY(3px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+.historia__mapa { gap: 12px; }
+.historia-cap {
+  border: 2.5px solid var(--livro-tinta); color: var(--livro-tinta);
+  background: var(--livro-grao), var(--livro-lavanda); box-shadow: 0 5px 0 var(--livro-tinta); font-weight: 900;
+}
+.historia-cap.is-ok { background: var(--livro-grao), var(--livro-salvia); }
+.historia-cap:disabled { background: var(--livro-grao), var(--livro-papel-suave); color: var(--rqr-texto-suave); border-style: dashed; box-shadow: none; }
+.historia-cap__estado { color: inherit; opacity: .85; }
+
+/* A cena: a ilustração do capítulo é o fundo; o SVG só põe o céu noturno translúcido,
+   as estrelas, as luas, a Vila e o Broto por cima. */
+.historia-dialogo { background: var(--livro-tinta); }
+.historia-dialogo__palco, .queda.queda {
+  background: url("/cenarios/cap1-nave-pousada.webp") center bottom / cover no-repeat, var(--livro-tinta);
+}
+.cena__ceu-topo { stop-color: #1B1A45; stop-opacity: .82; }
+.cena__ceu-base { stop-color: #4A3F8C; stop-opacity: .3; }
+.cena--ceu .cena__ceu-base { stop-color: #1B1A45; stop-opacity: .7; }
+.cena--amanhecer .cena__ceu-topo { stop-color: #7B6AC4; stop-opacity: .35; }
+.cena--amanhecer .cena__ceu-base { stop-color: #F7BED0; stop-opacity: .05; }
+.cena__bairro, .cena__grama { display: none; }
+/* O estilo .cena da tela inicial (styles.css) não vale para o SVG das histórias. */
+.historia-dialogo__palco > svg.cena, .queda svg.cena { background: none; border: 0; border-radius: 0; padding: 0; }
+.cena__cratera { fill: #8A7A5C; opacity: .5; }
+
+/* Topo: título numa etiqueta de papel, botões em pílula com degrau. */
+.historia-dialogo__topo { background: linear-gradient(rgb(27 26 69 / .55), transparent); }
+.historia-dialogo__titulo {
+  flex: 0 1 auto; padding: 6px 12px; border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta); border: 2px solid var(--livro-tinta);
+}
+.historia-dialogo__topo .historia-dialogo__titulo + * { margin-left: auto; }
+.historia-topo__botao {
+  border: 2px solid var(--livro-tinta); background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta);
+  box-shadow: 0 3px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.historia-topo__botao--ajuda { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+.historia-topo__botao:active { transform: translateY(3px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+
+/* Escolhas: blocos Kahoot em papel. */
+.historia-dialogo .historia-opcao {
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta); box-shadow: 0 4px 0 var(--livro-tinta);
+}
+.historia-dialogo .historia-opcao[aria-pressed="true"] { background: var(--livro-grao), var(--livro-salvia); }
+.historia-dialogo .historia-opcao--seguir { background: var(--livro-grao), var(--livro-sol); }
+
+/* Caixa de fala: folha de papel com o nome numa etiqueta amarela. */
+.historia-caixa {
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio);
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta); box-shadow: 0 5px 0 var(--livro-tinta);
+}
+.historia-caixa .historia-nota { color: #55527A; }
+.historia-caixa__nome {
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-sol); color: var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
+}
+.historia-caixa__seguir { color: var(--livro-tinta); }
+.historia-fala__cursor { background: var(--livro-tinta); }
+.queda__pular {
+  border: 2.5px solid var(--livro-tinta) !important; border-radius: var(--livro-raio-p) !important;
+  background: var(--livro-grao), var(--livro-sol) !important; color: var(--livro-tinta) !important;
+  box-shadow: 0 5px 0 var(--livro-tinta) !important;
+}
+.queda__pular:active { transform: translateY(5px); box-shadow: 0 0 0 var(--livro-tinta) !important; }
+
+/* Abertura: o Pular fica no canto, acima da regra genérica do .kb. */
+.abertura .abertura__pular { position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); }
+
+/* A regra .cena da tela inicial (fundo, borda) não vale para o SVG das cenas da história. */
+svg.cena { background: none !important; border: 0 !important; border-radius: 0 !important; padding: 0 !important; }
+
+/* =====================================================================
+   Personalizar: prévia na praça do capítulo 1, abas e opções em blocos Kahoot.
+   ===================================================================== */
+.personalizar__previa {
+  border-width: 2.5px; border-radius: var(--livro-raio); padding: 10px 8px 8px;
+  background: var(--livro-cena) center 62% / cover no-repeat, var(--rqr-cena-base);
+}
+.personalizar__previa::after {
+  content: ""; position: absolute; inset: auto 0 0; height: 40%; pointer-events: none; border-radius: inherit;
+  background: linear-gradient(transparent, rgb(251 246 232 / .45));
+}
+.personalizar__previa > * { position: relative; z-index: 1; }
+.personalizar__original { position: absolute; z-index: 2; }
+.personalizar__marco {
+  padding: 3px 10px; border-radius: 99px; color: var(--livro-tinta);
+  background: rgb(255 252 244 / .92); border: 2px solid var(--livro-tinta);
+}
+.personalizar__original {
+  border: 2px solid var(--livro-tinta); background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta);
+  box-shadow: 0 3px 0 var(--livro-tinta);
+}
+.personalizar__original:active { transform: translateY(3px); box-shadow: 0 0 0 var(--livro-tinta); }
+.personalizar__pronto { min-height: 44px; }
+
+/* Abas: trilho de papel com a aba ligada em bloco amarelo. */
+.personalizar__abas { background: var(--livro-grao), var(--livro-papel-suave); border-radius: var(--livro-raio-p); padding: 5px; gap: 5px; }
+.personalizar__aba { border-radius: 11px; font-size: .8rem; }
+.personalizar__aba.is-on {
+  background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta);
+  box-shadow: 0 3px 0 var(--livro-tinta); outline: 2px solid var(--livro-tinta); outline-offset: -2px;
+}
+
+.personalizar__painel { overflow-y: auto; padding: 2px 2px 8px; }
+.personalizar__grupo legend { font-size: .9rem; font-weight: 900; }
+
+/* Opções de item: grade de cartões com a miniatura do bichinho. */
+.personalizar__opcoes:has(.opcao-item) { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 12px 8px; }
+.opcao-item {
+  min-height: 0; padding: 6px 4px 8px; gap: 2px; justify-content: flex-start;
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta);
+  box-shadow: 0 4px 0 var(--livro-tinta); font-size: .75rem; font-weight: 800; text-align: center; line-height: 1.15;
+}
+.opcao-item__previa { display: grid; place-items: center; width: 60px; height: 58px; }
+.opcao-item__previa .bicho { pointer-events: none; }
+.opcao-item:has(input:checked) { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+.opcao-item:has(input:checked)::after { /* selo de escolhido */
+  content: "✓"; position: absolute; top: -9px; right: -7px; display: grid; place-items: center;
+  width: 24px; height: 24px; border-radius: 50%; font-size: .8rem; font-weight: 900;
+  background: var(--livro-salvia); color: var(--livro-tinta); border: 2px solid var(--livro-tinta);
+  animation: kb-selo 260ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+@keyframes kb-selo { from { transform: scale(0); } to { transform: scale(1); } }
+.opcao-item:not(.is-bloqueado):active { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+@media (hover: hover) { .opcao-item:not(.is-bloqueado):hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--livro-tinta); } }
+.opcao-item.is-bloqueado { background: var(--livro-grao), var(--livro-papel-suave); box-shadow: none; border-style: dashed; }
+.opcao-item.is-bloqueado .opcao-item__previa { opacity: .45; filter: grayscale(.6); }
+.opcao-item__marco {
+  position: absolute; top: 30px; left: 50%; translate: -50% 0; padding: 1px 7px; border-radius: 99px; white-space: nowrap;
+  background: var(--livro-tinta); color: var(--livro-sol); font-size: .68rem; font-weight: 900;
+}
+
+/* Cores: botões redondos com degrau; a escolhida ganha anel amarelo. */
+.personalizar__opcoes:has(.amostra) { gap: 10px; }
+.amostra {
+  padding: 4px; border: 2.5px solid var(--livro-tinta); background: #FFFCF4; box-shadow: 0 3px 0 var(--livro-tinta);
+}
+.amostra__cor { width: 32px; height: 32px; border: 2.5px solid var(--livro-tinta); }
+.amostra:has(input:checked) { background: var(--livro-sol); transform: translateY(-2px); }
+.amostra:has(input:checked) .amostra__cor { border-color: var(--livro-tinta); }
+.amostra:active { transform: translateY(3px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.personalizar__opcoes:has(.amostra) { gap: 8px; flex-wrap: nowrap; }
+.amostra { padding: 3px; min-width: 0; min-height: 0; }
+.amostra__cor { width: 30px; height: 30px; }
+
+/* Botão central do menu: o modo história, em bloco amarelo. */
+.tabbar__historia .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+
+/* Topo da história: título inteiro numa linha própria, abaixo dos botões. */
+.historia-dialogo__topo { flex-wrap: wrap; row-gap: 8px; }
+.historia-dialogo__titulo { order: 3; flex: 0 1 auto; max-width: 100%; white-space: normal; }
+.historia-dialogo__topo .historia-dialogo__titulo + * { margin-left: auto; }
+
+/* Foco: anel em tinta (claro) ou amarelo (escuro). O rosa suavizado não chega a 3:1 no papel. */
+:focus-visible, .rqr-botao:focus-visible { outline-color: var(--rqr-foco); }
+
+/* Topo da história: só um botão de ajustes; o resto abre num cartão de papel. */
+.historia-dialogo__topo { justify-content: flex-end; background: none; padding: max(12px, env(safe-area-inset-top)) 12px 0; }
+.historia-menu__botao { padding: 0; border: 0; background: none; cursor: pointer; border-radius: 50%; -webkit-tap-highlight-color: transparent; }
+.historia-menu__icone {
+  display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta);
+  border: 2.5px solid var(--livro-tinta); box-shadow: 0 4px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1), rotate 300ms ease;
+}
+.historia-menu__botao[aria-expanded="true"] .historia-menu__icone { background: var(--livro-grao), var(--livro-sol); rotate: 60deg; }
+.historia-menu__botao:active .historia-menu__icone { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.historia-menu__botao:focus-visible { outline: 3px solid var(--livro-sol); outline-offset: 3px; }
+.historia-menu {
+  position: absolute; top: calc(max(12px, env(safe-area-inset-top)) + 60px); right: 12px; z-index: 3;
+  display: grid; gap: 10px; width: min(290px, calc(100vw - 24px)); padding: 14px;
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta);
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio); box-shadow: 0 6px 0 var(--livro-tinta);
+  transform-origin: top right; animation: historia-menu-abre 240ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+@keyframes historia-menu-abre { from { opacity: 0; transform: scale(.7) translateY(-8px); } to { opacity: 1; transform: none; } }
+.historia-menu__titulo { margin: 0 0 2px; font-family: var(--rqr-font-titulo); font-size: 1.1rem; font-weight: 900; line-height: 1.2; }
+.historia-menu__item {
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; cursor: pointer; text-align: left;
+  font: inherit; font-weight: 900; color: var(--livro-tinta);
+  background: var(--livro-grao), var(--livro-papel-suave); border: 2.5px solid var(--livro-tinta);
+  border-radius: var(--livro-raio-p); box-shadow: 0 4px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.historia-menu__item--ajuda { background: var(--livro-grao), var(--livro-sol); }
+.historia-menu__item:active { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.historia-menu__item:focus-visible { outline: 3px solid var(--livro-tinta); outline-offset: 3px; }
+.historia-menu__nota { color: #55527A; font-weight: 700; }
+
+/* =====================================================================
+   História: respostas como no Kahoot — grade de blocos coloridos (2 por linha)
+   logo acima da caixa de fala, ocupando a largura toda. O Broto fica no centro
+   do gramado, acima delas (CenaCap1: ator em x 138, y 326).
+   ===================================================================== */
+.historia-dialogo__baixo { align-items: stretch; gap: 14px; }
+.historia-dialogo__acoes {
+  width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 2px 2px 6px;
+  max-height: 46dvh;
+}
+.historia-dialogo__acoes > :only-child,
+.historia-dialogo__acoes > .especial,
+.historia-dialogo__acoes > .historia-opcao--seguir { grid-column: 1 / -1; }
+.historia-dialogo .historia-opcao {
+  min-height: 56px; padding: 10px 12px; display: flex; align-items: center; justify-content: center; text-align: center;
+  font-size: .95rem; line-height: 1.2; box-shadow: 0 5px 0 var(--livro-tinta);
+}
+.historia-dialogo .historia-opcao:nth-child(4n+1) { background: var(--livro-grao), var(--livro-sol); }
+.historia-dialogo .historia-opcao:nth-child(4n+2) { background: var(--livro-grao), var(--livro-ceu); }
+.historia-dialogo .historia-opcao:nth-child(4n+3) { background: var(--livro-grao), var(--livro-rosa); }
+.historia-dialogo .historia-opcao:nth-child(4n+4) { background: var(--livro-grao), var(--livro-salvia); }
+.historia-dialogo .historia-opcao[aria-pressed="true"] { background: var(--livro-grao), var(--livro-papel-suave); border-style: dashed; box-shadow: 0 2px 0 var(--livro-tinta); }
+.historia-dialogo .historia-opcao--seguir { background: var(--livro-grao), #FFFCF4 !important; }
+.historia-dialogo .historia-opcao:active { transform: translateY(5px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+@keyframes historia-opcao { from { opacity: 0; transform: translateY(14px) scale(.9); } to { opacity: 1; transform: none; } }
+
+/* Libras ao lado do botão de ajustes, no topo da história. */
+.historia-dialogo__topo { gap: 10px; }
+.historia-dialogo__topo .botao-topo__icone { width: 48px; height: 48px; border-color: var(--livro-tinta); background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta); box-shadow: 0 4px 0 var(--livro-tinta); }
+
+/* Caixa de fala mais enxuta: a frase de aviso foi para o menu de ajustes. */
+.historia-dialogo { --caixa-h: 92px; }
+.historia-caixa { padding: 18px 14px 6px; grid-template-rows: 1fr auto; }
+.historia-caixa__seguir { min-height: 40px; }
+.historia-menu__nota { line-height: 1.35; }
+
+/* =====================================================================
+   Tema escuro: "noite sob o poste" (cenário do capítulo 4).
+   Luz âmbar = ação principal (texto em tinta). Os outros blocos em tons de
+   noite com texto creme (todos ≥ 4,5:1). Cartões em papel azul-noite com
+   borda lavanda; degrau em tinta funda.
+   ===================================================================== */
+:root[data-tema="escuro"] {
+  --livro-sol: #EDC765;
+  --noite-azul: #4C5FA8;
+  --noite-roxo: #6A58A8;
+  --noite-rosa: #9A4D6E;
+  --noite-verde: #3F7559;
+  --noite-menta: #2C706B;
+  --noite-creme: #FBF3E2;
+  --noite-funda: #0D0C26;
+  --noite-cartao: #2A2960;
+  --noite-linha: #B9AEE8;
+  --rqr-valor: #E7DDFF;
+}
+:root[data-tema="escuro"] body { color: var(--noite-creme); }
+
+/* Blocos Kahoot */
+:root[data-tema="escuro"] .kb { --kb-tinta: var(--noite-funda); color: var(--noite-creme); }
+:root[data-tema="escuro"] .kb::before { background: linear-gradient(180deg, rgb(255 255 255 / .16), rgb(255 255 255 / 0) 50%); }
+:root[data-tema="escuro"] .kb--amarelo { --kb-fundo: var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .kb--azul  { --kb-fundo: var(--noite-azul); }
+:root[data-tema="escuro"] .kb--roxo  { --kb-fundo: var(--noite-roxo); }
+:root[data-tema="escuro"] .kb--rosa  { --kb-fundo: var(--noite-rosa); }
+:root[data-tema="escuro"] .kb--verde { --kb-fundo: var(--noite-verde); }
+:root[data-tema="escuro"] .kb--menta { --kb-fundo: var(--noite-menta); }
+:root[data-tema="escuro"] .kb--escuro { --kb-fundo: var(--noite-funda); color: var(--livro-sol); }
+:root[data-tema="escuro"] .atalho__icone { background: rgb(251 243 226 / .14); color: var(--noite-creme); border-color: rgb(251 243 226 / .6); }
+:root[data-tema="escuro"] .kb--amarelo .atalho__icone { background: rgb(255 252 244 / .85); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+:root[data-tema="escuro"] .rqr-botao { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--noite-funda); box-shadow: 0 5px 0 var(--noite-funda); }
+
+/* Cartões e listas */
+:root[data-tema="escuro"] .rqr-card, :root[data-tema="escuro"] .proxima, :root[data-tema="escuro"] .missao,
+:root[data-tema="escuro"] .ajustes, :root[data-tema="escuro"] .pulo__painel {
+  background-color: var(--noite-cartao); border-color: var(--noite-linha); box-shadow: 0 5px 0 var(--noite-funda);
+}
+:root[data-tema="escuro"] .proxima__icone, :root[data-tema="escuro"] .missao__icone {
+  background: var(--noite-azul); color: var(--noite-creme); border-color: var(--noite-linha);
+}
+:root[data-tema="escuro"] .missao.is-ok { background-color: var(--noite-verde); color: var(--noite-creme); }
+:root[data-tema="escuro"] .missao.is-ok .missao__valor { color: var(--noite-creme); }
+:root[data-tema="escuro"] .missao.is-ok .missao__icone { background: rgb(255 252 244 / .9); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .ajuste input:checked + .interruptor__trilho { background: var(--noite-verde); }
+:root[data-tema="escuro"] .ajuste input:checked + .interruptor__trilho::after { background: var(--noite-creme); }
+:root[data-tema="escuro"] .tabbar { background: var(--livro-grao), var(--noite-cartao); border-top-color: var(--noite-linha); }
+:root[data-tema="escuro"] .tabbar__item.is-active { background: rgb(237 199 101 / .16); border-color: var(--livro-sol); color: var(--livro-sol); }
+:root[data-tema="escuro"] .botao-topo__icone, :root[data-tema="escuro"] .botao-tema--compacto .botao-tema__icone {
+  background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda);
+}
+
+/* História */
+:root[data-tema="escuro"] .historia__caixa, :root[data-tema="escuro"] .historia-caixa, :root[data-tema="escuro"] .historia-menu {
+  background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 6px 0 var(--noite-funda);
+}
+:root[data-tema="escuro"] .historia-caixa__seguir, :root[data-tema="escuro"] .historia-fala__cursor { color: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-fala__cursor { background: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-caixa__nome { border-color: var(--noite-funda); box-shadow: 0 3px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .historia-menu__nota { color: #D3CDE9; }
+:root[data-tema="escuro"] .historia-menu__item { background: var(--livro-grao), #36357A; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 4px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .historia-menu__item--ajuda { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .historia-menu__icone, :root[data-tema="escuro"] .historia-dialogo__topo .botao-topo__icone {
+  background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 4px 0 var(--noite-funda);
+}
+:root[data-tema="escuro"] .historia-menu__botao[aria-expanded="true"] .historia-menu__icone { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao { color: var(--noite-creme); border-color: var(--noite-funda); box-shadow: 0 5px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao:nth-child(4n+1) { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao:nth-child(4n+2) { background: var(--livro-grao), var(--noite-azul); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao:nth-child(4n+3) { background: var(--livro-grao), var(--noite-rosa); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao:nth-child(4n+4) { background: var(--livro-grao), var(--noite-verde); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao[aria-pressed="true"] { background: var(--livro-grao), #36357A; color: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao--seguir { background: var(--livro-grao), var(--noite-cartao) !important; color: var(--noite-creme); border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .historia-cap { background: var(--livro-grao), var(--noite-roxo); color: var(--noite-creme); border-color: var(--noite-funda); box-shadow: 0 5px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .historia-cap.is-ok { background: var(--livro-grao), var(--noite-verde); }
+:root[data-tema="escuro"] .historia-cap:disabled { background: var(--livro-grao), #33326E; color: #D3CDE9; border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .queda__pular { border-color: var(--noite-funda) !important; box-shadow: 0 5px 0 var(--noite-funda) !important; }
+
+/* Personalizar */
+:root[data-tema="escuro"] .opcao-item { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 4px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .opcao-item:has(input:checked) { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .opcao-item:has(input:checked)::after { background: var(--noite-verde); color: var(--noite-creme); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .opcao-item.is-bloqueado { background: var(--livro-grao), #33326E; box-shadow: none; }
+:root[data-tema="escuro"] .opcao-item__marco { background: var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .amostra { background: var(--noite-cartao); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .amostra:has(input:checked) { background: var(--livro-sol); }
+:root[data-tema="escuro"] .personalizar__abas { background: var(--livro-grao), #33326E; border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .personalizar__aba { color: var(--noite-creme); }
+:root[data-tema="escuro"] .personalizar__aba.is-on { color: var(--livro-tinta); outline-color: var(--noite-funda); box-shadow: 0 3px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .personalizar__original, :root[data-tema="escuro"] .personalizar__marco {
+  background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda);
+}
+:root[data-tema="escuro"] .personalizar__previa::after { background: linear-gradient(transparent, rgb(28 27 64 / .5)); }
+
+/* Abertura no escuro: placa em papel azul-noite e nome na luz do poste. */
+:root[data-tema="escuro"] .abertura__placa { background: var(--livro-grao), var(--noite-cartao); border-color: var(--noite-linha); box-shadow: 0 7px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .abertura__nome { color: var(--noite-creme); }
+:root[data-tema="escuro"] .abertura__nome::after { background: var(--noite-roxo); }
+:root[data-tema="escuro"] .abertura__frase { color: #D3CDE9; }
+:root[data-tema="escuro"] .abertura__cenario { background-image: var(--livro-calma); }
+
+/* Personalização dentro da história: prévia ao vivo do Broto no topo do painel,
+   abas e opções em blocos, e os dois botões lado a lado no fim. */
+.especial--aparencia { gap: 10px; padding: 12px; }
+.especial__previa {
+  display: grid; place-items: end center; height: 112px; margin: -2px -2px 0; overflow: hidden;
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p);
+  background: var(--livro-cena) center 70% / cover no-repeat, var(--rqr-cena-base);
+}
+.especial__previa .bicho { margin-bottom: 4px; }
+.especial__abas { gap: 6px; }
+.especial__aba {
+  border: 2px solid var(--livro-tinta); border-radius: var(--livro-raio-p); box-shadow: 0 3px 0 var(--livro-tinta);
+  background: var(--livro-grao), #FFFCF4; color: var(--livro-tinta); font-weight: 900;
+}
+.especial__aba.is-on { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+.especial__aba:active { transform: translateY(3px); box-shadow: 0 0 0 var(--livro-tinta); }
+.especial__cor { border: 2.5px solid var(--livro-tinta) !important; box-shadow: 0 3px 0 var(--livro-tinta); }
+.especial__cor[aria-pressed="true"] { outline: 3px solid var(--livro-sol); outline-offset: 2px; transform: translateY(-2px); }
+.especial__fim { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.especial__fim > * { min-height: 48px; margin: 0; justify-content: center; text-align: center; }
+.historia-dialogo .especial__fim .historia-opcao { background: var(--livro-grao), #FFFCF4 !important; color: var(--livro-tinta); }
+:root[data-tema="escuro"] .especial { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .especial__aba { background: var(--livro-grao), #36357A; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .especial__aba.is-on { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .especial__previa { border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .historia-dialogo .especial__fim .historia-opcao { background: var(--livro-grao), #36357A !important; color: var(--noite-creme); }
+
+/* Painel de visual aberto: só a prévia do cartão mostra o Broto (sem ele em dobro na cena). */
+.historia-dialogo:has(.especial--aparencia) .cena__ator { opacity: 0; transition: opacity 200ms; }
+
+/* Com a ilustração de fundo, a Vila Estrela (lua com casinhas) só aparece quando a conversa
+   fala dela; no resto do tempo o céu fica limpo, só com as estrelas. */
+.cena__vila { opacity: 0; }
+.cena--ceu .cena__vila { opacity: 1; }
+
+/* =====================================================================
+   Tipografia do livro ilustrado (fontes OFL empacotadas, funcionam sem internet):
+   Fredoka (redonda, "gordinha") em títulos, botões e etiquetas, como os blocos Kahoot;
+   Nunito (arredondada e legível) no texto corrido.
+   ===================================================================== */
+:root {
+  --rqr-font-titulo: "Fredoka Variable", "Nunito Variable", system-ui, sans-serif;
+  --rqr-font-texto: "Nunito Variable", "Nunito Sans", system-ui, sans-serif;
+}
+body { font-family: var(--rqr-font-texto); }
+h1, h2, h3, .topo__titulo, .proxima__titulo, .historia-menu__titulo, .historia__titulo,
+.kb, .rqr-botao, .chip, .tabbar__item, .tabbar__sos, .historia-opcao, .historia-cap, .historia-caixa__nome,
+.historia-caixa__seguir, .historia-menu__item, .especial__aba, .personalizar__aba, .opcao-item__nome,
+.mini__valor, .atalho__texto, .jogo__texto, .ajuste__texto, .abertura__nome, .pulo__titulo, .crise__titulo {
+  font-family: var(--rqr-font-titulo);
+}
+/* Fredoka vai até 700: o "900" do app vira 600–700, que é o peso bonito dela. */
+.kb, .rqr-botao, .historia-opcao, .historia-cap, .historia-menu__item { font-weight: 600; letter-spacing: .01em; }
+h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; letter-spacing: .005em; }
+.atalho__texto small, .jogo__texto small, .ajuste__texto small, .proxima__texto small { font-family: var(--rqr-font-texto); }
+.historia-balao__texto, .historia-menu__nota, .missao__texto, .proxima__texto { font-family: var(--rqr-font-texto); }
+
+/* Chips da personalização na história: escolhido em amarelo, como o resto. */
+.especial .chip.is-on { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+.especial__cores { flex-wrap: nowrap; gap: 6px; }
+.especial__cor { flex: 1 1 0; min-width: 0; aspect-ratio: 1; max-width: 40px; }
+
+/* Personalização na história: o cartão cresce (quase a tela toda) e os itens ficam compactos,
+   sem rolagem interna. A caixa de fala continua embaixo. */
+.historia-dialogo:has(.especial--aparencia) .historia-dialogo__acoes { max-height: calc(100dvh - 190px); overflow: visible; }
+.historia-dialogo:has(.especial--aparencia) .historia-dialogo__baixo { max-height: calc(100% - 70px); }
+.especial--aparencia .especial__previa { height: clamp(96px, 18dvh, 150px); }
+.especial--aparencia .especial__abas { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.especial--aparencia .especial__aba { min-height: 38px; padding: 0 2px; font-size: .8rem; }
+.especial--aparencia .especial__chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.especial--aparencia .especial__chips .chip { min-height: 38px; padding: 4px 6px; font-size: .8rem; line-height: 1.1; border-radius: var(--livro-raio-p); }
+.especial--aparencia .especial__cores { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; justify-items: center; }
+.especial--aparencia .especial__cor { width: 100%; max-width: 38px; height: auto; aspect-ratio: 1; }
+.especial--aparencia .especial__fim > * { min-height: 46px; font-size: .95rem; }
+
+/* Texto da história mais encorpado (Nunito fina demais sobre o papel). */
+.historia-balao__texto { font-weight: 650; font-size: 1.05rem; line-height: 1.45; letter-spacing: .005em; }
+.historia__aviso, .historia-menu__nota, .especial, .historia-nota { font-weight: 650; }
+.historia-dialogo .historia-opcao, .historia-cap { font-weight: 600; }
+
+/* =====================================================================
+   Transições entre telas (estilo livro: páginas que abrem e entram).
+   Duram de 260 a 650 ms; com "reduzir animações" viram instantâneas (regra global).
+   ===================================================================== */
+/* Abas do app: o conteúdo novo sobe e aparece. */
+.celular > .cena, .celular > .cards, .celular > .proxima, .celular > .atalhos,
+.aba-missoes, .aba-jogos, .aba-ajustes { animation: pagina-entra 320ms cubic-bezier(.2, .8, .2, 1) both; }
+.celular > .cards { animation-delay: 40ms; }
+.celular > .proxima { animation-delay: 80ms; }
+.celular > .atalhos { animation-delay: 120ms; }
+@keyframes pagina-entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* Abrir a história: a cena se revela num círculo que nasce do botão central do menu. */
+.historia, .historia-dialogo, .queda { animation: livro-revela 650ms cubic-bezier(.65, 0, .35, 1) both; }
+@keyframes livro-revela {
+  from { clip-path: circle(0% at 50% calc(100% - 40px)); }
+  to { clip-path: circle(150% at 50% calc(100% - 40px)); }
+}
+/* O cartão do mapa e a caixa de fala entram depois, como páginas. */
+.historia__caixa { animation: pagina-pop 480ms cubic-bezier(.3, 1.5, .5, 1) 260ms both; }
+@keyframes pagina-pop { from { opacity: 0; transform: translateY(30px) scale(.92) rotate(-1.5deg); } to { opacity: 1; transform: none; } }
+.historia-caixa { animation: pagina-sobe 420ms cubic-bezier(.3, 1.4, .5, 1) 350ms both; }
+@keyframes pagina-sobe { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+.historia-dialogo__topo { animation: pagina-entra 320ms ease-out 450ms both; }
+/* O Broto entra na cena com um pulinho. */
+.historia-dialogo .cena__ator-caixa { animation: broto-chega 520ms cubic-bezier(.3, 1.6, .5, 1) 300ms both; }
+@keyframes broto-chega { from { opacity: 0; transform: translateY(24px) scale(.8); } to { opacity: 1; transform: none; } }
+/* Cada resposta entra com um pop, uma depois da outra (como no Kahoot). */
+.historia-dialogo .historia-opcao { animation: historia-opcao 360ms cubic-bezier(.3, 1.6, .5, 1) both; }
+.historia-dialogo .historia-opcao:nth-child(2) { animation-delay: 70ms; }
+.historia-dialogo .historia-opcao:nth-child(3) { animation-delay: 140ms; }
+.historia-dialogo .historia-opcao:nth-child(n+4) { animation-delay: 210ms; }
+.especial { animation: pagina-pop 380ms cubic-bezier(.3, 1.5, .5, 1) both; }
+
+/* Respiração, painel de ajuda e jogos: abrem como um cartão que cresce do centro. */
+.crise, .pulo { animation: tela-abre 360ms cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes tela-abre { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+.pulo__painel { animation: pagina-pop 420ms cubic-bezier(.3, 1.5, .5, 1) 150ms both; }
+
+/* Personalizar: a tela entra deslizando da direita, como virar a página. */
+.celular.personalizar { animation: pagina-vira 420ms cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes pagina-vira { from { opacity: 0; transform: translateX(28px) rotate(.6deg); } to { opacity: 1; transform: none; } }
+
+/* Respostas da história: texto mais escuro e mais grosso. */
+.historia-dialogo .historia-opcao { color: var(--livro-tinta-funda); font-weight: 700; font-size: 1rem; -webkit-font-smoothing: antialiased; }
+.historia-dialogo .especial .chip, .especial__aba { font-weight: 700; color: var(--livro-tinta-funda); }
+.historia-caixa__nome { font-weight: 700; color: var(--livro-tinta-funda); }
+.historia-balao__texto { color: var(--livro-tinta-funda); }
+:root[data-tema="escuro"] .historia-balao__texto { color: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao { color: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-dialogo .historia-opcao:nth-child(4n+1) { color: var(--livro-tinta-funda); }
+:root[data-tema="escuro"] .especial__aba:not(.is-on) { color: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-dialogo .especial .chip:not(.is-on) { color: var(--noite-creme); }
+:root[data-tema="escuro"] .historia-dialogo .especial__fim .historia-opcao { color: var(--noite-creme) !important; }
+
+/* Abrir a história: o mesmo "pop" com quique do menu da engrenagem, crescendo a partir do
+   botão central do menu (substitui a revelação em círculo). */
+.historia, .historia-dialogo, .queda {
+  transform-origin: 50% calc(100% - 40px);
+  animation: livro-abre 380ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+@keyframes livro-abre { from { opacity: 0; transform: scale(.7) translateY(24px); } to { opacity: 1; transform: none; } }
+
+/* =====================================================================
+   Transição padrão de TODAS as telas: o "pop do livro" (o mesmo da História e
+   do menu da engrenagem). A tela cresce de 70% para 100% com um quique curto,
+   a partir do ponto de onde foi chamada. Skill: transicao-pop.
+   - Telas por cima (história, respiração, ajuda, jogos, personalizar): da barra de baixo.
+   - Abas: o conteúdo novo dá o pop a partir da aba tocada (embaixo).
+   - Classe .tela-pop para qualquer tela nova.
+   Com "reduzir animações", vira instantânea (regra global).
+   ===================================================================== */
+@keyframes tela-pop { from { opacity: 0; transform: scale(.7) translateY(24px); } to { opacity: 1; transform: none; } }
+.tela-pop,
+.historia, .historia-dialogo, .queda, .crise, .pulo, .celular.personalizar,
+.aba-missoes, .aba-jogos, .aba-ajustes {
+  transform-origin: 50% calc(100% - 40px);
+  animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+/* Tela inicial: os blocos dão o pop um depois do outro, de cima para baixo. */
+.celular > .cena, .celular > .cards, .celular > .proxima, .celular > .atalhos {
+  transform-origin: 50% 100%;
+  animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+.celular > .cards { animation-delay: 50ms; }
+.celular > .proxima { animation-delay: 100ms; }
+.celular > .atalhos { animation-delay: 150ms; }
+/* Painéis que ficam dentro dessas telas entram logo depois, com o mesmo pop. */
+.pulo__painel, .historia__caixa, .especial { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 120ms both; }

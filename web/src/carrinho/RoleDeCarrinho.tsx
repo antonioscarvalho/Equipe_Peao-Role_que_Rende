@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BotaoLibras } from "../BotaoLibras";
 import { createPortal } from "react-dom";
 import { Bichinho } from "../Bichinho";
-import { tocar } from "../sons";
+import { atualizarMotor, iniciarMotor, pararMotor, tocar, tocarTrilha } from "../sons";
 import { CORES_ROUPA, corDe } from "../personalizacao/aparencia";
 import { useAparenciaVisivel } from "../personalizacao";
 import { BotaoTema } from "../BotaoTema";
+import { Icone } from "../Icone";
 import { useEsconderVLibras } from "../vlibras";
 import { DURACAO_PARTIDA_MS, FOLHA_ALTA_A_CADA, FOLHA_A_CADA_PX, quadroMs } from "../partida";
 import "./carrinho.css";
@@ -66,6 +68,12 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
   const [aviso, setAviso] = useState("");
 
+  // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  useEffect(() => {
+    tocarTrilha("/sons/trilha-carrinho.opus", { titulo: "Rolê de Carrinho", artista: "Trilha do jogo" });
+    return () => tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+  }, []);
+
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({
     w: 360, h: 600, base: 400, x: 0, y: 0, vel: 0, vx: 0, vy: 0, ang: 0, rel: 0, angVel: 0, noChao: true,
@@ -100,6 +108,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   // Laço principal do jogo.
   useEffect(() => {
     if (estado !== "jogando") return;
+    iniciarMotor(); // zumbido grave que sobe com a velocidade — sensação de aceleração
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
     const css = getComputedStyle(document.documentElement);
@@ -184,6 +193,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         }
       }
       g.giroRoda += (g.noChao ? g.vel : g.vx) * dt / RODA;
+      atualizarMotor(Math.max(0, g.vel) / VEL_MAX);
 
       // Folhas em ritmo fixo: a maioria no chão, uma em cada 3 no alto (para pegar no pulo).
       while (g.proxFolha < g.x + g.w * 1.5) {
@@ -290,7 +300,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     const visib = () => { if (!document.hidden) ultimo = performance.now(); };
     document.addEventListener("visibilitychange", visib);
     id = requestAnimationFrame(passo);
-    return () => { cancelAnimationFrame(id); document.removeEventListener("visibilitychange", visib); };
+    return () => { cancelAnimationFrame(id); document.removeEventListener("visibilitychange", visib); pararMotor(); };
   }, [estado, corCarro]);
 
   // Pedais: segurar. Também vale segurar a metade esquerda/direita da tela.
@@ -311,6 +321,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         <span className="pulo__placar" aria-label={`${metros} metros, ${folhas} folhas`}>
           <b>{metros} m</b> · 🍃 {folhas}
         </span>
+        <BotaoLibras />
         <BotaoTema compacto />
         <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
@@ -387,7 +398,10 @@ export function BotaoCarrinho({ reduzir }: { reduzir: boolean }) {
   const [aberto, setAberto] = useState(false);
   return (
     <>
-      <button className="rqr-botao jogo-botao" onClick={() => setAberto(true)}>Jogar: Rolê de Carrinho</button>
+      <button className="kb kb--verde jogo" onClick={() => { tocar("clique"); setAberto(true); }}>
+        <span className="atalho__icone"><Icone nome="gamepad" tamanho={28} /></span>
+        <span className="jogo__texto">Rolê de Carrinho<small>Suba os morros e pegue folhas</small></span>
+      </button>
       {/* Portal: o cartão da tela inicial tem transform, que prenderia o position: fixed dentro dele. */}
       {aberto && createPortal(<RoleDeCarrinho aoFechar={() => setAberto(false)} reduzir={reduzir} />, document.body)}
     </>
