@@ -232,15 +232,15 @@ export default function App() {
             </section>
 
             <nav className="atalhos rqr-escalonado" aria-label="Atalhos">
-              <button className="kb kb--azul atalho" onClick={() => setAba("missoes")}>
+              <button className="kb kb--azul atalho" onClick={() => { tocar("clique"); setAba("missoes"); }}>
                 <span className="atalho__icone"><Icone nome="listChecks" /></span>
                 <span className="atalho__texto">Missões<small>{nivel} de {missoes.length} feitas</small></span>
               </button>
-              <button className="kb kb--roxo atalho" onClick={() => setCrise(true)}>
+              <button className="kb kb--roxo atalho" onClick={() => { tocar("clique"); setCrise(true); }}>
                 <span className="atalho__icone"><Icone nome="wind" /></span>
                 <span className="atalho__texto">Deu vontade<small>respirar comigo</small></span>
               </button>
-              <button className="kb kb--rosa atalho" onClick={() => setAba("jogos")}>
+              <button className="kb kb--rosa atalho" onClick={() => { tocar("clique"); setAba("jogos"); }}>
                 <span className="atalho__icone"><Icone nome="gamepad" /></span>
                 <span className="atalho__texto">Jogos<small>até 3 minutos</small></span>
               </button>
@@ -277,7 +277,7 @@ export default function App() {
               })}
             </ul>
             <p className="mini__nota">Cada missão conta. Dia difícil não zera nada.</p>
-            {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
+            {nivel > 0 && <button className="link" onClick={() => { tocar("clique"); reiniciar(); }}>Reiniciar demonstração</button>}
           </section>
         )}
 
@@ -327,12 +327,12 @@ export default function App() {
             <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
               {humores.map((h) => (
                 <button key={h.id} className={`chip ${humor === h.id ? "is-on" : ""}`}
-                  aria-pressed={humor === h.id} onClick={() => setHumor(h.id)}>{h.rotulo}</button>
+                  aria-pressed={humor === h.id} onClick={() => { tocar("clique"); setHumor(h.id); }}>{h.rotulo}</button>
               ))}
             </div>
 
             {conhecer && (
-              <button className="link" onClick={() => { apagarConhecer(); setAviso("O que você contou ao Broto foi apagado."); }}>
+              <button className="link" onClick={() => { tocar("clique"); apagarConhecer(); setAviso("O que você contou ao Broto foi apagado."); }}>
                 Apagar o que contei ao Broto
               </button>
             )}
