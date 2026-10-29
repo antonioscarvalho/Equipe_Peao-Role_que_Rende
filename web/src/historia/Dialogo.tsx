@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bichinho, type Humor } from "../Bichinho";
 import { PainelCrise } from "../AjudaAgora";
-import { useAparenciaVisivel } from "../personalizacao";
+import { nomeDoBroto, useAparenciaVisivel } from "../personalizacao";
 import { lerPerfil } from "../personalizacao/armazenamento-perfil";
 import { tocar, tocarMusica, type NomeSom } from "../sons";
 import { useModal } from "./useModal";
@@ -49,6 +49,8 @@ type Props = {
   folhas?: number;
   aoOferta?: (acao: string) => void;
   cena?: Cena;
+  /** Resposta da tela de idade (Historia.tsx). Menor de 18 não responde o questionário. Não é salva. */
+  menor?: boolean;
 };
 
 function frasesDeFolhas(n: number | undefined) {
@@ -56,9 +58,10 @@ function frasesDeFolhas(n: number | undefined) {
   return n === 1 ? "A gente pegou uma folha no caminho! Vou guardar ela aqui." : `A gente pegou ${n} folhas no caminho! Vou guardar todas aqui.`;
 }
 
-function interpolar(fala: string, nome: string | null, folhas: number | undefined) {
+function interpolar(fala: string, nome: string | null, folhas: number | undefined, broto: string | null = null) {
   return fala
     .replace(/\{folhas\}/g, frasesDeFolhas(folhas))
+    .replace(/\{broto\}/g, nomeDoBroto({ nomeBroto: broto }))
     .replace(/,\s*\{nome\}/g, nome ? `, ${nome}` : "")
     .replace(/\{nome\}/g, nome ?? "você");
 }
@@ -77,19 +80,23 @@ function useDigitando(texto: string, reduzir: boolean) {
   return { visivel: texto.slice(0, n), completo: n >= texto.length, completar: () => setN(texto.length) };
 }
 
-export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depois", folhas, aoOferta, cena: CenaDoCapitulo }: Props) {
+export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depois", folhas, aoOferta, cena: CenaDoCapitulo, menor = false }: Props) {
   const aparencia = useAparenciaVisivel();
   const caixa = useRef<HTMLDivElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const roteiro: Passo[] = (parte === "antes" ? capitulo.antesDoJogo : capitulo.depoisDoJogo) ?? [];
 
-  const [conversa, setConversa] = useState<Conversa>(() => ({ nome: lerPerfil().nome, menor: false, motivos: [], meta: null }));
+  const [conversa, setConversa] = useState<Conversa>(() => {
+    const p = lerPerfil();
+    return { nome: p.nome, broto: p.nomeBroto, menor, motivos: [], meta: null };
+  });
   const mudarConversa = useCallback((c: Partial<Conversa>) => setConversa((v) => ({ ...v, ...c })), []);
-  const dizer = useCallback((t: string) => interpolar(t, conversa.nome, folhas), [conversa.nome, folhas]);
+  const dizer = useCallback((t: string) => interpolar(t, conversa.nome, folhas, conversa.broto), [conversa.nome, conversa.broto, folhas]);
+  const nomeAlien = nomeDoBroto({ nomeBroto: conversa.broto });
 
   const [etapa, setEtapa] = useState<Etapa>(parte === "antes" ? "roteiro" : "abertura");
   const [i, setI] = useState(0);
-  const [fala, setFala] = useState(() => (parte === "antes" ? interpolar(roteiro[0]?.fala ?? "", conversa.nome, folhas) : capitulo.falaAbertura));
+  const [fala, setFala] = useState(() => (parte === "antes" ? interpolar(roteiro[0]?.fala ?? "", conversa.nome, folhas, conversa.broto) : capitulo.falaAbertura));
   const [respondeu, setRespondeu] = useState(false);
   const [ouvidas, setOuvidas] = useState<number[]>([]);
   const [pergunta, setPergunta] = useState<number | null>(null);
@@ -134,6 +141,8 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
   };
 
   const irParaPasso = (n: number) => {
+    // Batismo só uma vez: com o alien já batizado, o passo some (inclusive ao reler o capítulo).
+    while (roteiro[n]?.especial === "batismo" && conversa.broto) n++;
     const p = roteiro[n];
     if (!p) {
       if (parte === "antes") { aoConcluir(); return; }
@@ -186,7 +195,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
                   if (o.abreCrise) setCrise(true);
                   if (o.som === "cantiga") tocarMusica("/sons/cantiga-vo.opus");
                   if (!o.resposta && !o.abreCrise) irParaPasso(i + 1);
-                }}>{o.rotulo}</button>
+                }}>{dizer(o.rotulo)}</button>
               ))
             )
           )}
@@ -195,7 +204,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             <>
               {capitulo.perguntas.map((p, n) => (
                 <button key={p.pergunta} className="historia-opcao" aria-pressed={ouvidas.includes(n)}
-                  onClick={() => { tocar("clique"); setOuvidas((o) => (o.includes(n) ? o : [...o, n])); setPergunta(n); setFala(p.resposta); }}>
+                  onClick={() => { tocar("clique"); setOuvidas((o) => (o.includes(n) ? o : [...o, n])); setPergunta(n); setFala(dizer(p.resposta)); }}>
                   {p.pergunta}
                 </button>
               ))}
@@ -207,8 +216,8 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
             <>
               {capitulo.perguntaDoBroto.opcoes.map((o) => (
                 <button key={o.rotulo} className="historia-opcao"
-                  onClick={() => { tocar("clique"); setRespondeu(true); setFala(o.resposta); if (o.abreCrise) setCrise(true); }}>
-                  {o.rotulo}
+                  onClick={() => { tocar("clique"); setRespondeu(true); setFala(dizer(o.resposta)); if (o.abreCrise) setCrise(true); }}>
+                  {dizer(o.rotulo)}
                 </button>
               ))}
               <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); depoisDoBroto(); }}>Prefiro não responder</button>
@@ -222,7 +231,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
 
       {/* Caixa de texto de RPG: nome do Broto, a fala e o "seguir" no canto. */}
       <div className="historia-caixa">
-        <span className="historia-caixa__nome" aria-hidden="true">Broto</span>
+        <span className="historia-caixa__nome" aria-hidden="true">{nomeAlien}</span>
         <div className="historia-caixa__fala" key={fala} aria-hidden="true">
           <span className="historia-balao__texto">
             {visivel}
@@ -231,7 +240,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
           <span className="historia-balao__texto historia-balao__molde">{fala}</span>
         </div>
         {/* Leitor de tela recebe a fala inteira de uma vez, não letra por letra. */}
-        <p className="sr-only" aria-live="polite">Broto: {fala}</p>
+        <p className="sr-only" aria-live="polite">{nomeAlien}: {fala}</p>
         {(() => {
           const seguir =
             etapa === "roteiro" && passo && (respondeu || (!passo.opcoes && !passo.especial)) ? () => irParaPasso(i + 1)
@@ -243,7 +252,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
           return seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); completo ? seguir() : completar(); }}>
             {completo ? "Continuar ▸" : "Mostrar tudo ▸"}</button>;
         })()}
-        <small className="historia-nota">O Broto é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
+        <small className="historia-nota">{nomeAlien} é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
       </div>
       </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}

@@ -11,6 +11,8 @@
 export interface Perfil {
   /** Como o Guardião chama a pessoa. null = sem nome, e os textos falam "você". */
   nome: string | null;
+  /** Nome que a pessoa deu ao alien no cap. 1 (skill conversa-broto). null = ainda não batizado. */
+  nomeBroto: string | null;
   cenario: string;
 }
 
@@ -22,7 +24,7 @@ export interface OpcaoCenario {
 /** Por enquanto só o bairro que já existe (Bairro.tsx). Cenário novo entra aqui. */
 export const CENARIOS: OpcaoCenario[] = [{ id: "bairro", nome: "Bairro" }];
 
-export const PERFIL_PADRAO: Perfil = { nome: null, cenario: "bairro" };
+export const PERFIL_PADRAO: Perfil = { nome: null, nomeBroto: null, cenario: "bairro" };
 
 export const NOME_MAX = 30;
 
@@ -47,8 +49,16 @@ export function validarNome(texto: string): ErroNome | null {
 export function sanearPerfil(bruto: unknown): Perfil {
   const p = (bruto && typeof bruto === "object" ? bruto : {}) as Partial<Record<keyof Perfil, unknown>>;
   const nome = typeof p.nome === "string" && validarNome(p.nome) === null ? normalizarNome(p.nome) : null;
+  const nomeBroto = typeof p.nomeBroto === "string" && validarNome(p.nomeBroto) === null ? normalizarNome(p.nomeBroto) : null;
   const cenario = typeof p.cenario === "string" && CENARIOS.some((c) => c.id === p.cenario) ? p.cenario : PERFIL_PADRAO.cenario;
-  return { nome, cenario };
+  return { nome, nomeBroto, cenario };
+}
+
+/** Como o alien aparece antes do batismo: ele chega sem nome (skill conversa-broto). */
+export const NOME_BROTO_PROVISORIO = "Alien";
+
+export function nomeDoBroto(p: Pick<Perfil, "nomeBroto">): string {
+  return p.nomeBroto ?? NOME_BROTO_PROVISORIO;
 }
 
 // ---------- foto ----------

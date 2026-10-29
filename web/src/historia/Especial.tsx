@@ -2,7 +2,7 @@ import { useState } from "react";
 import { usePerfil, NOME_MAX } from "../personalizacao";
 import { useAparencia, DIAS_SEM_APOSTAR_DEMO } from "../personalizacao/armazenamento";
 import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, liberado, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
-import { MOTIVOS, METAS, guardarConhecer, refletirMotivos, type Conhecer } from "./conhecer";
+import { MOTIVOS, METAS, guardarConhecer, type Conhecer } from "./conhecer";
 import type { Passo } from "./tipos";
 
 /**
@@ -11,7 +11,7 @@ import type { Passo } from "./tipos";
  * Só o apelido (perfil) e, com "Guardar", motivo e meta (conhecer.ts) ficam no aparelho.
  * REVISÃO CLÍNICA PENDENTE das devolutivas.
  */
-export type Conversa = { nome: string | null; menor: boolean; motivos: string[]; meta: string | null };
+export type Conversa = { nome: string | null; broto: string | null; menor: boolean; motivos: string[]; meta: string | null };
 
 type Props = {
   tipo: NonNullable<Passo["especial"]>;
@@ -74,12 +74,25 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
 }
 
 export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
-  const { mudarNome } = usePerfil();
+  const { mudarNome, mudarNomeBroto } = usePerfil();
   const [texto, setTexto] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [marcados, setMarcados] = useState<string[]>([]);
 
   if (tipo === "aparencia") return <Aparencia aoFim={aoFim} />;
+
+  // Batismo (skill conversa-broto): não é escolha. É a pessoa comentando que ele parece um broto.
+  if (tipo === "batismo") {
+    return (
+      <div className="especial">
+        <button className="historia-opcao" onClick={() => {
+          mudarNomeBroto("Broto");
+          mudar({ broto: "Broto" });
+          aoFim("Broto… Meu primeiro nome de verdade. Gostei.");
+        }}>Você parece um broto. Vou te chamar de Broto.</button>
+      </div>
+    );
+  }
 
   if (tipo === "nome") {
     const enviar = () => {
@@ -91,7 +104,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
     };
     return (
       <form className="especial" onSubmit={(e) => { e.preventDefault(); enviar(); }}>
-        <label htmlFor="especial-nome" className="especial__rotulo">Como o Broto te chama (opcional)</label>
+        <label htmlFor="especial-nome" className="especial__rotulo">Como {conversa.broto ?? "o alien"} te chama (opcional)</label>
         <input id="especial-nome" className="especial__campo" value={texto} maxLength={NOME_MAX + 5} autoComplete="nickname"
           onChange={(e) => { setTexto(e.target.value); setErro(null); }} aria-describedby={erro ? "especial-nome-erro" : undefined} />
         {erro && <p id="especial-nome-erro" className="especial__erro" role="alert">{erro}</p>}
@@ -100,18 +113,6 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
           Prefiro não dizer
         </button>
       </form>
-    );
-  }
-
-  if (tipo === "idade") {
-    return (
-      <div className="especial">
-        <button className="historia-opcao" onClick={() => aoFim("Beleza. Obrigado por responder.")}>Sim</button>
-        <button className="historia-opcao" onClick={() => {
-          mudar({ menor: true });
-          aoFim("Que bom que você tá aqui. Esse app é pra adultos, mas você pode conversar com um adulto de confiança ou ir na unidade de saúde do seu bairro. Se precisar falar com alguém agora, o CVV atende de graça no 188. Eu fico aqui pra te contar minha história, se quiser.");
-        }}>Não</button>
-      </div>
     );
   }
 
@@ -129,8 +130,8 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
         </div>
         <button className="rqr-botao" disabled={!marcados.length} onClick={() => {
           mudar({ motivos: marcados });
-          aoFim(`Então ${refletirMotivos(marcados)} importa pra você. Isso diz muito de quem você é.`);
-        }}>Contar pro Broto</button>
+          aoFim("Obrigado por me contar. Fica entre a gente.");
+        }}>{conversa.broto ? `Contar pro ${conversa.broto}` : "Contar pra ele"}</button>
         <button className="historia-opcao historia-opcao--leve" onClick={() => aoFim("Tudo bem. A gente se conhece aos poucos.")}>Prefiro não dizer</button>
       </div>
     );

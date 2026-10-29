@@ -14,7 +14,7 @@ import { capitulosConcluidos } from "./historia/progresso";
 import { apagarConhecer, refletirMotivos, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
 import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
-import { BotaoPersonalizar, useAparenciaVisivel, usePerfil } from "./personalizacao";
+import { BotaoPersonalizar, nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
 
@@ -255,7 +255,7 @@ export default function App() {
 
         {aba === "jogos" && (
           <section className="aba-jogos" aria-label="Jogos">
-            <button className="rqr-botao jogo-botao" onClick={() => { tocar("clique"); setHistoria(true); }}>História do Broto</button>
+            <button className="rqr-botao jogo-botao" onClick={() => { tocar("clique"); setHistoria(true); }}>História do {nomeDoBroto(perfil)}</button>
             <button className="rqr-botao jogo-botao" onClick={() => { tocar("clique"); setJogo("inicio"); }}>Jogar: Pulo do Bichinho</button>
             <BotaoCarrinho reduzir={reduzir} />
             <p className="mini__nota">Partidas de até 3 minutos. Sem moeda, sem vidas, sem perder.</p>

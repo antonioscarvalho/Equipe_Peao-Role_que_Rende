@@ -25,8 +25,9 @@ export interface Capitulo {
  * Uma fala do Broto num roteiro. As opções voltam todas ao mesmo caminho (nada é salvo,
  * então nenhuma escolha muda o que vem depois). Inclua sempre uma opção para não responder
  * quando a pergunta for sobre a pessoa.
- * Na fala, `{nome}` vira o apelido da pessoa (", {nome}" some quando não há nome) e `{folhas}`
- * vira uma frase sobre as folhas do jogo.
+ * Na fala e no rótulo das opções, `{nome}` vira o apelido da pessoa (", {nome}" some quando não há
+ * nome), `{broto}` vira o nome que a pessoa deu ao alien e `{folhas}` vira uma frase sobre as folhas do jogo.
+ * Antes do batismo ninguém chama o alien de "Broto" (skill conversa-broto).
  */
 export interface Passo {
   fala: string
@@ -35,8 +36,11 @@ export interface Passo {
   humor?: 'calmo' | 'feliz' | 'cansado' | 'orgulhoso' | 'apoio'
   /** `som: "cantiga"` toca de novo a cantiga da Vó (ex.: resposta que cita "tum-tum, tá-rá"). */
   opcoes?: { rotulo: string; resposta?: string; abreCrise?: boolean; som?: 'cantiga' }[]
-  /** Pergunta do app com tela própria (só a base implementa). */
-  especial?: 'nome' | 'aparencia' | 'idade' | 'motivo' | 'meta' | 'guardar'
+  /**
+   * Pergunta do app com tela própria (só a base implementa). `batismo`: a pessoa dá nome ao alien;
+   * o passo é pulado quando ele já tem nome. A idade não é conversa: tem tela própria em Historia.tsx.
+   */
+  especial?: 'batismo' | 'nome' | 'aparencia' | 'motivo' | 'meta' | 'guardar'
 }
 
 export interface PropsJogo {
