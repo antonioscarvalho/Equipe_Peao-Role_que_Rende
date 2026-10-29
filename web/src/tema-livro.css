@@ -1603,6 +1603,10 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   background: var(--livro-grao), var(--livro-papel); color: var(--livro-tinta); box-shadow: 0 6px 0 var(--livro-tinta);
   animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both;
 }
+.modal-acess__caixa { gap: 16px; }
+/* Respiro entre os grupos (Acessibilidade, Vibração, Som) dentro do modal. */
+.modal-acess__ajustes .ajustes__grupo { margin: 14px 0 0; }
+.modal-acess__ajustes .ajustes__grupo:first-child { margin-top: 0; }
 .modal-acess__selos { display: flex; gap: 10px; justify-content: center; }
 .modal-acess__simbolo { width: 64px; height: 64px; }
 /* No tema escuro o contorno preto sumiria: vira branco e o azul continua azul. */
