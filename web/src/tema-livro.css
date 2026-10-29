@@ -1605,6 +1605,8 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 }
 .modal-acess__selos { display: flex; gap: 10px; justify-content: center; }
 .modal-acess__simbolo { width: 64px; height: 64px; }
+/* No tema escuro o contorno preto sumiria: vira branco e o azul continua azul. */
+:root[data-tema="escuro"] .modal-acess__simbolo { filter: invert(1) hue-rotate(180deg); }
 .modal-acess__selo {
   display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
   background: #1351B4; color: #FFFFFF; border: 2.5px solid var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
