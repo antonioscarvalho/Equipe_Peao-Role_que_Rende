@@ -35,7 +35,7 @@ function aleatorio(a: number, b: number) { return a + Math.random() * (b - a); }
 
 /**
  * Segue o contrato `PropsJogo` da história. `aoTerminar` é opcional para manter os usos antigos
- * (início e "Deu vontade"): sem ele, "Voltar pro meu rolê" só fecha.
+ * (início e "Deu vontade"): sem ele, "Voltar pro início" só fecha.
  * `chamada` troca o convite do início (o "Deu vontade" abre o jogo com "3 minutos para a onda passar").
  */
 type Props = Omit<PropsJogo, "aoTerminar"> & Partial<Pick<PropsJogo, "aoTerminar">> & { chamada?: string };
@@ -307,7 +307,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
       }
       // 3 minutos: termina com calma, sem cortar no meio de uma queda.
       if (g.tempo >= DURACAO_PARTIDA_MS) {
-        encerrar("tempo", `3 minutos de rolê! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
+        encerrar("tempo", `3 minutos de passeio! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
         return;
       }
       id = requestAnimationFrame(passo);
@@ -330,7 +330,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
 
   // Saída gentil depois da partida: na história, segue para a conversa com as folhas pegas.
   const sair = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
-  const rotuloSair = aoTerminar ? "Conversar com o Broto" : "Voltar pro meu rolê";
+  const rotuloSair = aoTerminar ? "Conversar com o Broto" : "Voltar pro início";
 
   const novoRecorde = estado === "caiu" && pontos > 0 && pontos >= recorde;
 
@@ -382,7 +382,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
         {estado === "tempo" && (
           <div className="pulo__painel rqr-pop">
             <Bichinho humor="feliz" nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={90} reduzir={reduzir} aparencia={aparencia} />
-            <p className="pulo__chamada">3 minutos de rolê!</p>
+            <p className="pulo__chamada">3 minutos de passeio!</p>
             <p className="pulo__resultado"><b>{pontos} m</b> de altura · 🍃 {folhas} folhas</p>
             <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai descansar.</p>
             <button className="rqr-botao" onClick={sair}>{rotuloSair}</button>

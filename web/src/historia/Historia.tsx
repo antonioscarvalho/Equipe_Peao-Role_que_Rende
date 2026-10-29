@@ -5,7 +5,7 @@ import { PainelCrise } from "../AjudaAgora";
 import { nomeDoBroto, usePerfil } from "../personalizacao";
 import { capitulos, TITULOS } from "./capitulos";
 import {
-  ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, marcarAvisoVisto, marcarParte, parteDoCapitulo,
+  ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, liberaAmanha, marcarAvisoVisto, marcarParte, parteDoCapitulo,
 } from "./progresso";
 import { useModal } from "./useModal";
 import type { IdCapitulo } from "./tipos";
@@ -132,7 +132,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
                 const ok = feitos.includes(id);
                 const livre = pronto && estaDesbloqueado(id);
                 const meio = !ok && livre && parteDoCapitulo(id);
-                const estado = ok ? "Concluído · ler de novo" : !pronto ? "Em breve" : meio ? "Continuar" : livre ? "Disponível" : "Depois do anterior";
+                const estado = ok ? "Concluído · ler de novo" : !pronto ? "Em breve" : meio ? "Continuar" : livre ? "Disponível" : liberaAmanha(id) ? "Libera amanhã · faça uma missão hoje" : "Depois do anterior";
                 return (
                   <li key={id}>
                     <button className={`historia-cap ${ok ? "is-ok" : ""}`} disabled={!livre} onClick={() => abrir(id)}>

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { aparenciaVisivel, sanear, type Aparencia } from "./aparencia";
+import { aparenciaVisivel, sanear, type Aparencia, type Progresso } from "./aparencia";
+import { usePlano } from "../plano";
+import { capitulosConcluidos } from "../historia/progresso";
 
 /**
  * A escolha fica só neste aparelho (spec 009, CA-6). A prova visual não tem banco,
@@ -10,10 +12,13 @@ const CHAVE = "rqr:aparencia";
 const EVENTO = "rqr:aparencia-mudou";
 
 /**
- * Dias sem apostar da demonstração. A tela inicial mostra "12 dias" fixo (dados sintéticos, edital 8.5).
- * Quando o contador real existir, troque por ele: o resto do módulo já recebe o número pronto.
+ * O que conta para as metas da personalização: dias do plano de 90 dias, missões feitas e
+ * capítulos concluídos. Tudo real, deste aparelho (sem dado de demonstração).
  */
-export const DIAS_SEM_APOSTAR_DEMO = 12;
+export function useProgresso(): Progresso {
+  const plano = usePlano();
+  return { dias: plano.dia, missoes: plano.totalFeitas, capitulos: capitulosConcluidos().length };
+}
 
 export function lerAparencia(): Aparencia {
   try {
@@ -58,7 +63,8 @@ export function useAparencia() {
   return { aparencia, mudar };
 }
 
-/** Para a tela inicial: a aparência já sem itens de marco ainda não alcançados. */
-export function useAparenciaVisivel(dias = DIAS_SEM_APOSTAR_DEMO): Aparencia {
-  return aparenciaVisivel(useAparencia().aparencia, dias);
+/** Para a tela inicial: a aparência já sem itens cuja meta ainda não foi alcançada. */
+export function useAparenciaVisivel(): Aparencia {
+  const progresso = useProgresso();
+  return aparenciaVisivel(useAparencia().aparencia, progresso);
 }

@@ -94,7 +94,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
               <Icone nome="sprout" /> Pulo do Bichinho: 3 minutos pra onda passar
             </button>
           )}
-          <button className="rqr-botao" onClick={aoFechar}>Voltar pro meu rolê</button>
+          <button className="rqr-botao" onClick={aoFechar}>Voltar pro início</button>
           <small>Este app é um apoio complementar e não substitui atendimento profissional.</small>
         </div>
       )}
