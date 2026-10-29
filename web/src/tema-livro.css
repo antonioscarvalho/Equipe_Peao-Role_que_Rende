@@ -1578,3 +1578,12 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .historia-cortina { position: fixed; inset: 0; z-index: 29; background: var(--livro-tinta); }
 /* Pulo aberto a partir da respiração ("Deu vontade"): troca de uma tela cheia por outra, sem pop. */
 .pulo.sem-pop { animation: none; }
+
+/* Menu de baixo sempre fixo na tela. Antes era `sticky`, mas o .palco tem overflow: hidden,
+   então ele ficava no fim do conteúdo: descia ao trocar de aba (Jogos) e sumia nas abas
+   compridas (Ajustes) até rolar a página. Agora é fixo e o conteúdo ganha espaço embaixo. */
+.celular:has(> .tabbar) { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+.celular > .tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; margin: 0;
+  padding-inline: max(8px, calc((100vw - 560px) / 2));
+}
