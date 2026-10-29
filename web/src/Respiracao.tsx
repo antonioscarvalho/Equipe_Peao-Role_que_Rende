@@ -4,6 +4,7 @@ import { Bichinho } from "./Bichinho";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { abaixarTrilha, tocar, tocarTrilha } from "./sons";
+import { pararVibracao, vibracaoSuportada, vibrar } from "./tato";
 
 const fases = [
   { nome: "Inspire", dica: "pelo nariz, enchendo a barriga", seg: 4, classe: "inspira" },
@@ -22,6 +23,9 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
   const [ciclo, setCiclo] = useState(0);
   // Spec 003 CA-3: sem som por padrão no momento de crise; a pessoa pode ligar aqui.
   const [comSom, setComSom] = useState(false);
+  // Vibrar no ritmo: desligado por padrão, como o som. Ajuda quem não vê o círculo nem ouve o tom.
+  // Uma vibração longa = inspire; duas curtas = solte; "Segure" fica parado.
+  const [noRitmo, setNoRitmo] = useState(false);
   const [fase, setFase] = useState(0);
   const [resta, setResta] = useState<number>(fases[0].seg);
   const terminou = ciclo >= CICLOS;
@@ -80,6 +84,14 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
     if (c === "expira") tocar("expira");
   }, [fase, ciclo, terminou, comSom]);
 
+  useEffect(() => {
+    if (terminou || !noRitmo) return;
+    const c = fases[fase].classe;
+    if (c === "inspira") vibrar("inspira", { noRitmo: true });
+    if (c === "expira") vibrar("expira", { noRitmo: true });
+  }, [fase, ciclo, terminou, noRitmo]);
+  useEffect(() => () => pararVibracao(), []);
+
   const f = fases[fase];
 
   return (
@@ -119,6 +131,15 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
           <button className="kb kb--escuro respiro__som" onClick={() => setComSom((v) => !v)} aria-pressed={comSom}>
             <Icone nome="music" tamanho={20} /> {comSom ? "Som da respiração: ligado" : "Som da respiração: desligado"}
           </button>
+          {vibracaoSuportada && (
+            <button className="kb kb--escuro respiro__som" onClick={() => setNoRitmo((v) => !v)} aria-pressed={noRitmo}
+              aria-describedby={noRitmo ? "respiro-ritmo-dica" : undefined}>
+              <Icone nome="wind" tamanho={20} /> {noRitmo ? "Vibrar no ritmo: ligado" : "Vibrar no ritmo: desligado"}
+            </button>
+          )}
+          {vibracaoSuportada && noRitmo && (
+            <small id="respiro-ritmo-dica" className="respiro__ritmo-dica">Vibração longa: inspire. Duas curtas: solte.</small>
+          )}
         </div>
       ) : (
         <div className="respiro__fim">

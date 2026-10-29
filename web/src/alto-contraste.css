@@ -1,0 +1,263 @@
+/* =====================================================================
+   Alto contraste (WCAG 1.4.6 AAA, 1.4.8, 1.4.11; spec 008 CA-2).
+   Ligado por data-contraste="alto" no <html> (tema.ts e index.html), com o claro ou com o escuro.
+   Sem escolha guardada, segue o aparelho (prefers-contrast: more).
+   Carregado por último (main.tsx): só troca cor e acabamento, nunca o layout.
+
+   O que muda:
+   - Texto ≥ 7:1 em toda superfície; contorno de controle e foco ≥ 3:1 (quase sempre ≥ 7:1).
+   - Sem textura de papel, sem véu translúcido e sem ilustração atrás de texto.
+   - Sem cinza "suave": todo texto em tinta cheia. Sem opacidade em texto.
+   - Foco em anel grosso de 4 px com folga da cor da página, visível sobre qualquer fundo.
+   - Claro: papel branco, tinta preta, os pastéis do livro continuam (todos ≥ 10:1 com o preto).
+   - Escuro: fundo preto, texto branco, ação principal e estado marcado em amarelo com texto preto.
+   O formato do livro (contorno, degrau do botão, cantos recortados, fontes) continua igual.
+   Também aqui: o modo de cores forçadas do Windows (forced-colors), no fim do arquivo.
+   ===================================================================== */
+
+/* ---------- Claro + alto contraste ---------- */
+:root[data-contraste="alto"] {
+  --ac-pagina: #FFFFFF;
+  --ac-texto: #000000;
+  --ac-foco: #000000;
+  --ac-folga: #FFFFFF;
+  --ac-marcado: #000000;
+  --ac-marcado-texto: #FFFFFF;
+
+  --livro-tinta: #000000;
+  --livro-tinta-funda: #000000;
+  --livro-papel: #FFFFFF;
+  --livro-cartao: #FFFFFF;
+  --livro-papel-suave: #EDEDED;
+  --livro-grao: none;
+
+  --rqr-azul-escuro: #000000;
+  --rqr-roxo: #3B1F8F;
+  --rqr-fundo: #FFFFFF;
+  --rqr-fundo-conteudo: #FFFFFF;
+  --rqr-fundo-suave: #EDEDED;
+  --rqr-fundo-destaque: #FFF0C2;
+  --rqr-texto: #000000;
+  --rqr-texto-suave: #000000;
+  --rqr-texto-fraco: #000000;
+  --rqr-borda: #000000;
+  --rqr-sombra-cor: #000000;
+  --rqr-foco: #000000;
+  --rqr-ativo-fundo: #000000;
+  --rqr-ativo-texto: #FFFFFF;
+  --rqr-valor: #3B1F8F;
+  --rqr-verde-agro: #000000; /* barras de progresso: preenchimento preto sobre trilho claro */
+  --rqr-rosa-escuro: #000000;
+  color-scheme: light;
+}
+
+/* ---------- Escuro + alto contraste ---------- */
+:root[data-contraste="alto"][data-tema="escuro"] {
+  --ac-pagina: #000000;
+  --ac-texto: #FFFFFF;
+  --ac-foco: #FFE14D;
+  --ac-folga: #000000;
+  --ac-marcado: #FFE14D;
+  --ac-marcado-texto: #000000;
+
+  --livro-tinta: #000000;         /* texto sobre o amarelo e sobre cartões claros */
+  --livro-tinta-funda: #000000;
+  --livro-papel: #000000;
+  --livro-cartao: #000000;
+  --livro-papel-suave: #1F1F1F;
+  --livro-sol: #FFE14D;
+
+  --noite-azul: #000000;
+  --noite-roxo: #000000;
+  --noite-rosa: #000000;
+  --noite-verde: #000000;
+  --noite-menta: #000000;
+  --noite-creme: #FFFFFF;
+  --noite-funda: #FFFFFF;          /* contorno e degrau dos blocos: branco sobre o preto */
+  --noite-cartao: #000000;
+  --noite-linha: #FFFFFF;
+
+  --rqr-fundo: #000000;
+  --rqr-fundo-conteudo: #000000;
+  --rqr-fundo-suave: #1F1F1F;
+  --rqr-fundo-destaque: #1F1F1F;
+  --rqr-texto: #FFFFFF;
+  --rqr-texto-suave: #FFFFFF;
+  --rqr-texto-fraco: #FFFFFF;
+  --rqr-borda: #FFFFFF;
+  --rqr-sombra-cor: #FFFFFF;
+  --rqr-foco: #FFE14D;
+  --rqr-ativo-fundo: #FFE14D;
+  --rqr-ativo-texto: #000000;
+  --rqr-valor: #FFE14D;
+  --rqr-verde-agro: #FFE14D;
+  --rqr-rosa-escuro: #FFE14D;
+  color-scheme: dark;
+}
+
+/* ---------- Regras gerais ---------- */
+:root[data-contraste="alto"] body { color: var(--ac-texto); background: var(--ac-pagina); }
+:root[data-contraste="alto"] *, :root[data-contraste="alto"] *::before, :root[data-contraste="alto"] *::after { text-shadow: none !important; }
+/* Nenhuma imagem, textura, véu ou gradiente atrás de texto (1.4.8). Ficam só as cenas
+   ilustradas, que não têm texto solto por cima (cada etiqueta ali tem fundo próprio),
+   e as amostras de cor da personalização. */
+:root[data-contraste="alto"] :not(.cena, .personalizar__previa, .especial__previa, .historia-dialogo__palco,
+  .queda, .abertura__cenario, .amostra__cor, .especial__cor, .moeda, svg, svg *),
+:root[data-contraste="alto"] ::before, :root[data-contraste="alto"] ::after { background-image: none !important; }
+/* Brilho de cima do botão Kahoot e ilustração do cartão da história: somem. */
+:root[data-contraste="alto"] .kb::before, :root[data-contraste="alto"] .destaque--historia::after { content: none; }
+
+/* Foco: anel de 4 px na cor de foco, com uma folga da cor da página em volta (2.4.7, 2.4.13).
+   A folga garante o anel visível mesmo sobre a ilustração ou sobre um bloco da mesma cor. */
+:root[data-contraste="alto"] :focus-visible {
+  outline: 4px solid var(--ac-foco) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 10px var(--ac-folga) !important;
+}
+:root[data-contraste="alto"] .ajuste input:focus-visible + .interruptor__trilho,
+:root[data-contraste="alto"] .interruptor input:focus-visible + .interruptor__trilho,
+:root[data-contraste="alto"] .botao-tema:focus-visible .botao-tema__icone {
+  outline: 4px solid var(--ac-foco) !important; outline-offset: 3px !important; box-shadow: 0 0 0 10px var(--ac-folga) !important;
+}
+:root[data-contraste="alto"] .ajuste--link:focus-visible { outline-offset: -6px !important; box-shadow: none !important; }
+
+/* Texto nunca translúcido. */
+:root[data-contraste="alto"] :is(.destaque__rotulo, .historia-cap__estado, .respiro__dica, .respiro__fim small,
+  .crise__fim small, .missao.is-ok .missao__texto small, .missao-bloco.is-ok .missao-bloco__texto, .semana__seta:disabled,
+  .historia-menu__nota, .historia-nota, .respiro__ritmo-dica) { opacity: 1 !important; }
+/* Botão desabilitado continua legível: o tracejado diz que não dá para tocar. */
+:root[data-contraste="alto"] .semana__seta:disabled { border-style: dashed; }
+:root[data-contraste="alto"] .opcao-item.is-bloqueado .opcao-item__previa { opacity: .7; }
+
+/* Linhas tracejadas e bordas suaves viram tinta cheia. */
+:root[data-contraste="alto"] .ajuste + .ajuste { border-top: 2px dashed var(--rqr-borda); }
+:root[data-contraste="alto"] .bairro__vaga { opacity: 1; }
+
+/* Links: sempre sublinhados, mais grossos. */
+:root[data-contraste="alto"] a:not(.kb):not(.ajuda):not(.rqr-botao), :root[data-contraste="alto"] .link {
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
+}
+
+/* ---------- Telas por cima: sem ilustração e sem véu atrás do texto ---------- */
+:root[data-contraste="alto"] .crise,
+:root[data-contraste="alto"][data-tema="escuro"] .respiro {
+  background: #000000; color: #FFFFFF;
+}
+:root[data-contraste="alto"] .crise :is(p, small, .crise__fase) { color: #FFFFFF; }
+:root[data-contraste="alto"] .crise__titulo { color: #FFE14D; }
+:root[data-contraste="alto"] .crise .respiro__selo { background: #FFE14D; color: #000000; border-color: #000000; box-shadow: 0 3px 0 #FFFFFF; }
+:root[data-contraste="alto"] .crise__fechar { border-color: #FFE14D; color: #FFE14D; background: #000000; }
+:root[data-contraste="alto"] .ajuda {
+  background: #000000; color: #FFFFFF; border: 3px solid #FFFFFF; box-shadow: 0 4px 0 #FFFFFF;
+}
+:root[data-contraste="alto"] .ajuda:hover { background: #1F1F1F; }
+:root[data-contraste="alto"] .crise .link { color: #FFFFFF; }
+:root[data-contraste="alto"] .crise :focus-visible { outline-color: #FFE14D !important; box-shadow: 0 0 0 10px #000000 !important; }
+:root[data-contraste="alto"] .crise .rqr-botao { background: #FFE14D; color: #000000; border-color: #FFFFFF; box-shadow: 0 5px 0 #FFFFFF; }
+
+/* Respiração no claro: papel branco, tinta preta (a ilustração da praça sai). */
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .respiro { background: #FFFFFF; color: #000000; }
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .respiro :is(p, small, h2, .respiro__titulo, .respiro__fim-titulo) { color: #000000; }
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .respiro :focus-visible { outline-color: #000000 !important; box-shadow: 0 0 0 10px #FFFFFF !important; }
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .respiro__trilho { stroke: #000000; }
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .respiro__tempo { stroke: #3B1F8F; filter: none; }
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .respiro__som { --kb-fundo: var(--livro-lavanda); color: #000000; }
+:root[data-contraste="alto"] .respiro__halo, :root[data-contraste="alto"] .respiro__poeira { display: none; }
+:root[data-contraste="alto"] .respiro__fim { background: var(--ac-pagina); color: var(--ac-texto); border: 3px solid var(--ac-texto); box-shadow: 0 6px 0 var(--ac-texto); }
+:root[data-contraste="alto"] .respiro__fim :is(p, small, h2) { color: var(--ac-texto); }
+:root[data-contraste="alto"][data-tema="escuro"] .respiro__trilho { stroke: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .respiro__ciclos li { border-color: #FFE14D; }
+:root[data-contraste="alto"][data-tema="escuro"] .respiro__lua { background: #000000; border-color: #FFFFFF; box-shadow: 0 6px 0 #FFFFFF; }
+:root[data-contraste="alto"] .respiro__fase { box-shadow: 0 5px 0 var(--ac-texto); }
+:root[data-contraste="alto"][data-tema="escuro"] .respiro__fase { --respiro-cor: #FFE14D; color: #000000; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .respiro__fase :is(.respiro__nome, .respiro__dica) { color: #000000; }
+:root[data-contraste="alto"] .respiro__seg { background: #FFFFFF; color: #000000; border-color: #000000; }
+:root[data-contraste="alto"] .respiro__ritmo-dica { display: block; margin: 0; font-weight: 700; color: inherit; }
+
+/* Mapa da história, jogos e cartão da história na tela inicial: fundo liso. */
+:root[data-contraste="alto"] :is(.historia, .historia--inicio, .pulo) { background: var(--ac-pagina); }
+:root[data-contraste="alto"] .destaque--historia { background: var(--livro-lavanda); animation: none; }
+:root[data-contraste="alto"][data-tema="escuro"] .destaque--historia { background: #000000; }
+:root[data-contraste="alto"] .celular > .cena::after,
+:root[data-contraste="alto"] .personalizar__previa::after,
+:root[data-contraste="alto"] .historia-dialogo__topo { background: none; }
+:root[data-contraste="alto"] .personalizar__marco { background: #FFFFFF; color: #000000; border-color: #000000; }
+:root[data-contraste="alto"] .pulo__nota { color: #FFFFFF; background: #000000; }
+:root[data-contraste="alto"]:not([data-tema="escuro"]) .pulo__nota { color: #000000; background: #FFFFFF; }
+:root[data-contraste="alto"] .pulo__recorde { color: var(--ac-texto); }
+
+/* ---------- Estados: marcado sempre com cor E forma ---------- */
+/* Interruptor: trilho e bolinha trocam de cor e de lugar (1.4.1, 1.4.11). */
+:root[data-contraste="alto"] .interruptor__trilho { background: var(--ac-pagina); border: 3px solid var(--ac-texto); }
+:root[data-contraste="alto"] .interruptor__trilho::after { background: var(--ac-texto); }
+:root[data-contraste="alto"] :is(.ajuste, .interruptor) input:checked + .interruptor__trilho { background: var(--ac-marcado); border-color: var(--ac-texto); }
+:root[data-contraste="alto"] :is(.ajuste, .interruptor) input:checked + .interruptor__trilho::after { background: var(--ac-marcado-texto); }
+
+/* Aba ativa do menu: bloco cheio + borda, além do aria-current. */
+:root[data-contraste="alto"] .tabbar__item, :root[data-contraste="alto"] .tabbar__sos { color: var(--ac-texto); }
+:root[data-contraste="alto"] .tabbar__item.is-active { background: var(--ac-marcado); color: var(--ac-marcado-texto); border: 3px solid var(--ac-texto); }
+:root[data-contraste="alto"] .tabbar { border-top: 3px solid var(--ac-texto); background: var(--ac-pagina); }
+
+/* Missão feita na grade da tela inicial: tracejado + riscado, sem transparência. */
+:root[data-contraste="alto"] .missao-bloco__tempo, :root[data-contraste="alto"] .missao-mini__tempo { background: #FFFFFF; color: #000000; border: 1.5px solid #000000; }
+:root[data-contraste="alto"] .missao-mini.is-ok .missao-mini__tempo { background: #FFFFFF; }
+
+/* ---------- Escuro + alto contraste: ajustes finos ---------- */
+:root[data-contraste="alto"][data-tema="escuro"] body { color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .kb { --kb-tinta: #FFFFFF; color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .kb--amarelo { --kb-fundo: #FFE14D; color: #000000; }
+:root[data-contraste="alto"][data-tema="escuro"] .kb--escuro { --kb-fundo: #000000; color: #FFE14D; }
+:root[data-contraste="alto"][data-tema="escuro"] .rqr-botao { background: #FFE14D; color: #000000; border-color: #FFFFFF; box-shadow: 0 5px 0 #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .atalho__icone { background: #000000; color: #FFFFFF; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .kb--amarelo .atalho__icone { background: #FFFFFF; color: #000000; border-color: #000000; }
+:root[data-contraste="alto"][data-tema="escuro"] :is(.missao.is-ok, .missao-mini.is-ok) { background: #FFE14D; color: #000000; }
+:root[data-contraste="alto"][data-tema="escuro"] :is(.missao.is-ok, .missao-mini.is-ok) :is(.missao__valor, .missao__texto small) { color: #000000; background: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .missao-bloco.is-ok { background: #000000; color: #FFFFFF; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .missao-bloco__tempo { background: #000000; color: #FFFFFF; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .missao-bloco--0 .missao-bloco__tempo { background: #FFFFFF; color: #000000; border-color: #000000; }
+:root[data-contraste="alto"][data-tema="escuro"] .missao-bloco__icone { background: #FFFFFF; color: #000000; }
+:root[data-contraste="alto"][data-tema="escuro"] .missao-mini__tempo, :root[data-contraste="alto"][data-tema="escuro"] .missao__valor { background: #000000; color: #FFFFFF; border: 1.5px solid #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .tabbar__item.is-active { background: #FFE14D; color: #000000; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .tabbar__sos-circulo { background: #FFE14D; color: #000000; border-color: #FFFFFF; box-shadow: 0 4px 0 #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .tabbar__historia.is-novo .tabbar__sos-circulo::after { background: #000000; color: #FFE14D; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] :is(.destaque__novo, .opcao-item__marco) { background: #FFE14D; color: #000000; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .historia-caixa .historia-nota,
+:root[data-contraste="alto"][data-tema="escuro"] .historia-menu__nota { color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] :is(.historia-balao__texto, .historia-caixa__seguir) { color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .historia-dialogo .historia-opcao[aria-pressed="true"] { background: #1F1F1F; color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .historia-cap:disabled { background: #1F1F1F; color: #FFFFFF; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .controle-volume__linha input[type="range"]::-webkit-slider-thumb { background: #FFE14D; border-color: #FFFFFF; }
+:root[data-contraste="alto"][data-tema="escuro"] .controle-volume__linha input[type="range"]::-moz-range-thumb { background: #FFE14D; border-color: #FFFFFF; }
+:root[data-contraste="alto"] .controle-volume__linha input[type="range"]::-webkit-slider-thumb { background: var(--ac-marcado); border-color: var(--ac-texto); }
+:root[data-contraste="alto"] .controle-volume__linha input[type="range"]::-moz-range-thumb { background: var(--ac-marcado); border-color: var(--ac-texto); }
+:root[data-contraste="alto"] .hud-musica { background: var(--ac-pagina); color: var(--ac-texto); border: 2px solid var(--ac-texto); }
+:root[data-contraste="alto"] .hud-musica__artista { color: var(--ac-texto); }
+
+/* =====================================================================
+   Cores forçadas (alto contraste do Windows, modo de contraste do navegador).
+   O sistema troca as cores sozinho; fundo some, então a borda segura cada controle.
+   Ilustrações e amostras de cor ficam com as cores próprias (forced-color-adjust: none).
+   ===================================================================== */
+@media (forced-colors: active) {
+  .kb, .rqr-botao, .chip, .missao, .missao-bloco, .missao-mini, .destaque, .ajuda, .ajuda-agora,
+  .historia-opcao, .historia-cap, .historia-menu__item, .historia-menu__icone, .historia-topo__botao,
+  .opcao-item, .amostra, .semana__seta, .botao-topo__icone, .botao-tema__icone, .tabbar__item,
+  .tabbar__sos-circulo, .controle-volume__passo, .especial__aba, .personalizar__aba, .personalizar__original,
+  .crise__fechar, .queda__pular, .respiro__fase, .respiro__seg, .rqr-card, .semana-home, .ajustes, .proxima {
+    border: 2px solid ButtonText;
+  }
+  :focus-visible { outline: 3px solid Highlight !important; outline-offset: 3px; }
+  [aria-pressed="true"], [aria-current="page"], .is-on, .is-active,
+  .opcao-item:has(input:checked), .amostra:has(input:checked) {
+    outline: 3px solid Highlight; outline-offset: -6px;
+  }
+  .interruptor__trilho { border: 2px solid ButtonText; background: Canvas; forced-color-adjust: none; }
+  .interruptor__trilho::after { background: ButtonText; forced-color-adjust: none; }
+  input:checked + .interruptor__trilho { background: Highlight; }
+  input:checked + .interruptor__trilho::after { background: HighlightText; }
+  .progresso, .contagem__barra { border: 1px solid CanvasText; }
+  .progresso span, .contagem__barra span { background: Highlight; forced-color-adjust: none; }
+  .bicho svg, .bairro, svg.cena, .amostra__cor, .especial__cor, .presente__vitrine, .opcao-item__previa,
+  .confete, .respiro__anel { forced-color-adjust: none; }
+  .icone, .tabbar__item svg, .atalho__icone svg { forced-color-adjust: auto; }
+}

@@ -11,6 +11,7 @@ import { usePerfil } from "./armazenamento-perfil";
 import { nomeDoBroto } from "./perfil";
 import { BotaoTema } from "../BotaoTema";
 import { tocar } from "../sons";
+import { vibrar } from "../tato";
 
 
 type Props = { aoVoltar: () => void };
@@ -147,7 +148,8 @@ function Itens({ titulo, nome, base, opcoes, valor, progresso, aoMudar }: ItensP
           const livre = liberado(item, progresso);
           const idDica = `dica-${nome}-${item.id}`;
           return (
-            <label key={item.id} className={`opcao-item ${livre ? "" : "is-bloqueado"}`}>
+            <label key={item.id} className={`opcao-item ${livre ? "" : "is-bloqueado"}`}
+              onClick={livre ? undefined : () => vibrar("aviso")}>
               <input type="radio" name={nome} value={item.id} checked={valor === item.id && livre}
                 disabled={!livre} aria-describedby={livre ? undefined : idDica} onChange={() => { tocar("clique"); aoMudar(item.id); }} />
               <span className="opcao-item__previa" aria-hidden="true">

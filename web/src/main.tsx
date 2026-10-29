@@ -7,6 +7,7 @@ import { carregarVLibras } from "./vlibras";
 import "@fontsource-variable/fredoka";
 import "@fontsource-variable/nunito";
 import "./tema-livro.css";
+import "./alto-contraste.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
