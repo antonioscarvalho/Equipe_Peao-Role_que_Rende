@@ -3,16 +3,17 @@ import { BotaoLibras } from "../BotaoLibras";
 import { Bichinho } from "../Bichinho";
 import {
   APARENCIA_PADRAO, CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS,
-  aparenciaVisivel, diasQueFaltam, liberado, proximoMarco,
-  type Aparencia, type OpcaoCor, type OpcaoItem,
+  aparenciaVisivel, liberado, metaCurta, proximoMarco, textoMeta,
+  type Aparencia, type OpcaoCor, type OpcaoItem, type Progresso,
 } from "./aparencia";
-import { DIAS_SEM_APOSTAR_DEMO, useAparencia } from "./armazenamento";
+import { useAparencia, useProgresso } from "./armazenamento";
+import { usePerfil } from "./armazenamento-perfil";
+import { nomeDoBroto } from "./perfil";
 import { BotaoTema } from "../BotaoTema";
 import { tocar } from "../sons";
 
-const plural = (n: number) => (n === 1 ? "1 dia" : `${n} dias`);
 
-type Props = { aoVoltar: () => void; dias?: number };
+type Props = { aoVoltar: () => void };
 
 /**
  * Tela de personalização do bichinho (spec 009). Tudo é livre, menos os 3 itens de marco
@@ -27,13 +28,15 @@ const ABAS: { id: Aba; rotulo: string }[] = [
   { id: "peito", rotulo: "Peito" },
 ];
 
-export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) {
+export function Personalizar({ aoVoltar }: Props) {
   const { aparencia, mudar } = useAparencia();
   const [aba, setAba] = useState<Aba>("corpo");
   const titulo = useRef<HTMLHeadingElement>(null);
   const abasRef = useRef<(HTMLButtonElement | null)[]>([]);
-  const visivel = aparenciaVisivel(aparencia, dias);
-  const proximo = proximoMarco(dias);
+  const progresso = useProgresso();
+  const { perfil } = usePerfil();
+  const visivel = aparenciaVisivel(aparencia, progresso);
+  const proximo = proximoMarco(progresso);
   // O app guarda a preferência na classe do <html>; respeitamos sem depender do estado dele.
   const reduzir = document.documentElement.classList.contains("reduzir-animacoes")
     || window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -63,7 +66,7 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
           </span>
         </div>
         <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo personalizar__titulo">
-          Deixe o bichinho com a sua cara
+          Deixe o {nomeDoBroto(perfil)} com a sua cara
         </h1>
 
         <div className="personalizar__previa">
@@ -73,7 +76,7 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
           </button>
           {proximo && (
             <p className="personalizar__marco" role="status">
-              Próximo marco: <strong>{proximo.item.nome}</strong> em {plural(proximo.faltam)}
+              Próximo: <strong>{proximo.item.nome}</strong> · {proximo.texto}
             </p>
           )}
         </div>
@@ -97,16 +100,16 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
           )}
           {aba === "roupa" && (
             <>
-              <Itens titulo="Roupa" nome="roupa" base={visivel} opcoes={ROUPAS} valor={aparencia.roupa} dias={dias} aoMudar={(roupa) => mudar({ roupa })} />
+              <Itens titulo="Roupa" nome="roupa" base={visivel} opcoes={ROUPAS} valor={aparencia.roupa} progresso={progresso} aoMudar={(roupa) => mudar({ roupa })} />
               <fieldset className="personalizar__grupo">
                 <legend>Cor da roupa e dos acessórios</legend>
                 <Cores nome="corRoupa" opcoes={CORES_ROUPA} valor={aparencia.corRoupa} aoMudar={(corRoupa) => mudar({ corRoupa })} />
               </fieldset>
             </>
           )}
-          {aba === "cabeca" && <Itens titulo="Cabeça" nome="cabeca" base={visivel} opcoes={CABECA} valor={aparencia.cabeca} dias={dias} aoMudar={(cabeca) => mudar({ cabeca })} />}
-          {aba === "rosto" && <Itens titulo="Rosto" nome="rosto" base={visivel} opcoes={ROSTO} valor={aparencia.rosto} dias={dias} aoMudar={(rosto) => mudar({ rosto })} />}
-          {aba === "peito" && <Itens titulo="Peito" nome="peito" base={visivel} opcoes={PEITO} valor={aparencia.peito} dias={dias} aoMudar={(peito) => mudar({ peito })} />}
+          {aba === "cabeca" && <Itens titulo="Cabeça" nome="cabeca" base={visivel} opcoes={CABECA} valor={aparencia.cabeca} progresso={progresso} aoMudar={(cabeca) => mudar({ cabeca })} />}
+          {aba === "rosto" && <Itens titulo="Rosto" nome="rosto" base={visivel} opcoes={ROSTO} valor={aparencia.rosto} progresso={progresso} aoMudar={(rosto) => mudar({ rosto })} />}
+          {aba === "peito" && <Itens titulo="Peito" nome="peito" base={visivel} opcoes={PEITO} valor={aparencia.peito} progresso={progresso} aoMudar={(peito) => mudar({ peito })} />}
         </div>
 
       </main>
@@ -131,17 +134,17 @@ function Cores({ nome, opcoes, valor, aoMudar }: CoresProps) {
 }
 
 type ItensProps = {
-  titulo: string; nome: keyof Aparencia; base: Aparencia; opcoes: OpcaoItem[]; valor: string; dias: number; aoMudar: (id: string) => void;
+  titulo: string; nome: keyof Aparencia; base: Aparencia; opcoes: OpcaoItem[]; valor: string; progresso: Progresso; aoMudar: (id: string) => void;
 };
 
 /** Cada opção é um cartão com o bichinho já usando o item, para escolher olhando, não lendo. */
-function Itens({ titulo, nome, base, opcoes, valor, dias, aoMudar }: ItensProps) {
+function Itens({ titulo, nome, base, opcoes, valor, progresso, aoMudar }: ItensProps) {
   return (
     <fieldset className="personalizar__grupo">
       <legend>{titulo}</legend>
       <div className="personalizar__opcoes">
         {opcoes.map((item) => {
-          const livre = liberado(item, dias);
+          const livre = liberado(item, progresso);
           const idDica = `dica-${nome}-${item.id}`;
           return (
             <label key={item.id} className={`opcao-item ${livre ? "" : "is-bloqueado"}`}>
@@ -151,10 +154,11 @@ function Itens({ titulo, nome, base, opcoes, valor, dias, aoMudar }: ItensProps)
                 <Bichinho humor="calmo" nivel={3} tamanho={56} reduzir aparencia={{ ...base, [nome]: item.id }} />
               </span>
               <span className="opcao-item__nome">{item.nome}</span>
-              {!livre && <span className="opcao-item__marco" aria-hidden="true">{plural(item.marco ?? 0)}</span>}
+              {item.tema && <span className="opcao-item__tema" aria-hidden="true">{item.tema}</span>}
+              {!livre && item.meta && <span className="opcao-item__marco" aria-hidden="true">{metaCurta(item.meta)}</span>}
               {!livre && (
                 <span id={idDica} className="sr-only">
-                  Com {plural(item.marco ?? 0)} · faltam {plural(diasQueFaltam(item, dias))}
+                  {textoMeta(item, progresso)}
                 </span>
               )}
             </label>

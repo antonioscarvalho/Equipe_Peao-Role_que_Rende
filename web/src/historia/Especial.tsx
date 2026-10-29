@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { tocar } from "../sons";
 import { usePerfil, NOME_MAX } from "../personalizacao";
-import { useAparencia, DIAS_SEM_APOSTAR_DEMO } from "../personalizacao/armazenamento";
-import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
+import { useAparencia, useProgresso } from "../personalizacao/armazenamento";
+import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, metaCurta, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
 import { Bichinho } from "../Bichinho";
 import { MOTIVOS, METAS, guardarConhecer, type Conhecer } from "./conhecer";
 import type { Passo } from "./tipos";
@@ -33,12 +33,13 @@ const ITENS: Record<string, OpcaoItem[]> = { roupa: ROUPAS, cabeca: CABECA, rost
  */
 function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
   const { aparencia, mudar } = useAparencia();
+  const progresso = useProgresso();
   const [aba, setAba] = useState("cor");
   const itens = ITENS[aba];
   return (
     <div className="especial especial--aparencia">
       <div className="especial__previa" aria-hidden="true">
-        <Bichinho humor="feliz" nivel={2} tamanho={92} reduzir aparencia={aparenciaVisivel(aparencia, DIAS_SEM_APOSTAR_DEMO)} />
+        <Bichinho humor="feliz" nivel={2} tamanho={92} reduzir aparencia={aparenciaVisivel(aparencia, progresso)} />
       </div>
       <div className="especial__abas" role="group" aria-label="O que mudar">
         {ABAS.map((a) => (
@@ -56,12 +57,12 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
       {itens && (
         <div className="especial__chips" role="group" aria-label={ABAS.find((a) => a.id === aba)!.rotulo}>
           {itens.map((it) => {
-            const livre = liberado(it, DIAS_SEM_APOSTAR_DEMO);
+            const livre = liberado(it, progresso);
             const on = aparencia[aba as keyof Aparencia] === it.id;
             return (
               <button key={it.id} className={`chip ${on ? "is-on" : ""}`} aria-pressed={on} disabled={!livre}
                 onClick={() => { tocar("clique"); mudar({ [aba]: it.id } as Partial<Aparencia>); }}>
-                {it.nome}{!livre && ` · ${it.marco} dias`}
+                {it.nome}{!livre && it.meta && ` · ${metaCurta(it.meta)}`}
               </button>
             );
           })}
@@ -118,6 +119,8 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
       <form className="especial" onSubmit={(e) => { e.preventDefault(); enviar(); }}>
         <label htmlFor="especial-nome" className="especial__rotulo">Como {conversa.broto ?? "o alien"} te chama (opcional)</label>
         <input id="especial-nome" className="especial__campo" value={texto} maxLength={NOME_MAX + 5} autoComplete="nickname"
+          enterKeyHint="done" autoCapitalize="words" spellCheck={false}
+          onFocus={(e) => window.setTimeout(() => e.target.scrollIntoView({ block: "center" }), 300)}
           onChange={(e) => { setTexto(e.target.value); setErro(null); }} aria-describedby={erro ? "especial-nome-erro" : undefined} />
         {erro && <p id="especial-nome-erro" className="especial__erro" role="alert">{erro}</p>}
         <button className="rqr-botao" type="submit">Pronto</button>

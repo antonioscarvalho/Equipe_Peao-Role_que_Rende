@@ -75,12 +75,12 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   useEffect(() => {
     let cancelado = false;
     const id = window.setTimeout(() => {
-      if (!cancelado) tocarTrilha("/sons/trilha-carrinho.opus", { titulo: "Rolê de Carrinho", artista: "Trilha do jogo" });
+      if (!cancelado) tocarTrilha("/sons/trilha-carrinho.opus", { titulo: "Carrinho no Morro", artista: "Trilha do jogo" });
     }, 0);
     return () => {
       cancelado = true;
       window.clearTimeout(id);
-      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Um Passo de Cada Vez", artista: "Tema do app" });
     };
   }, []);
 
@@ -299,7 +299,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
       if (g.tempo >= DURACAO_PARTIDA_MS) {
         const final = g.maisLonge;
         setRecorde((r) => { const novo = Math.max(r, final); localStorage.setItem(CHAVE_RECORDE, String(novo)); return novo; });
-        setAviso(`3 minutos de rolê! Você andou ${final} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
+        setAviso(`3 minutos de passeio! Você andou ${final} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
         setEstado("tempo");
         return;
       }
@@ -327,7 +327,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   return (
     <div className="pulo carrinho" role="dialog" aria-modal="true" aria-labelledby="carrinho-titulo">
       <div className="pulo__topo">
-        <h2 id="carrinho-titulo" className="pulo__titulo">Rolê de Carrinho</h2>
+        <h2 id="carrinho-titulo" className="pulo__titulo">Carrinho no Morro</h2>
         <span className="pulo__placar" aria-label={`${metros} metros, ${folhas} folhas`}>
           <b>{metros} m</b> · 🍃 {folhas}
         </span>
@@ -364,7 +364,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         {estado === "inicio" && (
           <div className="pulo__painel rqr-escalonado">
             <Bichinho humor="feliz" nivel={1} tamanho={110} reduzir={reduzir} aparencia={aparencia} />
-            <p className="pulo__chamada">Bora dar um rolê pelos morros do bairro!</p>
+            <p className="pulo__chamada">Bora passear pelos morros do bairro?</p>
             <ul className="pulo__dicas">
               <li><b>Celular:</b> segure os pedais Acelerar e Freio</li>
               <li><b>Computador:</b> → acelera, ← freia (ou A / D)</li>
@@ -380,20 +380,20 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         {estado === "virou" && (
           <div className="pulo__painel rqr-pop">
             <p className="pulo__chamada">Virou na grama macia, tudo bem!</p>
-            <p className="pulo__resultado"><b>{metros} m</b> de rolê · 🍃 {folhas} folhas</p>
-            {novoRecorde ? <p className="pulo__recorde">Seu rolê mais longo até agora!</p> : <small>Seu recorde: {recorde} m</small>}
+            <p className="pulo__resultado"><b>{metros} m</b> de passeio · 🍃 {folhas} folhas</p>
+            {novoRecorde ? <p className="pulo__recorde">Seu passeio mais longo até agora!</p> : <small>Seu recorde: {recorde} m</small>}
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Dirigir de novo</button>
-            <button className="link" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar pro meu rolê</button>
+            <button className="link" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar pro início</button>
           </div>
         )}
 
         {estado === "tempo" && (
           <div className="pulo__painel rqr-pop">
             <Bichinho humor="feliz" nivel={Math.min(3, Math.floor(folhas / 3))} tamanho={90} reduzir={reduzir} aparencia={aparencia} />
-            <p className="pulo__chamada">3 minutos de rolê!</p>
-            <p className="pulo__resultado"><b>{metros} m</b> de rolê · 🍃 {folhas} folhas</p>
+            <p className="pulo__chamada">3 minutos de passeio!</p>
+            <p className="pulo__resultado"><b>{metros} m</b> de passeio · 🍃 {folhas} folhas</p>
             <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai estacionar.</p>
-            <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar pro meu rolê</button>
+            <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar pro início</button>
             <button className="link" onClick={() => { tocar("clique"); iniciar(); }}>Dirigir mais uma</button>
           </div>
         )}
@@ -410,7 +410,7 @@ export function BotaoCarrinho({ reduzir }: { reduzir: boolean }) {
     <>
       <button className="kb kb--verde jogo" onClick={() => { tocar("clique"); setAberto(true); }}>
         <span className="atalho__icone"><Icone nome="gamepad" tamanho={28} /></span>
-        <span className="jogo__texto">Rolê de Carrinho<small>Suba os morros e pegue folhas</small></span>
+        <span className="jogo__texto">Carrinho no Morro<small>Suba os morros e pegue folhas</small></span>
       </button>
       {/* Portal: o cartão da tela inicial tem transform, que prenderia o position: fixed dentro dele. */}
       {aberto && createPortal(<RoleDeCarrinho aoFechar={() => setAberto(false)} reduzir={reduzir} />, document.body)}

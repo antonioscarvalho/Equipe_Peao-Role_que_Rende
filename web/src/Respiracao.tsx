@@ -42,7 +42,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
     return () => {
       cancelado = true;
       window.clearTimeout(id);
-      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Um Passo de Cada Vez", artista: "Tema do app" });
     };
   }, [comSom]);
 
@@ -139,7 +139,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
               <Icone nome="sprout" /> Pulo do Bichinho: 3 minutos pra onda passar
             </button>
           )}
-          <button className="kb kb--amarelo respiro__acao" onClick={aoFechar}>Voltar pro meu rolê</button>
+          <button className="kb kb--amarelo respiro__acao" onClick={aoFechar}>Voltar pro início</button>
           <small>Este app é um apoio complementar e não substitui atendimento profissional.</small>
         </div>
       )}
