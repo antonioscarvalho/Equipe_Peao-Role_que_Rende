@@ -21,7 +21,7 @@ export function ModalAcessibilidade({ children, aoTerminar }: { children: ReactN
           {/* Símbolo de acessibilidade (ONU), sem fundo. O VLibras aparece logo abaixo, no botão de Libras. */}
           <img className="modal-acess__simbolo" src="/marca/acessibilidade-onu.svg" alt="" width={64} height={64} />
         </div>
-        <h2 id="modal-acess-titulo" ref={titulo} tabIndex={-1} className="modal-acess__titulo">Deixe o app do seu jeito</h2>
+        <h2 id="modal-acess-titulo" ref={titulo} tabIndex={-1} className="modal-acess__titulo">Acessibilidade</h2>
         <p id="modal-acess-texto" className="modal-acess__texto">
           Antes de começar, ajuste o que ajudar você a ler e ouvir melhor. Dá para mudar depois em Ajustes.
         </p>
