@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bichinho } from "./Bichinho";
-import { tocar } from "./sons";
-import { useAparenciaVisivel } from "./personalizacao";
-import { BotaoTema } from "./BotaoTema";
-import { useEsconderVLibras } from "./vlibras";
-import { DURACAO_PARTIDA_MS, FOLHA_A_CADA_PLATAFORMAS, quadroMs } from "./partida";
+import { Bichinho } from "../../Bichinho";
+import { tocar } from "../../sons";
+import { useAparenciaVisivel } from "../../personalizacao";
+import { BotaoTema } from "../../BotaoTema";
+import { useEsconderVLibras } from "../../vlibras";
+import type { PropsJogo } from "../../historia/tipos";
+import { DURACAO_PARTIDA_MS, FOLHA_A_CADA_PLATAFORMAS, quadroMs } from "../../partida";
 
 /**
  * "Pulo do Bichinho": mini jogo de pulo infinito (estilo Sky Jump).
@@ -31,8 +32,14 @@ type Estado = "inicio" | "jogando" | "caiu" | "tempo";
 
 function aleatorio(a: number, b: number) { return a + Math.random() * (b - a); }
 
-/** `chamada` troca o convite do início (o "Deu vontade" abre o jogo com "3 minutos para a onda passar"). */
-export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () => void; reduzir: boolean; chamada?: string }) {
+/**
+ * Segue o contrato `PropsJogo` da história. `aoTerminar` é opcional para manter os usos antigos
+ * (início e "Deu vontade"): sem ele, "Voltar pro meu rolê" só fecha.
+ * `chamada` troca o convite do início (o "Deu vontade" abre o jogo com "3 minutos para a onda passar").
+ */
+type Props = Omit<PropsJogo, "aoTerminar"> & Partial<Pick<PropsJogo, "aoTerminar">> & { chamada?: string };
+
+export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props) {
   const aparencia = useAparenciaVisivel();
   const caixaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -46,6 +53,10 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
   const [sensor, setSensor] = useState<"desconhecido" | "ok" | "sem">("desconhecido");
   const [graus, setGraus] = useState<number | null>(null);
   const [aviso, setAviso] = useState("");
+  // Na história, fechar também segue para a conversa levando as folhas pegas (não existe derrota).
+  const fechar = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
+  const fecharRef = useRef(fechar);
+  fecharRef.current = fechar;
 
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({
@@ -119,7 +130,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
       const t = jogo.current.teclas;
       if (["ArrowLeft", "a", "A"].includes(e.key)) t.e = v;
       if (["ArrowRight", "d", "D"].includes(e.key)) t.d = v;
-      if (e.key === "Escape" && v) aoFechar();
+      if (e.key === "Escape" && v) fecharRef.current();
     };
     const desce = (e: KeyboardEvent) => tecla(e, true);
     const sobe = (e: KeyboardEvent) => tecla(e, false);
@@ -131,7 +142,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
       window.removeEventListener("keydown", desce);
       window.removeEventListener("keyup", sobe);
     };
-  }, [aoFechar]);
+  }, []);
 
   // Laço principal do jogo.
   useEffect(() => {
@@ -316,6 +327,10 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
   };
   const soltar = () => { jogo.current.toque = 0; };
 
+  // Saída gentil depois da partida: na história, segue para a conversa com as folhas pegas.
+  const sair = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
+  const rotuloSair = aoTerminar ? "Conversar com o Broto" : "Voltar pro meu rolê";
+
   const novoRecorde = estado === "caiu" && pontos > 0 && pontos >= recorde;
 
   return (
@@ -326,7 +341,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
+        <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"
@@ -358,7 +373,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
             <p className="pulo__resultado"><b>{pontos} m</b> de altura · 🍃 {folhas} folhas</p>
             {novoRecorde ? <p className="pulo__recorde">Seu melhor pulo até agora!</p> : <small>Seu recorde: {recorde} m</small>}
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Pular de novo</button>
-            <button className="link" onClick={aoFechar}>Voltar pro meu rolê</button>
+            <button className="link" onClick={sair}>{rotuloSair}</button>
           </div>
         )}
 
@@ -368,7 +383,7 @@ export function PuloDoBichinho({ aoFechar, reduzir, chamada }: { aoFechar: () =>
             <p className="pulo__chamada">3 minutos de rolê!</p>
             <p className="pulo__resultado"><b>{pontos} m</b> de altura · 🍃 {folhas} folhas</p>
             <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai descansar.</p>
-            <button className="rqr-botao" onClick={aoFechar}>Voltar pro meu rolê</button>
+            <button className="rqr-botao" onClick={sair}>{rotuloSair}</button>
             <button className="link" onClick={() => { tocar("clique"); iniciar(); }}>Jogar mais uma</button>
           </div>
         )}

@@ -41,6 +41,8 @@ Copiadas sem alterações; cada pasta tem `LICENSE` e `ORIGEM.md` com o commit d
 | `startup-validator` | https://github.com/ailabs-393/ai-labs-claude-skills | MIT | Manter aviso de copyright |
 | `market-research` | https://github.com/affaan-m/everything-claude-code | MIT | Manter aviso de copyright |
 | `product-thinking`, `teach-acumen`, `diagnose`, `workshop`, `increment`, `critique-product` | https://github.com/VGrss/Acumen | Apache-2.0 | Manter `LICENSE` |
+| `motion-design` | https://github.com/LottieFiles/motion-design-skill | MIT | Manter aviso de copyright |
+| `interactive-fiction`, `story-init`, `character-management`, `worldbuilding`, `plot-structure`, `scene-craft`, `revision-continuity`, `voice-style`, `theme-craft`, `story-maintenance` (com a CLI `story.js`) | https://github.com/danjdewhurst/story-skills (commit e44c97c) | MIT | Manter aviso de copyright |
 
 Avaliadas e **não instaladas** por não terem licença declarada: `brainstorm` (happycatlabs/bradley-skills) e `idea` (jorgenschaefer/skills).
 

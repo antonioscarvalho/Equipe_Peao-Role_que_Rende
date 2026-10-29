@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exemplo — estilo Rolê que Rende</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 400 var(--rqr-fs-body)/var(--rqr-lh-corpo) var(--rqr-font-texto); color: var(--rqr-texto); background: var(--rqr-fundo); }
+  .container { max-width: var(--rqr-container); margin: 0 auto; padding: 0 16px; }
+  h1, h2, h3 { font-family: var(--rqr-font-titulo); line-height: var(--rqr-lh-titulo); margin: 0 0 var(--rqr-esp-2); }
+  .hero { position: relative; overflow: hidden; padding: var(--rqr-esp-5) 0 80px; }
+  .hero h1 { font-size: var(--rqr-fs-display); line-height: var(--rqr-lh-display); font-weight: 600; }
+  .hero h1 .l2 { padding-left: 1.2em; display: block; } .hero h1 .l3 { padding-left: .4em; display: block; }
+  .logo-placeholder { display: inline-block; border: 3px dashed var(--rqr-azul-escuro); border-radius: 16px; padding: 12px 20px; font-weight: 700; margin-bottom: var(--rqr-esp-3); }
+  .tag { font: italic 600 16px var(--rqr-font-titulo); display: block; margin-top: 4px; text-align: center; }
+  .grafismo { position: absolute; pointer-events: none; }
+  section.escuro { background: var(--rqr-fundo-escuro); color: var(--rqr-texto-inverso); padding: var(--rqr-esp-5) 0; }
+  section.escuro h2 { color: var(--rqr-titulo-escuro); font-size: var(--rqr-fs-h2); }
+  section.branco { background: var(--rqr-branco); padding: var(--rqr-esp-5) 0; }
+  section.branco h2 { color: var(--rqr-titulo-claro); font-size: var(--rqr-fs-h2); }
+  section.roxo { background: var(--rqr-roxo); color: #fff; padding: var(--rqr-esp-5) 0; }
+  section.roxo h2 { color: var(--rqr-amarelo); font-size: var(--rqr-fs-h2); }
+  .grid { display: grid; gap: var(--rqr-gap); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card h3 { color: var(--rqr-azul); font-size: var(--rqr-fs-h3); }
+  .swatches { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .sw { border-radius: 16px; padding: 60px 12px 12px; font: 600 14px/1.3 var(--rqr-font-texto); border: 2px solid rgb(0 0 0 / .08); }
+  .icones { display: flex; gap: 20px; flex-wrap: wrap; }
+  .rqr-icone-circulo svg { width: 34px; height: 34px; }
+  .moeda { width: 72px; height: 72px; border-radius: 50%; display: inline-grid; place-items: center; cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, var(--rqr-ouro-luz), var(--rqr-ouro) 60%, var(--rqr-ouro-sombra)); color: var(--rqr-ouro-sombra); font: 800 28px var(--rqr-font-titulo); border: 3px solid var(--rqr-ouro-sombra); }
+  .demo-row { display: flex; gap: 24px; flex-wrap: wrap; align-items: center; margin-top: var(--rqr-esp-3); }
+  .status-on { width: 18px; height: 18px; border-radius: 50%; background: var(--rqr-azul-claro); }
+  @media (max-width: 767px) { .hero { padding-top: var(--rqr-esp-3); } }
+</style>
+</head>
+<body>
+
+<!-- Filtro de "pincel seco" reutilizável -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="pincel">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" result="ruido"/>
+    <feDisplacementMap in="SourceGraphic" in2="ruido" scale="6"/>
+  </filter>
+</svg>
+
+<header class="hero">
+  <svg class="grafismo rqr-anim-flutuar" style="top:20px;right:6%;--rqr-rot:-10deg" width="160" height="140" viewBox="0 0 160 140" aria-hidden="true">
+    <path class="rqr-anim-pincelada" style="--rqr-traco:320" d="M10 30 C 90 -10, 160 40, 110 90 S 40 100, 60 70" fill="none" stroke="#465EFF" stroke-width="16" stroke-linecap="round" filter="url(#pincel)"/>
+    <path d="M45 58 L60 72 L40 82" fill="none" stroke="#465EFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" filter="url(#pincel)"/>
+  </svg>
+  <svg class="grafismo rqr-anim-flutuar" style="bottom:20px;left:4%;--rqr-rot:8deg" width="120" height="60" viewBox="0 0 120 60" aria-hidden="true">
+    <path d="M10 15 Q 60 70 110 15" fill="none" stroke="#FF6E91" stroke-width="18" stroke-linecap="round" filter="url(#pincel)"/>
+  </svg>
+  <svg class="grafismo rqr-anim-flutuar" style="top:50%;right:20%" width="60" height="60" viewBox="0 0 60 60" aria-hidden="true">
+    <circle cx="30" cy="30" r="18" fill="none" stroke="#54DCFC" stroke-width="12" filter="url(#pincel)"/>
+  </svg>
+
+  <div class="container">
+    <div class="logo-placeholder">[ logo Rolê que Rende — usar arquivo oficial, se autorizado ]
+      <span class="tag">#TodoRolêImporta</span></div>
+    <h1>O feed
+      <span class="l2">tá <span class="rqr-destaque">on</span>,</span>
+      <span class="l3">só falta <span class="rqr-destaque rqr-realce rqr-anim-marca-texto" style="background-color:transparent">você!</span></span></h1>
+    <p style="font-size:var(--rqr-fs-lead);max-width:36ch">Falar de grana pode ser leve, sim. Nada de aula chata: é jogo, escolha e consequência.</p>
+    <div class="demo-row">
+      <button class="rqr-botao">Jogar</button>
+      <button class="rqr-botao rqr-botao--escuro">Saiba mais</button>
+    </div>
+  </div>
+</header>
+
+<section class="escuro">
+  <div class="container">
+    <h2>Como o Rolê acontece:</h2>
+    <div class="grid rqr-escalonado">
+      <div class="rqr-card"><h3>Jogos educativos</h3><p>É jogo, escolha e consequência.</p></div>
+      <div class="rqr-card"><h3>Quiz e desafio</h3><p>Seu money mindset tá como?</p></div>
+      <div class="rqr-card"><h3>Rodas de conversa</h3><p>Papo reto, sem “financês”.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="branco">
+  <div class="container">
+    <h2>Paleta oficial</h2>
+    <div class="swatches">
+      <div class="sw" style="background:#FCFC30;color:#3333BD">Amarelo<br>#FCFC30</div>
+      <div class="sw" style="background:#3333BD;color:#fff">Azul-escuro<br>#3333BD</div>
+      <div class="sw" style="background:#465EFF;color:#fff">Azul<br>#465EFF</div>
+      <div class="sw" style="background:#54DCFC;color:#3333BD">Azul-claro<br>#54DCFC</div>
+      <div class="sw" style="background:#735CC6;color:#fff">Roxo-escuro<br>#735CC6</div>
+      <div class="sw" style="background:#FF6E91;color:#111214">Rosa-escuro<br>#FF6E91</div>
+      <div class="sw" style="background:#FFA7D3;color:#3333BD">Rosa-claro<br>#FFA7D3</div>
+      <div class="sw" style="background:#fff;color:#3333BD">Branco<br>#FFFFFF</div>
+    </div>
+
+    <h2 style="margin-top:var(--rqr-esp-5)">Ícones em círculo</h2>
+    <div class="icones rqr-escalonado">
+      <span class="rqr-icone-circulo" style="background:#FF6E91" aria-label="Coração"><svg viewBox="0 0 24 24" fill="#fff" stroke="#3333BD" stroke-width="2"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></span>
+      <span class="rqr-icone-circulo" style="background:#3333BD" aria-label="Dinheiro"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M16 7c-1-1-2.5-1.5-4-1.5-2 0-3.5 1-3.5 2.7S10 10.5 12 11s3.8 1 3.8 2.9S14 16.5 12 16.5c-1.6 0-3.2-.6-4.2-1.7M12 4v16"/></svg></span>
+      <span class="rqr-icone-circulo" style="background:#735CC6" aria-label="Proteção"><svg viewBox="0 0 24 24" fill="#fff" stroke="#3333BD" stroke-width="2"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/></svg></span>
+      <span class="rqr-icone-circulo" style="background:#54DCFC" aria-label="Rede de apoio"><svg viewBox="0 0 24 24" fill="#fff" stroke="#3333BD" stroke-width="2"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M11 19c0-3 2.5-5 5-5s5 2 5 5"/></svg></span>
+    </div>
+  </div>
+</section>
+
+<section class="roxo">
+  <div class="container">
+    <h2>Movimento</h2>
+    <p>Clique para testar. Com “reduzir movimento” ativo no sistema, tudo fica estático.</p>
+    <div class="demo-row">
+      <span class="moeda" id="moeda" role="button" tabindex="0" aria-label="Moeda: economia conquistada">$</span>
+      <button class="rqr-botao" id="erro">Resposta errada</button>
+      <button class="rqr-botao" id="pop">Pop</button>
+      <span style="display:flex;align-items:center;gap:10px"><span class="status-on rqr-anim-on"></span> você está ON</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+  const moeda = document.getElementById('moeda');
+  moeda.addEventListener('click', () => replay(moeda, 'rqr-anim-moeda'));
+  moeda.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); replay(moeda, 'rqr-anim-moeda'); } });
+  const erro = document.getElementById('erro');
+  erro.addEventListener('click', () => replay(erro, 'rqr-anim-tremida'));
+  const pop = document.getElementById('pop');
+  pop.addEventListener('click', () => replay(pop, 'rqr-anim-pop'));
+</script>
+</body>
+</html>
