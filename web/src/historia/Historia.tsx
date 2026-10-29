@@ -26,9 +26,9 @@ type Tela =
   | { tipo: "idade"; id: IdCapitulo; menorDeIdade?: boolean }
   | { tipo: "abertura" | "antes" | "jogo" | "depois"; id: IdCapitulo; folhas?: number };
 
-type Props = { aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo };
+type Props = { aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo; trilhaRetorno?: "app" | "jogos" };
 
-export function Historia({ aoFechar, reduzir, iniciar }: Props) {
+export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app" }: Props) {
   const caixa = useRef<HTMLDivElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const botaoAjuda = useRef<HTMLButtonElement>(null);
@@ -51,10 +51,12 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
     const e = capitulos[id];
     if (!e || !estaDesbloqueado(id)) return;
     const parte = parteDoCapitulo(id);
+    const concluido = capitulosConcluidos().includes(id);
     // O questionário de entrada fica no começo do cap. 1: antes dele, a tela dos 18 anos.
-    if (id === "cap1" && !parte && !idadeFeita) { setTela({ tipo: "idade", id }); return; }
-    if (parte === "depois") setTela({ tipo: "depois", id });
-    else if (parte === "jogo" && e.jogo) setTela({ tipo: "jogo", id });
+    if (id === "cap1" && !parte && !idadeFeita && !concluido) { setTela({ tipo: "idade", id }); return; }
+    // "Ler de novo" reinicia a narrativa e a abertura, em vez de retomar um ponto antigo salvo.
+    if (!concluido && parte === "depois") setTela({ tipo: "depois", id });
+    else if (!concluido && parte === "jogo" && e.jogo) setTela({ tipo: "jogo", id });
     else if (e.abertura) setTela({ tipo: "abertura", id });
     else setTela({ tipo: "antes", id });
   }, []);
@@ -73,14 +75,18 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
 
   const depoisDoAntes = (id: IdCapitulo) => {
     const e = capitulos[id]!;
+    tocar("transicao");
     if (e.jogo) { marcarParte(id, "jogo"); setTela({ tipo: "jogo", id }); }
     else { marcarParte(id, "depois"); setTela({ tipo: "depois", id }); }
   };
-  const fimDoJogo = useCallback((folhas: number) => setTela((t) => {
-    if (t.tipo !== "jogo") return t;
-    marcarParte(t.id, "depois");
-    return { tipo: "depois", id: t.id, folhas };
-  }), []);
+  const fimDoJogo = useCallback((folhas: number) => {
+    tocar("transicao");
+    setTela((t) => {
+      if (t.tipo !== "jogo") return t;
+      marcarParte(t.id, "depois");
+      return { tipo: "depois", id: t.id, folhas };
+    });
+  }, []);
 
   const concluir = (id: IdCapitulo) => {
     concluirCapitulo(id);
@@ -158,7 +164,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
           parte={tela.tipo} folhas={tela.folhas} menor={menor}
           aoFechar={sair} aoConcluir={() => (tela.tipo === "antes" ? depoisDoAntes(tela.id) : concluir(tela.id))} />
       )}
-      {Jogo && <Jogo reduzir={reduzir} aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}
+      {Jogo && <Jogo reduzir={reduzir} trilhaRetorno={trilhaRetorno} aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}
     </>
   );
 }

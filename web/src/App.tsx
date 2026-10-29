@@ -146,14 +146,31 @@ export default function App() {
   useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Meu amigo Broto!`; }, [aba]);
   useEffect(() => { setSemanaVista(plano.semana); }, [plano.semana]);
 
-  // Trilha leve, alegre e energética pra todo o app (não só a história) — abaixa, não para,
-  // em telas de crise e na respiração (ver abaixarTrilha em AjudaAgora.tsx e Respiracao.tsx).
+  // O tema anterior fica no menu Jogos; a trilha nova acompanha a navegação principal.
+  // A abertura fica silenciosa e a música entra quando o primeiro menu aparece.
   useEffect(() => {
-    tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Um Passo de Cada Vez", artista: "Tema do app" });
-    // Baixa as outras trilhas (jogos, cantiga) em segundo plano, sem tocar — assim, quando a
-    // pessoa realmente entrar num mini jogo ou numa cena, a troca é instantânea, sem flicar.
-    precarregarTrilhas();
-  }, []);
+    if (abrindo) return;
+    const menuJogos = aba === "jogos";
+    tocarTrilha(
+      menuJogos ? "/sons/trilha-alegre.opus" : "/sons/trilha-leve.opus",
+      menuJogos
+        ? { titulo: "Rolê de Hoje", artista: "Tema do menu de jogos" }
+        : { titulo: "Um Passo de Cada Vez", artista: "Trilha do app" },
+    );
+  }, [aba, abrindo]);
+
+  // Pré-carrega apenas o que a pessoa provavelmente vai abrir a seguir; evita baixar a OST inteira no início.
+  useEffect(() => {
+    if (abrindo) return;
+    if (aba === "jogos") {
+      precarregarTrilhas([
+        "/sons/trilha-pulo.opus",
+        "/sons/trilha-carrinho.opus",
+      ]);
+    }
+    if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
+    if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
+  }, [aba, abrindo, historia, crise]);
 
   // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
   const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);
@@ -466,7 +483,8 @@ export default function App() {
           </div>
         </div>
       )}
-      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined} />}
+      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
+        trilhaRetorno={aba === "jogos" ? "jogos" : "app"} />}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);
         // Primeiro acesso: o capítulo 1 apresenta o Broto e o app conhece a pessoa.
@@ -476,6 +494,7 @@ export default function App() {
         }
       }} />}
       {(jogo === "pulo" || jogo === "crise") && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
+        trilhaRetorno={aba === "jogos" ? "jogos" : "app"}
         chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
       {jogo === "carrinho" && createPortal(<RoleDeCarrinho aoFechar={() => setJogo(false)} reduzir={reduzir} />, document.body)}
       {crise && <Respiracao aoFechar={fecharCrise} reduzir={reduzir}
