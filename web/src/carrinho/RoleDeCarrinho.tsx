@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BotaoLibras } from "../BotaoLibras";
 import { createPortal } from "react-dom";
 import { Bichinho } from "../Bichinho";
 import { atualizarMotor, iniciarMotor, pararMotor, tocar, tocarTrilha } from "../sons";
 import { CORES_ROUPA, corDe } from "../personalizacao/aparencia";
 import { useAparenciaVisivel } from "../personalizacao";
 import { BotaoTema } from "../BotaoTema";
+import { Icone } from "../Icone";
 import { useEsconderVLibras } from "../vlibras";
 import { DURACAO_PARTIDA_MS, FOLHA_ALTA_A_CADA, FOLHA_A_CADA_PX, quadroMs } from "../partida";
 import "./carrinho.css";
@@ -319,6 +321,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         <span className="pulo__placar" aria-label={`${metros} metros, ${folhas} folhas`}>
           <b>{metros} m</b> · 🍃 {folhas}
         </span>
+        <BotaoLibras />
         <BotaoTema compacto />
         <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
@@ -395,7 +398,10 @@ export function BotaoCarrinho({ reduzir }: { reduzir: boolean }) {
   const [aberto, setAberto] = useState(false);
   return (
     <>
-      <button className="rqr-botao jogo-botao" onClick={() => { tocar("clique"); setAberto(true); }}>Jogar: Rolê de Carrinho</button>
+      <button className="kb kb--verde jogo" onClick={() => { tocar("clique"); setAberto(true); }}>
+        <span className="atalho__icone"><Icone nome="gamepad" tamanho={28} /></span>
+        <span className="jogo__texto">Rolê de Carrinho<small>Suba os morros e pegue folhas</small></span>
+      </button>
       {/* Portal: o cartão da tela inicial tem transform, que prenderia o position: fixed dentro dele. */}
       {aberto && createPortal(<RoleDeCarrinho aoFechar={() => setAberto(false)} reduzir={reduzir} />, document.body)}
     </>

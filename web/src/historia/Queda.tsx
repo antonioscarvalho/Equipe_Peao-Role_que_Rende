@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { BotaoLibras } from "../BotaoLibras";
 import { Bichinho } from "../Bichinho";
 import { useAparenciaVisivel } from "../personalizacao";
 import { CenaCap1 } from "./cenas/CenaCap1";
@@ -40,6 +41,7 @@ export function Queda({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean 
       <p id="queda-texto" className="sr-only" aria-live="polite">
         {pousou ? "Alguma coisa pousou na grama, ao lado da cratera. Parece um alien." : "Uma estrela cai do espaço."}
       </p>
+      <div className="tela-libras"><BotaoLibras /></div>
       <button ref={botao} className="queda__pular" onClick={terminar}>{reduzir || pousou ? "Continuar" : "Pular"}</button>
     </div>
   );

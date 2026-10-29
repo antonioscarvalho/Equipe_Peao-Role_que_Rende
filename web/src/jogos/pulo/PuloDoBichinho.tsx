@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
 import { tocar, tocarTrilha } from "../../sons";
 import { useAparenciaVisivel } from "../../personalizacao";
@@ -357,6 +358,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
+        <BotaoLibras />
         <BotaoTema compacto />
         <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Bichinho, type Humor } from "../Bichinho";
 import { PainelCrise } from "../AjudaAgora";
+import { Icone } from "../Icone";
+import { BotaoLibras } from "../BotaoLibras";
 import { nomeDoBroto, useAparenciaVisivel } from "../personalizacao";
 import { lerPerfil } from "../personalizacao/armazenamento-perfil";
 import { tocar, tocarMusica, type NomeSom } from "../sons";
@@ -101,6 +103,18 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
   const [ouvidas, setOuvidas] = useState<number[]>([]);
   const [pergunta, setPergunta] = useState<number | null>(null);
   const [crise, setCrise] = useState(false);
+  // Menu de ajustes do topo: título do capítulo, ajuda e sair. Esc fecha o menu antes da história.
+  const [menu, setMenu] = useState(false);
+  const botaoMenu = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!menu) return;
+    const esc = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      e.preventDefault(); e.stopPropagation(); setMenu(false); botaoMenu.current?.focus();
+    };
+    window.addEventListener("keydown", esc, true);
+    return () => window.removeEventListener("keydown", esc, true);
+  }, [menu]);
   const [cenaAtual, setCenaAtual] = useState<string | undefined>(parte === "antes" ? roteiro[0]?.cena : undefined);
 
   useModal(caixa, aoFechar, !crise);
@@ -174,9 +188,26 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
       </div>
 
       <header className="historia-dialogo__topo">
-        <h2 id="dialogo-titulo" ref={titulo} tabIndex={-1} className="historia-dialogo__titulo">{capitulo.titulo}</h2>
-        <button className="historia-topo__botao historia-topo__botao--ajuda" onClick={() => { tocar("clique"); setCrise(true); }}>Preciso de ajuda agora</button>
-        <button className="historia-topo__botao" onClick={() => { tocar("clique"); aoFechar(); }}>Agora não</button>
+        <h2 id="dialogo-titulo" ref={titulo} tabIndex={-1} className="sr-only">{capitulo.titulo}</h2>
+        <BotaoLibras />
+        <button ref={botaoMenu} className="historia-menu__botao" aria-label="Ajustes da história" aria-expanded={menu}
+          aria-controls="historia-menu" data-vlibras-gloss="AJUSTES" onClick={() => { tocar("clique"); setMenu((m) => !m); }}>
+          <span className="historia-menu__icone" aria-hidden="true"><Icone nome="settings" tamanho={22} /></span>
+        </button>
+        {menu && (
+          <div id="historia-menu" className="historia-menu" role="group" aria-label="Ajustes da história">
+            <p className="historia-menu__titulo">{capitulo.titulo}</p>
+            <button className="historia-menu__item historia-menu__item--ajuda" onClick={() => { tocar("clique"); setMenu(false); setCrise(true); }}>
+              <Icone nome="phone" tamanho={20} /> Preciso de ajuda agora
+            </button>
+            <button className="historia-menu__item" onClick={() => { tocar("clique"); aoFechar(); }}>
+              <Icone nome="house" tamanho={20} /> Parar por agora
+            </button>
+            <small className="historia-menu__nota">
+              {nomeAlien} é um apoio, não um terapeuta. Seu lugar na história fica salvo; o que você escolhe nas conversas, não.
+            </small>
+          </div>
+        )}
       </header>
 
       <div className="historia-dialogo__baixo">
@@ -252,7 +283,6 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
           return seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); completo ? seguir() : completar(); }}>
             {completo ? "Continuar ▸" : "Mostrar tudo ▸"}</button>;
         })()}
-        <small className="historia-nota">{nomeAlien} é um apoio, não um terapeuta. O que você escolhe aqui não é salvo.</small>
       </div>
       </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}
