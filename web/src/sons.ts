@@ -45,6 +45,10 @@ type Nota = {
   ataque?: number;
 };
 
+// As receitas foram afinadas sem música por baixo. Com a trilha a 40%, a transição saía 21 dB
+// abaixo dela e o tique da tecla 33 dB (medido no Chromium): estavam tocando, mas ninguém ouvia.
+const REFORCO_EFEITOS = 4;
+
 function tocarNotas(notas: Nota[], volumeGeral = 1) {
   const ac = contexto();
   if (!ac) return;
@@ -54,7 +58,7 @@ function tocarNotas(notas: Nota[], volumeGeral = 1) {
     const ganho = ac.createGain();
     const t0 = agora + n.inicio;
     const t1 = t0 + n.dur;
-    const pico = (n.volume ?? 0.1) * volumeGeral;
+    const pico = Math.min(0.5, (n.volume ?? 0.1) * volumeGeral * REFORCO_EFEITOS);
     const ataque = n.ataque ?? 0.01;
     osc.type = n.tipo ?? "sine";
     osc.frequency.setValueAtTime(n.freq, t0);
@@ -285,7 +289,7 @@ export function tocarTecla() {
   if (agoraMs - ultimoTique < 55) return;
   ultimoTique = agoraMs;
   const freq = 1500 + Math.random() * 450;
-  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.018, volume: 0.009, tipo: "triangle", ataque: 0.002 }], volumeEfeitos / 10);
+  tocarNotas([{ freq, freqFim: freq * 0.72, inicio: 0, dur: 0.022, volume: 0.016, tipo: "triangle", ataque: 0.002 }], volumeEfeitos / 10);
 }
 
 let motorOsc: OscillatorNode | null = null;
