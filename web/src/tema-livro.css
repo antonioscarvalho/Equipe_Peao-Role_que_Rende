@@ -1643,3 +1643,13 @@ button.botao-fechar-gov.botao-fechar-gov:hover { background: #0C326F; color: #FF
 button.botao-fechar-gov.botao-fechar-gov:active { background: #071D41; color: #FFFFFF; transform: scale(.94); box-shadow: none; }
 button.botao-fechar-gov.botao-fechar-gov:focus-visible { outline: 4px dashed #C2850C; outline-offset: 4px; }
 .ajuste__titulo-icone { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Libras: o ícone oficial do VLibras aparece quadrado, como é, sem o círculo dos outros botões. */
+.botao-libras .botao-topo__icone,
+.historia-dialogo__topo .botao-libras .botao-topo__icone,
+:root[data-tema="escuro"] .botao-libras .botao-topo__icone,
+:root[data-tema="escuro"] .historia-dialogo__topo .botao-libras .botao-topo__icone {
+  width: 44px; height: 44px; padding: 0; border: 0; border-radius: 8px; background: none; box-shadow: 0 3px 0 var(--livro-tinta); overflow: hidden;
+}
+.botao-libras .botao-topo__icone img { width: 44px; height: 44px; border-radius: 8px; display: block; }
+.botao-libras:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; border-radius: 10px; }
