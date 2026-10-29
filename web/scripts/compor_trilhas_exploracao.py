@@ -1,8 +1,8 @@
-"""Gera trilhas instrumentais originais para uma aventura espacial cinematografica.
+"""Gera trilhas originais com flauta percussiva grave para uma aventura de jogo.
 
-A sintese combina ostinatos pulsantes, percussao tonal curta e plucks melodicos que
-crescem ao longo do loop. A harmonia aparece em ataques breves e arpejos, mantendo
-o tom acolhedor e curioso do jogo. Sem samples ou melodias de terceiros.
+A voz principal combina timbre arredondado de ocarina com ataque de percussao de
+madeira. Baixos, tambores leves e arpejos dao movimento de aventura; a melodia e
+original e nao usa samples de terceiros.
 
 Uso: python compor_trilhas_exploracao.py [leve|alegre|pulo|carrinho]
 """
@@ -93,6 +93,18 @@ def acrescentar_baque(canal, inicio, volume, detune, atraso=0.0):
         canal[i] += volume * env * (0.88 * math.sin(fase) + 0.12 * math.sin(2.0 * fase))
 
 
+def acrescentar_tom(canal, inicio, volume, detune, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.24) * SR))
+    for i in range(i0, i1):
+        t = i / SR - t0
+        freq = (156.0 - 45.0 * min(1.0, t / 0.16)) * (1.0 + detune)
+        fase = 2.0 * math.pi * freq * t
+        env = math.exp(-17.0 * t)
+        canal[i] += volume * env * (0.82 * math.sin(fase) + 0.18 * math.sin(1.7 * fase))
+
+
 def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.0):
     t0 = inicio + atraso
     freq = hz(nota) * (1.0 + detune)
@@ -112,9 +124,9 @@ def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.
 def acrescentar_nota_melodia(canal, nota, inicio, duracao, volume, detune, atraso=0.0):
     t0 = inicio + atraso
     freq = hz(nota) * (1.0 + detune)
-    ataque = 0.006
-    soltura = 0.2
-    nivel_soltura = 0.88 * math.exp(-1.45 * duracao) + 0.12 * math.exp(-11.0 * duracao)
+    ataque = 0.012
+    soltura = 0.22
+    nivel_soltura = 0.76 + 0.24 * math.exp(-1.8 * duracao)
     limite = min(len(canal), int((t0 + duracao + soltura) * SR))
     i0 = max(0, int(t0 * SR))
     for i in range(i0, limite):
@@ -122,13 +134,13 @@ def acrescentar_nota_melodia(canal, nota, inicio, duracao, volume, detune, atras
         if t < ataque:
             env = t / ataque
         elif t < duracao:
-            env = 0.88 * math.exp(-1.45 * t) + 0.12 * math.exp(-11.0 * t)
+            env = 0.76 + 0.24 * math.exp(-1.8 * t)
         else:
-            env = nivel_soltura * math.exp(-12.0 * (t - duracao))
-        fase = 2.0 * math.pi * freq * t
-        onda = (0.55 * math.sin(fase) + 0.25 * math.sin(2.0 * fase)
-                + 0.13 * math.sin(3.0 * fase) + 0.06 * math.sin(4.0 * fase)
-                + 0.025 * math.exp(-16.0 * t) * math.sin(5.0 * fase))
+            env = nivel_soltura * math.exp(-13.0 * (t - duracao))
+        fase = 2.0 * math.pi * freq * t + 0.12 * math.exp(-30.0 * t)
+        corpo = 0.80 * math.sin(fase) + 0.16 * math.sin(2.0 * fase) + 0.04 * math.sin(3.0 * fase)
+        ataque_madeira = math.exp(-24.0 * t) * (0.11 * math.sin(4.7 * fase) + 0.04 * math.sin(7.1 * fase))
+        onda = corpo + ataque_madeira
         canal[i] += volume * env * onda
 
 
@@ -162,6 +174,9 @@ def gerar_canal(config, detune, atraso):
 
         # Um baque por acorde deixa espaco para a frase principal.
         acrescentar_baque(canal, inicio, 0.026 * crescimento, detune, atraso)
+        for batida in (2.5, 6.5):
+            acrescentar_tom(canal, inicio + batida * segundos_batida,
+                            0.018 * crescimento, detune, atraso)
 
         # O baixo muda entre os dois compassos em vez de marcar cada tempo.
         for batida, nota_baixo in ((0, baixo[0]), (4, baixo[1])):
@@ -174,8 +189,8 @@ def gerar_canal(config, detune, atraso):
             acrescentar_pluck(canal, nota_arpejo, inicio + batida * segundos_batida,
                               0.012 * crescimento, 10.0, detune, atraso)
 
-        raiz_gancho = acorde[0] + 12
-        if raiz_gancho < 60:
+        raiz_gancho = acorde[0]
+        if raiz_gancho < 48:
             raiz_gancho += 12
         for indice_nota, (batida, intervalo, duracao) in enumerate(MELODIAS_SECOES[indice]):
             nota = raiz_gancho + intervalo
