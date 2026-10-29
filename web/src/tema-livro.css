@@ -1614,7 +1614,16 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 .modal-acess__libras { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: .9rem; }
 .modal-acess__libras:not(:has(button)) { display: none; } /* sem internet o VLibras não carrega */
 .modal-acess__ajustes { display: grid; gap: 12px; }
-.modal-acess__seguir { position: sticky; bottom: 0; width: 100%; }
+/* A rolagem termina no topo do botão: o rodapé fixo tem a cor do papel e esconde o que passa
+   por baixo; a folga no fim da lista deixa o controle de Música aparecer inteiro acima dele. */
+.modal-acess__rodape {
+  position: sticky; bottom: -20px; z-index: 1; margin: 0 -18px -20px; padding: 10px 18px 20px;
+  background: var(--livro-grao), var(--livro-papel);
+}
+.modal-acess__seguir { width: 100%; }
+.modal-acess__ajustes { padding-bottom: 6px; }
+:root[data-tema="escuro"] .modal-acess__rodape { background: var(--livro-grao), var(--noite-cartao); }
+:root[data-contraste="alto"] .modal-acess__rodape { background: var(--ac-pagina); }
 :root[data-tema="escuro"] .modal-acess__caixa { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); }
 .ajustes__grupo svg { vertical-align: -3px; }
 @media (prefers-reduced-motion: reduce) { .modal-acess__caixa { animation: none; } }

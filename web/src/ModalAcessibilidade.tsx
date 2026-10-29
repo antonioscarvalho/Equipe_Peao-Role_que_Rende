@@ -31,9 +31,11 @@ export function ModalAcessibilidade({ children, aoTerminar }: { children: ReactN
           <span>Libras: toque para ver a tradução com o VLibras</span>
         </div>
         <div className="modal-acess__ajustes">{children}</div>
-        <button className="rqr-botao modal-acess__seguir" onClick={() => { tocar("clique"); aoTerminar(); }}>
-          Pronto, começar a história
-        </button>
+        <div className="modal-acess__rodape">
+          <button className="rqr-botao modal-acess__seguir" onClick={() => { tocar("clique"); aoTerminar(); }}>
+            Pronto, começar a história
+          </button>
+        </div>
       </div>
     </div>
   );
