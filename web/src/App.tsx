@@ -186,10 +186,7 @@ export default function App() {
   useEffect(() => {
     if (abrindo) return;
     if (aba === "jogos") {
-      precarregarTrilhas([
-        "/sons/trilha-pulo.opus",
-        "/sons/trilha-carrinho.opus",
-      ]);
+      precarregarTrilhas(["/sons/trilha-pulo.opus"]);
     }
     if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
     if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
