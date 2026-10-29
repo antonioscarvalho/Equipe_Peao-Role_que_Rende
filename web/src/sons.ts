@@ -450,6 +450,7 @@ export const URLS_TRILHAS = [
   "/sons/trilha-leve.opus",
   "/sons/trilha-pulo.opus",
   "/sons/trilha-carrinho.opus",
+  "/sons/cantiga-vo.opus",
   "/sons/respirar-calma.opus",
 ] as const;
 
