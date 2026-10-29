@@ -29,15 +29,19 @@ export const cap1: Capitulo = {
     ],
   },
   antesDoJogo: [
-    { cena: "cratera", humor: "cansado", fala: "Ai… ai, ai. Cadê o chão? Ah, achei. Tá aqui embaixo de mim." },
-    { fala: "Opa. Tem alguém aí? Desculpa o susto. Eu não costumo cair do céu assim, juro.", opcoes: [
-      { rotulo: "Você tá bem?", resposta: "Tô inteiro. Um pouco amassado, mas inteiro." },
-      { rotulo: "Quem é você?", resposta: "Já já eu conto. Deixa eu só achar minha antena." },
+    { cena: "cratera", humor: "cansado", fala: "Ai… minha antena… A nave parou? Tem alguém aí no meio dessa fumaça?" },
+    { fala: "Espera… fica aí um pouquinho. Eu também tô com medo. Não conheço esse lugar.", opcoes: [
+      { rotulo: "Você tá bem?", resposta: "Acho que sim. Minhas pernas ainda estão tremendo. Você pode ficar aí enquanto eu levanto?" },
+      { rotulo: "Quem é você?", resposta: "Meu nome é Broto. Eu vinha naquela nave… você viu mais alguém cair?" },
     ] },
-    { humor: "calmo", fala: "Eu sou o Broto. Sou um broto de luz, lá de cima. Mas olha meu estado… caí todo bagunçado." },
-    { especial: "aparencia", humor: "feliz", fala: "Me ajuda a me arrumar? Escolhe minha cor e o que eu visto. Vou mudando aqui na sua frente." },
+    { humor: "calmo", fala: "Sou o Broto, um broto de luz. Vim do espaço. Eu ia tentar explicar melhor, mas esqueci tudo quando vi você." },
+    { humor: "calmo", fala: "Você não foi embora… Posso chegar um pouco mais perto?", opcoes: [
+      { rotulo: "Pode, vem devagar.", resposta: "Assim? Pronto. Vou sentar aqui na beirada. O chão de vocês é bem firme." },
+      { rotulo: "Prefiro ficar aqui.", resposta: "Tudo bem. Eu fico deste lado. Dá pra conversar daqui." },
+    ] },
+    { especial: "aparencia", humor: "feliz", fala: "A queda bagunçou minhas cores. Me ajuda a escolher uma cor e uma roupa? Ou posso ficar assim por enquanto." },
     { especial: "nome", fala: "E você? Como eu te chamo? Pode ser apelido. Se preferir, eu te chamo de \"você\" mesmo." },
-    { humor: "feliz", fala: "Prazer, {nome}. Que bom que foi você que me achou." },
+    { humor: "feliz", fala: "Prazer, {nome}. Quando ouvi seus passos, achei que precisava me esconder. Agora tô feliz que você chegou." },
     { especial: "idade", humor: "calmo", fala: "Pergunta chata, mas eu preciso fazer: você tem 18 anos ou mais?" },
     { fala: "E você, tá chegando como hoje?", opcoes: [
       { rotulo: "Tô de boa", resposta: "Que bom. Fica à vontade, então." },
@@ -49,15 +53,15 @@ export const cap1: Capitulo = {
     { especial: "motivo", humor: "calmo", fala: "Se quiser me contar… o que te trouxe até aqui hoje?" },
     { especial: "meta", fala: "E o que faz sentido pra você agora, com as apostas?" },
     { especial: "guardar", fala: "Quer que eu guarde isso só aqui no seu celular? Assim eu lembro de você quando a vontade apertar. Ninguém mais vê, e dá pra apagar quando quiser." },
-    { cena: "vila", humor: "feliz", fala: "Agora deixa eu te contar de mim. Tá vendo aquele pontinho lá em cima, brilhando? É a Vila Estrela. Minha casa." },
+    { cena: "vila", humor: "feliz", fala: "Tá vendo aquele pontinho perto das estrelas? É pra lá que eu tava olhando quando você chegou. A Vila Estrela. Minha casa." },
     { fala: "É um asteroide tão pequenininho que dá a volta nele a pé antes do almoço. Tem umas vinte casinhas e um quintal pra cada uma." },
     { cena: "colheita", fala: "Lá a gente vive de poeira de luz. Toda manhã, bem cedinho, a gente sai com uns potes pra colher a poeira que o sol deixa nas pedras.", opcoes: [
       { rotulo: "Pra que serve a poeira?", resposta: "Pra tudo! Acende as casas, esquenta a comida e faz as naves voarem. Não é muito, mas é nosso." },
       { rotulo: "Dá trabalho?", resposta: "Dá. Acordar cedo, encher pote por pote. Mas tem um gostinho de coisa feita com a mão, sabe?" },
     ] },
     { cena: "musica", humor: "feliz", fala: "E na colheita a gente canta. Tem uma cantiga que a minha Vó Vega ensinou… é assim: tum-tum, tá-rá, tum-tum… a luz vem devagar…" },
-    { fala: "Desafinei, né? Pode falar. A Nina, minha irmã, sempre fala." },
-    { fala: "E aqui embaixo, que música vocês ouvem?", opcoes: [
+    { fala: "A Nina, minha irmã, sempre entra nessa parte. Fiquei esperando a voz dela… Esqueci por um segundo que tô longe." },
+    { fala: "E você, tem alguma música de que gosta? Quero conhecer um pedacinho daqui também.", opcoes: [
       { rotulo: "Samba ou pagode", resposta: "Ouvi um pagode enquanto caía! Acho que tinha uma roda perto da praça. Tum-tum, tá-rá… combina com a cantiga da Vó!" },
       { rotulo: "Funk", resposta: "Aquele grave que faz o chão tremer? Achei que era o meu coração batendo depois da queda!" },
       { rotulo: "Sertanejo", resposta: "Música de saudade, né? Acho que eu vou gostar. Tô com um pouco de saudade de casa." },
@@ -66,32 +70,32 @@ export const cap1: Capitulo = {
       { rotulo: "Outra", resposta: "Um dia você me mostra? Eu adoro aprender música nova." },
       { rotulo: "Prefiro não dizer", resposta: "Tudo bem. A gente fica com a cantiga da Vó por enquanto." },
     ] },
-    { cena: "lua", humor: "calmo", fala: "Posso perguntar uma coisa? Vocês aqui só têm uma lua?", opcoes: [
+    { cena: "lua", humor: "calmo", fala: "Posso perguntar uma coisa meio estranha? Aquela é a única lua de vocês?", opcoes: [
       { rotulo: "Só uma.", resposta: "Lá na Vila tem três! Uma pequenininha, uma média e uma que parece um pão de queijo." },
       { rotulo: "E vocês, quantas?", resposta: "Três! Uma pequenininha, uma média e uma que parece um pão de queijo." },
     ] },
     { fala: "Mas a de vocês é bonita. Grandona. Parece que tá cuidando da praça." },
-    { cena: "bairro", humor: "feliz", fala: "Que engraçado… aqui o alienígena sou eu, né? Azulzinho, de antena, conversando com a lua.", opcoes: [
+    { cena: "bairro", humor: "feliz", fala: "Na minha vila, você é que ia ser a visita do espaço. Acho que eu também ia ficar olhando, tentando entender.", opcoes: [
       { rotulo: "Você nem parece alien.", resposta: "Valeu! Mas eu brilho no escuro. Isso é meio alien, admite." },
       { rotulo: "É um alien fofo.", resposta: "Fofo eu aceito! Na Vila todo mundo me chama de \"pequeno\" e eu odeio. \"Fofo\" tá liberado." },
     ] },
-    { humor: "calmo", fala: "Reparei numa coisa enquanto caía. O bairro de vocês tá meio apagado. Quase nenhuma janela acesa." },
-    { fala: "Lá em casa também andou assim. As luzes foram apagando, uma por uma. É uma história comprida… outro dia eu te conto, pode ser?", opcoes: [
-      { rotulo: "Pode, sem pressa.", resposta: "Obrigado. Você é gente boa, sabia?" },
+    { humor: "calmo", fala: "Quando a nave começou a cair, procurei uma luz pra pousar perto. Vim parar nesta praça. Aí você apareceu." },
+    { fala: "Antes de eu sair, as luzes lá de casa foram apagando, uma por uma. Tem uma coisa que eu ainda não sei contar… Podemos deixar pra outro dia?", opcoes: [
+      { rotulo: "Pode, sem pressa.", resposta: "Obrigado por não me apressar. Ainda tô tentando entender o que aconteceu." },
       { rotulo: "Quer contar agora?", resposta: "Ainda não. Hoje eu só quero voltar pra casa." },
     ] },
     { cena: "familia", fala: "Minha família tá lá: meu pai Órion, que conserta nave; minha mãe Lyra, que faz a conta da casa render; a Nina; e a Vó Vega, que planta semente de luz no quintal." },
-    { fala: "Eles devem tá me procurando. Se eu subir bem alto, quem sabe eles me veem." },
-    { cena: "cratera", humor: "feliz", fala: "Já sei! Tá vendo essas plataformas? Se eu for pulando de uma em uma, chego lá em cima. Me ajuda?", opcoes: [
-      { rotulo: "Bora!", resposta: "Bora! Você me guia e eu pulo." },
+    { fala: "Eles devem tá me procurando. Eu queria conseguir dizer que tô aqui… e que encontrei alguém que ficou comigo." },
+    { cena: "cratera", humor: "feliz", fala: "Tá vendo essas plataformas acima da cratera? Talvez lá do alto eu consiga fazer um sinal pra minha família. Você me guia numa tentativa?", opcoes: [
+      { rotulo: "Bora!", resposta: "Tá. Você me guia e eu pulo. Vou começar pela mais perto." },
       { rotulo: "Como eu ajudo?", resposta: "Você me diz pra que lado ir: inclina o celular, usa as setas ou segura um lado da tela. Eu faço o resto." },
     ] },
-    { fala: "Cada folhinha que a gente pegar no caminho eu guardo. São pequenas, mas são nossas. Vamos?" },
+    { fala: "Se aparecerem folhinhas no caminho, a gente pode guardar. E, se quiser parar, tudo bem. Vamos tentar a primeira plataforma?" },
   ],
   depoisDoJogo: [
     { humor: "feliz", fala: "{folhas}" },
     { cena: "estrelas", humor: "calmo", fala: "Sabe o que a minha Vó diz? Que estrela sozinha é só um pontinho. Mas várias juntas viram desenho no céu. Constelação." },
-    { fala: "Acho que a gente é meio assim. Eu sozinho caí. Com você aqui, até que eu subi bonito." },
+    { fala: "Quando eu olhei pra baixo e vi você, tive coragem de tentar a próxima plataforma. Obrigado por me acompanhar." },
     { cena: "regua", fala: "E olha: a altura que a gente subiu hoje, ninguém tira. Amanhã eu começo dali, não do chão." },
     { fala: "E você, já subiu alguma coisa que ninguém tira de você?", opcoes: [
       { rotulo: "Já.", resposta: "Eu sabia. Dá pra ver. Guarda isso com carinho." },
@@ -99,7 +103,12 @@ export const cap1: Capitulo = {
       { rotulo: "Prefiro não dizer.", resposta: "Justo. Fica guardado contigo." },
     ] },
     { cena: "musica", humor: "feliz", fala: "Ei, vou cantar a cantiga da Vó com um tum-tum daqui de baixo: tum-tum, tá-rá… a luz vem devagar… Ficou melhor, vai." },
-    { cena: "bairro", humor: "calmo", fala: "Tá ficando tarde. O bairro tá quietinho." },
+    { humor: "calmo", fala: "Na minha vila, a gente chama de amigo quem começa a dividir o caminho. Gostei de dividir esse pedaço com você.", opcoes: [
+      { rotulo: "Também gostei, Broto.", resposta: "Então, até a próxima conversa. Tenho um monte de perguntas sobre a Terra." },
+      { rotulo: "Vamos nos conhecer aos poucos.", resposta: "Combinado. Um pedaço do caminho de cada vez." },
+      { rotulo: "Prefiro não dizer.", resposta: "Tudo bem. Obrigado pela companhia de hoje." },
+    ] },
+    { cena: "bairro", humor: "calmo", fala: "Tá ficando tarde. Vou ficar perto da praça por enquanto. Se você voltar, quero aprender aquela música daqui." },
   ],
   // Sem oferta: o capítulo 1 é só acolhimento.
   licao: "Não dá pra voltar pro céu num pulo só. É uma plataforma de cada vez. E cair não apaga o caminho que você já fez.",
