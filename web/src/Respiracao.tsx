@@ -39,7 +39,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
     return () => {
       cancelado = true;
       window.clearTimeout(id);
-      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+      tocarTrilha("/sons/trilha-leve.opus", { titulo: "Um Passo de Cada Vez", artista: "Trilha do app" });
     };
   }, [comSom]);
 

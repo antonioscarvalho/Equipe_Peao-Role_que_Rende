@@ -40,7 +40,7 @@ function aleatorio(a: number, b: number) { return a + Math.random() * (b - a); }
  */
 type Props = Omit<PropsJogo, "aoTerminar"> & Partial<Pick<PropsJogo, "aoTerminar">> & { chamada?: string };
 
-export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props) {
+export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaRetorno = "jogos" }: Props) {
   const aparencia = useAparenciaVisivel();
   const caixaRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,12 +59,16 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const fecharRef = useRef(fechar);
   fecharRef.current = fechar;
 
-  // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  // Trilha própria do jogo; ao fechar, volta ao menu de origem e à trilha correspondente.
   // O StrictMode do React (só em dev) monta, desmonta e monta de novo todo componente pra pegar
   // bug de efeito — sem o adiamento abaixo, isso troca de trilha 3x em sequência (pulo → alegre →
   // pulo) e às vezes a última troca nem chega a tocar de verdade. Adiando um tique, a "desmontagem"
   // falsa cancela antes de pedir qualquer coisa, e só a montagem de verdade troca a trilha.
   useEffect(() => {
+    const urlRetorno = trilhaRetorno === "jogos" ? "/sons/trilha-alegre.opus" : "/sons/trilha-leve.opus";
+    const infoRetorno = trilhaRetorno === "jogos"
+      ? { titulo: "Rolê de Hoje", artista: "Tema do menu de jogos" }
+      : { titulo: "Um Passo de Cada Vez", artista: "Trilha do app" };
     let cancelado = false;
     const id = window.setTimeout(() => {
       if (cancelado) return;
@@ -74,10 +78,10 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
     return () => {
       cancelado = true;
       window.clearTimeout(id);
-      console.log("[pulo] saindo, voltando pra trilha-alegre.opus");
-      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+      console.log(`[pulo] saindo, voltando pra ${urlRetorno}`);
+      tocarTrilha(urlRetorno, infoRetorno);
     };
-  }, []);
+  }, [trilhaRetorno]);
 
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({

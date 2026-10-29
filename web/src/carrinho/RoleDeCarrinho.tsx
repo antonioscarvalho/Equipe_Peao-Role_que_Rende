@@ -68,7 +68,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
   const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
   const [aviso, setAviso] = useState("");
 
-  // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  // Trilha própria do jogo, com transição suave pra entrar e retorno ao menu Jogos ao fechar.
   // Adiado um tique por causa do StrictMode (dev): ele monta/desmonta/monta de novo todo componente,
   // e sem isso a trilha trocava 3x em sequência (às vezes travando na trilha errada). Veja o mesmo
   // comentário, mais detalhado, em jogos/pulo/PuloDoBichinho.tsx.
@@ -80,7 +80,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
     return () => {
       cancelado = true;
       window.clearTimeout(id);
-      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do app" });
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Rolê de Hoje", artista: "Tema do menu de jogos" });
     };
   }, []);
 

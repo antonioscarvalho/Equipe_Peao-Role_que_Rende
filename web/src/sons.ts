@@ -447,6 +447,7 @@ export function pararTrilha() {
 /** Todas as músicas do app (tema, cada mini jogo, a cantiga) — fonte única pro pré-carregamento. */
 export const URLS_TRILHAS = [
   "/sons/trilha-alegre.opus",
+  "/sons/trilha-leve.opus",
   "/sons/trilha-pulo.opus",
   "/sons/trilha-carrinho.opus",
   "/sons/cantiga-vo.opus",

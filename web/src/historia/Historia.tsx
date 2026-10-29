@@ -26,9 +26,9 @@ type Tela =
   | { tipo: "idade"; id: IdCapitulo; menorDeIdade?: boolean }
   | { tipo: "abertura" | "antes" | "jogo" | "depois"; id: IdCapitulo; folhas?: number };
 
-type Props = { aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo };
+type Props = { aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo; trilhaRetorno?: "app" | "jogos" };
 
-export function Historia({ aoFechar, reduzir, iniciar }: Props) {
+export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app" }: Props) {
   const caixa = useRef<HTMLDivElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const botaoAjuda = useRef<HTMLButtonElement>(null);
@@ -164,7 +164,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
           parte={tela.tipo} folhas={tela.folhas} menor={menor}
           aoFechar={sair} aoConcluir={() => (tela.tipo === "antes" ? depoisDoAntes(tela.id) : concluir(tela.id))} />
       )}
-      {Jogo && <Jogo reduzir={reduzir} aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}
+      {Jogo && <Jogo reduzir={reduzir} trilhaRetorno={trilhaRetorno} aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}
     </>
   );
 }
