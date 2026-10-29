@@ -874,3 +874,371 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .celular > .atalhos { animation-delay: 150ms; }
 /* Painéis que ficam dentro dessas telas entram logo depois, com o mesmo pop. */
 .pulo__painel, .historia__caixa, .especial { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 120ms both; }
+
+/* =====================================================================
+   Plano de 90 dias, jogos e metas (sem demonstração)
+   ===================================================================== */
+/* Respiro entre os atalhos e a barra de menu (o círculo da História sobe 26px). */
+.celular:has(> .cena) > :nth-last-child(3) { margin-bottom: clamp(26px, 4dvh, 36px); }
+.celular:has(> .cena) { gap: clamp(8px, 1.4dvh, 12px); }
+
+.mini__icone--feitas { background: var(--livro-salvia); color: var(--livro-tinta); }
+.proxima__texto small { font-weight: 800; }
+
+/* Navegação entre as semanas */
+.semana { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
+.semana__titulo { text-align: center; }
+.semana__titulo h2 { font-size: 1.1rem; }
+.semana__titulo p { margin: 2px 0 0; font-weight: 700; color: var(--rqr-texto-suave); }
+.semana__seta {
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font: 700 1.6rem/1 var(--rqr-font-titulo);
+  background: var(--livro-grao), var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border: 2.5px solid var(--rqr-borda); box-shadow: 0 3px 0 var(--rqr-sombra-cor);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.semana__seta:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+.semana__seta:disabled { opacity: .35; cursor: default; box-shadow: none; }
+.missoes { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both; }
+.missao__texto small { display: block; margin-top: 2px; font-family: var(--rqr-font-texto); font-weight: 600; font-size: .75rem; color: var(--rqr-texto-suave); }
+.missao.is-ok .missao__texto small { color: inherit; opacity: .85; }
+.missao__valor { flex: none; padding: 2px 8px; border-radius: 99px; font-size: .72rem; font-weight: 800; white-space: nowrap;
+  background: var(--livro-papel-suave); color: var(--rqr-texto); }
+.missao.is-oculta { cursor: default; border-style: dashed; box-shadow: none; background: var(--livro-grao), var(--livro-papel-suave); color: var(--rqr-texto-suave); }
+.missao.is-oculta .missao__icone { background: transparent; border-style: dashed; color: var(--rqr-texto-suave); font: 700 1.1rem/1 var(--rqr-font-titulo); }
+
+/* Jogos: grade 2 × 3; os ocultos em papel tracejado com um "?" */
+.jogos-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; }
+.jogo-cartao {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 8px;
+  min-height: 118px; padding: 12px; text-align: left; width: 100%;
+}
+.jogo-cartao .jogo__texto { font-size: 1rem; }
+.jogo-cartao--oculto {
+  border: 2.5px dashed var(--rqr-borda); border-radius: var(--livro-raio-p);
+  background: var(--livro-grao), var(--livro-papel-suave); color: var(--rqr-texto-suave);
+}
+.jogo-oculto__icone {
+  display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+  border: 2.5px dashed var(--rqr-borda); font: 700 1.3rem/1 var(--rqr-font-titulo); color: var(--rqr-texto-suave);
+}
+
+/* Personalizar: etiqueta do tema (Halloween, Natal...) */
+.opcao-item__tema {
+  position: absolute; top: -9px; left: 50%; translate: -50% 0; padding: 0 7px; border-radius: 99px; white-space: nowrap;
+  font: 700 .6rem/1.5 var(--rqr-font-titulo); background: var(--livro-lavanda); color: var(--livro-tinta); border: 1.5px solid var(--livro-tinta);
+}
+.opcao-item:has(input:checked) .opcao-item__tema { background: #FFFCF4; }
+.personalizar__opcoes:has(.opcao-item) { row-gap: 16px; padding-top: 8px; }
+
+:root[data-tema="escuro"] .semana__seta { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .missao__valor { background: #36357A; color: var(--noite-creme); }
+:root[data-tema="escuro"] .missao.is-oculta, :root[data-tema="escuro"] .jogo-cartao--oculto { background: var(--livro-grao), #24234F; color: #D3CDE9; border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .jogo-oculto__icone, :root[data-tema="escuro"] .missao.is-oculta .missao__icone { border-color: var(--noite-linha); color: #D3CDE9; }
+:root[data-tema="escuro"] .mini__icone--feitas { background: var(--noite-verde); color: var(--noite-creme); }
+:root[data-tema="escuro"] .opcao-item__tema { background: var(--noite-roxo); color: var(--noite-creme); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .missao.is-oculta .missao__icone { background: transparent; }
+
+/* Respiração e painel de ajuda: o véu escurece a ilustração por igual (a luz do poste
+   ficava atrás do texto) e os botões de ligar viram cartões sólidos. Texto ≥ 7:1. */
+.crise {
+  background:
+    linear-gradient(180deg, rgb(20 19 52 / .86), rgb(20 19 52 / .9) 45%, rgb(20 19 52 / .94)),
+    var(--livro-calma) center / cover no-repeat, var(--livro-tinta-funda);
+  color: #FBF3E2;
+}
+.crise p, .crise small, .crise__fase, .crise__fim small { color: #FBF3E2; opacity: 1; text-shadow: 0 1px 2px rgb(0 0 0 / .45); }
+.crise__titulo { color: var(--livro-sol); text-shadow: 0 2px 3px rgb(0 0 0 / .5); }
+.ajuda {
+  background: var(--livro-grao), #2A2960; color: #FBF3E2; border: 2.5px solid #B9AEE8;
+  box-shadow: 0 4px 0 #0D0C26; font-weight: 800;
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.ajuda:hover { background: var(--livro-grao), #36357A; }
+.ajuda:active { transform: translateY(4px); box-shadow: 0 0 0 #0D0C26; transition-duration: 60ms; }
+.ajuda:focus-visible { outline: 3px solid var(--livro-sol); outline-offset: 3px; }
+.crise .link { color: #FBF3E2; }
+
+/* =====================================================================
+   Tela inicial v2: cena com selos do plano, Broto tocável, missões da
+   semana para marcar ali mesmo e o "Deu vontade" em destaque.
+   ===================================================================== */
+.cena__selos { position: absolute; top: 10px; left: 10px; right: 10px; z-index: 2; display: flex; justify-content: space-between; gap: 8px; }
+.cena__selo {
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px;
+  font: 700 .82rem/1.2 var(--rqr-font-titulo); color: var(--livro-tinta);
+  background: var(--livro-grao), #FFFCF4; border: 2px solid var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
+}
+.cena__broto {
+  position: relative; z-index: 1; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 40%;
+  margin-bottom: clamp(10px, 3dvh, 28px); -webkit-tap-highlight-color: transparent;
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.cena__broto:active { transform: scale(.94); transition-duration: 60ms; }
+.cena__broto:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 4px; }
+.celular > .cena .cena__broto > .bicho {
+  width: clamp(84px, 17dvh, 170px) !important; height: clamp(84px, 17dvh, 170px) !important;
+}
+.cena__paleta {
+  position: absolute; right: -6px; bottom: 12px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+  background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border: 2px solid var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
+}
+
+.semana-home {
+  display: grid; gap: 8px; padding: 12px; flex: none;
+  background: var(--livro-grao), var(--rqr-fundo-conteudo); border: 2.5px solid var(--rqr-borda);
+  border-radius: var(--livro-raio); box-shadow: 0 5px 0 var(--rqr-sombra-cor);
+  transform-origin: 50% 100%; animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 60ms both;
+}
+.semana-home .proxima__titulo { white-space: normal; font-size: .98rem; }
+.semana-home__lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.semana-home__lista > li { animation: tela-pop 340ms cubic-bezier(.3, 1.6, .5, 1) both; }
+.missao-mini {
+  width: 100%; display: flex; align-items: center; gap: 9px; min-height: 44px; padding: 5px 8px; cursor: pointer; text-align: left;
+  font: inherit; color: var(--rqr-texto);
+  background: var(--livro-grao), var(--livro-papel); border: 2px solid var(--rqr-borda); border-radius: var(--livro-raio-p);
+  box-shadow: 0 3px 0 var(--rqr-sombra-cor);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1), background 200ms;
+}
+.missao-mini:active { transform: translateY(3px); box-shadow: 0 0 0 var(--rqr-sombra-cor); transition-duration: 60ms; }
+.missao-mini__check {
+  flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--livro-ceu); color: var(--livro-tinta); border: 2px solid var(--livro-tinta);
+}
+.missao-mini__texto { flex: 1; min-width: 0; font-weight: 700; font-size: .86rem; line-height: 1.2; }
+.missao-mini__tempo { flex: none; padding: 1px 7px; border-radius: 99px; font: 700 .68rem/1.5 var(--rqr-font-titulo); background: var(--livro-papel-suave); color: var(--rqr-texto); }
+.missao-mini.is-ok { background: var(--livro-grao), var(--livro-salvia); color: var(--livro-tinta); }
+.missao-mini.is-ok .missao-mini__check { background: #FFFCF4; animation: kb-selo 260ms cubic-bezier(.3, 1.6, .5, 1); }
+.missao-mini.is-ok .missao-mini__texto { text-decoration: line-through; text-decoration-thickness: 2px; }
+.missao-mini.is-ok .missao-mini__tempo { background: rgb(255 252 244 / .7); color: var(--livro-tinta); }
+.semana-home__fim { margin: 0; font-weight: 700; font-size: .85rem; }
+
+.deu-vontade { width: 100%; justify-content: flex-start; min-height: 60px; padding: 8px 14px; gap: 12px; flex: none;
+  transform-origin: 50% 100%; animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 140ms both; }
+.deu-vontade .atalho__texto { font-size: 1.05rem; }
+.celular:has(> .cena) > .deu-vontade { margin-bottom: clamp(30px, 4.5dvh, 40px); }
+
+:root[data-tema="escuro"] .semana-home { background: var(--livro-grao), var(--noite-cartao); border-color: var(--noite-linha); box-shadow: 0 5px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .missao-mini { background: var(--livro-grao), #24234F; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .missao-mini__check { background: var(--noite-azul); color: var(--noite-creme); border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .missao-mini__tempo { background: #36357A; color: var(--noite-creme); }
+:root[data-tema="escuro"] .missao-mini.is-ok { background: var(--livro-grao), var(--noite-verde); color: var(--noite-creme); }
+:root[data-tema="escuro"] .missao-mini.is-ok .missao-mini__check { background: rgb(255 252 244 / .9); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .missao-mini.is-ok .missao-mini__tempo { background: rgb(13 12 38 / .4); color: var(--noite-creme); }
+:root[data-tema="escuro"] .cena__selo { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+
+/* Tela inicial v3: números do caminho em destaque e cartões compactos de história e presente. */
+.contagem { flex: none; }
+.contagem__item { position: relative; padding: 10px 10px 14px; overflow: hidden; }
+.contagem .mini__valor { font: 700 1.5rem/1.05 var(--rqr-font-titulo); }
+.contagem .mini__valor small { font: 700 .8rem var(--rqr-font-texto); color: var(--rqr-texto-suave); }
+.contagem__barra { position: absolute; left: 10px; right: 10px; bottom: 6px; height: 5px; border-radius: 99px; background: var(--livro-papel-suave); overflow: hidden; }
+.contagem__barra span { display: block; height: 100%; background: var(--rqr-verde-agro); transform-origin: left; transition: transform 600ms cubic-bezier(.3, 1.4, .5, 1); }
+.mini__icone--feitas { animation: kb-selo 300ms cubic-bezier(.3, 1.6, .5, 1); }
+
+.destaques { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: none; transform-origin: 50% 100%; animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 80ms both; }
+.destaque {
+  position: relative; display: grid; align-content: start; gap: 1px; min-height: 64px; padding: 8px 10px; text-align: left; cursor: pointer;
+  font: inherit; color: var(--livro-tinta); overflow: hidden;
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p); box-shadow: 0 4px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1);
+}
+.destaque:active { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.destaque:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+.destaque--historia { background: linear-gradient(90deg, rgb(255 252 244 / .95) 55%, rgb(255 252 244 / .35)), url("/cenarios/cap1-nave-pousada.webp") right 30% / 70% auto no-repeat, var(--livro-lavanda); }
+.destaque--historia.is-pronto { box-shadow: 0 4px 0 var(--livro-tinta), 0 0 0 3px var(--livro-sol); }
+.destaque--presente { background: var(--livro-grao), var(--livro-rosa); padding-right: 52px; }
+.destaque__rotulo { display: inline-flex; align-items: center; gap: 4px; font: 700 .68rem/1.3 var(--rqr-font-titulo); text-transform: uppercase; letter-spacing: .04em; opacity: .85; }
+.destaque__titulo { font: 700 .92rem/1.15 var(--rqr-font-titulo); }
+.destaque__estado { font-weight: 700; font-size: .72rem; line-height: 1.2; }
+.destaque__previa { position: absolute; right: -4px; bottom: -6px; width: 58px; height: 58px; }
+.semana-home__todas { justify-self: end; margin: 0; padding: 2px 0; font-size: .82rem; }
+
+:root[data-tema="escuro"] .contagem__barra { background: #36357A; }
+:root[data-tema="escuro"] .contagem .mini__valor small { color: #D3CDE9; }
+:root[data-tema="escuro"] .destaque { color: var(--noite-creme); border-color: var(--noite-funda); box-shadow: 0 4px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .destaque--historia { background: linear-gradient(90deg, rgb(42 41 96 / .96) 55%, rgb(42 41 96 / .4)), url("/cenarios/cap4-banco-noite.webp") right 40% / 70% auto no-repeat, var(--noite-roxo); }
+:root[data-tema="escuro"] .destaque--presente { background: var(--livro-grao), var(--noite-rosa); }
+
+/* Tela inicial v4: missões da semana em grade 2 × 2 de blocos coloridos. */
+.mini__icone--dias { background: var(--livro-salvia); color: var(--livro-tinta); }
+.contagem .mini--linha { gap: 8px; }
+.contagem .mini__valor { font-size: 1.35rem; white-space: nowrap; }
+.missoes-grade { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.missoes-grade > li { display: grid; animation: tela-pop 340ms cubic-bezier(.3, 1.6, .5, 1) both; }
+.missao-bloco {
+  display: grid; align-content: start; gap: 4px; min-height: 76px; padding: 7px 9px 9px; text-align: left; cursor: pointer;
+  font: inherit; color: var(--livro-tinta);
+  border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p); box-shadow: 0 4px 0 var(--livro-tinta);
+  transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1), background 200ms;
+}
+.missao-bloco:active { transform: translateY(4px); box-shadow: 0 0 0 var(--livro-tinta); transition-duration: 60ms; }
+.missao-bloco:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; }
+.missao-bloco--0 { background: var(--livro-grao), var(--livro-sol); }
+.missao-bloco--1 { background: var(--livro-grao), var(--livro-ceu); }
+.missao-bloco--2 { background: var(--livro-grao), var(--livro-rosa); }
+.missao-bloco--3 { background: var(--livro-grao), var(--livro-salvia); }
+.missao-bloco__topo { display: flex; align-items: center; justify-content: space-between; }
+.missao-bloco__icone { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #FFFCF4; border: 2px solid var(--livro-tinta); }
+.missao-bloco__tempo { padding: 0 7px; border-radius: 99px; font: 700 .66rem/1.6 var(--rqr-font-titulo); background: rgb(255 252 244 / .75); }
+.missao-bloco__texto { font: 700 .8rem/1.2 var(--rqr-font-titulo); }
+.missao-bloco.is-ok { background: var(--livro-grao), var(--livro-papel-suave); box-shadow: 0 2px 0 var(--livro-tinta); border-style: dashed; }
+.missao-bloco.is-ok .missao-bloco__texto { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .75; }
+.missao-bloco.is-ok .missao-bloco__icone { background: var(--livro-salvia); animation: kb-selo 260ms cubic-bezier(.3, 1.6, .5, 1); }
+.semana-home { gap: 7px; padding: 10px 10px 12px; }
+.celular:has(> .cena) > .deu-vontade { margin-bottom: clamp(20px, 3dvh, 28px); min-height: 54px; }
+.deu-vontade .atalho__texto { text-align: left; }
+
+:root[data-tema="escuro"] .mini__icone--dias { background: var(--noite-verde); color: var(--noite-creme); }
+:root[data-tema="escuro"] .missao-bloco { color: var(--noite-creme); border-color: var(--noite-funda); box-shadow: 0 4px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .missao-bloco--0 { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .missao-bloco--1 { background: var(--livro-grao), var(--noite-azul); }
+:root[data-tema="escuro"] .missao-bloco--2 { background: var(--livro-grao), var(--noite-rosa); }
+:root[data-tema="escuro"] .missao-bloco--3 { background: var(--livro-grao), var(--noite-verde); }
+:root[data-tema="escuro"] .missao-bloco__tempo { background: rgb(13 12 38 / .35); }
+:root[data-tema="escuro"] .missao-bloco--0 .missao-bloco__tempo { background: rgb(255 252 244 / .75); }
+:root[data-tema="escuro"] .missao-bloco__icone { color: var(--livro-tinta); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .missao-bloco.is-ok { background: var(--livro-grao), #24234F; color: #D3CDE9; border-color: var(--noite-linha); box-shadow: 0 2px 0 var(--noite-funda); }
+
+/* Contador de dias e missões: ícone + texto em cima, barra embaixo (nada sobreposto). */
+.celular .contagem .contagem__item {
+  display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; align-items: center;
+  column-gap: 9px; row-gap: 7px; padding: 9px 11px 10px; overflow: visible; min-height: 0;
+}
+.celular .contagem .contagem__item > div { min-width: 0; }
+.celular .contagem .mini__icone { width: 36px; height: 36px; }
+.celular .contagem .mini__rotulo { font-size: .74rem; line-height: 1.15; }
+.celular .contagem .mini__valor { font: 700 1.35rem/1.1 var(--rqr-font-titulo); white-space: nowrap; }
+.celular .contagem .contagem__barra { position: static; grid-column: 1 / -1; height: 6px; margin: 0; }
+
+/* A cena encolhe com a tela e o Broto acompanha a altura dela (nunca corta a cabeça). */
+.celular > .cena { container-type: size; min-height: 130px; }
+.celular > .cena .cena__broto { margin-bottom: 7cqh; }
+.celular > .cena .cena__broto > .bicho { width: min(170px, 74cqh) !important; height: min(170px, 74cqh) !important; }
+.missoes-grade:empty { display: none; }
+.missoes-grade:has(> li:only-child) { grid-template-columns: 1fr; }
+
+/* =====================================================================
+   História com vida: botão central que flutua e vira a página; cartão
+   com a ilustração passeando e selo "Novo!" quando o capítulo libera.
+   Movimento lento (≥ 3 s), sem piscar; para com "Reduzir animações".
+   ===================================================================== */
+.tabbar__historia .tabbar__sos-circulo { position: relative; animation: livro-flutua 3.2s ease-in-out infinite; }
+@keyframes livro-flutua { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(-4deg); } }
+.livro-pagina { display: grid; place-items: center; perspective: 120px; }
+.livro-pagina svg { animation: livro-vira 5s ease-in-out infinite; transform-origin: 50% 50%; }
+@keyframes livro-vira { 0%, 78%, 100% { transform: rotateY(0); } 86% { transform: rotateY(-180deg) scale(1.08); } 94% { transform: rotateY(-360deg); } }
+.tabbar__historia.is-novo .tabbar__sos-circulo::after {
+  content: "★"; position: absolute; top: -8px; right: -8px; display: grid; place-items: center; width: 22px; height: 22px;
+  border-radius: 50%; font-size: .75rem; line-height: 1; color: var(--livro-tinta);
+  background: #FFFCF4; border: 2px solid var(--livro-tinta); animation: estrela-gira 4s linear infinite;
+}
+@keyframes estrela-gira { to { transform: rotate(360deg); } }
+.tabbar__historia:active .tabbar__sos-circulo { animation-play-state: paused; }
+
+.destaque--historia { background-size: auto, 70% auto, auto; animation: historia-passeia 14s ease-in-out infinite alternate; }
+@keyframes historia-passeia { from { background-position: 0 0, right 20%, 0 0; } to { background-position: 0 0, right 55%, 0 0; } }
+.destaque__novo {
+  position: absolute; top: 6px; right: 6px; padding: 1px 8px; border-radius: 99px;
+  font: 700 .66rem/1.6 var(--rqr-font-titulo); color: var(--livro-tinta);
+  background: var(--livro-sol); border: 2px solid var(--livro-tinta); box-shadow: 0 2px 0 var(--livro-tinta);
+  animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 400ms both, novo-balanca 2.8s ease-in-out 1s infinite;
+}
+@keyframes novo-balanca { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-2px); } }
+.destaque--historia .destaque__titulo { padding-right: 46px; }
+:root[data-tema="escuro"] .destaque__novo { border-color: var(--noite-funda); box-shadow: 0 2px 0 var(--noite-funda); }
+:root[data-tema="escuro"] .tabbar__historia.is-novo .tabbar__sos-circulo::after { background: var(--noite-cartao); color: var(--livro-sol); border-color: var(--noite-linha); }
+
+/* Cartão "Próximo presente": vitrine redonda com o Broto inteiro usando o item. */
+.destaque--presente { display: flex; align-items: center; gap: 8px; padding: 7px 8px; padding-right: 8px; }
+.presente__vitrine {
+  flex: none; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; overflow: hidden;
+  background: var(--livro-grao), #FFFCF4; border: 2px solid var(--livro-tinta);
+  animation: vitrine-respira 3.4s ease-in-out infinite;
+}
+.presente__vitrine .bicho { width: 50px !important; height: 50px !important; margin-top: 6px; }
+@keyframes vitrine-respira { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) scale(1.04); } }
+.presente__info { display: grid; gap: 1px; min-width: 0; }
+.destaque--presente .destaque__titulo { font-size: .86rem; }
+.destaque--presente .destaque__rotulo { font-size: .6rem; }
+:root[data-tema="escuro"] .presente__vitrine { background: var(--livro-grao), #FFFCF4; border-color: var(--noite-funda); }
+
+/* Celulares baixos (até ~700 px de altura): tudo um pouco mais compacto para caber sem rolar. */
+.celular > .cena { min-height: 84px; }
+@media (max-height: 720px) {
+  .celular:has(> .cena) { gap: 7px; padding-top: 12px; }
+  .celular:has(> .cena) .topo__oi { font-size: .8rem; }
+  .celular:has(> .cena) .topo__titulo { font-size: 1.15rem; }
+  .celular:has(> .cena) .botao-topo__icone, .celular:has(> .cena) .botao-tema--compacto .botao-tema__icone { width: 38px; height: 38px; }
+  .celular .contagem .contagem__item { padding: 6px 9px; }
+  .celular .contagem .mini__icone { width: 30px; height: 30px; }
+  .celular .contagem .mini__valor { font-size: 1.15rem; }
+  .destaque { min-height: 54px; padding: 6px 8px; }
+  .presente__vitrine { width: 44px; height: 44px; }
+  .presente__vitrine .bicho { width: 42px !important; height: 42px !important; }
+  .semana-home { padding: 8px 9px 9px; gap: 5px; }
+  .semana-home .progresso--cheio { display: none; }
+  .missao-bloco { min-height: 60px; padding: 5px 8px 7px; }
+  .celular:has(> .cena) > .deu-vontade { min-height: 48px; margin-bottom: 30px; }
+  .deu-vontade .atalho__icone { width: 34px; height: 34px; }
+}
+
+/* Animações de chamada mais sutis (pedido do produto: não competir com o conteúdo). */
+.tabbar__historia .tabbar__sos-circulo { animation: livro-flutua 5s ease-in-out infinite; }
+@keyframes livro-flutua { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.livro-pagina svg { animation: livro-vira 9s ease-in-out infinite; }
+@keyframes livro-vira { 0%, 88%, 100% { transform: rotateY(0); } 94% { transform: rotateY(-28deg); } }
+.tabbar__historia.is-novo .tabbar__sos-circulo::after { animation: none; width: 18px; height: 18px; top: -5px; right: -5px; font-size: .62rem; }
+.destaque__novo { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 400ms both; }
+.presente__vitrine { animation: vitrine-respira 6s ease-in-out infinite; }
+@keyframes vitrine-respira { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+.destaque--historia { animation-duration: 24s; }
+
+/* Cartão do presente discreto: papel como os outros cartões, vitrine parada. */
+.destaque--presente { background: var(--livro-grao), var(--rqr-fundo-conteudo); color: var(--rqr-texto); border-width: 2px; box-shadow: 0 3px 0 var(--rqr-sombra-cor); }
+.presente__vitrine { animation: none; background: var(--livro-grao), var(--livro-papel-suave); border-width: 1.5px; }
+.destaque--presente .destaque__rotulo { color: var(--rqr-texto-suave); opacity: 1; }
+:root[data-tema="escuro"] .destaque--presente { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); }
+:root[data-tema="escuro"] .destaque--presente .destaque__rotulo { color: #D3CDE9; }
+:root[data-tema="escuro"] .presente__vitrine { background: var(--livro-grao), #36357A; border-color: var(--noite-linha); }
+
+/* Cartões de História e presente como blocos coloridos (estilo Kahoot), sem animação chamativa. */
+.destaque { border-width: 2.5px; box-shadow: 0 5px 0 var(--livro-tinta); }
+.destaque:active { transform: translateY(5px); box-shadow: 0 0 0 var(--livro-tinta); }
+.destaque--historia, .destaque--historia.is-pronto { background: var(--livro-grao), var(--livro-lavanda); box-shadow: 0 5px 0 var(--livro-tinta); animation: none; }
+.destaque--historia::after { /* recorte da ilustração no canto, como uma figurinha */
+  content: ""; position: absolute; right: -10px; bottom: -14px; width: 64px; height: 64px; border-radius: 50%;
+  background: url("/cenarios/cap1-nave-pousada.webp") 50% 88% / 260% auto no-repeat; border: 2px solid var(--livro-tinta); opacity: .95;
+}
+.destaque--historia .destaque__titulo, .destaque--historia .destaque__estado { padding-right: 44px; }
+.destaque--presente { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-width: 2.5px; box-shadow: 0 5px 0 var(--livro-tinta); }
+.destaque--presente .destaque__rotulo { color: var(--livro-tinta); opacity: .8; }
+.presente__vitrine { background: var(--livro-grao), #FFFCF4; border: 2px solid var(--livro-tinta); }
+:root[data-tema="escuro"] .destaque { box-shadow: 0 5px 0 var(--noite-funda); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .destaque--historia, :root[data-tema="escuro"] .destaque--historia.is-pronto { background: var(--livro-grao), var(--noite-roxo); color: var(--noite-creme); }
+:root[data-tema="escuro"] .destaque--historia::after { background-image: url("/cenarios/cap4-banco-noite.webp"); border-color: var(--noite-funda); }
+:root[data-tema="escuro"] .destaque--presente { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .destaque--presente .destaque__rotulo { color: var(--livro-tinta); }
+:root[data-tema="escuro"] .presente__vitrine { background: var(--livro-grao), #FFFCF4; border-color: var(--noite-funda); }
+/* Sem a barrinha, o cartão de contagem tem uma linha só (sem sobra embaixo). */
+.celular .contagem .contagem__item { grid-template-rows: auto; row-gap: 0; padding: 8px 11px; box-shadow: 0 4px 0 var(--rqr-sombra-cor); }
+:root[data-tema="escuro"] .celular .contagem .contagem__item { box-shadow: 0 4px 0 var(--noite-funda); }
+
+/* Campo de texto na história: enquanto digita, o formulário sobe para o topo da tela,
+   longe do teclado do celular (que cobre a parte de baixo e escondia o que era digitado). */
+.historia-dialogo:has(.especial__campo:focus) .historia-dialogo__baixo {
+  top: calc(max(12px, env(safe-area-inset-top)) + 60px); bottom: auto; max-height: none;
+}
+.historia-dialogo:has(.especial__campo:focus) .historia-caixa { display: none; }
+.especial__campo { font-size: 16px; color: var(--livro-tinta); background: #FFFCF4; border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio-p); }
+.especial__campo:focus { outline: 3px solid var(--livro-sol); outline-offset: 2px; }
+
+/* História em vermelho-tomate (botão central do menu e cartão da tela inicial). */
+:root { --livro-tomate: #E0605A; --livro-tomate-claro: #F29B8F; --noite-tomate: #A8443F; }
+.tabbar__historia .tabbar__sos-circulo,
+:root[data-tema="escuro"] .tabbar__historia .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-tomate); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+.destaque--historia, .destaque--historia.is-pronto { background: var(--livro-grao), var(--livro-tomate-claro); color: var(--livro-tinta); }
+:root[data-tema="escuro"] .destaque--historia, :root[data-tema="escuro"] .destaque--historia.is-pronto { background: var(--livro-grao), var(--noite-tomate); color: var(--noite-creme); }
+/* O botão central do menu continua amarelo; só o cartão da História na tela inicial é vermelho. */
+.tabbar__historia .tabbar__sos-circulo, :root[data-tema="escuro"] .tabbar__historia .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+/* A estrelinha é decorativa: texto alternativo vazio para não entrar no nome do botão. */
+.tabbar__historia.is-novo .tabbar__sos-circulo::after { content: "★" / ""; }
