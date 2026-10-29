@@ -37,7 +37,7 @@ export function Queda({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean 
       <CenaCap1 momento={{ etapa: "abertura", pergunta: null, cena: "queda" }} reduzir={reduzir}
         ator={<div className="queda__broto"><Bichinho humor={pousou ? "cansado" : "calmo"} nivel={1} tamanho={104} reduzir aparencia={aparencia} /></div>} />
       <p id="queda-texto" className="sr-only" aria-live="polite">
-        {pousou ? "O Broto pousou na grama, ao lado da cratera. Está bem." : "Uma estrelinha cai do espaço. É o Broto."}
+        {pousou ? "Alguma coisa pousou na grama, ao lado da cratera. Parece um alien." : "Uma estrela cai do espaço."}
       </p>
       <button ref={botao} className="queda__pular" onClick={terminar}>{reduzir || pousou ? "Continuar" : "Pular"}</button>
     </div>

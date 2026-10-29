@@ -35,7 +35,7 @@ export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boole
         </div>
       </div>
       <h1 className="abertura__nome">Guardião</h1>
-      <p className="abertura__frase">Um passo de cada vez, junto com o Broto.</p>
+      <p className="abertura__frase">Um passo de cada vez, com alguém do seu lado.</p>
       <p className="sr-only" role="status">Abrindo o Guardião.</p>
       <button className="abertura__pular" onClick={terminar}>Pular</button>
     </div>

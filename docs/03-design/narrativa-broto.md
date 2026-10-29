@@ -84,7 +84,7 @@ Os capítulos destravam ao jogar, nunca por sorte. Podem ser relidos, e toda con
 O capítulo 6 é o mais importante clinicamente: depois de um lapso, a pessoa costuma pensar "já estraguei tudo" e apostar mais (efeito de violação da abstinência). Ver o Broto escorregar e a luz continuar acesa prepara a pessoa antes de ela passar por isso.
 
 ### Capítulo 1: A Queda
-**Duração:** 10 a 15 minutos. É o primeiro contato com o app: abre sozinho no primeiro acesso, depois da abertura (`web/src/Abertura.tsx`) e do aviso. A pessoa conhece o alien e **dá a ele o nome Broto** num comentário dela ("Você parece um broto. Vou te chamar de Broto."), sem escolha de nome, e ele faz, na voz dele, as perguntas do [questionário de entrada](../02-produto/questionario-onboarding.md) (aparência, apelido, como a pessoa chega, motivo, meta e se quer guardar). A pergunta dos 18 anos fica fora da conversa, numa tela neutra antes do capítulo. Fala e perguntas seguem a skill `conversa-broto`. O resto é conversa para criar confiança: a Vila Estrela, a poeira de luz, a cantiga da Vó, música, as luas e o Broto como "alienígena".
+**Duração:** 10 a 15 minutos. É o primeiro contato com o app: abre sozinho no primeiro acesso, depois da abertura (`web/src/Abertura.tsx`) e do aviso. A pessoa conhece o alien e **dá a ele o nome Broto** num comentário dela ("Nossa, você parece um broto. Vou te chamar de Broto."), sem escolha de nome, e ele faz, na voz dele, as perguntas do [questionário de entrada](../02-produto/questionario-onboarding.md) (aparência, apelido, como a pessoa chega, motivo, meta e se quer guardar). A pergunta dos 18 anos fica fora da conversa, numa tela neutra antes do capítulo. Fala e perguntas seguem a skill `conversa-broto`. O resto é conversa para criar confiança: a Vila Estrela, a poeira de luz, a cantiga da Vó, música, as luas e o Broto como "alienígena".
 
 **Ordem:** queda do espaço → conversa antes do jogo → Pulo do Bichinho → fala de abertura → conversa depois do jogo → perguntas da pessoa → pergunta do Broto → lição.
 
@@ -109,7 +109,7 @@ Até ser batizado, o alien não se chama de Broto e aparece como "Alien". O tom 
   - "Não tô bem, não." → "Obrigado por me dizer. Olha quem pode te ajudar agora. Eu espero aqui." **(abre o protocolo de crise)**
   - "Prefiro não dizer." → "Tudo bem. Não precisa."
 - **Broto:** Lá na Vila, a família chama a gente de "pequeno" até a gente sair de casa. O nome de verdade quem dá é o primeiro amigo que a gente faz longe dela. E eu nunca tinha saído… Então, por enquanto, eu não tenho nome. _(pergunta do app: batismo)_
-  - "Você parece um broto. Vou te chamar de Broto." → "Broto… Meu primeiro nome de verdade. Gostei." (única opção: é a pessoa comentando, não uma escolha de nome)
+  - "Nossa, você parece um broto. Vou te chamar de Broto." → "Broto… Meu primeiro nome de verdade. Gostei." (única opção: é a pessoa comentando, não uma escolha de nome)
 - **Broto:** E você? Como eu te chamo? Pode ser apelido. Ou eu te chamo de "você" mesmo. _(pergunta do app: nome)_
 - **Broto:** Prazer, {nome}. Você é o primeiro humano que eu vejo de perto. E a recepção tá melhor que a do ET de Varginha: ele foi parar no jornal, eu ganhei alguém pra conversar.
 - **Broto:** Tá vendo aquele ponto de luz perto das estrelas? É a Vila Estrela. Minha casa. _(cena: vila)_

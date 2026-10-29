@@ -50,14 +50,14 @@ O que isso muda na fala:
 
 ## O nome "Broto" quem dá é a pessoa
 
-O alienígena chega **sem nome**. Quem dá o nome é a pessoa, num comentário dela, e não numa tela de escolher nome: *"Você parece um broto. Vou te chamar de Broto."* O nome é sempre Broto. Ter sido ela quem achou parecido e batizou cria vínculo desde o primeiro minuto.
+O alienígena chega **sem nome**. Quem dá o nome é a pessoa, num comentário dela, e não numa tela de escolher nome: *"Nossa, você parece um broto. Vou te chamar de Broto."* O nome é sempre Broto. Ter sido ela quem achou parecido e batizou cria vínculo desde o primeiro minuto.
 
 Regras:
 
 1. **Antes do batismo, ele não se chama de Broto.** Nenhuma fala anterior diz "Sou o Broto" ou "Meu nome é Broto". Na interface, ele aparece como "Alien" até ser batizado.
 2. **Ele explica, sem pedir nome, por que com 25 anos ainda não tem um.** Na Vila Estrela, a família chama todo mundo de "pequeno" até a pessoa sair de casa. O nome de verdade quem dá é o primeiro amigo que a gente faz longe de casa, e ele nunca tinha saído:
    > "Lá na Vila, a família chama a gente de 'pequeno' até a gente sair de casa. O nome de verdade quem dá é o primeiro amigo que a gente faz longe dela. E eu nunca tinha saído… Então, por enquanto, eu não tenho nome."
-3. **A pessoa responde com uma fala só, que não é escolha:** "Você parece um broto. Vou te chamar de Broto." → "Broto… Meu primeiro nome de verdade. Gostei." Não tem campo de texto, outro nome nem "Agora não" nesse passo. Para sair, existe o "Agora não" do topo da tela, que vale para a conversa toda.
+3. **A pessoa responde com uma fala só, que não é escolha:** "Nossa, você parece um broto. Vou te chamar de Broto." → "Broto… Meu primeiro nome de verdade. Gostei." Não tem campo de texto, outro nome nem "Agora não" nesse passo. Para sair, existe o "Agora não" do topo da tela, que vale para a conversa toda.
 4. **Depois do batismo, ele pergunta o nome da pessoa.** É a troca natural, e dá para responder com apelido ou pular ("Pode ser 'você' mesmo").
 5. **Depois do batismo, a fala usa "Broto" normalmente.** O batismo fica guardado só no aparelho, e o passo não se repete quando a pessoa relê o capítulo.
 
