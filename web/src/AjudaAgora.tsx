@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { BotaoLibras } from "./BotaoLibras";
 import { Icone } from "./Icone";
 
 /**
@@ -46,6 +47,7 @@ export function PainelCrise({ aoFechar }: { aoFechar: () => void }) {
 
   return (
     <div className="crise ajuda-agora__painel" role="dialog" aria-modal="true" aria-labelledby="ajuda-agora-titulo">
+      <div className="tela-libras"><BotaoLibras /></div>
       <button className="crise__fechar" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
       <h2 id="ajuda-agora-titulo" ref={titulo} tabIndex={-1} className="crise__titulo">
         Você não precisa passar por isso sozinho(a).

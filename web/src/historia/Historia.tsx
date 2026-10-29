@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BotaoLibras } from "../BotaoLibras";
 import { Dialogo } from "./Dialogo";
 import { PainelCrise } from "../AjudaAgora";
 import { nomeDoBroto, usePerfil } from "../personalizacao";
@@ -97,6 +98,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
     <>
       <div ref={caixa} className={`historia ${iniciar ? "historia--inicio" : ""}`} role="dialog" aria-modal="true" aria-labelledby="historia-titulo"
         aria-hidden={escondeMapa || undefined} style={escondeMapa ? { visibility: "hidden" } : undefined}>
+        <div className="tela-libras"><BotaoLibras /></div>
         <div className="historia__caixa">
           <h2 id="historia-titulo" ref={titulo} className="historia__titulo" tabIndex={-1}>História do {alien}</h2>
           <button className="historia__fechar" onClick={aoFechar} aria-label="Fechar a história">×</button>

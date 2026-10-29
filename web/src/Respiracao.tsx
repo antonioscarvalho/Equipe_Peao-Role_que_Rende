@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BotaoLibras } from "./BotaoLibras";
 import { Bichinho } from "./Bichinho";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
@@ -56,6 +57,7 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
 
   return (
     <div className="crise" role="dialog" aria-modal="true" aria-labelledby="crise-titulo">
+      <div className="tela-libras"><BotaoLibras /></div>
       <button className="crise__fechar" onClick={aoFechar} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>
       {!terminou ? (
         <>
