@@ -1,9 +1,0 @@
-/* Mini jogo Desvia dos Cometas (cap. 2). Reaproveita o visual .pulo* de styles.css; aqui só o que é dele. */
-.cometas__mundo {
-  background: linear-gradient(180deg, rgb(20 18 60 / .55), rgb(20 18 60 / .15)),
-    url("/cenarios/cap2-nave-cometa.webp") center / cover no-repeat, var(--rqr-ceu-topo);
-}
-.cometas__bicho { transition: filter 300ms ease, opacity 300ms ease; }
-/* Sem brilho por 2 s depois de encostar no cometa. Não some, não pisca, não treme: só fica mais apagado. */
-.cometas__bicho.is-apagado { filter: grayscale(.7) brightness(.75); opacity: .8; }
-.reduzir-animacoes .cometas__bicho { transition: none; }

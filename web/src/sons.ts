@@ -11,7 +11,9 @@ export type NomeSom =
   | "missao" | "moeda" | "folha" | "inspira" | "expira" | "clique" | "conquista" | "pulo"
   // Cenas do modo história (ver SOM_DA_CENA em Dialogo.tsx): um toque curto por cena, pra combinar
   // com a arte de fundo. "musica" tem a sua própria cantiga (tocarMusica), não entra aqui.
-  | "queda" | "aproximar" | "lua" | "constelacao" | "nave" | "medir" | "amanhecer" | "familia";
+  | "queda" | "aproximar" | "lua" | "constelacao" | "nave" | "medir" | "amanhecer" | "familia"
+  // Ritmo da Cantiga (cap. 2): "tum" e "tá" da cantiga da Vó, a batida do cometa e a colheita no tempo certo.
+  | "tum" | "ta" | "cometa" | "colhe";
 
 let ctx: AudioContext | null = null;
 
@@ -65,6 +67,12 @@ function tocarNotas(notas: Nota[], volumeGeral = 1) {
 }
 
 const receitas: Record<NomeSom, Nota[]> = {
+  // Ritmo da Cantiga (cap. 2). A cantiga é grave e redonda; o cometa é agudo, curto e mais apressado,
+  // mas baixinho e sem brilho de cassino. Acertar o tempo dá só um toque leve de colheita.
+  tum: [{ freq: 196, inicio: 0, dur: 0.22, volume: 0.07, tipo: "triangle", ataque: 0.008 }],
+  ta: [{ freq: 293.66, inicio: 0, dur: 0.18, volume: 0.06, tipo: "triangle", ataque: 0.008 }],
+  cometa: [{ freq: 1174.66, inicio: 0, dur: 0.07, volume: 0.025, ataque: 0.004 }],
+  colhe: [{ freq: 587.33, freqFim: 659.25, inicio: 0, dur: 0.14, volume: 0.035, ataque: 0.01 }],
   // Acorde maior suave subindo (Dó-Mi-Sol): "você fez", sem fanfarra.
   missao: [
     { freq: 523.25, inicio: 0, dur: 0.35, volume: 0.08, tipo: "triangle" },

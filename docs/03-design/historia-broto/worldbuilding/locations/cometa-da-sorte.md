@@ -25,7 +25,7 @@ Prometia devolver o dobro da luz para quem desse um pouco da sua.
 
 ## Notable Features
 
-Só aparece ao longe, no céu, e nos cometas dourados do jogo do cap. 2.
+Só aparece ao longe, no céu, e nos grãos dourados do jogo do cap. 2 (Ritmo da Cantiga), que batem mais rápido que a cantiga.
 
 ## Current State
 

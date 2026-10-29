@@ -176,7 +176,7 @@ As perguntas são da pessoa para o Broto. Ele pode contar a idade dele, mas nunc
 ### Capítulo 2: O Cometa da Sorte
 **Duração:** 6 a 10 minutos com o jogo. **Estágio:** contemplação. O Broto cumpre a promessa do capítulo 1 ("lá na Vila aconteceu uma coisa com aposta, um dia eu te conto") e conta a história do pai e do Cometa. A pessoa olha para a aposta **pela família dele**, sem precisar falar de si.
 
-**Jogo novo, Desvia dos Cometas:** cometas dourados caem prometendo "+2", e encostar neles puxa um pouco do brilho do Broto por 2 segundos: o cometa sobe maior, o brilho volta e nenhuma semente se perde (sem vidas, sem derrota). Quando um cometa passa raspando, aparece um "quase" apagado que não vale nada. As sementes verdes são simples, caem sempre no mesmo caminho e fazem ele crescer. Sementes e cometas seguem um padrão fixo de faixas, sem sorteio. Código em `web/src/jogos/cometas/`.
+**Jogo novo, Ritmo da Cantiga:** o Broto colhe poeira de luz no ritmo da cantiga da Vó ("tum-tum, tá-rá", do cap. 1). A poeira desce até o pote e a pessoa toca quando ela chega; cada 8 grãos enchem o pote e fazem a semente crescer. Em compassos fixos o Cometa da Sorte passa no céu batendo mais rápido, com grãos dourados no meio da cantiga que brilham mais quando chegam perto. Tocar no dourado não colhe nada: aparece um "quase" e o cometa fica maior. Errar o tempo não tira nada do pote. Sem sorteio, sem vidas, sem derrota, sem combo; o pote pulsa em cada batida para dar pra jogar sem som; ritmo "calmo" mais lento e com mais folga. Código em `web/src/jogos/cantiga/`.
 
 **O que o capítulo trabalha** (skill `tcc-reestruturacao-cognitiva`, sempre como pergunta ou história, nunca sermão):
 
@@ -214,10 +214,10 @@ As perguntas são da pessoa para o Broto. Ele pode contar a idade dele, mas nunc
 - **Broto:** Hoje eu acho que foi a pior coisa que podia ter acontecido. Ele achou que tinha descoberto o jeito.
   - "Por que a pior?" → "Porque depois daquele dia, toda perda parecia azar, e todo ganho parecia talento dele."
   - "Ele entendia do cometa?" → "Ele achava que sim. Dizia que sabia a hora certa de ir. O cometa não tava nem aí pra hora dele."
-- **Broto:** Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles puxa um pouco da minha luz. Ela volta, mas o cometa sai mais forte.
-- **Broto:** As sementes verdes são o contrário: simples e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?
-  - "Bora." → "Então eu desvio do brilho, e você me avisa quando eu me distrair."
-  - "Como funciona?" → "Você me guia pros lados. O dourado a gente deixa passar, o verde a gente pega. Dá pra parar quando quiser."
+- **Broto:** Os cometas desse jogo são parecidos com aquele: dourados, brilhando, batendo mais rápido que a cantiga. Seguir a batida deles não enche o pote. Só deixa o cometa mais forte.
+- **Broto:** A poeira de luz é o contrário: vem sempre no ritmo da Vó, devagar. Essa enche o pote e faz a semente crescer. Você colhe comigo?
+  - "Bora." → "Então eu canto e você colhe. Tum-tum, tá-rá."
+  - "Como funciona?" → "Você toca quando a poeira chega no pote. Quando o cometa passar, ele bate mais rápido: o dourado a gente deixa passar. Dá pra parar quando quiser."
 
 #### Depois do jogo (logo após a fala de abertura)
 
@@ -245,7 +245,7 @@ As perguntas são da pessoa para o Broto. Ele pode contar a idade dele, mas nunc
 
 #### Fala de abertura, perguntas e lição
 
-> **Broto:** Ufa. Desviar do brilho cansa mais do que parece.
+> **Broto:** Ufa. Segurar o ritmo com o cometa batendo do lado cansa mais do que parece.
 
 | Pergunta | Resposta do Broto |
 |---|---|
@@ -334,7 +334,7 @@ Ninguém fica rico no final. A família está junta, e o bairro voltou a ter rol
 | Jogo | Mecanismo psicológico | Estado |
 |---|---|---|
 | Pulo do Bichinho | Tarefa visual que compete com a imagem da fissura | Pronto |
-| Desvia dos Cometas | Treino de recusa: não encostar no brilho que promete o dobro | Pronto |
+| Ritmo da Cantiga | Treino de recusa: manter o ritmo devagar e não seguir a batida rápida do cometa | Pronto |
 | Acende a Casa | Atenção e memória com recompensa previsível | A fazer |
 | Liga as Estrelas | Calma, sem tempo; regula a emoção antes de falar do segredo | A fazer |
 | Monta o Farol | Junta o esforço acumulado em algo visível; reforça a confiança | A fazer |
@@ -381,5 +381,5 @@ Contrato técnico, pastas, branches e prioridade em [divisão da história](../0
 1. Revisão clínica dos diálogos.
 2. Componente de diálogo com escolhas e progresso dos capítulos.
 3. Capítulo 1 completo no Pulo do Bichinho (para a demo).
-4. Capítulo 2 com o jogo Desvia dos Cometas; os demais aparecem como "em breve".
+4. Capítulo 2 com o jogo Ritmo da Cantiga; os demais aparecem como "em breve".
 5. Registrar o uso de IA em `docs/07-conformidade/declaracao-de-uso-de-ia.md`.

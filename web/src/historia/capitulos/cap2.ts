@@ -3,13 +3,13 @@
 // Estágio: contemplação. Técnica: distorções do quase-ganho, do ganho no começo, da ilusão de controle e da memória
 // seletiva (skill tcc-reestruturacao-cognitiva), pela história do pai do Broto (distância de si, Kross e Ayduk), e
 // balança decisória (skill entrevista-motivacional). Nada da pessoa é guardado: só o apelido do perfil entra na fala.
-// O jogo Desvia dos Cometas (web/src/jogos/cometas/) está registrado em capitulos/index.ts.
+// O jogo Ritmo da Cantiga (web/src/jogos/cantiga/) está registrado em capitulos/index.ts.
 import type { Capitulo } from "../tipos";
 
 export const cap2: Capitulo = {
   id: "cap2",
   titulo: "Capítulo 2: O Cometa da Sorte",
-  falaAbertura: "Ufa. Desviar do brilho cansa mais do que parece.",
+  falaAbertura: "Ufa. Segurar o ritmo com o cometa batendo do lado cansa mais do que parece.",
   perguntas: [
     { pergunta: "Alguém ganhava de verdade?", resposta: "Ganhava um aqui, outro ali, e a Vila inteira ficava sabendo. De quem perdia, ninguém falava." },
     { pergunta: "Você chegou a ir no cometa?", resposta: "Não. Eu só via do quintal. De longe parecia uma festa. De perto, eu nunca quis saber." },
@@ -43,10 +43,10 @@ export const cap2: Capitulo = {
       { rotulo: "Por que a pior?", resposta: "Porque depois daquele dia, toda perda parecia azar, e todo ganho parecia talento dele." },
       { rotulo: "Ele entendia do cometa?", resposta: "Ele achava que sim. Dizia que sabia a hora certa de ir. O cometa não tava nem aí pra hora dele." },
     ] },
-    { humor: "calmo", fala: "Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles puxa um pouco da minha luz. Ela volta, mas o cometa sai mais forte." },
-    { fala: "As sementes verdes são o contrário: simples e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?", opcoes: [
-      { rotulo: "Bora.", resposta: "Então eu desvio do brilho, e você me avisa quando eu me distrair." },
-      { rotulo: "Como funciona?", resposta: "Você me guia pros lados. O dourado a gente deixa passar, o verde a gente pega. Dá pra parar quando quiser." },
+    { humor: "calmo", fala: "Os cometas desse jogo são parecidos com aquele: dourados, brilhando, batendo mais rápido que a cantiga. Seguir a batida deles não enche o pote. Só deixa o cometa mais forte." },
+    { fala: "A poeira de luz é o contrário: vem sempre no ritmo da Vó, devagar. Essa enche o pote e faz a semente crescer. Você colhe comigo?", opcoes: [
+      { rotulo: "Bora.", resposta: "Então eu canto e você colhe. Tum-tum, tá-rá." },
+      { rotulo: "Como funciona?", resposta: "Você toca quando a poeira chega no pote. Quando o cometa passar, ele bate mais rápido: o dourado a gente deixa passar. Dá pra parar quando quiser." },
     ] },
   ],
   depoisDoJogo: [

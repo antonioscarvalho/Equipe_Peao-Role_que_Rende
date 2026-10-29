@@ -1,0 +1,17 @@
+/* Mini jogo Ritmo da Cantiga (cap. 2). Reaproveita o visual .pulo* de styles.css; aqui só o que é dele. */
+.cantiga__mundo {
+  touch-action: manipulation; user-select: none; -webkit-user-select: none; cursor: pointer;
+  background: linear-gradient(180deg, rgb(20 18 60 / .6), rgb(20 18 60 / .25)),
+    url("/cenarios/cap2-nave-cometa.webp") center / cover no-repeat, var(--rqr-ceu-topo);
+}
+/* O Broto fica ao lado do pote (o pote está a 120 px do fundo, no meio). */
+.cantiga__bicho {
+  position: absolute; left: calc(50% - 110px); bottom: 88px; pointer-events: none;
+  transition: filter 300ms ease, opacity 300ms ease;
+}
+.cantiga__bicho.is-balanca { animation: cantiga-balanca calc(var(--batida) * 2) ease-in-out infinite; }
+/* Seguiu o cometa: fica um pouco mais apagado por menos de 1 s. Não some, não pisca, não treme. */
+.cantiga__bicho.is-puxado { filter: grayscale(.6) brightness(.8); opacity: .85; }
+@keyframes cantiga-balanca { 0%, 100% { translate: 0 0; } 50% { translate: 0 -4px; } }
+.reduzir-animacoes .cantiga__bicho { animation: none; transition: none; }
+.cantiga__velocidade { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; }

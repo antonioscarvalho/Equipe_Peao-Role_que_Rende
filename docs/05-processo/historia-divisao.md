@@ -14,13 +14,13 @@ Uma **base comum** e **frentes independentes**: cada pessoa tem a própria pasta
 | Quem | Entrega | Jogo | Função do app que precisa trazer |
 |---|---|---|---|
 | **Atyrson** | **Base** e **Cap. 1, A Queda** | Pulo do Bichinho (pronto) | — |
-| **Maykon** | **Cap. 2, O Cometa da Sorte** | Desvia dos Cometas (novo) | Balança decisória simples ("o que dá" × "o que custa") |
+| **Maykon** | **Cap. 2, O Cometa da Sorte** | Ritmo da Cantiga (novo) | Balança decisória simples ("o que dá" × "o que custa") |
 | **Ian** | **Cap. 3, As Luzes da Casa** | Acende a Casa, jogo da memória (novo) | Link para o "Dinheiro protegido" (`Contador` já existe) |
 | **Danillo** | **Cap. 4, O Segredo** e **Cap. 6, Dia Nublado** | Liga as Estrelas (novo) e Rolê de Carrinho (pronto) | Círculo de Confiança simples (contato e mensagem pronta pelo WhatsApp) e fluxo pós-lapso |
 | **Antonio** | **Cap. 5, O Sinal**, **Epílogo** e **integração final** | Monta o Farol (novo; usa as folhas de todos os jogos) | Plano "Se… então…", CVV 188 e autoexclusão |
 
 Por quê:
-- **Maykon** fez a skill de gamificação ética, e o Desvia dos Cometas é o jogo que mais corre risco de lembrar aposta.
+- **Maykon** fez a skill de gamificação ética, e o Ritmo da Cantiga é o jogo que mais corre risco de lembrar aposta.
 - **Ian** fez a parte visual e o Bichinho no app; o capítulo 3 é visual (casa, lâmpadas, família).
 - **Danillo** escreveu a spec do check-in e do pós-lapso e a skill de acessibilidade; o capítulo 4 é o jogo calmo e sem tempo.
 - **Antonio** faz os merges do repositório; o Farol e o epílogo juntam o que todo mundo fez.
@@ -36,7 +36,7 @@ A base define este formato. Quem mudar o contrato avisa no grupo.
 |---|---|
 | `web/src/historia/Dialogo.tsx`, `Historia.tsx`, `progresso.ts`, `tipos.ts`, `useModal.ts`, `historia.css` | Base (Atyrson) |
 | `web/src/historia/capitulos/capN.ts` | Dono do capítulo |
-| `web/src/historia/capitulos/index.ts` | Todos, **uma linha** por capítulo (ex.: `cap2: { capitulo: cap2, jogo: DesviaDosCometas, nomeJogo: "Desvia dos Cometas" },`) |
+| `web/src/historia/capitulos/index.ts` | Todos, **uma linha** por capítulo (ex.: `cap2: { capitulo: cap2, jogo: RitmoDaCantiga, nomeJogo: "Ritmo da Cantiga" },`) |
 | `web/src/jogos/<nome>/` (com o CSS próprio) | Dono do jogo |
 | `web/src/App.tsx` | Só a base e a integração final (Antonio) |
 
