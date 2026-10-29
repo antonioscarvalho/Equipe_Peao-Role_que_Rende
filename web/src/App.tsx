@@ -26,6 +26,7 @@ import { useContraste } from "./tema";
 import { useVibrar, vibrar } from "./tato";
 import { BotaoLibras } from "./BotaoLibras";
 import { PainelCrise } from "./AjudaAgora";
+import { ModalAcessibilidade } from "./ModalAcessibilidade";
 import { ehMenorDeIdade } from "./menor";
 import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
@@ -121,6 +122,8 @@ export default function App() {
   // false = fechada; true = mapa; "cap1" = primeiro acesso, direto no capítulo 1.
   const [historia, setHistoria] = useState<boolean | "cap1">(false);
   const [abrindo, setAbrindo] = useState(true);
+  // Primeiro acesso: modal de acessibilidade antes da história.
+  const [convite, setConvite] = useState(false);
   // Respondeu que tem menos de 18 anos (tela de idade da história): só a tela de ajuda, sem o resto do app.
   const [menorDeIdade, setMenorDeIdade] = useState(ehMenorDeIdade);
   const conhecer = useConhecer();
@@ -230,6 +233,48 @@ export default function App() {
 
   const abrirCrise = () => { setCrise(true); setEvento({ humor: "apoio", ate: Date.now() + 10 * 60_000 }); };
   const fecharCrise = () => { setCrise(false); setEvento({ humor: "apoio", ate: Date.now() + 30_000 }); };
+
+  // Ajustes de acessibilidade: os mesmos na aba Ajustes e no modal do primeiro acesso.
+  const ajustesAcessibilidade = (
+    <>
+      <h2 className="ajustes__grupo"><Icone nome="acessibilidade" tamanho={18} /> Acessibilidade e conforto</h2>
+      <div className="ajustes">
+        <label className="ajuste">
+          <span className="ajuste__texto">Alto contraste<small>Cores mais fortes e sem textura atrás do texto</small></span>
+          <input type="checkbox" role="switch" checked={contraste.alto} onChange={(e) => { tocar("clique"); contraste.mudar(e.target.checked); }} />
+          <span className="interruptor__trilho" aria-hidden="true" />
+        </label>
+        <label className="ajuste">
+          <span className="ajuste__texto">Reduzir animações<small>Menos movimento na tela</small></span>
+          <input type="checkbox" role="switch" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
+          <span className="interruptor__trilho" aria-hidden="true" />
+        </label>
+        <div className="ajuste">
+          <span className="ajuste__texto">Tema<small>Claro, escuro ou automático</small></span>
+          <BotaoTema compacto />
+        </div>
+      </div>
+
+      <h2 className="ajustes__grupo">Vibração</h2>
+      <div className="ajustes">
+        <label className="ajuste">
+          <span className="ajuste__texto">Vibrar
+            <small>{vibracao.suportado
+              ? "O celular vibra de leve nos botões, nas missões e nos avisos"
+              : "Este aparelho não vibra pelo navegador. O resto continua igual"}</small>
+          </span>
+          <input type="checkbox" role="switch" checked={vibracao.ligado} onChange={(e) => vibracao.mudar(e.target.checked)} />
+          <span className="interruptor__trilho" aria-hidden="true" />
+        </label>
+      </div>
+
+      <h2 className="ajustes__grupo">Som</h2>
+      <div className="ajustes controles-volume">
+        <ControleVolume id="volume-efeitos" rotulo="Efeitos" valor={volumes.efeitos} aoMudar={definirEfeitos} />
+        <ControleVolume id="volume-musica" rotulo="Música" valor={volumes.musica} aoMudar={definirMusica} />
+      </div>
+    </>
+  );
 
   if (menorDeIdade) return <PainelCrise bloqueio aoFechar={() => {}} />;
 
@@ -447,45 +492,14 @@ export default function App() {
 
         {aba === "ajustes" && (
           <section className="aba-ajustes" aria-label="Ajustes">
-            <h2 className="ajustes__grupo">Aparência e conforto</h2>
+            {ajustesAcessibilidade}
+
+            <h2 className="ajustes__grupo">Broto</h2>
             <div className="ajustes">
-              <label className="ajuste">
-                <span className="ajuste__texto">Alto contraste<small>Cores mais fortes e sem textura atrás do texto</small></span>
-                <input type="checkbox" role="switch" checked={contraste.alto} onChange={(e) => { tocar("clique"); contraste.mudar(e.target.checked); }} />
-                <span className="interruptor__trilho" aria-hidden="true" />
-              </label>
-              <label className="ajuste">
-                <span className="ajuste__texto">Reduzir animações<small>Menos movimento na tela</small></span>
-                <input type="checkbox" role="switch" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
-                <span className="interruptor__trilho" aria-hidden="true" />
-              </label>
-              <div className="ajuste">
-                <span className="ajuste__texto">Tema<small>Claro, escuro ou automático</small></span>
-                <BotaoTema compacto />
-              </div>
               <button className="ajuste ajuste--link" onClick={() => { tocar("clique"); abrirPersonalizar(); }}>
                 <span className="ajuste__texto">Personalizar<small>Cores, roupas e acessórios do {nomeBroto}</small></span>
                 <span aria-hidden="true" className="ajuste__seta">›</span>
               </button>
-            </div>
-
-            <h2 className="ajustes__grupo">Vibração</h2>
-            <div className="ajustes">
-              <label className="ajuste">
-                <span className="ajuste__texto">Vibrar
-                  <small>{vibracao.suportado
-                    ? "O celular vibra de leve nos botões, nas missões e nos avisos"
-                    : "Este aparelho não vibra pelo navegador. O resto continua igual"}</small>
-                </span>
-                <input type="checkbox" role="switch" checked={vibracao.ligado} onChange={(e) => vibracao.mudar(e.target.checked)} />
-                <span className="interruptor__trilho" aria-hidden="true" />
-              </label>
-            </div>
-
-            <h2 className="ajustes__grupo">Som</h2>
-            <div className="ajustes controles-volume">
-              <ControleVolume id="volume-efeitos" rotulo="Efeitos" valor={volumes.efeitos} aoMudar={definirEfeitos} />
-              <ControleVolume id="volume-musica" rotulo="Música" valor={volumes.musica} aoMudar={definirMusica} />
             </div>
 
             {conhecer && (
@@ -513,12 +527,15 @@ export default function App() {
       <Confete disparo={confete} reduzir={reduzir} />
       {historia && <Historia aoFechar={() => setHistoria(false)} aoMenorDeIdade={() => { setHistoria(false); setMenorDeIdade(true); }} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
         trilhaRetorno={aba === "jogos" ? "jogos" : "app"} />}
+      {convite && (
+        <ModalAcessibilidade aoTerminar={() => { setConvite(false); setHistoria("cap1"); }}>{ajustesAcessibilidade}</ModalAcessibilidade>
+      )}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);
         // Primeiro acesso: o capítulo 1 apresenta o Broto e o app conhece a pessoa.
         if (!capitulosConcluidos().includes("cap1") && !localStorage.getItem(CHAVE_PRIMEIRO_ACESSO)) {
           try { localStorage.setItem(CHAVE_PRIMEIRO_ACESSO, "1"); } catch { /* modo privado */ }
-          setHistoria("cap1");
+          setConvite(true);
         }
       }} />}
       {(jogo === "pulo" || jogo === "crise") && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}

@@ -28,7 +28,7 @@ export function BotaoLibras() {
     <button type="button" className="botao-topo botao-libras" onClick={() => { tocar("clique"); acharBotaoVLibras()?.click(); }}
       aria-label="Traduzir para Libras com o VLibras" title="Traduzir para Libras"
       data-vlibras-gloss="LIBRAS">
-      <span className="botao-topo__icone" aria-hidden="true"><Icone nome="libras" tamanho={24} /></span>
+      <span className="botao-topo__icone" aria-hidden="true"><Icone nome="linguaDeSinais" tamanho={26} /></span>
     </button>
   );
 }
