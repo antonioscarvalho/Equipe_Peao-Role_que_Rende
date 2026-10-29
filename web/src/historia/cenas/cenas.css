@@ -1,0 +1,118 @@
+/* Cenas da história (skill motion-design: personalidade "Playful" calma).
+   Câmera e trocas de momento: 1,2 s, ease-in-out. Ambiente: loops lentos (5 a 90 s), só transform e opacity.
+   Tudo para com prefers-reduced-motion e com .reduzir-animacoes. */
+.cena { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.cena * { transform-box: fill-box; transform-origin: center; }
+.cena__ceu-topo { stop-color: var(--rqr-azul-escuro); transition: stop-color 1.2s; }
+.cena__ceu-base { stop-color: var(--rqr-roxo); transition: stop-color 1.2s; }
+.cena--amanhecer .cena__ceu-topo { stop-color: var(--rqr-roxo); }
+.cena--amanhecer .cena__ceu-base { stop-color: var(--rqr-rosa-claro); }
+.cena--ceu .cena__ceu-base { stop-color: var(--rqr-azul-escuro); }
+.cena__brilho-centro { stop-color: var(--rqr-amarelo); stop-opacity: .5; }
+.cena__brilho-borda { stop-color: var(--rqr-amarelo); stop-opacity: 0; }
+
+/* Câmera: sobe pro céu (a praça desce) nos momentos da Vila. */
+.cena__camera, .cena__chao { transform-box: view-box; transition: transform 1.2s cubic-bezier(.65, 0, .35, 1); }
+.cena__camera { transform-origin: 62% 17%; }
+.cena--ceu .cena__camera { transform: translateY(150px) scale(1.3); }
+.cena--ceu .cena__chao { transform: translateY(40px); }
+
+.cena__estrela { fill: var(--rqr-amarelo); animation: cena-brilho 5s ease-in-out infinite alternate; }
+@keyframes cena-brilho { from { opacity: 1; } to { opacity: .4; } }
+.cena__estrelas--longe { animation: cena-deriva 90s linear infinite alternate; }
+.cena__estrelas--perto { animation: cena-deriva 60s linear infinite alternate-reverse; }
+@keyframes cena-deriva { from { transform: translateX(-10px); } to { transform: translateX(10px); } }
+.cena--musica .cena__estrela { animation-duration: 1.6s; }
+
+/* Estrela cadente: uma a cada 14 s, bem discreta. */
+.cena__cadente-traco { fill: none; stroke: var(--rqr-branco); stroke-width: 2; stroke-linecap: round; opacity: 0;
+  animation: cena-cadente 14s ease-in 4s infinite; }
+@keyframes cena-cadente {
+  0%, 92% { opacity: 0; transform: translate(0, 0); }
+  94% { opacity: .8; }
+  100% { opacity: 0; transform: translate(260px, 130px); }
+}
+
+.cena__constelacao { fill: none; stroke: var(--rqr-amarelo); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset 2.4s ease-in-out, opacity .6s; }
+.cena--estrelas .cena__constelacao { stroke-dashoffset: 0; opacity: .9; }
+
+.cena__luas { opacity: 0; transition: opacity 1.2s; }
+.cena--lua .cena__luas { opacity: 1; }
+.cena__lua { fill: var(--rqr-amarelo-claro); stroke: var(--rqr-azul-escuro); stroke-width: 3; }
+.cena__lua--vila { fill: var(--rqr-roxo-claro); }
+.cena__lua-mancha { fill: var(--rqr-realce); }
+
+.cena__vila { opacity: .8; transition: opacity 1.2s; }
+.cena--ceu .cena__vila { opacity: 1; }
+.cena__halo { opacity: .3; transition: opacity 1.2s; }
+.cena--familia .cena__halo, .cena--colheita .cena__halo { opacity: 1; }
+.cena__asteroide { fill: var(--rqr-roxo-claro); stroke: var(--rqr-azul-escuro); stroke-width: 3; }
+.cena__cratera-pequena { fill: var(--rqr-roxo); }
+.cena__casinha { fill: var(--rqr-amarelo); stroke: var(--rqr-azul-escuro); stroke-width: 2; stroke-linejoin: round; }
+.cena__vila-janela { fill: var(--rqr-azul-escuro); transition: fill .6s; }
+.cena--familia .cena__vila-janela { fill: var(--rqr-rosa-escuro); }
+.cena__poeira circle { fill: var(--rqr-amarelo); opacity: 0; }
+.cena--colheita .cena__poeira circle { animation: cena-poeira 3s ease-out infinite; }
+@keyframes cena-poeira { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-26px); } }
+
+.cena__nave, .cena__regua { opacity: 0; transition: opacity 1.2s; }
+.cena--nave .cena__nave, .cena--regua .cena__regua { opacity: 1; }
+.cena__nave-rastro { opacity: 0; transition: opacity 1.2s; }
+.cena--nave .cena__nave-rastro { opacity: 1; }
+.cena__nave-corpo { fill: var(--rqr-rosa-escuro); stroke: var(--rqr-azul-escuro); stroke-width: 3; }
+.cena__nave-janela { fill: var(--rqr-azul-claro); stroke: var(--rqr-azul-escuro); stroke-width: 2; }
+.cena__tanque { fill: none; stroke: var(--rqr-amarelo); stroke-width: 2; }
+.cena__traco { stroke: var(--rqr-amarelo); stroke-width: 3; stroke-linecap: round; }
+.cena__rastro { fill: none; stroke: var(--rqr-amarelo); stroke-width: 3; stroke-dasharray: 6 10; stroke-linecap: round; }
+.cena__regua-linha { fill: none; stroke: var(--rqr-amarelo); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+.cena__plataforma { fill: var(--rqr-verde-agro); stroke: var(--rqr-azul-escuro); stroke-width: 3; opacity: 0; }
+.cena--amanhecer .cena__plataforma { animation: cena-plataforma var(--rqr-dur-lenta) var(--rqr-ease-padrao) both; }
+@keyframes cena-plataforma { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+.cena__casa { fill: var(--rqr-roxo); stroke: var(--rqr-azul-escuro); stroke-width: 3; stroke-linejoin: round; transition: transform 1.2s; }
+.cena--bairro .cena__casa { transform: scale(1.06); }
+.cena__janela { fill: var(--rqr-azul-escuro); stroke: var(--rqr-azul-escuro); stroke-width: 2; transition: fill var(--rqr-dur-lenta) 1.2s; }
+.cena--amanhecer .cena__janela--primeira { fill: var(--rqr-amarelo); }
+
+.cena__grama { fill: var(--rqr-verde-agro); stroke: var(--rqr-azul-escuro); stroke-width: 4; }
+.cena__cratera { fill: var(--rqr-azul-escuro); opacity: .55; }
+.cena__fumaca circle { fill: var(--rqr-branco); opacity: .5; animation: cena-fumaca 6s ease-in-out infinite alternate; transition: opacity 1.2s; }
+.cena--amanhecer .cena__fumaca circle { opacity: 0; }
+@keyframes cena-fumaca { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+
+.cena__nota { fill: none; stroke: var(--rqr-amarelo); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+.cena--musica .cena__nota { animation: cena-nota 2.8s ease-out infinite; }
+@keyframes cena-nota { 0% { opacity: 0; transform: translateY(10px) rotate(-8deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-40px) rotate(8deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cena *, .cena { animation: none !important; transition: none !important; }
+  .cena--amanhecer .cena__plataforma, .cena--musica .cena__nota, .cena--colheita .cena__poeira circle { opacity: 1; }
+}
+.reduzir-animacoes .cena--amanhecer .cena__plataforma,
+.reduzir-animacoes .cena--musica .cena__nota,
+.reduzir-animacoes .cena--colheita .cena__poeira circle { opacity: 1; }
+.reduzir-animacoes .cena__cadente-traco { display: none; }
+
+.cena__ator { overflow: visible; }
+.cena__ator-caixa { width: 124px; height: 120px; display: grid; place-items: end center; }
+.cena__queda-rastro { fill: none; stroke: var(--rqr-amarelo); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
+
+/* ---------- Abertura do capítulo: o Broto cai do espaço (mesma cena, momento "queda") ---------- */
+.queda { position: fixed; inset: 0; z-index: 46; overflow: hidden; background: var(--rqr-azul-escuro); }
+.cena--queda .cena__queda-rastro { animation: queda-rastro 2.2s ease-out both; }
+@keyframes queda-rastro { 0% { opacity: 0; stroke-dashoffset: 1; } 15% { opacity: .9; } 75% { opacity: .8; stroke-dashoffset: 0; } 100% { opacity: 0; stroke-dashoffset: 0; } }
+.cena--queda .cena__fumaca circle, .cena--queda .cena__cratera { opacity: 0; animation: queda-aparece var(--rqr-dur-lenta) var(--rqr-ease-padrao) 1.7s both; }
+@keyframes queda-aparece { to { opacity: .55; } }
+.queda__broto { animation: queda-broto 1.7s cubic-bezier(.45, 0, .9, .6) both, queda-quica var(--rqr-dur-lenta) var(--rqr-ease-pop) 1.7s forwards; }
+@keyframes queda-broto { from { transform: translate(520px, -600px) rotate(-540deg) scale(.3); } to { transform: none; } }
+@keyframes queda-quica { 0% { transform: scale(1.18, .78); } 45% { transform: translateY(-26px) scale(.95, 1.06); } 100% { transform: none; } }
+.queda__pular {
+  position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); min-width: 96px; min-height: 48px; padding: 0 18px;
+  border: 3px solid var(--rqr-amarelo); border-radius: 999px; background: var(--rqr-azul-escuro); color: var(--rqr-amarelo);
+  font: inherit; font-weight: 800; cursor: pointer;
+}
+.queda__pular:focus-visible { outline: 3px solid var(--rqr-branco); outline-offset: 3px; }
+.queda--parada .queda__broto { animation: none; }
+@media (prefers-reduced-motion: reduce) { .queda__broto { animation: none !important; } }

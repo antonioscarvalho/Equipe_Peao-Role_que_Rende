@@ -78,5 +78,6 @@ O roteiro de 40 segundos, ensaiável, está em [`teste-manual.md`](references/te
 - `guia-estilo-role-que-rende` decide a paleta; **esta pode vetar um par** que não passa, e a cor muda, não a regra.
 - `ui-ux-designer` decide reuso e estados de tela; o alvo de toque, o foco e o contraste seguem esta.
 - `design-etico-saude-digital` e `seguranca-e-crise` decidem o que o app faz na crise; esta garante que todo mundo consegue fazer.
+- `vlibras` garante que o conteúdo chegue ao avatar de Libras (texto visível ou glosa em todo controle, nada só em `aria-label`); rode o script dela junto com os desta.
 - `conformidade-legal-br` cobre a LBI (Lei 13.146/2015) e a ABNT NBR 17225:2025; esta é o como técnico.
 - Em conflito, vale a regra **mais exigente** para quem usa.

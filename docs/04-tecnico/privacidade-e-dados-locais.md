@@ -32,6 +32,8 @@ O prompt de produto pedia duas opções. A equipe já tinha decidido; fica regis
 | Perfil: apelido, foto, cenário | "Bia", foto 256×256 | **Pessoal**, e sensível pelo contexto (ligar rosto e nome a um app de apostas) | localStorage, chaves `rqr:perfil` e `rqr:foto` (foto recortada, reencodada e guardada como `data:`, sem os metadados do arquivo original) | **Não** |
 | Aparência do bichinho | cor, roupa, acessórios | Comum | localStorage, chave `rqr:aparencia` | Não |
 | Preferências (tema, fonte, modo discreto) | — | Comum | localStorage | Não |
+| Texto tocado com o VLibras aberto | "Dia difícil não zera nada." | O que estiver na tela, inclusive o apelido se ele aparecer no texto | Não fica guardado no app | **Sim**, para `traducao2.vlibras.gov.br` (governo federal), só quando a pessoa abre o VLibras e toca no texto |
+| Uso do VLibras | domínio e caminho da página (`/`, sem o `#` da tela) | Comum | — | **Sim**: o próprio widget manda `widget_initialized` ao PostHog (EUA) em 7% das aberturas, sem pedir consentimento; os demais eventos só depois do aceite dentro do widget |
 | **Conteúdo do app** | Cards de distorção, textos do SOS, links do Hub, telefones | Público | Arquivos em `web/src/content/*.json` dentro do build; opcionalmente o Supabase serve versões novas | — |
 | Dados do Open Finance (demo) | Transações | **Sintético** | `seed.sql` / mock | Só dado fictício |
 
@@ -62,7 +64,7 @@ conteúdo → hook (useConteudo) → content.repository.ts → JSON do build (of
 | **Modo discreto** | Nome e ícone neutros ao instalar ("Diário"), sem palavras como "aposta" na tela inicial nem no título da aba; opção nas configurações |
 | **Apagar tudo** | Um botão em Configurações → confirmação em uma tela → limpa IndexedDB, localStorage e cache |
 | **Exportar** | Baixar um JSON com os próprios dados (portabilidade, LGPD art. 18) |
-| **Sem telemetria** | Nenhum analytics, pixel ou rastreador. Se a equipe quiser medir algo na demo, contar localmente e mostrar só na tela de "seu progresso" |
+| **Sem telemetria** | Nenhum analytics, pixel ou rastreador. Se a equipe quiser medir algo na demo, contar localmente e mostrar só na tela de "seu progresso". **Exceção conhecida:** o VLibras, que só carrega o PostHog depois que a pessoa toca na bolha (ver tabela acima e a skill `vlibras`). Bloquear por CSP (`connect-src`) é possível, mas precisa ser testado com o avatar abrindo de verdade |
 | **Nada sensível em URL ou log** | Rotas sem parâmetros com conteúdo (`/sos`, não `/sos?fissura=9`); nenhum `console.log` com dado do usuário no build |
 | **Consentimento** | Tela curta no onboarding explicando o que fica no aparelho, com link para a política em linguagem simples; registro do consentimento só local |
 | **Idade** | Aviso de que o app é para maiores de 18 anos, com orientação para menores procurarem um adulto de confiança e a rede de saúde (decisão final da equipe, ver dúvida aberta) |

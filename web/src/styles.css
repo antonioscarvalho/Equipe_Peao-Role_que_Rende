@@ -309,3 +309,69 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .ajuda-agora__painel { z-index: 70; max-width: 100%; }
 .ajuda-agora__painel .ajuda { max-width: 380px; }
 .ajuda-agora__painel h2:focus { outline: none; }
+
+/* ---------- Menu inferior (abas) e telas sem rolagem ---------- */
+.celular { padding-bottom: 0; min-height: min(780px, calc(100dvh - 96px)); }
+.topo__titulo { font-size: 1.5rem; }
+.mini--linha { flex-direction: row; align-items: center; gap: 10px; padding: 10px 12px; }
+.atalho-missoes {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 0 16px;
+  border: 3px solid var(--rqr-borda); border-radius: 18px; background: var(--rqr-fundo-destaque); color: var(--rqr-texto);
+  font: inherit; font-weight: 800; text-align: left; cursor: pointer; box-shadow: 0 4px 0 var(--rqr-sombra-cor);
+}
+.atalho-missoes span { margin-left: auto; font-size: 1.5rem; }
+.secao__conta { font-weight: 900; font-variant-numeric: tabular-nums; }
+.aba-missoes, .aba-jogos, .aba-ajustes { display: grid; gap: 12px; align-content: start; }
+.aba-jogos .jogo-botao { margin-top: 0; }
+.aba-ajustes .interruptores { justify-content: space-around; }
+.aba-ajustes__titulo { margin: 8px 0 0; font-size: 1.125rem; }
+
+.tabbar {
+  position: sticky; bottom: 0; z-index: 5; margin: auto -18px 0; display: grid;
+  grid-template-columns: 1fr 1fr 1.25fr 1fr 1fr; align-items: end; gap: 2px;
+  padding: 8px 8px max(10px, env(safe-area-inset-bottom)); border-top: 3px solid var(--rqr-borda);
+  border-radius: 0 0 32px 32px; background: var(--rqr-fundo-conteudo);
+}
+.tabbar__item, .tabbar__sos {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 52px; padding: 4px 2px;
+  border: 2px solid transparent; border-radius: 14px; background: transparent; color: var(--rqr-texto-suave);
+  font: inherit; font-family: var(--rqr-font-titulo); font-size: .75rem; font-weight: 800; cursor: pointer;
+}
+.tabbar__item.is-active { background: var(--rqr-fundo-destaque); color: var(--rqr-texto); border-color: var(--rqr-borda); }
+.tabbar__sos { color: var(--rqr-texto); }
+.tabbar__sos-circulo {
+  width: 52px; height: 52px; margin-top: -26px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--rqr-ativo-fundo); color: var(--rqr-ativo-texto); border: 3px solid var(--rqr-ativo-texto);
+  box-shadow: 0 4px 0 var(--rqr-sombra-cor);
+}
+.tabbar__item:focus-visible, .tabbar__sos:focus-visible, .atalho-missoes:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 2px; }
+
+/* ---------- App em tela cheia (sem moldura de celular) ---------- */
+.palco { display: block; padding: 0; min-height: 100dvh; background: var(--rqr-fundo-conteudo); }
+.palco > .decor { display: none; }
+.celular {
+  width: 100%; max-width: none; min-height: 100dvh; margin: 0; border: 0; border-radius: 0; box-shadow: none;
+  /* topo livre para o botão fixo "Preciso de ajuda agora" */
+  padding: calc(64px + env(safe-area-inset-top, 0px)) max(18px, calc((100% - 560px) / 2)) 0;
+}
+.tabbar { margin: auto calc(-1 * max(18px, calc((100vw - 560px) / 2))) 0; border-radius: 0; padding-inline: max(8px, calc((100vw - 560px) / 2)); }
+
+.seu-motivo { margin: 0; padding: 8px 14px; border-left: 4px solid var(--rqr-borda); background: var(--rqr-fundo-destaque); border-radius: 8px; }
+.seu-motivo::first-letter { text-transform: uppercase; }
+
+/* ---------- VLibras (skill vlibras) ---------- */
+/* O VLibras traduz o elemento exato que recebeu o toque, não o botão em volta dele: tocar no
+   ícone de um botão traduzia nada (e num <svg> o widget dá erro). Com os filhos transparentes
+   ao toque, o alvo é sempre o controle inteiro, com o texto ou o data-vlibras-gloss dele. */
+:where(button, a, [role="button"]) * { pointer-events: none; }
+/* Janela do avatar menor que a padrão do widget (260 × 328 no celular, 300 × 380 a partir de
+   640 px), que cobria quase metade da tela. O botão de expandir dela continua levando ao tamanho
+   grande, para quem precisa do sinal maior. As variáveis vivem no :host do widget, e a regra da
+   página ganha dela no próprio elemento. A largura é a mínima em que o botão Fechar ainda cabe
+   na barra (os botões do widget crescem a partir de 640 px). A altura pode descer mais que a
+   largura sem cortar os braços do avatar. */
+#vlibras-app-root { --widget-width: 220px; --player-height: 240px; }
+@media (min-width: 640px) { #vlibras-app-root { --widget-width: 240px; --player-height: 260px; } }
+/* Durante a partida dos jogos (useEsconderVLibras). */
+body[data-vlibras-oculto] #vlibras-access-wrapper,
+body[data-vlibras-oculto] #vlibras-app-root { display: none !important; }

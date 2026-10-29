@@ -82,7 +82,83 @@ Os capítulos destravam ao jogar, nunca por sorte. Podem ser relidos, e toda con
 O capítulo 6 é o mais importante clinicamente: depois de um lapso, a pessoa costuma pensar "já estraguei tudo" e apostar mais (efeito de violação da abstinência). Ver o Broto escorregar e a luz continuar acesa prepara a pessoa antes de ela passar por isso.
 
 ### Capítulo 1: A Queda
-**Jogo:** Pulo do Bichinho (já existe em `web/src/PuloDoBichinho.tsx`). O Broto tenta subir de volta até o céu.
+**Duração:** 10 a 15 minutos. É o primeiro contato com o app: abre sozinho no primeiro acesso, depois da abertura (`web/src/Abertura.tsx`) e do aviso. Apresenta o Broto e faz, na voz dele, as perguntas do [questionário de entrada](../02-produto/questionario-onboarding.md) (aparência do Broto, apelido, idade, como a pessoa chega, motivo, meta e se quer guardar). O resto é conversa para criar confiança: a Vila Estrela, a poeira de luz, a cantiga da Vó, música, as luas e o Broto como "alienígena".
+
+**Ordem:** queda do espaço → conversa antes do jogo → Pulo do Bichinho → fala de abertura → conversa depois do jogo → perguntas da pessoa → pergunta do Broto → lição.
+
+**Jogo:** Pulo do Bichinho (`web/src/jogos/pulo/PuloDoBichinho.tsx`). O Broto tenta subir de volta até o céu.
+
+#### Antes do jogo
+
+As perguntas do app têm sempre "Prefiro não dizer". Menor de 18 anos: o Broto acolhe, orienta a buscar um adulto de confiança, a UBS e o CVV 188, e pula as perguntas seguintes. As devolutivas das perguntas do app estão em `web/src/historia/Especial.tsx`.
+
+- **Broto:** Ai… ai, ai. Cadê o chão? Ah, achei. Tá aqui embaixo de mim. _(cena: cratera)_
+- **Broto:** Opa. Tem alguém aí? Desculpa o susto. Eu não costumo cair do céu assim, juro.
+  - "Você tá bem?" → "Tô inteiro. Um pouco amassado, mas inteiro."
+  - "Quem é você?" → "Já já eu conto. Deixa eu só achar minha antena."
+- **Broto:** Eu sou o Broto. Sou um broto de luz, lá de cima. Mas olha meu estado… caí todo bagunçado.
+- **Broto:** Me ajuda a me arrumar? Escolhe minha cor e o que eu visto. Vou mudando aqui na sua frente. _(pergunta do app: aparencia — cor, roupa, cabeça, rosto e peito do catálogo da spec 009)_
+- **Broto:** E você? Como eu te chamo? Pode ser apelido. Se preferir, eu te chamo de "você" mesmo. _(pergunta do app: nome)_
+- **Broto:** Prazer, {nome}. Que bom que foi você que me achou.
+- **Broto:** Pergunta chata, mas eu preciso fazer: você tem 18 anos ou mais? _(pergunta do app: idade)_
+- **Broto:** E você, tá chegando como hoje?
+  - "Tô de boa" → "Que bom. Fica à vontade, então."
+  - "Meio cansado(a)" → "Eu entendo. Cair cansa, e viver cansa também. Aqui pode ir devagar."
+  - "Tá pesado demais" → "Obrigado por me contar. Isso importa. Olha quem pode te ajudar agora. Eu espero aqui." **(abre o protocolo de crise)**
+  - "Prefiro não dizer" → "Tudo bem. Não precisa."
+- **Broto:** Deixa eu te contar uma coisa antes: eu não sou médico nem nada, tá? Sou só um broto. Mas escutar eu sei. E você não precisa me contar nada que não queira.
+- **Broto:** Se quiser me contar… o que te trouxe até aqui hoje? _(pergunta do app: motivo)_
+- **Broto:** E o que faz sentido pra você agora, com as apostas? _(pergunta do app: meta)_
+- **Broto:** Quer que eu guarde isso só aqui no seu celular? Assim eu lembro de você quando a vontade apertar. Ninguém mais vê, e dá pra apagar quando quiser. _(pergunta do app: guardar)_
+- **Broto:** Agora deixa eu te contar de mim. Tá vendo aquele pontinho lá em cima, brilhando? É a Vila Estrela. Minha casa. _(cena: vila)_
+- **Broto:** É um asteroide tão pequenininho que dá a volta nele a pé antes do almoço. Tem umas vinte casinhas e um quintal pra cada uma.
+- **Broto:** Lá a gente vive de poeira de luz. Toda manhã, bem cedinho, a gente sai com uns potes pra colher a poeira que o sol deixa nas pedras. _(cena: colheita)_
+  - "Pra que serve a poeira?" → "Pra tudo! Acende as casas, esquenta a comida e faz as naves voarem. Não é muito, mas é nosso."
+  - "Dá trabalho?" → "Dá. Acordar cedo, encher pote por pote. Mas tem um gostinho de coisa feita com a mão, sabe?"
+- **Broto:** E na colheita a gente canta. Tem uma cantiga que a minha Vó Vega ensinou… é assim: tum-tum, tá-rá, tum-tum… a luz vem devagar… _(cena: musica)_
+- **Broto:** Desafinei, né? Pode falar. A Nina, minha irmã, sempre fala.
+- **Broto:** E aqui embaixo, que música vocês ouvem?
+  - "Samba ou pagode" → "Ouvi um pagode enquanto caía! Acho que tinha uma roda perto da praça. Tum-tum, tá-rá… combina com a cantiga da Vó!"
+  - "Funk" → "Aquele grave que faz o chão tremer? Achei que era o meu coração batendo depois da queda!"
+  - "Sertanejo" → "Música de saudade, né? Acho que eu vou gostar. Tô com um pouco de saudade de casa."
+  - "Gospel ou louvor" → "Música de fé. A Vó Vega diz que cantar junto deixa a gente mais leve."
+  - "Rock" → "Barulhento e corajoso! Tipo cair de uma nave."
+  - "Outra" → "Um dia você me mostra? Eu adoro aprender música nova."
+  - "Prefiro não dizer" → "Tudo bem. A gente fica com a cantiga da Vó por enquanto."
+- **Broto:** Posso perguntar uma coisa? Vocês aqui só têm uma lua? _(cena: lua)_
+  - "Só uma." → "Lá na Vila tem três! Uma pequenininha, uma média e uma que parece um pão de queijo."
+  - "E vocês, quantas?" → "Três! Uma pequenininha, uma média e uma que parece um pão de queijo."
+- **Broto:** Mas a de vocês é bonita. Grandona. Parece que tá cuidando da praça.
+- **Broto:** Que engraçado… aqui o alienígena sou eu, né? Azulzinho, de antena, conversando com a lua. _(cena: bairro)_
+  - "Você nem parece alien." → "Valeu! Mas eu brilho no escuro. Isso é meio alien, admite."
+  - "É um alien fofo." → "Fofo eu aceito! Na Vila todo mundo me chama de "pequeno" e eu odeio. "Fofo" tá liberado."
+- **Broto:** Reparei numa coisa enquanto caía. O bairro de vocês tá meio apagado. Quase nenhuma janela acesa.
+- **Broto:** Lá em casa também andou assim. As luzes foram apagando, uma por uma. É uma história comprida… outro dia eu te conto, pode ser?
+  - "Pode, sem pressa." → "Obrigado. Você é gente boa, sabia?"
+  - "Quer contar agora?" → "Ainda não. Hoje eu só quero voltar pra casa."
+- **Broto:** Minha família tá lá: meu pai Órion, que conserta nave; minha mãe Lyra, que faz a conta da casa render; a Nina; e a Vó Vega, que planta semente de luz no quintal. _(cena: familia)_
+- **Broto:** Eles devem tá me procurando. Se eu subir bem alto, quem sabe eles me veem.
+- **Broto:** Já sei! Tá vendo essas plataformas? Se eu for pulando de uma em uma, chego lá em cima. Me ajuda? _(cena: cratera)_
+  - "Bora!" → "Bora! Você me guia e eu pulo."
+  - "Como eu ajudo?" → "Você me diz pra que lado ir: inclina o celular, usa as setas ou segura um lado da tela. Eu faço o resto."
+- **Broto:** Cada folhinha que a gente pegar no caminho eu guardo. São pequenas, mas são nossas. Vamos?
+
+#### Depois do jogo (logo após a fala de abertura)
+
+`{folhas}` é uma frase sobre as folhas pegas no jogo.
+
+- **Broto:** {folhas}
+- **Broto:** Sabe o que a minha Vó diz? Que estrela sozinha é só um pontinho. Mas várias juntas viram desenho no céu. Constelação. _(cena: estrelas)_
+- **Broto:** Acho que a gente é meio assim. Eu sozinho caí. Com você aqui, até que eu subi bonito.
+- **Broto:** E olha: a altura que a gente subiu hoje, ninguém tira. Amanhã eu começo dali, não do chão. _(cena: regua)_
+- **Broto:** E você, já subiu alguma coisa que ninguém tira de você?
+  - "Já." → "Eu sabia. Dá pra ver. Guarda isso com carinho."
+  - "Não sei." → "Às vezes a gente não vê de perto. Eu vejo uma: você tá aqui, conversando comigo. Isso já é subir."
+  - "Prefiro não dizer." → "Justo. Fica guardado contigo."
+- **Broto:** Ei, vou cantar a cantiga da Vó com um tum-tum daqui de baixo: tum-tum, tá-rá… a luz vem devagar… Ficou melhor, vai. _(cena: musica)_
+- **Broto:** Tá ficando tarde. O bairro tá quietinho. _(cena: bairro)_
+
+#### Fala de abertura, perguntas e lição
 
 > **Broto:** Ufa. Não deu pra chegar lá em cima hoje. Mas olha quanto a gente subiu.
 
@@ -193,6 +269,7 @@ Regras (skill `design-etico-saude-digital`): partidas de cerca de 3 minutos com 
 
 ## Ferramentas do projeto
 
+- **Bíblia da história:** [`historia-broto/`](historia-broto/story.md), projeto das skills de história (`interactive-fiction`, `character-management`, `worldbuilding`, `revision-continuity` e outras). Guarda personagens, lugares, promessas entre capítulos e o mapa de escolhas. Os textos de fala continuam valendo **aqui**. Rode `node .claude/skills/story-maintenance/scripts/story.js check docs/03-design/historia-broto` depois de mexer.
 - **Skills:** `entrevista-motivacional` (diálogos), `tcc-reestruturacao-cognitiva` (lições), `prevencao-recaida` (capítulos 1, 5 e 6), `controle-estimulos-financas` (capítulo 3), `seguranca-e-crise` e `conformidade-legal-br` (revisão de tudo), `criar-personagem`, `animar-componente` e `sonorizar-componente` (arte e som).
 - **MCPs:**
   - **iconify:** ícones Lucide para lâmpadas, estrelas e antena.
