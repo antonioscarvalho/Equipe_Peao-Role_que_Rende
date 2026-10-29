@@ -46,20 +46,33 @@ export function carregarVLibras() {
 }
 
 /**
- * No hover e no foco a bolha se abre numa faixa de 200 px com a imagem "Acessível com VLibras",
- * por cima do conteúdo. A faixa só repete o que o aria-label do botão já diz, então fica
- * fechada. Parada, ela fica quase transparente e só aparece inteira com o mouse em cima ou com
- * foco (pedido do produto: a 20% ela não tem o contraste de 3:1 da WCAG 1.4.11 até ser
- * selecionada). O estilo entra no shadow DOM (aberto) do carregador, que o CSS da página não alcança;
- * se uma versão nova mudar os ids, a regra só deixa de valer e a faixa volta.
+ * A bolha padrão fica no meio da borda direita, por cima da cena do bichinho, e no hover se abre
+ * numa faixa de 200 px ("Acessível com VLibras") que só repete o aria-label do botão.
+ * Aqui ela vira um botão redondo no canto inferior direito, logo acima do menu de abas, no
+ * mesmo estilo dos outros botões do app (contorno azul-escuro e degrau embaixo), sem a faixa.
+ * O estilo entra no shadow DOM (aberto) do carregador, que o CSS da página não alcança;
+ * se uma versão nova mudar os ids, a regra só deixa de valer e a bolha volta ao padrão.
  */
 function discreta(raiz: ShadowRoot) {
   const estilo = document.createElement("style");
   estilo.textContent = `
-    #vlibras-access { width: 40px !important; opacity: 0.2; transition: opacity 0.2s ease !important; }
-    #vlibras-access:hover, #vlibras-access:focus-within { opacity: 1; }
+    #vlibras-access {
+      top: auto !important; left: auto !important;
+      right: max(14px, calc((100vw - 560px) / 2 + 14px)) !important;
+      bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
+      width: 48px !important; height: 48px !important; margin: 0 !important; transform: none !important;
+    }
     #vlibras-popup { display: none !important; }
-    @media (prefers-reduced-motion: reduce) { #vlibras-access { transition: none !important; } }
+    #vlibras-button {
+      width: 48px !important; height: 48px !important; padding: 6px !important; border-radius: 50% !important;
+      display: grid !important; place-items: center; overflow: hidden; cursor: pointer;
+      background: #FFFFFF !important; border: 3px solid #3333BD !important; box-shadow: 0 4px 0 #3333BD !important;
+      transition: transform 220ms cubic-bezier(.3, 1.6, .5, 1), box-shadow 220ms cubic-bezier(.3, 1.6, .5, 1) !important;
+    }
+    #vlibras-button img { width: 100% !important; height: 100% !important; object-fit: contain; }
+    #vlibras-button:active { transform: translateY(4px); box-shadow: 0 0 0 #3333BD !important; transition-duration: 60ms !important; }
+    #vlibras-button:focus-visible { outline: 3px solid #FF6E91; outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) { #vlibras-button { transition: none !important; } }
   `;
   raiz.appendChild(estilo);
 }

@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { Bichinho, type Humor } from "./Bichinho";
-import { Bairro, totalPecas } from "./Bairro";
 import { Contador } from "./Contador";
 import { Respiracao } from "./Respiracao";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
-import { AjudaAgora } from "./AjudaAgora";
 import { PuloDoBichinho } from "./jogos/pulo/PuloDoBichinho";
 import { Historia } from "./historia/Historia";
 import { Abertura } from "./Abertura";
 import { capitulosConcluidos } from "./historia/progresso";
-import { apagarConhecer, refletirMotivos, useConhecer } from "./historia/conhecer";
+import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
 import { ligarSons, tocar, tocarMissao } from "./sons";
-import { BotaoPersonalizar, useAparenciaVisivel, usePerfil } from "./personalizacao";
+import { useAparenciaVisivel, usePerfil } from "./personalizacao";
+import { abrirPersonalizar } from "./personalizacao/rota";
 import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
+import { BotaoLibras } from "./BotaoLibras";
 
 type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
 
@@ -34,14 +34,6 @@ const humores: { id: Humor; rotulo: string }[] = [
   { id: "orgulhoso", rotulo: "Orgulhoso" },
   { id: "cansado", rotulo: "Dia difícil" },
 ];
-
-const falas: Record<Humor, string> = {
-  calmo: "Bora cuidar do nosso rolê hoje?",
-  feliz: "Boa! Cada passo conta.",
-  orgulhoso: "Olha quanto você já protegeu!",
-  cansado: "Dia difícil acontece. Tô aqui, nada do que construímos sumiu.",
-  apoio: "Respira comigo.",
-};
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
 
@@ -105,15 +97,15 @@ export default function App() {
       window.setTimeout(() => tocar("conquista"), 1300);
     }
     setAviso(feitas.length + 1 === missoes.length
-      ? `Todas as missões de hoje concluídas! O bairro inteiro agradece.`
-      : `Missão concluída: ${m.texto}. Mais um lugar do bairro foi reconstruído.`);
+      ? `Todas as missões de hoje concluídas!`
+      : `Missão concluída: ${m.texto}.`);
     window.setTimeout(() => setHumor((h) => (h === "feliz" ? "calmo" : h)), 2600);
   }, [feitas]);
 
   const reiniciar = () => { setFeitas([]); setHumor("calmo"); setProtegido(1240); };
 
   const nivel = feitas.length;
-  const construidas = Math.min(totalPecas, 2 + nivel);
+  const proxima = missoes.find((m) => !feitas.includes(m.id));
 
   return (
     <div className="palco">
@@ -124,23 +116,24 @@ export default function App() {
             <p className="topo__oi">{perfil.nome ? `Oi, ${perfil.nome}` : "Oi!"}</p>
             <h1 className="topo__titulo">{TITULOS_ABA[aba]}</h1>
           </div>
-          <BotaoTema compacto />
+          <div className="topo__acoes">
+            <BotaoLibras />
+            <BotaoTema compacto />
+          </div>
         </header>
 
         {aba === "role" && (
           <>
             <section className="cena" aria-label="Seu bichinho">
-              <div className="balao" key={humor}>{falas[humor]}</div>
-              <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} />
-              <BotaoPersonalizar />
-              <Bairro construidas={construidas} />
+              <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} tamanho={170} />
               {moedaKey > 0 && humor === "feliz" && (
                 <div className="cena__brilho" key={moedaKey}>
                   <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
                 </div>
               )}
             </section>
-            <section className="cards">
+
+            <section className="cards" aria-label="Seu progresso">
               <article className="rqr-card mini mini--linha">
                 <span className="mini__icone mini__icone--lottie" style={{ background: "var(--rqr-verde-claro)" }}>
                   <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
@@ -160,12 +153,47 @@ export default function App() {
                 </div>
               </article>
             </section>
-            {conhecer?.motivos.length ? (
-              <p className="seu-motivo"><b>Seu motivo:</b> {refletirMotivos(conhecer.motivos)}</p>
-            ) : null}
-            <button className="atalho-missoes" onClick={() => setAba("missoes")}>
-              <Icone nome="listChecks" /> {nivel} de {missoes.length} missões feitas hoje <span aria-hidden="true">›</span>
-            </button>
+
+            <section className="proxima" aria-labelledby="proxima-titulo">
+              <div className="proxima__cabeca">
+                <h2 id="proxima-titulo" className="proxima__titulo">{proxima ? "Próxima missão" : "Missões de hoje"}</h2>
+                <span className="progresso progresso--cheio" aria-hidden="true">
+                  <span style={{ transform: `scaleX(${nivel / missoes.length})` }} />
+                </span>
+                <span className="proxima__conta">{nivel}/{missoes.length}</span>
+              </div>
+              {proxima ? (
+                <div className="proxima__corpo" key={proxima.id}>
+                  <span className="proxima__icone"><Icone nome={proxima.icone} /></span>
+                  <p className="proxima__texto">{proxima.texto}<small>+ R$ {proxima.valor} protegidos</small></p>
+                  <button className="kb kb--verde proxima__botao" onClick={() => concluir(proxima)}>
+                    <Icone nome="check" tamanho={20} /> Feito!
+                  </button>
+                </div>
+              ) : (
+                <p className="proxima__fim">Tudo feito hoje. Boa!</p>
+              )}
+            </section>
+
+            <nav className="atalhos rqr-escalonado" aria-label="Atalhos">
+              <button className="kb kb--azul atalho" onClick={() => setAba("missoes")}>
+                <span className="atalho__icone"><Icone nome="listChecks" /></span>
+                <span className="atalho__texto">Missões<small>{nivel} de {missoes.length} feitas</small></span>
+              </button>
+              <button className="kb kb--roxo atalho" onClick={() => setCrise(true)}>
+                <span className="atalho__icone"><Icone nome="wind" /></span>
+                <span className="atalho__texto">Deu vontade<small>respirar comigo</small></span>
+              </button>
+              <button className="kb kb--rosa atalho" onClick={() => setAba("jogos")}>
+                <span className="atalho__icone"><Icone nome="gamepad" /></span>
+                <span className="atalho__texto">Jogos<small>até 3 minutos</small></span>
+              </button>
+              <button className="kb kb--amarelo atalho" onClick={() => { tocar("clique"); abrirPersonalizar(); }}>
+                <span className="atalho__icone"><Icone nome="palette" /></span>
+                <span className="atalho__texto">Personalizar<small>seu bichinho</small></span>
+              </button>
+            </nav>
+
           </>
         )}
 
@@ -192,56 +220,74 @@ export default function App() {
                 );
               })}
             </ul>
-            <p className="mini__nota">Cada missão reconstrói um pedaço do bairro. Dia difícil não zera nada.</p>
+            <p className="mini__nota">Cada missão conta. Dia difícil não zera nada.</p>
             {nivel > 0 && <button className="link" onClick={reiniciar}>Reiniciar demonstração</button>}
           </section>
         )}
 
         {aba === "jogos" && (
           <section className="aba-jogos" aria-label="Jogos">
-            <button className="rqr-botao jogo-botao" onClick={() => setHistoria(true)}>História do Broto</button>
-            <button className="rqr-botao jogo-botao" onClick={() => setJogo("inicio")}>Jogar: Pulo do Bichinho</button>
-            <BotaoCarrinho reduzir={reduzir} />
+            <div className="jogos rqr-escalonado">
+              <button className="kb kb--roxo jogo" onClick={() => setHistoria(true)}>
+                <span className="atalho__icone"><Icone nome="bookOpen" tamanho={28} /></span>
+                <span className="jogo__texto">História do Broto<small>Conheça o Broto, capítulo por capítulo</small></span>
+              </button>
+              <button className="kb kb--azul jogo" onClick={() => setJogo("inicio")}>
+                <span className="atalho__icone"><Icone nome="sprout" tamanho={28} /></span>
+                <span className="jogo__texto">Pulo do Bichinho<small>Pule cada vez mais alto</small></span>
+              </button>
+              <BotaoCarrinho reduzir={reduzir} />
+            </div>
             <p className="mini__nota">Partidas de até 3 minutos. Sem moeda, sem vidas, sem perder.</p>
           </section>
         )}
 
         {aba === "ajustes" && (
           <section className="aba-ajustes" aria-label="Ajustes">
-            <div className="interruptores">
-              <label className="interruptor">
+            <h2 className="ajustes__grupo">Aparência e conforto</h2>
+            <div className="ajustes">
+              <label className="ajuste">
+                <span className="ajuste__texto">Reduzir animações<small>Menos movimento na tela</small></span>
                 <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
                 <span className="interruptor__trilho" aria-hidden="true" />
-                <span className="interruptor__texto">Reduzir animações</span>
               </label>
-              <label className="interruptor">
+              <label className="ajuste">
+                <span className="ajuste__texto">Sons<small>Sons ao concluir missões</small></span>
                 <input type="checkbox" checked={sons} onChange={(e) => { setSons(e.target.checked); if (e.target.checked) { ligarSons(true); tocar("clique"); } }} />
                 <span className="interruptor__trilho" aria-hidden="true" />
-                <span className="interruptor__texto">Sons</span>
               </label>
-              <BotaoTema />
-            </div>
-            {conhecer && (
-              <button className="link" onClick={() => { apagarConhecer(); setAviso("O que você contou ao Broto foi apagado."); }}>
-                Apagar o que contei ao Broto
+              <div className="ajuste">
+                <span className="ajuste__texto">Tema<small>Claro, escuro ou automático</small></span>
+                <BotaoTema compacto />
+              </div>
+              <button className="ajuste ajuste--link" onClick={() => abrirPersonalizar()}>
+                <span className="ajuste__texto">Personalizar<small>Nome, foto e visual do bichinho</small></span>
+                <span aria-hidden="true" className="ajuste__seta">›</span>
               </button>
-            )}
-            <h2 className="aba-ajustes__titulo">Humor do bichinho (demonstração)</h2>
+            </div>
+
+            <h2 className="ajustes__grupo">Humor do bichinho (demonstração)</h2>
             <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
               {humores.map((h) => (
                 <button key={h.id} className={`chip ${humor === h.id ? "is-on" : ""}`}
                   aria-pressed={humor === h.id} onClick={() => setHumor(h.id)}>{h.rotulo}</button>
               ))}
             </div>
+
+            {conhecer && (
+              <button className="link" onClick={() => { apagarConhecer(); setAviso("O que você contou ao Broto foi apagado."); }}>
+                Apagar o que contei ao Broto
+              </button>
+            )}
           </section>
         )}
 
         <nav className="tabbar" aria-label="Navegação principal">
           <BotaoAba aba="role" atual={aba} mudar={setAba} icone="house" rotulo="Rolê" />
           <BotaoAba aba="missoes" atual={aba} mudar={setAba} icone="listChecks" rotulo="Missões" />
-          <button className="tabbar__sos" onClick={() => setCrise(true)}>
-            <span className="tabbar__sos-circulo rqr-anim-on"><Icone nome="wind" tamanho={24} /></span>
-            <span>Deu vontade</span>
+          <button className="tabbar__sos tabbar__historia" onClick={() => { tocar("clique"); setHistoria(true); }}>
+            <span className="tabbar__sos-circulo"><Icone nome="bookOpen" tamanho={24} /></span>
+            <span>História</span>
           </button>
           <BotaoAba aba="jogos" atual={aba} mudar={setAba} icone="gamepad" rotulo="Jogos" />
           <BotaoAba aba="ajustes" atual={aba} mudar={setAba} icone="settings" rotulo="Ajustes" />
@@ -259,8 +305,6 @@ export default function App() {
           setHistoria("cap1");
         }
       }} />}
-      {/* Na história o botão flutuante sai; ela tem o próprio link de ajuda (Historia/Dialogo). */}
-      {!historia && <AjudaAgora />}
       {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
         chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
       {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}

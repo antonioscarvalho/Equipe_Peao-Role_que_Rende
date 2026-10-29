@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { usePerfil, NOME_MAX } from "../personalizacao";
 import { useAparencia, DIAS_SEM_APOSTAR_DEMO } from "../personalizacao/armazenamento";
-import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, liberado, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
+import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
+import { Bichinho } from "../Bichinho";
 import { MOTIVOS, METAS, guardarConhecer, refletirMotivos, type Conhecer } from "./conhecer";
 import type { Passo } from "./tipos";
 
@@ -25,13 +26,19 @@ const ABAS: { id: string; rotulo: string }[] = [
 ];
 const ITENS: Record<string, OpcaoItem[]> = { roupa: ROUPAS, cabeca: CABECA, rosto: ROSTO, peito: PEITO };
 
-/** Personalização do Broto dentro da história (spec 009, tela 2 do questionário). O Broto na cena muda na hora. */
+/**
+ * Personalização do Broto dentro da história (spec 009, tela 2 do questionário).
+ * O painel cobre o Broto da cena, por isso ele tem a própria prévia, que muda na hora.
+ */
 function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
   const { aparencia, mudar } = useAparencia();
   const [aba, setAba] = useState("cor");
   const itens = ITENS[aba];
   return (
-    <div className="especial">
+    <div className="especial especial--aparencia">
+      <div className="especial__previa" aria-hidden="true">
+        <Bichinho humor="feliz" nivel={2} tamanho={92} reduzir aparencia={aparenciaVisivel(aparencia, DIAS_SEM_APOSTAR_DEMO)} />
+      </div>
       <div className="especial__abas" role="group" aria-label="O que mudar">
         {ABAS.map((a) => (
           <button key={a.id} className={`especial__aba ${aba === a.id ? "is-on" : ""}`} aria-pressed={aba === a.id} onClick={() => setAba(a.id)}>{a.rotulo}</button>
@@ -67,8 +74,10 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
           ))}
         </div>
       )}
-      <button className="rqr-botao" onClick={() => aoFim("Ficou a minha cara! Quer dizer… a nossa. Dá pra mudar quando quiser, em Personalizar.")}>Pronto</button>
-      <button className="historia-opcao historia-opcao--leve" onClick={() => aoFim("Do jeito que eu caí, então. Tá valendo!")}>Deixar como está</button>
+      <div className="especial__fim">
+        <button className="historia-opcao historia-opcao--leve" onClick={() => aoFim("Do jeito que eu caí, então. Tá valendo!")}>Deixar como está</button>
+        <button className="rqr-botao" onClick={() => aoFim("Ficou a minha cara! Quer dizer… a nossa. Dá pra mudar quando quiser, em Personalizar.")}>Pronto</button>
+      </div>
     </div>
   );
 }
