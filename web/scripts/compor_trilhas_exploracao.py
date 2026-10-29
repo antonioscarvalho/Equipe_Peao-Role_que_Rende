@@ -17,15 +17,15 @@ SR = 32000
 BATIDAS_POR_ACORDE = 8  # dois compassos 4/4
 CAUDA = 1.4
 FADE_LOOP = 1.0
-BATIDAS_OSTINATO = (0.5, 1.0, 1.75, 2.5, 3.25, 4.5, 5.0, 5.75, 6.5, 7.25)
-PASSOS_OSTINATO = (0, 2, 1, 3, 1, 0, 2, 3, 2, 1)
+BATIDAS_OSTINATO = (0.0, 0.75, 1.0, 2.0, 2.75, 3.0, 4.0, 4.75, 5.0, 6.0, 6.75, 7.0)
+PASSOS_OSTINATO = (0, 2, 1, 3, 2, 1, 0, 2, 3, 1, 2, 1)
 MELODIAS_SECOES = (
     ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
      (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 4, 1.0)),
     ((0.0, 4, 0.65), (0.75, 7, 0.4), (1.25, 9, 1.1), (3.0, 12, 0.8),
      (4.25, 9, 0.95), (5.5, 7, 0.4), (6.0, 4, 0.45), (6.75, 7, 0.85)),
     ((0.0, 0, 0.55), (0.75, 4, 0.55), (1.5, 7, 0.9), (2.5, 9, 0.9),
-     (4.0, 12, 1.1), (5.25, 14, 0.4), (5.75, 16, 0.5), (6.5, 12, 1.0)),
+     (4.0, 12, 1.1), (5.25, 14, 0.4), (5.75, 19, 0.5), (6.5, 12, 1.0)),
     ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
      (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 0, 1.0)),
 )
@@ -39,8 +39,8 @@ TRILHAS = {
         "bpm": 100,
         "secoes": [
             ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81]),
-            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74]),
             ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
+            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74]),
             ([55, 62, 67, 71, 76], (43, 50), [67, 71, 76, 79]),
         ],
     },
@@ -49,8 +49,8 @@ TRILHAS = {
         "bpm": 108,
         "secoes": [
             ([48, 55, 60, 64, 67], (36, 43), [60, 64, 67, 74]),
-            ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77]),
             ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
+            ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77]),
             ([48, 55, 60, 64, 69], (36, 43), [60, 64, 69, 76]),
         ],
     },
@@ -59,8 +59,8 @@ TRILHAS = {
         "bpm": 112,
         "secoes": [
             ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78]),
-            ([45, 52, 57, 59, 61], (33, 40), [69, 73, 76, 81]),
             ([47, 54, 59, 61, 63], (35, 42), [71, 75, 78, 83]),
+            ([45, 52, 57, 59, 61], (33, 40), [69, 73, 76, 81]),
             ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78]),
         ],
     },
@@ -69,8 +69,8 @@ TRILHAS = {
         "bpm": 104,
         "secoes": [
             ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
             ([57, 64, 69, 71, 73], (45, 52), [69, 73, 76, 81]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
             ([50, 57, 62, 66, 69], (38, 45), [62, 66, 69, 74]),
         ],
     },
@@ -164,7 +164,7 @@ def gerar_canal(config, detune, atraso):
 
     for indice, (acorde, baixo, arpejo) in enumerate(config["secoes"]):
         inicio = indice * duracao_secao
-        crescimento = 0.58 + indice * 0.12
+        crescimento = 0.5 + indice * 0.16
 
         # Ataque breve marca a troca harmonica; nao ha acordes sustentados.
         notas_acorde = (acorde[0], acorde[1])
@@ -172,22 +172,25 @@ def gerar_canal(config, detune, atraso):
             acrescentar_pluck(canal, nota, inicio, 0.018 * crescimento, 7.5,
                               detune, atraso + voz * 0.045)
 
-        # Um baque por acorde deixa espaco para a frase principal.
-        acrescentar_baque(canal, inicio, 0.026 * crescimento, detune, atraso)
-        for batida in (2.5, 6.5):
+        # Tambores em dois compassos e contratempos para dar sensacao de jornada.
+        for batida in (0, 4):
+            acrescentar_baque(canal, inicio + batida * segundos_batida,
+                              0.023 * crescimento, detune, atraso)
+        batidas_tom = (2.5, 6.5) if indice % 2 == 0 else (3.0, 7.0)
+        for batida in batidas_tom:
             acrescentar_tom(canal, inicio + batida * segundos_batida,
-                            0.018 * crescimento, detune, atraso)
+                            0.019 * crescimento, detune, atraso)
 
-        # O baixo muda entre os dois compassos em vez de marcar cada tempo.
-        for batida, nota_baixo in ((0, baixo[0]), (4, baixo[1])):
+        # Alternancia sincopada de raiz e quinta, com espaco para a flauta responder.
+        for batida, nota_baixo in ((0, baixo[0]), (1.5, baixo[1]), (4, baixo[0]), (5.5, baixo[1])):
             acrescentar_pluck(canal, nota_baixo, inicio + batida * segundos_batida,
-                              0.032 * crescimento, 6.8, detune, atraso)
+                              0.028 * crescimento, 6.8, detune, atraso)
 
-        # Arpejo sincopado e discreto; o motivo principal fica em primeiro plano.
+        # Arpejo em galope alterna os acentos a cada acorde.
         for passo, batida in enumerate(BATIDAS_OSTINATO):
             nota_arpejo = arpejo[PASSOS_OSTINATO[(passo + indice * 2) % len(PASSOS_OSTINATO)]]
             acrescentar_pluck(canal, nota_arpejo, inicio + batida * segundos_batida,
-                              0.012 * crescimento, 10.0, detune, atraso)
+                              0.014 * crescimento, 10.0, detune, atraso)
 
         raiz_gancho = acorde[0]
         if raiz_gancho < 48:
