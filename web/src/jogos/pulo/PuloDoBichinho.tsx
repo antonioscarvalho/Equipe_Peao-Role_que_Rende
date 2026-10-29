@@ -1,4 +1,5 @@
 import { Icone } from "../../Icone";
+import { TRILHA_PULO, imagemCenarioPulo } from "./precarregar";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
@@ -75,7 +76,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     const id = window.setTimeout(() => {
       if (cancelado) return;
       console.log("[pulo] trocando pra trilha-pulo.opus");
-      tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+      tocarTrilha(TRILHA_PULO, { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
     }, 0);
     return () => {
       cancelado = true;
@@ -191,8 +192,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     // Cenários ilustrados para a subida: Praça/Cidade (cap1) -> Céu/Telhados/Cometa (cap2) -> Espaço e Vila Estrela.
-    const imgCidade = new Image();
-    imgCidade.src = "/cenarios/cap1-nave-pousada.webp";
+    const imgCidade = imagemCenarioPulo(); // já baixada na abertura do app (precarregar.ts)
 
     // Estrelas do espaço profundo (geradas uma vez para a partida).
     const estrelasEspaco = Array.from({ length: 48 }, (_, i) => ({

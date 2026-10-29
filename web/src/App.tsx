@@ -19,6 +19,7 @@ import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { useProgresso } from "./personalizacao/armazenamento";
 import { categoriaDe, proximoMarco, quantoFalta } from "./personalizacao/aparencia";
 import { abrirPersonalizar } from "./personalizacao/rota";
+import { precarregarPulo } from "./jogos/pulo/precarregar";
 import { RoleDeCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
 import { useContraste } from "./tema";
@@ -161,6 +162,8 @@ export default function App() {
   const progresso = useProgresso();
   const feitosCaps = capitulosConcluidos();
 
+  // Enquanto a abertura aparece, já baixa o Pulo do Bichinho (jogo do cap. 1) para ele abrir fluido.
+  useEffect(() => { precarregarPulo(); }, []);
   useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Meu amigo Broto!`; }, [aba]);
   useEffect(() => { setSemanaVista(plano.semana); }, [plano.semana]);
 

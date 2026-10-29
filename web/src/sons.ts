@@ -430,7 +430,7 @@ export function tocarTrilha(url: string, info?: InfoTrilha) {
     return;
   }
   const antiga = trilhaAudio;
-  const nova = new Audio(url);
+  const nova = new Audio(trilhasEmMemoria.get(url) ?? url);
   nova.loop = true;
   nova.volume = 0;
   trilhaUrlAtual = url;
@@ -471,16 +471,19 @@ const precarregados = new Set<string>();
  * pipeline nativo do navegador via `<audio>`; não criamos buffers PCM grandes em JavaScript.
  * A lista é obrigatória para evitar baixar todas as trilhas sem necessidade em dispositivos móveis.
  */
+/** Trilhas já baixadas inteiras na memória (URL original → blob:), para tocar sem esperar a rede. */
+const trilhasEmMemoria = new Map<string, string>();
+
 export function precarregarTrilhas(urls: readonly string[]) {
   if (typeof window === "undefined") return;
   for (const url of urls) {
     if (precarregados.has(url)) continue;
     precarregados.add(url);
-    const audio = new Audio();
-    audio.preload = "auto";
-    audio.muted = true; // nunca deve ser ouvido — é só pra encher o cache do navegador
-    audio.src = url;
-    audio.load();
+    // O arquivo inteiro, não só o começo: com `<audio preload>` o navegador pode baixar só os metadados.
+    fetch(url)
+      .then((r) => (r.ok ? r.blob() : Promise.reject(new Error(String(r.status)))))
+      .then((b) => { trilhasEmMemoria.set(url, URL.createObjectURL(b)); })
+      .catch(() => { precarregados.delete(url); /* sem internet ou erro: toca direto da rede depois */ });
   }
 }
 
