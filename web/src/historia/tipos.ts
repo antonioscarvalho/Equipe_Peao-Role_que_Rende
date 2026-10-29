@@ -34,7 +34,8 @@ export interface Passo {
   /** Momento da arte de fundo (ver as cenas do capítulo). Fica valendo até outro passo mudar. */
   cena?: string
   humor?: 'calmo' | 'feliz' | 'cansado' | 'orgulhoso' | 'apoio'
-  opcoes?: { rotulo: string; resposta?: string; abreCrise?: boolean }[]
+  /** `som: "cantiga"` toca de novo a cantiga da Vó (ex.: resposta que cita "a luz vem devagar"). */
+  opcoes?: { rotulo: string; resposta?: string; abreCrise?: boolean; som?: 'cantiga' }[]
   /**
    * Pergunta do app com tela própria (só a base implementa). `batismo`: a pessoa dá nome ao alien;
    * o passo é pulado quando ele já tem nome. A idade não é conversa: tem tela própria em Historia.tsx.

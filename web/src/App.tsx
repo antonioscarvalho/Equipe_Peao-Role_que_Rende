@@ -172,8 +172,9 @@ export default function App() {
         "/sons/trilha-carrinho.opus",
       ]);
     }
+    if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
     if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
-  }, [aba, abrindo, crise]);
+  }, [aba, abrindo, historia, crise]);
 
   // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
   const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);
