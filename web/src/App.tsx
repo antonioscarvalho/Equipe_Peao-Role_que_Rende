@@ -111,7 +111,7 @@ export default function App() {
   };
   const aparencia = useAparenciaVisivel();
 
-  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Guardião`; }, [aba]);
+  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Meu amigo Broto!`; }, [aba]);
 
   // Trilha leve, alegre e energética pra todo o app (não só a história) — abaixa, não para,
   // em telas de crise e na respiração (ver abaixarTrilha em AjudaAgora.tsx e Respiracao.tsx).
