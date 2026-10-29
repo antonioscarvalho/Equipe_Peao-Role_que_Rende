@@ -13,7 +13,7 @@
 
 .abertura__cenario {
   position: absolute; inset: -4%;
-  background: url("/cenarios/cap1-nave-pousada.webp") center bottom / cover no-repeat;
+  background: url("/cenarios/cap1-nave-pousada-anim.webp") center bottom / cover no-repeat;
   animation: abertura-camera 2.8s cubic-bezier(.2, .7, .2, 1) both;
 }
 @keyframes abertura-camera { from { transform: scale(1.14) translateY(-3%); } to { transform: scale(1); } }
@@ -72,8 +72,10 @@
 .abertura__pular { position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); min-height: 44px; padding: 0 18px; }
 
 .abertura--parada, .abertura--parada * { animation: none !important; }
+.abertura--parada .abertura__cenario { background-image: url("/cenarios/cap1-nave-pousada.webp"); }
 .abertura--parada .abertura__poeira { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .abertura, .abertura * { animation: none !important; }
+  .abertura__cenario { background-image: url("/cenarios/cap1-nave-pousada.webp"); }
   .abertura__poeira { display: none; }
 }
