@@ -1618,7 +1618,7 @@ html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 .modal-acess__titulo { margin: 0; text-align: center; font-family: var(--rqr-font-titulo); font-size: 1.4rem; }
 .modal-acess__titulo:focus { outline: none; }
 .modal-acess__texto { margin: 0; text-align: center; font-weight: 650; }
-.modal-acess__libras { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: .9rem; }
+.modal-acess__libras { display: flex; align-items: center; gap: 10px; margin: 10px 0 14px; font-weight: 700; font-size: .9rem; }
 .modal-acess__libras:not(:has(button)) { display: none; } /* sem internet o VLibras não carrega */
 .modal-acess__ajustes { display: grid; gap: 12px; }
 /* A rolagem termina no topo do botão: o rodapé fixo tem a cor do papel e esconde o que passa
