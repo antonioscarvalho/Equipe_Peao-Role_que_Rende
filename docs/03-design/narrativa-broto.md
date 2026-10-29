@@ -88,18 +88,23 @@ O capítulo 6 é o mais importante clinicamente: depois de um lapso, a pessoa co
 
 **Jogo:** Pulo do Bichinho (`web/src/jogos/pulo/PuloDoBichinho.tsx`). O Broto tenta subir de volta até o céu.
 
+**Arco do encontro:** susto com a queda → aproximação com respeito à distância → troca de nomes e histórias de casa → primeira tentativa juntos → convite para continuar a amizade. O que aconteceu com as luzes da família fica como gancho para o capítulo 2.
+
 #### Antes do jogo
 
 As perguntas do app têm sempre "Prefiro não dizer". Menor de 18 anos: o Broto acolhe, orienta a buscar um adulto de confiança, a UBS e o CVV 188, e pula as perguntas seguintes. As devolutivas das perguntas do app estão em `web/src/historia/Especial.tsx`.
 
-- **Broto:** Ai… ai, ai. Cadê o chão? Ah, achei. Tá aqui embaixo de mim. _(cena: cratera)_
-- **Broto:** Opa. Tem alguém aí? Desculpa o susto. Eu não costumo cair do céu assim, juro.
-  - "Você tá bem?" → "Tô inteiro. Um pouco amassado, mas inteiro."
-  - "Quem é você?" → "Já já eu conto. Deixa eu só achar minha antena."
-- **Broto:** Eu sou o Broto. Sou um broto de luz, lá de cima. Mas olha meu estado… caí todo bagunçado.
-- **Broto:** Me ajuda a me arrumar? Escolhe minha cor e o que eu visto. Vou mudando aqui na sua frente. _(pergunta do app: aparencia — cor, roupa, cabeça, rosto e peito do catálogo da spec 009)_
+- **Broto:** Ai… minha antena… A nave parou? Tem alguém aí no meio dessa fumaça? _(cena: cratera)_
+- **Broto:** Espera… fica aí um pouquinho. Eu também tô com medo. Não conheço esse lugar.
+  - "Você tá bem?" → "Acho que sim. Minhas pernas ainda estão tremendo. Você pode ficar aí enquanto eu levanto?"
+  - "Quem é você?" → "Meu nome é Broto. Eu vinha naquela nave… você viu mais alguém cair?"
+- **Broto:** Sou o Broto, um broto de luz. Vim do espaço. Eu ia tentar explicar melhor, mas esqueci tudo quando vi você.
+- **Broto:** Você não foi embora… Posso chegar um pouco mais perto?
+  - "Pode, vem devagar." → "Assim? Pronto. Vou sentar aqui na beirada. O chão de vocês é bem firme."
+  - "Prefiro ficar aqui." → "Tudo bem. Eu fico deste lado. Dá pra conversar daqui."
+- **Broto:** A queda bagunçou minhas cores. Me ajuda a escolher uma cor e uma roupa? Ou posso ficar assim por enquanto. _(pergunta do app: aparencia — cor, roupa, cabeça, rosto e peito do catálogo da spec 009)_
 - **Broto:** E você? Como eu te chamo? Pode ser apelido. Se preferir, eu te chamo de "você" mesmo. _(pergunta do app: nome)_
-- **Broto:** Prazer, {nome}. Que bom que foi você que me achou.
+- **Broto:** Prazer, {nome}. Quando ouvi seus passos, achei que precisava me esconder. Agora tô feliz que você chegou.
 - **Broto:** Pergunta chata, mas eu preciso fazer: você tem 18 anos ou mais? _(pergunta do app: idade)_
 - **Broto:** E você, tá chegando como hoje?
   - "Tô de boa" → "Que bom. Fica à vontade, então."
@@ -110,14 +115,14 @@ As perguntas do app têm sempre "Prefiro não dizer". Menor de 18 anos: o Broto 
 - **Broto:** Se quiser me contar… o que te trouxe até aqui hoje? _(pergunta do app: motivo)_
 - **Broto:** E o que faz sentido pra você agora, com as apostas? _(pergunta do app: meta)_
 - **Broto:** Quer que eu guarde isso só aqui no seu celular? Assim eu lembro de você quando a vontade apertar. Ninguém mais vê, e dá pra apagar quando quiser. _(pergunta do app: guardar)_
-- **Broto:** Agora deixa eu te contar de mim. Tá vendo aquele pontinho lá em cima, brilhando? É a Vila Estrela. Minha casa. _(cena: vila)_
+- **Broto:** Tá vendo aquele pontinho perto das estrelas? É pra lá que eu tava olhando quando você chegou. A Vila Estrela. Minha casa. _(cena: vila)_
 - **Broto:** É um asteroide tão pequenininho que dá a volta nele a pé antes do almoço. Tem umas vinte casinhas e um quintal pra cada uma.
 - **Broto:** Lá a gente vive de poeira de luz. Toda manhã, bem cedinho, a gente sai com uns potes pra colher a poeira que o sol deixa nas pedras. _(cena: colheita)_
   - "Pra que serve a poeira?" → "Pra tudo! Acende as casas, esquenta a comida e faz as naves voarem. Não é muito, mas é nosso."
   - "Dá trabalho?" → "Dá. Acordar cedo, encher pote por pote. Mas tem um gostinho de coisa feita com a mão, sabe?"
 - **Broto:** E na colheita a gente canta. Tem uma cantiga que a minha Vó Vega ensinou… é assim: tum-tum, tá-rá, tum-tum… a luz vem devagar… _(cena: musica)_
-- **Broto:** Desafinei, né? Pode falar. A Nina, minha irmã, sempre fala.
-- **Broto:** E aqui embaixo, que música vocês ouvem?
+- **Broto:** A Nina, minha irmã, sempre entra nessa parte. Fiquei esperando a voz dela… Esqueci por um segundo que tô longe.
+- **Broto:** E você, tem alguma música de que gosta? Quero conhecer um pedacinho daqui também.
   - "Samba ou pagode" → "Ouvi um pagode enquanto caía! Acho que tinha uma roda perto da praça. Tum-tum, tá-rá… combina com a cantiga da Vó!"
   - "Funk" → "Aquele grave que faz o chão tremer? Achei que era o meu coração batendo depois da queda!"
   - "Sertanejo" → "Música de saudade, né? Acho que eu vou gostar. Tô com um pouco de saudade de casa."
@@ -125,23 +130,23 @@ As perguntas do app têm sempre "Prefiro não dizer". Menor de 18 anos: o Broto 
   - "Rock" → "Barulhento e corajoso! Tipo cair de uma nave."
   - "Outra" → "Um dia você me mostra? Eu adoro aprender música nova."
   - "Prefiro não dizer" → "Tudo bem. A gente fica com a cantiga da Vó por enquanto."
-- **Broto:** Posso perguntar uma coisa? Vocês aqui só têm uma lua? _(cena: lua)_
+- **Broto:** Posso perguntar uma coisa meio estranha? Aquela é a única lua de vocês? _(cena: lua)_
   - "Só uma." → "Lá na Vila tem três! Uma pequenininha, uma média e uma que parece um pão de queijo."
   - "E vocês, quantas?" → "Três! Uma pequenininha, uma média e uma que parece um pão de queijo."
 - **Broto:** Mas a de vocês é bonita. Grandona. Parece que tá cuidando da praça.
-- **Broto:** Que engraçado… aqui o alienígena sou eu, né? Azulzinho, de antena, conversando com a lua. _(cena: bairro)_
+- **Broto:** Na minha vila, você é que ia ser a visita do espaço. Acho que eu também ia ficar olhando, tentando entender. _(cena: bairro)_
   - "Você nem parece alien." → "Valeu! Mas eu brilho no escuro. Isso é meio alien, admite."
   - "É um alien fofo." → "Fofo eu aceito! Na Vila todo mundo me chama de "pequeno" e eu odeio. "Fofo" tá liberado."
-- **Broto:** Reparei numa coisa enquanto caía. O bairro de vocês tá meio apagado. Quase nenhuma janela acesa.
-- **Broto:** Lá em casa também andou assim. As luzes foram apagando, uma por uma. É uma história comprida… outro dia eu te conto, pode ser?
-  - "Pode, sem pressa." → "Obrigado. Você é gente boa, sabia?"
+- **Broto:** Quando a nave começou a cair, procurei uma luz pra pousar perto. Vim parar nesta praça. Aí você apareceu.
+- **Broto:** Antes de eu sair, as luzes lá de casa foram apagando, uma por uma. Tem uma coisa que eu ainda não sei contar… Podemos deixar pra outro dia?
+  - "Pode, sem pressa." → "Obrigado por não me apressar. Ainda tô tentando entender o que aconteceu."
   - "Quer contar agora?" → "Ainda não. Hoje eu só quero voltar pra casa."
 - **Broto:** Minha família tá lá: meu pai Órion, que conserta nave; minha mãe Lyra, que faz a conta da casa render; a Nina; e a Vó Vega, que planta semente de luz no quintal. _(cena: familia)_
-- **Broto:** Eles devem tá me procurando. Se eu subir bem alto, quem sabe eles me veem.
-- **Broto:** Já sei! Tá vendo essas plataformas? Se eu for pulando de uma em uma, chego lá em cima. Me ajuda? _(cena: cratera)_
-  - "Bora!" → "Bora! Você me guia e eu pulo."
+- **Broto:** Eles devem tá me procurando. Eu queria conseguir dizer que tô aqui… e que encontrei alguém que ficou comigo.
+- **Broto:** Tá vendo essas plataformas acima da cratera? Talvez lá do alto eu consiga fazer um sinal pra minha família. Você me guia numa tentativa? _(cena: cratera)_
+  - "Bora!" → "Tá. Você me guia e eu pulo. Vou começar pela mais perto."
   - "Como eu ajudo?" → "Você me diz pra que lado ir: inclina o celular, usa as setas ou segura um lado da tela. Eu faço o resto."
-- **Broto:** Cada folhinha que a gente pegar no caminho eu guardo. São pequenas, mas são nossas. Vamos?
+- **Broto:** Se aparecerem folhinhas no caminho, a gente pode guardar. E, se quiser parar, tudo bem. Vamos tentar a primeira plataforma?
 
 #### Depois do jogo (logo após a fala de abertura)
 
@@ -149,14 +154,18 @@ As perguntas do app têm sempre "Prefiro não dizer". Menor de 18 anos: o Broto 
 
 - **Broto:** {folhas}
 - **Broto:** Sabe o que a minha Vó diz? Que estrela sozinha é só um pontinho. Mas várias juntas viram desenho no céu. Constelação. _(cena: estrelas)_
-- **Broto:** Acho que a gente é meio assim. Eu sozinho caí. Com você aqui, até que eu subi bonito.
+- **Broto:** Quando eu olhei pra baixo e vi você, tive coragem de tentar a próxima plataforma. Obrigado por me acompanhar.
 - **Broto:** E olha: a altura que a gente subiu hoje, ninguém tira. Amanhã eu começo dali, não do chão. _(cena: regua)_
 - **Broto:** E você, já subiu alguma coisa que ninguém tira de você?
   - "Já." → "Eu sabia. Dá pra ver. Guarda isso com carinho."
   - "Não sei." → "Às vezes a gente não vê de perto. Eu vejo uma: você tá aqui, conversando comigo. Isso já é subir."
   - "Prefiro não dizer." → "Justo. Fica guardado contigo."
 - **Broto:** Ei, vou cantar a cantiga da Vó com um tum-tum daqui de baixo: tum-tum, tá-rá… a luz vem devagar… Ficou melhor, vai. _(cena: musica)_
-- **Broto:** Tá ficando tarde. O bairro tá quietinho. _(cena: bairro)_
+- **Broto:** Na minha vila, a gente chama de amigo quem começa a dividir o caminho. Gostei de dividir esse pedaço com você.
+  - "Também gostei, Broto." → "Então, até a próxima conversa. Tenho um monte de perguntas sobre a Terra."
+  - "Vamos nos conhecer aos poucos." → "Combinado. Um pedaço do caminho de cada vez."
+  - "Prefiro não dizer." → "Tudo bem. Obrigado pela companhia de hoje."
+- **Broto:** Tá ficando tarde. Vou ficar perto da praça por enquanto. Se você voltar, quero aprender aquela música daqui. _(cena: bairro)_
 
 #### Fala de abertura, perguntas e lição
 
