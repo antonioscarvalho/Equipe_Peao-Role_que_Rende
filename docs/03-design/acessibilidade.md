@@ -17,6 +17,7 @@
 | Tamanho de fonte ajustável | Could | ⬜ | _a definir_ |
 | Linguagem simples | Must | ⬜ | Ver [tom de voz](conteudo-e-tom-de-voz.md) |
 | Reduzir movimento / animações | Could | ⬜ | _a definir_ |
+| Tradução para Libras (VLibras Widget) | Should | 🟡 ligado, falta testar o avatar num aparelho | Tocar na bolha à direita, depois num texto da tela inicial |
 
 ## Checklist de verificação
 

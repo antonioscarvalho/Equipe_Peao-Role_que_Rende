@@ -16,7 +16,8 @@ export function BotaoTema({ compacto = false }: { compacto?: boolean }) {
 
   return (
     <button type="button" className={`botao-tema${compacto ? " botao-tema--compacto" : ""}`}
-      onClick={() => { tocar("clique"); escolher(proximo); }} aria-label={rotulo} title={rotulo}>
+      onClick={() => { tocar("clique"); escolher(proximo); }} aria-label={rotulo} title={rotulo}
+      data-vlibras-gloss={compacto ? "MUDAR TEMA" : undefined}>
       <span className="botao-tema__icone" aria-hidden="true"><Icone nome={ICONE[pref]} tamanho={18} /></span>
       {!compacto && <span className="botao-tema__texto" aria-hidden="true">Tema: {NOME_TEMA[pref]}</span>}
     </button>

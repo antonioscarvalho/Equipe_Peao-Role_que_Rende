@@ -26,6 +26,7 @@ Código da equipe: **MIT** (ver [LICENSE](../../LICENSE)). Componentes de tercei
 | Testing Library (react, user-event, jest-dom) | 16.3 / 14.6 / 7.0 | MIT | https://github.com/testing-library | Testes de tela do web |
 | fake-indexeddb | 6.2 | Apache 2.0 | https://github.com/dumbmatter/fakeIndexedDB | IndexedDB em memória nos testes |
 | lottie-react | 2.4.1 | MIT | https://github.com/Gamote/lottie-react | Renderização de animações Lottie no app web |
+| VLibras Widget | 7.12.2 (carregado de `vlibras.gov.br`, não vai no build) | LGPL 3.0 | https://github.com/spbgovbr-vlibras | Tradução para Libras do texto tocado (`web/src/vlibras.ts`). Usado sem alteração e servido pelo governo, então a LGPL não pede abrir o nosso código |
 
 ## Skills de IA de terceiros (`.claude/skills/`)
 

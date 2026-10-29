@@ -3,6 +3,7 @@ import { Bichinho } from "../../Bichinho";
 import { tocar } from "../../sons";
 import { useAparenciaVisivel } from "../../personalizacao";
 import { BotaoTema } from "../../BotaoTema";
+import { useEsconderVLibras } from "../../vlibras";
 import type { PropsJogo } from "../../historia/tipos";
 import { DURACAO_PARTIDA_MS, FOLHA_A_CADA_PLATAFORMAS, quadroMs } from "../../partida";
 
@@ -44,6 +45,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bichoRef = useRef<HTMLDivElement>(null);
   const [estado, setEstado] = useState<Estado>("inicio");
+  useEsconderVLibras(estado === "jogando");
   const [pontos, setPontos] = useState(0);
   const [folhas, setFolhas] = useState(0);
   const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
@@ -339,7 +341,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
           <b>{pontos} m</b> · 🍃 {folhas}
         </span>
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo">×</button>
+        <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"
