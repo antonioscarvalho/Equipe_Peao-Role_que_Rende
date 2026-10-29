@@ -174,18 +174,14 @@ def gerar_canal(config, detune, atraso):
             acrescentar_pluck(canal, nota_arpejo, inicio + batida * segundos_batida,
                               0.012 * crescimento, 10.0, detune, atraso)
 
-        raiz_gancho = acorde[0] + 24
-        if raiz_gancho < 72:
+        raiz_gancho = acorde[0] + 12
+        if raiz_gancho < 60:
             raiz_gancho += 12
         for indice_nota, (batida, intervalo, duracao) in enumerate(MELODIAS_SECOES[indice]):
             nota = raiz_gancho + intervalo
             volume = (0.078 + indice * 0.009) * (1.12 if indice_nota in (0, 4) else 1.0)
             acrescentar_nota_melodia(canal, nota, inicio + batida * segundos_batida,
                                      duracao * segundos_batida, volume, detune, atraso)
-            if indice >= 2 and indice_nota in (3, 4, 6):
-                acrescentar_nota_melodia(canal, nota + 12, inicio + batida * segundos_batida,
-                                         duracao * segundos_batida, 0.022 * crescimento,
-                                         detune, atraso)
 
     return crossfade_loop(canal, ciclo, FADE_LOOP)
 
