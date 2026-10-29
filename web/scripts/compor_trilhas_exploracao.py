@@ -1,13 +1,14 @@
-"""Gera as trilhas instrumentais do jogo com clima de descoberta espacial.
+"""Gera trilhas originais com flauta percussiva grave para uma aventura de jogo.
 
-Composicao e sintese originais, sem samples ou melodias de terceiros. A linguagem usa
-frases pentatonicas simples, acordes abertos, plucks claros e um pulso leve: curiosa e
-acolhedora, com referencia ao espaco exploratorio de Minecraft, sem reproduzir sua musica.
+A voz principal combina timbre arredondado de ocarina com ataque de percussao de
+madeira. Um pulso sincopado, caixa no contratempo e arpejos crescentes dao
+movimento cinematografico; as melodias sao originais e nao usam samples de terceiros.
 
 Uso: python compor_trilhas_exploracao.py [leve|alegre|pulo|carrinho]
 """
 import math
 import os
+import random
 import sys
 import wave
 from array import array
@@ -17,52 +18,64 @@ SR = 32000
 BATIDAS_POR_ACORDE = 8  # dois compassos 4/4
 CAUDA = 1.4
 FADE_LOOP = 1.0
-BATIDAS_ARPEJO = (0.0, 0.75, 1.5, 2.5, 3.25, 4.0, 4.75, 5.5, 6.25, 7.0, 7.65)
-PASSOS_ARPEJO = (0, 1, 2, 3, 2, 1, 0, 2, 3, 2, 1)
-BATIDAS_MELODIA = (0.25, 1.25, 2.25, 3.5, 4.25, 5.25, 6.25, 7.5)
+BATIDAS_OSTINATO = tuple(passo * 0.5 for passo in range(16))
+PASSOS_OSTINATO = (0, 2, 1, 3, 2, 1, 0, 2, 0, 2, 3, 1, 2, 3, 0, 1)
+BATIDAS_BUMBO = (0.0, 1.5, 3.0, 4.0, 5.5, 7.0)
+BATIDAS_CAIXA = (1.0, 3.0, 5.0, 7.0)
+BATIDAS_CHOCALHO = (0.5, 1.5, 1.75, 2.5, 3.5, 3.75, 4.5, 5.5, 5.75, 6.5, 7.5, 7.75)
+MELODIAS_SECOES = (
+    ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
+     (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 4, 1.0)),
+    ((0.0, 4, 0.65), (0.75, 7, 0.4), (1.25, 9, 1.1), (3.0, 12, 0.8),
+     (4.25, 9, 0.95), (5.5, 7, 0.4), (6.0, 4, 0.45), (6.75, 7, 0.85)),
+    ((0.0, 0, 0.55), (0.75, 4, 0.55), (1.5, 7, 0.9), (2.5, 9, 0.9),
+     (4.0, 12, 1.1), (5.25, 14, 0.4), (5.75, 19, 0.5), (6.5, 12, 1.0)),
+    ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
+     (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 0, 1.0)),
+)
 
 
-# Cada secao: notas do acorde, baixo (raiz/quinta), arpejo e pequena resposta melodica.
-# Os registros ficam centrados e brilhantes, sem subgraves ou agudos estridentes.
+# Cada secao define o acorde, o baixo e o ostinato. A melodia tem frase, resposta,
+# subida para o climax e retorno do tema com resolucao.
 TRILHAS = {
     "leve": {
         "arquivo": "trilha-leve",
         "bpm": 100,
         "secoes": [
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81], [79, 83, 86, 88, 86, 83, 81, 79]),
-            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74], [84, 86, 88, 91, 88, 86, 83, 84]),
-            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76], [86, 88, 90, 93, 90, 88, 86, 83]),
-            ([55, 62, 67, 71, 76], (43, 50), [67, 71, 76, 79], [79, 83, 88, 86, 83, 81, 83, 79]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 81]),
+            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
+            ([48, 55, 60, 62, 64], (36, 43), [60, 64, 67, 74]),
+            ([55, 62, 67, 71, 76], (43, 50), [67, 71, 76, 79]),
         ],
     },
     "alegre": {
         "arquivo": "trilha-alegre",
         "bpm": 108,
         "secoes": [
-            ([48, 55, 60, 64, 67], (36, 43), [60, 64, 67, 74], [76, 79, 84, 86, 84, 79, 81, 76]),
-            ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77], [77, 81, 84, 86, 84, 81, 79, 77]),
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79], [79, 83, 86, 88, 86, 83, 81, 79]),
-            ([48, 55, 60, 64, 69], (36, 43), [60, 64, 69, 76], [76, 79, 84, 88, 86, 84, 81, 76]),
+            ([48, 55, 60, 64, 67], (36, 43), [60, 64, 67, 74]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
+            ([53, 60, 65, 67, 69], (41, 48), [65, 69, 72, 77]),
+            ([48, 55, 60, 64, 69], (36, 43), [60, 64, 69, 76]),
         ],
     },
     "pulo": {
         "arquivo": "trilha-pulo",
-        "bpm": 116,
+        "bpm": 112,
         "secoes": [
-            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78], [76, 80, 83, 88, 83, 80, 78, 76]),
-            ([45, 52, 57, 59, 61], (33, 40), [69, 73, 76, 81], [81, 85, 88, 90, 88, 85, 83, 81]),
-            ([47, 54, 59, 61, 63], (35, 42), [71, 75, 78, 83], [83, 87, 90, 92, 90, 87, 85, 83]),
-            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78], [76, 80, 83, 88, 86, 83, 80, 76]),
+            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78]),
+            ([47, 54, 59, 61, 63], (35, 42), [71, 75, 78, 83]),
+            ([45, 52, 57, 59, 61], (33, 40), [69, 73, 76, 81]),
+            ([52, 59, 64, 66, 68], (40, 47), [64, 68, 71, 78]),
         ],
     },
     "carrinho": {
         "arquivo": "trilha-carrinho",
-        "bpm": 106,
+        "bpm": 104,
         "secoes": [
-            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76], [74, 78, 81, 86, 83, 81, 78, 76]),
-            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79], [79, 81, 86, 88, 86, 83, 81, 79]),
-            ([57, 64, 69, 71, 73], (45, 52), [69, 73, 76, 81], [81, 85, 88, 90, 88, 85, 83, 81]),
-            ([50, 57, 62, 66, 69], (38, 45), [62, 66, 69, 74], [74, 78, 81, 86, 83, 81, 78, 74]),
+            ([50, 57, 62, 64, 66], (38, 45), [62, 66, 69, 76]),
+            ([57, 64, 69, 71, 73], (45, 52), [69, 73, 76, 81]),
+            ([55, 62, 67, 69, 71], (43, 50), [67, 71, 74, 79]),
+            ([50, 57, 62, 66, 69], (38, 45), [62, 66, 69, 74]),
         ],
     },
 }
@@ -72,33 +85,57 @@ def hz(nota_midi):
     return 440.0 * (2.0 ** ((nota_midi - 69) / 12.0))
 
 
-def envelope_pad(t, duracao):
-    ataque = 0.65
-    release = 0.7
-    if t < 0:
-        return 0.0
-    if t < ataque:
-        return t / ataque
-    if t < duracao:
-        return 1.0
-    if t < duracao + release:
-        return 1.0 - (t - duracao) / release
-    return 0.0
-
-
-def acrescentar_pad(canal, notas, inicio, fim, detune):
-    duracao = fim - inicio
-    i0 = max(0, int(inicio * SR))
-    i1 = min(len(canal), int((fim + 0.75) * SR))
-    frequencias = [hz(nota) * (1.0 + detune) for nota in notas]
+def acrescentar_baque(canal, inicio, volume, detune, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.36) * SR))
     for i in range(i0, i1):
-        t = i / SR - inicio
-        env = envelope_pad(t, duracao)
-        if env <= 0:
-            continue
-        fase = 2.0 * math.pi * t
-        valor = sum(math.sin(f * fase) * peso for f, peso in zip(frequencias, (0.47, 0.23, 0.16, 0.09, 0.05)))
-        canal[i] += 0.026 * env * valor
+        t = i / SR - t0
+        freq = (78.0 - 26.0 * min(1.0, t / 0.3)) * (1.0 + detune)
+        fase = 2.0 * math.pi * freq * t
+        env = math.exp(-13.0 * t)
+        canal[i] += volume * env * (0.88 * math.sin(fase) + 0.12 * math.sin(2.0 * fase))
+
+
+def acrescentar_tom(canal, inicio, volume, detune, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.24) * SR))
+    for i in range(i0, i1):
+        t = i / SR - t0
+        freq = (156.0 - 45.0 * min(1.0, t / 0.16)) * (1.0 + detune)
+        fase = 2.0 * math.pi * freq * t
+        env = math.exp(-17.0 * t)
+        canal[i] += volume * env * (0.82 * math.sin(fase) + 0.18 * math.sin(1.7 * fase))
+
+
+def acrescentar_caixa(canal, inicio, volume, semente, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.16) * SR))
+    rng = random.Random(semente)
+    anterior = 0.0
+    for i in range(i0, i1):
+        t = i / SR - t0
+        branco = rng.uniform(-1.0, 1.0)
+        ruido = branco - 0.72 * anterior
+        anterior = branco
+        corpo = math.sin(2.0 * math.pi * 185.0 * t) * math.exp(-24.0 * t)
+        canal[i] += volume * math.exp(-31.0 * t) * (0.78 * ruido + 0.22 * corpo)
+
+
+def acrescentar_chocalho(canal, inicio, volume, semente, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.055) * SR))
+    rng = random.Random(semente)
+    anterior = 0.0
+    for i in range(i0, i1):
+        t = i / SR - t0
+        branco = rng.uniform(-1.0, 1.0)
+        ruido = branco - 0.9 * anterior
+        anterior = branco
+        canal[i] += volume * math.exp(-82.0 * t) * ruido
 
 
 def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.0):
@@ -114,6 +151,29 @@ def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.
         fase = 2.0 * math.pi * freq * t
         onda = (0.68 * math.sin(fase) + 0.23 * math.sin(2.0 * fase)
                 + 0.07 * math.sin(3.0 * fase) + 0.02 * math.sin(4.0 * fase))
+        canal[i] += volume * env * onda
+
+
+def acrescentar_nota_melodia(canal, nota, inicio, duracao, volume, detune, atraso=0.0):
+    t0 = inicio + atraso
+    freq = hz(nota) * (1.0 + detune)
+    ataque = 0.012
+    soltura = 0.22
+    nivel_soltura = 0.76 + 0.24 * math.exp(-1.8 * duracao)
+    limite = min(len(canal), int((t0 + duracao + soltura) * SR))
+    i0 = max(0, int(t0 * SR))
+    for i in range(i0, limite):
+        t = i / SR - t0
+        if t < ataque:
+            env = t / ataque
+        elif t < duracao:
+            env = 0.76 + 0.24 * math.exp(-1.8 * t)
+        else:
+            env = nivel_soltura * math.exp(-13.0 * (t - duracao))
+        fase = 2.0 * math.pi * freq * t + 0.12 * math.exp(-30.0 * t)
+        corpo = 0.80 * math.sin(fase) + 0.16 * math.sin(2.0 * fase) + 0.04 * math.sin(3.0 * fase)
+        ataque_madeira = math.exp(-24.0 * t) * (0.11 * math.sin(4.7 * fase) + 0.04 * math.sin(7.1 * fase))
+        onda = corpo + ataque_madeira
         canal[i] += volume * env * onda
 
 
@@ -135,23 +195,59 @@ def gerar_canal(config, detune, atraso):
     total = int((ciclo + CAUDA) * SR)
     canal = [0.0] * total
 
-    for indice, (acorde, baixo, arpejo, melodia) in enumerate(config["secoes"]):
+    for indice, (acorde, baixo, arpejo) in enumerate(config["secoes"]):
         inicio = indice * duracao_secao
-        acrescentar_pad(canal, acorde, inicio, inicio + duracao_secao, detune)
+        crescimento = 0.5 + indice * 0.16
 
-        # Baixo redondo em dois pulsos por compasso, com pequena pausa para a melodia respirar.
-        for batida in (0, 2, 4, 6):
-            nota_baixo = baixo[0] if batida in (0, 4) else baixo[1]
+        # Ataque breve marca a troca harmonica; nao ha acordes sustentados.
+        notas_acorde = (acorde[0], acorde[1])
+        for voz, nota in enumerate(notas_acorde):
+            acrescentar_pluck(canal, nota, inicio, 0.018 * crescimento, 7.5,
+                              detune, atraso + voz * 0.045)
+
+        # Pulso de motor em 3+3+2, com caixa firme no backbeat dos dois compassos.
+        for batida in BATIDAS_BUMBO:
+            volume_bumbo = 0.026 if batida in (0, 4) else (0.018 if batida in (1.5, 5.5) else 0.012)
+            acrescentar_baque(canal, inicio + batida * segundos_batida,
+                              volume_bumbo * crescimento, detune, atraso)
+        for batida in BATIDAS_CAIXA:
+            semente = int((inicio + batida) * SR) + indice * 97
+            acento = 1.0 if batida in (3, 7) else 0.68
+            acrescentar_caixa(canal, inicio + batida * segundos_batida,
+                              0.034 * acento * crescimento, semente, atraso)
+        for passo, batida in enumerate(BATIDAS_CHOCALHO):
+            semente = int((inicio + batida) * SR) + indice * 211 + passo
+            antecipacao = batida % 1.0 == 0.75
+            volume_chocalho = 0.0038 if antecipacao else (0.007 if passo % 2 else 0.005)
+            acrescentar_chocalho(canal, inicio + batida * segundos_batida,
+                                 volume_chocalho * crescimento, semente, atraso)
+        if indice > 0:
+            for batida in (3.5, 7.5):
+                acrescentar_tom(canal, inicio + batida * segundos_batida,
+                                0.006 * crescimento, detune, atraso)
+
+        # Baixo acompanha o galope do bumbo e deixa a flauta respirar entre frases.
+        for batida, nota_baixo in ((0, baixo[0]), (1.5, baixo[1]), (3, baixo[0]),
+                                   (4, baixo[0]), (5.5, baixo[1]), (7, baixo[0])):
             acrescentar_pluck(canal, nota_baixo, inicio + batida * segundos_batida,
-                              0.058, 6.0, detune, atraso)
+                              (0.025 if batida in (0, 4) else 0.018) * crescimento,
+                              7.2, detune, atraso)
 
-        # Arpejo ascendente/descendente e motivo de oito notas, como pergunta e resposta.
-        for batida, passo in zip(BATIDAS_ARPEJO, PASSOS_ARPEJO):
-            acrescentar_pluck(canal, arpejo[passo], inicio + batida * segundos_batida,
-                              0.030, 6.8, detune, atraso)
-        for batida, nota in zip(BATIDAS_MELODIA, melodia):
-            acrescentar_pluck(canal, nota, inicio + batida * segundos_batida,
-                              0.047, 4.2, detune, atraso)
+        # Figura de colcheias que se repete como gancho e muda a resposta no segundo compasso.
+        for passo, batida in enumerate(BATIDAS_OSTINATO):
+            nota_arpejo = arpejo[PASSOS_OSTINATO[(passo + indice * 2) % len(PASSOS_OSTINATO)]]
+            acento = 1.22 if passo % 4 == 0 else (0.84 if passo % 2 else 1.0)
+            acrescentar_pluck(canal, nota_arpejo, inicio + batida * segundos_batida,
+                              0.0105 * acento * crescimento, 10.0, detune, atraso)
+
+        raiz_gancho = acorde[0]
+        if raiz_gancho < 48:
+            raiz_gancho += 12
+        for indice_nota, (batida, intervalo, duracao) in enumerate(MELODIAS_SECOES[indice]):
+            nota = raiz_gancho + intervalo
+            volume = (0.078 + indice * 0.009) * (1.12 if indice_nota in (0, 4) else 1.0)
+            acrescentar_nota_melodia(canal, nota, inicio + batida * segundos_batida,
+                                     duracao * segundos_batida, volume, detune, atraso)
 
     return crossfade_loop(canal, ciclo, FADE_LOOP)
 

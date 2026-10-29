@@ -5,7 +5,7 @@ import { Icone } from "../Icone";
 import { BotaoLibras } from "../BotaoLibras";
 import { nomeDoBroto, useAparenciaVisivel } from "../personalizacao";
 import { lerPerfil } from "../personalizacao/armazenamento-perfil";
-import { tocar, tocarMusica, tocarTecla, vocalizarBroto, type NomeSom } from "../sons";
+import { tocar, tocarTecla, vocalizarBroto, type NomeSom } from "../sons";
 import { useModal } from "./useModal";
 import { Especial, type Conversa } from "./Especial";
 import type { Capitulo, Passo } from "./tipos";
@@ -25,9 +25,7 @@ import "./historia.css";
 /** Fala de transição da base, igual para todos os capítulos. REVISÃO CLÍNICA PENDENTE. */
 const CONVITE_PERGUNTAS = "Pode me perguntar o que quiser. Ou a gente segue.";
 
-/** Um efeito por cena (combina com a arte de fundo em `cenas/`). "musica" tem sua própria
- * cantiga (tocarMusica, mais abaixo); "cratera", "bairro" e "amanhecer" ficam fora daqui —
- * a última toca ao entrar na lição, não por cena (ver `ir`). Nem toda cena precisa de som. */
+/** Efeitos por cena que acompanham a arte de fundo. */
 const SOM_DA_CENA: Partial<Record<string, NomeSom>> = {
   queda: "queda",
   vila: "aproximar",
@@ -160,8 +158,7 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
   const ultimaCenaComSom = useRef<string | undefined>(undefined);
   const tocarSomDaCena = (c: string | undefined) => {
     if (c && c !== ultimaCenaComSom.current) {
-      if (c === "musica") tocarMusica("/sons/cantiga-vo.opus");
-      else if (SOM_DA_CENA[c]) tocar(SOM_DA_CENA[c]!);
+      if (SOM_DA_CENA[c]) tocar(SOM_DA_CENA[c]!);
     }
     ultimaCenaComSom.current = c;
   };
@@ -236,7 +233,6 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
                   setRespondeu(true);
                   if (o.resposta) setFala(dizer(o.resposta));
                   if (o.abreCrise) setCrise(true);
-                  if (o.som === "cantiga") tocarMusica("/sons/cantiga-vo.opus");
                   if (!o.resposta && !o.abreCrise) irParaPasso(i + 1);
                 }}>{dizer(o.rotulo)}</button>
               ))
