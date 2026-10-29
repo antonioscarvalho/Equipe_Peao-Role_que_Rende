@@ -8,6 +8,7 @@ Uso: python compor_trilhas_exploracao.py [leve|alegre|pulo|carrinho]
 """
 import math
 import os
+import random
 import sys
 import wave
 from array import array
@@ -19,6 +20,9 @@ CAUDA = 1.4
 FADE_LOOP = 1.0
 BATIDAS_OSTINATO = (0.0, 0.75, 1.0, 2.0, 2.75, 3.0, 4.0, 4.75, 5.0, 6.0, 6.75, 7.0)
 PASSOS_OSTINATO = (0, 2, 1, 3, 2, 1, 0, 2, 3, 1, 2, 1)
+BATIDAS_BUMBO = (0.0, 2.75, 4.0, 6.5)
+BATIDAS_CAIXA = (2.0, 6.0)
+BATIDAS_CHOCALHO = (0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5)
 MELODIAS_SECOES = (
     ((0.0, 0, 1.0), (1.25, 7, 0.38), (1.75, 9, 0.58), (2.5, 7, 0.9),
      (4.0, 12, 0.9), (5.25, 9, 0.38), (5.75, 7, 0.58), (6.5, 4, 1.0)),
@@ -105,6 +109,35 @@ def acrescentar_tom(canal, inicio, volume, detune, atraso=0.0):
         canal[i] += volume * env * (0.82 * math.sin(fase) + 0.18 * math.sin(1.7 * fase))
 
 
+def acrescentar_caixa(canal, inicio, volume, semente, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.16) * SR))
+    rng = random.Random(semente)
+    anterior = 0.0
+    for i in range(i0, i1):
+        t = i / SR - t0
+        branco = rng.uniform(-1.0, 1.0)
+        ruido = branco - 0.72 * anterior
+        anterior = branco
+        corpo = math.sin(2.0 * math.pi * 185.0 * t) * math.exp(-24.0 * t)
+        canal[i] += volume * math.exp(-31.0 * t) * (0.78 * ruido + 0.22 * corpo)
+
+
+def acrescentar_chocalho(canal, inicio, volume, semente, atraso=0.0):
+    t0 = inicio + atraso
+    i0 = max(0, int(t0 * SR))
+    i1 = min(len(canal), int((t0 + 0.055) * SR))
+    rng = random.Random(semente)
+    anterior = 0.0
+    for i in range(i0, i1):
+        t = i / SR - t0
+        branco = rng.uniform(-1.0, 1.0)
+        ruido = branco - 0.9 * anterior
+        anterior = branco
+        canal[i] += volume * math.exp(-82.0 * t) * ruido
+
+
 def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.0):
     t0 = inicio + atraso
     freq = hz(nota) * (1.0 + detune)
@@ -172,14 +205,23 @@ def gerar_canal(config, detune, atraso):
             acrescentar_pluck(canal, nota, inicio, 0.018 * crescimento, 7.5,
                               detune, atraso + voz * 0.045)
 
-        # Tambores em dois compassos e contratempos para dar sensacao de jornada.
-        for batida in (0, 4):
+        # Bumbo sincopado, caixa no contratempo e chocalho nas subdivisoes.
+        for batida in BATIDAS_BUMBO:
+            volume_bumbo = 0.023 if batida in (0, 4) else 0.015
             acrescentar_baque(canal, inicio + batida * segundos_batida,
-                              0.023 * crescimento, detune, atraso)
-        batidas_tom = (2.5, 6.5) if indice % 2 == 0 else (3.0, 7.0)
-        for batida in batidas_tom:
+                              volume_bumbo * crescimento, detune, atraso)
+        for batida in BATIDAS_CAIXA:
+            semente = int((inicio + batida) * SR) + indice * 97
+            acrescentar_caixa(canal, inicio + batida * segundos_batida,
+                              0.038 * crescimento, semente, atraso)
+        for passo, batida in enumerate(BATIDAS_CHOCALHO):
+            semente = int((inicio + batida) * SR) + indice * 211 + passo
+            volume_chocalho = 0.008 if passo % 2 else 0.0055
+            acrescentar_chocalho(canal, inicio + batida * segundos_batida,
+                                 volume_chocalho * crescimento, semente, atraso)
+        for batida in (3.5, 7.5):
             acrescentar_tom(canal, inicio + batida * segundos_batida,
-                            0.019 * crescimento, detune, atraso)
+                            0.009 * crescimento, detune, atraso)
 
         # Alternancia sincopada de raiz e quinta, com espaco para a flauta responder.
         for batida, nota_baixo in ((0, baixo[0]), (1.5, baixo[1]), (4, baixo[0]), (5.5, baixo[1])):
