@@ -1,20 +1,21 @@
-/* Abertura discreta (cerca de 3 s):
+/* Abertura discreta (cerca de 4 s):
    0–350 ms     tela preta
    350–1450 ms  o contorno do Broto se desenha em traço claro (logo em esboço)
-   1450–1950 ms o amarelo toma a tela a partir do centro; o Broto ganha cor e o esboço some
+   1450–2450 ms o esboço pronto fica 1 s na tela escura
+   2450–2950 ms o amarelo toma a tela a partir do centro; o Broto ganha cor e o esboço some
    1900–2400 ms o nome aparece, suave
-   2550–3000 ms tudo some, revelando o app */
+   3550–4000 ms tudo some, revelando o app */
 .abertura {
   position: fixed; inset: 0; z-index: 90; overflow: hidden; display: grid; place-items: center;
   background: #0E0D1C; color: var(--livro-tinta);
-  animation: abertura-sai 450ms ease-in 2.55s forwards;
+  animation: abertura-sai 450ms ease-in 3.55s forwards;
 }
 @keyframes abertura-sai { to { opacity: 0; visibility: hidden; } }
 
 .abertura__amarelo {
   position: absolute; left: 50%; top: 50%; width: 160vmax; height: 160vmax; margin: -80vmax 0 0 -80vmax; border-radius: 50%;
   background: var(--livro-grao), var(--livro-sol);
-  transform: scale(0); animation: abertura-amarelo 650ms cubic-bezier(.65, 0, .35, 1) 1.45s forwards;
+  transform: scale(0); animation: abertura-amarelo 650ms cubic-bezier(.65, 0, .35, 1) 2.45s forwards;
 }
 :root[data-tema="escuro"] .abertura__amarelo { background: var(--livro-grao), #2A2960; }
 @keyframes abertura-amarelo { to { transform: scale(1); } }
@@ -24,7 +25,7 @@
 .abertura__logo > * { position: absolute; inset: 0; }
 
 .abertura__esboco { width: 150px; height: 150px; overflow: visible;
-  animation: abertura-some-esboco 300ms ease-out 1.75s forwards; }
+  animation: abertura-some-esboco 300ms ease-out 2.75s forwards; }
 .abertura__esboco path {
   fill: none; stroke: #FFFCF4; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
   stroke-dasharray: 1; stroke-dashoffset: 1;
@@ -36,7 +37,7 @@
 @keyframes abertura-traco { to { stroke-dashoffset: 0; } }
 @keyframes abertura-some-esboco { to { opacity: 0; } }
 
-.abertura__broto { opacity: 0; transform: scale(.96); animation: abertura-cor 450ms ease-out 1.6s forwards; }
+.abertura__broto { opacity: 0; transform: scale(.96); animation: abertura-cor 450ms ease-out 2.6s forwards; }
 @keyframes abertura-cor { to { opacity: 1; transform: none; } }
 
 .abertura__nome {

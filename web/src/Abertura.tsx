@@ -5,14 +5,14 @@ import { CAMINHO_CORPO } from "./personalizacao/ItensBichinho";
 import "./abertura.css";
 
 /**
- * Abertura do app (cerca de 3 s), discreta, como a logo de um app:
+ * Abertura do app (cerca de 4 s), discreta, como a logo de um app:
  * 1. tela preta;
- * 2. o contorno do Broto se desenha em traço claro (o esboço vira a logo);
+ * 2. o contorno do Broto se desenha em traço claro (o esboço vira a logo) e fica 1 s no escuro;
  * 3. o amarelo toma a tela a partir do Broto, que ganha cor;
  * 4. tudo some, revelando o app (sem nome: a logo é o próprio Broto).
  * Sem botão de pular (pedido do produto). Enter ou Esc ainda pulam. Com reduzir, fica parada e some em 1,2 s.
  */
-const DURACAO_MS = 3000;
+const DURACAO_MS = 4000;
 
 export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean }) {
   const aparencia = useAparenciaVisivel();
