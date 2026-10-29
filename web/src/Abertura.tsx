@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Bichinho } from "./Bichinho";
 import { useAparenciaVisivel } from "./personalizacao";
+import { tocar } from "./sons";
 import "./abertura.css";
 
 /**
@@ -41,7 +42,7 @@ export function Abertura({ aoFim, reduzir }: { aoFim: () => void; reduzir: boole
         <Bichinho humor="feliz" nivel={2} tamanho={132} reduzir aparencia={aparencia} />
       </div>
       <p className="sr-only" role="status">Abrindo o Guardião.</p>
-      <button className="kb kb--amarelo abertura__pular" onClick={terminar}>Pular</button>
+      <button className="kb kb--amarelo abertura__pular" onClick={() => { tocar("clique"); terminar(); }}>Pular</button>
     </div>
   );
 }

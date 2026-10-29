@@ -42,7 +42,7 @@ export function Queda({ aoFim, reduzir }: { aoFim: () => void; reduzir: boolean 
         {pousou ? "Alguma coisa pousou na grama, ao lado da cratera. Parece um alien." : "Uma estrela cai do espaço."}
       </p>
       <div className="tela-libras"><BotaoLibras /></div>
-      <button ref={botao} className="queda__pular" onClick={terminar}>{reduzir || pousou ? "Continuar" : "Pular"}</button>
+      <button ref={botao} className="queda__pular" onClick={() => { tocar("clique"); terminar(); }}>{reduzir || pousou ? "Continuar" : "Pular"}</button>
     </div>
   );
 }

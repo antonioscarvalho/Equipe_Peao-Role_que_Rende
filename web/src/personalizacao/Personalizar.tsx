@@ -8,6 +8,7 @@ import {
 } from "./aparencia";
 import { DIAS_SEM_APOSTAR_DEMO, useAparencia } from "./armazenamento";
 import { BotaoTema } from "../BotaoTema";
+import { tocar } from "../sons";
 
 const plural = (n: number) => (n === 1 ? "1 dia" : `${n} dias`);
 
@@ -54,11 +55,11 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
     <div className="palco">
       <main className="celular personalizar" aria-labelledby="personalizar-titulo">
         <div className="personalizar__topo">
-          <button className="link personalizar__voltar" onClick={aoVoltar}>← Voltar</button>
+          <button className="link personalizar__voltar" onClick={() => { tocar("clique"); aoVoltar(); }}>← Voltar</button>
           <span className="personalizar__acoes">
             <BotaoLibras />
             <BotaoTema compacto />
-            <button className="rqr-botao personalizar__pronto" onClick={aoVoltar}>Pronto</button>
+            <button className="rqr-botao personalizar__pronto" onClick={() => { tocar("clique"); aoVoltar(); }}>Pronto</button>
           </span>
         </div>
         <h1 id="personalizar-titulo" ref={titulo} tabIndex={-1} className="topo__titulo personalizar__titulo">
@@ -67,7 +68,7 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
 
         <div className="personalizar__previa">
           <Bichinho humor="calmo" nivel={3} tamanho={120} reduzir={reduzir} aparencia={visivel} />
-          <button className="personalizar__original" onClick={() => mudar({ ...APARENCIA_PADRAO })}>
+          <button className="personalizar__original" onClick={() => { tocar("clique"); mudar({ ...APARENCIA_PADRAO }); }}>
             Visual original
           </button>
           {proximo && (
@@ -81,7 +82,7 @@ export function Personalizar({ aoVoltar, dias = DIAS_SEM_APOSTAR_DEMO }: Props) 
           {ABAS.map((x, i) => (
             <button key={x.id} ref={(el) => { abasRef.current[i] = el; }} role="tab" id={`aba-${x.id}`}
               aria-selected={aba === x.id} aria-controls={`painel-${x.id}`} tabIndex={aba === x.id ? 0 : -1}
-              className={`personalizar__aba ${aba === x.id ? "is-on" : ""}`} onClick={() => setAba(x.id)}>
+              className={`personalizar__aba ${aba === x.id ? "is-on" : ""}`} onClick={() => { tocar("clique"); setAba(x.id); }}>
               {x.rotulo}
             </button>
           ))}
@@ -120,7 +121,7 @@ function Cores({ nome, opcoes, valor, aoMudar }: CoresProps) {
     <div className="personalizar__opcoes">
       {opcoes.map((c) => (
         <label key={c.id} className="amostra" title={c.nome}>
-          <input type="radio" name={nome} value={c.id} checked={valor === c.id} onChange={() => aoMudar(c.id)} />
+          <input type="radio" name={nome} value={c.id} checked={valor === c.id} onChange={() => { tocar("clique"); aoMudar(c.id); }} />
           <span className="amostra__cor" style={{ background: c.valor }} aria-hidden="true" />
           <span className="sr-only">{c.nome}</span>
         </label>
@@ -145,7 +146,7 @@ function Itens({ titulo, nome, base, opcoes, valor, dias, aoMudar }: ItensProps)
           return (
             <label key={item.id} className={`opcao-item ${livre ? "" : "is-bloqueado"}`}>
               <input type="radio" name={nome} value={item.id} checked={valor === item.id && livre}
-                disabled={!livre} aria-describedby={livre ? undefined : idDica} onChange={() => aoMudar(item.id)} />
+                disabled={!livre} aria-describedby={livre ? undefined : idDica} onChange={() => { tocar("clique"); aoMudar(item.id); }} />
               <span className="opcao-item__previa" aria-hidden="true">
                 <Bichinho humor="calmo" nivel={3} tamanho={56} reduzir aparencia={{ ...base, [nome]: item.id }} />
               </span>

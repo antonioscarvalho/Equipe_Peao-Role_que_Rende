@@ -55,7 +55,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const [graus, setGraus] = useState<number | null>(null);
   const [aviso, setAviso] = useState("");
   // Na história, fechar também segue para a conversa levando as folhas pegas (não existe derrota).
-  const fechar = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
+  const fechar = () => { tocar("clique"); return aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar(); };
   const fecharRef = useRef(fechar);
   fecharRef.current = fechar;
 
@@ -346,7 +346,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const soltar = () => { jogo.current.toque = 0; };
 
   // Saída gentil depois da partida: na história, segue para a conversa com as folhas pegas.
-  const sair = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
+  const sair = () => { tocar("clique"); return aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar(); };
   const rotuloSair = aoTerminar ? "Conversar com o Broto" : "Voltar pro meu rolê";
 
   const novoRecorde = estado === "caiu" && pontos > 0 && pontos >= recorde;

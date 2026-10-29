@@ -323,7 +323,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         </span>
         <BotaoLibras />
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={aoFechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
+        <button className="crise__fechar pulo__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"
@@ -373,7 +373,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
             <p className="pulo__resultado"><b>{metros} m</b> de rolê · 🍃 {folhas} folhas</p>
             {novoRecorde ? <p className="pulo__recorde">Seu rolê mais longo até agora!</p> : <small>Seu recorde: {recorde} m</small>}
             <button className="rqr-botao" onClick={() => { tocar("clique"); iniciar(); }}>Dirigir de novo</button>
-            <button className="link" onClick={aoFechar}>Voltar pro meu rolê</button>
+            <button className="link" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar pro meu rolê</button>
           </div>
         )}
 
@@ -383,7 +383,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
             <p className="pulo__chamada">3 minutos de rolê!</p>
             <p className="pulo__resultado"><b>{metros} m</b> de rolê · 🍃 {folhas} folhas</p>
             <p className="pulo__dicas">Que tal uma pausa agora? O bichinho também vai estacionar.</p>
-            <button className="rqr-botao" onClick={aoFechar}>Voltar pro meu rolê</button>
+            <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar pro meu rolê</button>
             <button className="link" onClick={() => { tocar("clique"); iniciar(); }}>Dirigir mais uma</button>
           </div>
         )}
