@@ -1,8 +1,8 @@
 """Gera trilhas instrumentais originais para uma aventura espacial cinematografica.
 
-A sintese combina ostinatos pulsantes, acordes amplos e camadas que crescem ao longo
-do loop. O resultado busca escala e expectativa de trilha de cinema, mantendo o tom
-acolhedor e curioso do jogo. Sem samples ou melodias de terceiros.
+A sintese combina ostinatos pulsantes, percussao tonal curta e plucks melodicos que
+crescem ao longo do loop. A harmonia aparece em ataques breves e arpejos, mantendo
+o tom acolhedor e curioso do jogo. Sem samples ou melodias de terceiros.
 
 Uso: python compor_trilhas_exploracao.py [leve|alegre|pulo|carrinho]
 """
@@ -17,7 +17,6 @@ SR = 32000
 BATIDAS_POR_ACORDE = 8  # dois compassos 4/4
 CAUDA = 1.4
 FADE_LOOP = 1.0
-PESOS_PAD = (0.16, 0.17, 0.15, 0.14, 0.12, 0.10, 0.09, 0.07)
 BATIDAS_OSTINATO = tuple(passo * 0.5 for passo in range(16))
 PASSOS_OSTINATO = (0, 2, 1, 2, 0, 2, 3, 2, 0, 2, 1, 2, 3, 2, 1, 2)
 BATIDAS_MELODIA = (0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5)
@@ -72,36 +71,6 @@ def hz(nota_midi):
     return 440.0 * (2.0 ** ((nota_midi - 69) / 12.0))
 
 
-def envelope_pad(t, duracao):
-    ataque = 1.1
-    release = 0.9
-    if t < 0:
-        return 0.0
-    if t < ataque:
-        return t / ataque
-    if t < duracao:
-        return 1.0
-    if t < duracao + release:
-        return 1.0 - (t - duracao) / release
-    return 0.0
-
-
-def acrescentar_pad(canal, notas, inicio, fim, detune, volume):
-    duracao = fim - inicio
-    i0 = max(0, int(inicio * SR))
-    i1 = min(len(canal), int((fim + 0.75) * SR))
-    frequencias = [hz(nota) * (1.0 + detune) for nota in notas]
-    for i in range(i0, i1):
-        t = i / SR - inicio
-        env = envelope_pad(t, duracao)
-        if env <= 0:
-            continue
-        fase = 2.0 * math.pi * t
-        valor = sum((0.78 * math.sin(f * fase) + 0.22 * math.sin(2.0 * f * fase)) * peso
-                    for f, peso in zip(frequencias, PESOS_PAD))
-        canal[i] += volume * env * valor
-
-
 def acrescentar_baque(canal, inicio, volume, detune, atraso=0.0):
     t0 = inicio + atraso
     i0 = max(0, int(t0 * SR))
@@ -151,9 +120,14 @@ def gerar_canal(config, detune, atraso):
     for indice, (acorde, baixo, arpejo, melodia) in enumerate(config["secoes"]):
         inicio = indice * duracao_secao
         crescimento = 0.58 + indice * 0.12
-        notas_amplas = [acorde[0] - 12] + acorde + [acorde[1] + 12, acorde[2] + 12]
-        acrescentar_pad(canal, notas_amplas, inicio, inicio + duracao_secao, detune,
-                        volume=0.027 * crescimento)
+
+        # Acorde em ataques curtos substitui blocos sustentados, sem timbre de orgao.
+        notas_acorde = (acorde[0], acorde[1], acorde[-1])
+        for batida in (0, 4):
+            for voz, nota in enumerate(notas_acorde):
+                acrescentar_pluck(canal, nota, inicio + batida * segundos_batida,
+                                  0.026 * crescimento, 6.5, detune,
+                                  atraso + voz * 0.035)
 
         # Baques suaves marcam os tempos fortes e dao peso ao crescendo.
         for batida in (0, 4):
