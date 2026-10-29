@@ -1,7 +1,7 @@
 """Trilha instrumental leve para a navegação do Guardião.
 
 Síntese própria, sem samples: acordes macios, baixo redondo e uma melodia saltitante
-em Sol maior, com pulso calmo. O ciclo usa crossfade para repetir sem estalo.
+em Sol maior, a 80 bpm. Cada acorde ocupa dois compassos de 4/4; o ciclo usa crossfade.
 
 Uso:
     python compor-trilha-leve.py
@@ -26,20 +26,18 @@ ACORDES = [
     ([130.81, 164.81, 196.00, 293.66], 18.0, DUR),
 ]
 
-# Baixo leve em pulso de 90 bpm: raiz, raiz, quinta, raiz.
+# Baixo leve em pulso de 80 bpm: raiz, raiz, quinta, raiz; dois compassos por acorde.
 BAIXO = [(98.00, 146.83, 0.0), (73.42, 110.00, 6.0), (82.41, 123.47, 12.0), (65.41, 98.00, 18.0)]
-PASSO_BAIXO = 0.667
+PASSO_BAIXO = 0.75
 
-# Motivos curtos sobem e descem como um assobio; a segunda volta varia o repouso final.
+# Uma nota por pulso; cada frase fecha antes da mudança de acorde, com resolução no último tempo.
 MELODIAS = [
     (0.0, [392.00, 493.88, 587.33, 659.25, 587.33, 493.88, 440.00, 392.00]),
     (6.0, [440.00, 587.33, 739.99, 880.00, 739.99, 659.25, 587.33, 440.00]),
     (12.0, [493.88, 659.25, 783.99, 987.77, 783.99, 739.99, 659.25, 493.88]),
     (18.0, [392.00, 523.25, 659.25, 783.99, 659.25, 587.33, 523.25, 392.00]),
 ]
-TEMPOS = [0.25, 0.68, 1.12, 1.56, 2.08, 2.52, 2.96, 3.48]
-REPETE_EM = 3.6
-BRILHOS = [2.8, 8.7, 14.6, 20.5]
+TEMPOS = [0.15, 0.9, 1.65, 2.4, 3.15, 3.9, 4.65, 5.4]
 
 
 def envelope(t, dur, ataque=0.25, release=0.55):
@@ -99,10 +97,6 @@ def gerar_canal(detune, atraso):
         for k, freq in enumerate(notas):
             t = inicio + TEMPOS[k]
             nota_curta(canal, freq, t, 0.046, 7.5, [0.78, 0.18, 0.04], detune, atraso)
-            nota_curta(canal, freq, t + REPETE_EM, 0.041, 7.5, [0.78, 0.18, 0.04], detune, atraso)
-
-    for t in BRILHOS:
-        nota_curta(canal, 1567.98, t, 0.012, 10, [0.9, 0.1], detune, atraso)
     return canal
 
 
