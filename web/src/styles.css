@@ -185,12 +185,6 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 }
 .crise__fechar { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; border: 3px solid var(--rqr-amarelo); background: transparent; color: var(--rqr-amarelo); font-size: 26px; line-height: 1; cursor: pointer; }
 .crise__titulo { color: var(--rqr-amarelo); font-size: 24px; font-weight: 900; line-height: 1.2; }
-.crise__fase { margin: 0; font-size: 22px; font-weight: 800; }
-.crise__fase b { display: inline-block; min-width: 1.4em; color: var(--rqr-amarelo); font-variant-numeric: tabular-nums; }
-.crise__ciclos { display: flex; gap: 8px; }
-.crise__ciclos span { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--rqr-amarelo); transition: background var(--rqr-dur-base); }
-.crise__ciclos .ok { background: var(--rqr-amarelo); }
-.crise__ciclos .agora { background: var(--rqr-azul-claro); }
 .crise__fim { display: grid; justify-items: center; gap: 12px; max-width: 340px; }
 .crise__fim p, .crise__fim small { margin: 0; }
 .crise__fim small { opacity: .85; }
@@ -198,16 +192,6 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .ajuda:hover { background: rgb(255 255 255 / .2); }
 .ajuda--botao { font: inherit; font-weight: 800; text-align: left; cursor: pointer; }
 
-.onda { position: relative; width: 260px; height: 260px; display: grid; place-items: center; }
-.onda__anel { position: absolute; inset: 0; border-radius: 50%; border: 4px solid var(--rqr-azul-claro); transition: transform var(--dur) ease-in-out, opacity var(--dur); }
-.onda__anel--2 { border-color: var(--rqr-amarelo); border-style: dashed; inset: 22px; }
-.onda__centro { transition: transform var(--dur) ease-in-out; }
-.onda--inspira .onda__anel, .onda--segura .onda__anel { transform: scale(1); opacity: 1; }
-.onda--inspira .onda__centro, .onda--segura .onda__centro { transform: scale(1.18); }
-.onda--expira .onda__anel { transform: scale(.62); opacity: .5; }
-.onda--expira .onda__centro { transform: scale(.88); }
-.onda--segura .onda__anel--2 { animation: girar 4s linear; }
-@keyframes girar { to { rotate: 90deg; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
 /* ---------- Grafismos decorativos ---------- */

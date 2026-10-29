@@ -1,79 +1,61 @@
-/* Abertura do app no estilo livro ilustrado (skill estilo-livro-ilustrado).
-   Ambiente: o cenário se afasta devagar e o véu da noite clareia (luzes do entardecer acendendo).
-   Herói 1: a placa de papel com o nome entra com o "pop" dos botões Kahoot.
-   Herói 2: o Broto salta da navezinha, com poeira de luz em volta.
-   Saída: tudo some junto (fade 400 ms). */
+/* Abertura discreta (cerca de 4 s):
+   0–350 ms     tela preta
+   350–1450 ms  o contorno do Broto se desenha em traço claro (logo em esboço)
+   1450–2450 ms o esboço pronto fica 1 s na tela escura
+   2450–2950 ms o amarelo toma a tela a partir do centro; o Broto ganha cor e o esboço some
+   1900–2400 ms o nome aparece, suave
+   3550–4000 ms tudo some, revelando o app */
 .abertura {
-  position: fixed; inset: 0; z-index: 90; overflow: hidden; color: var(--livro-tinta);
-  display: grid; grid-template-rows: 1fr auto 1fr; justify-items: center; padding: 24px 20px;
-  background: var(--livro-tinta);
-  animation: abertura-sai 400ms ease-in 2.4s forwards;
+  position: fixed; inset: 0; z-index: 90; overflow: hidden; display: grid; place-items: center;
+  background: #0E0D1C; color: var(--livro-tinta);
+  animation: abertura-sai 450ms ease-in 3.55s forwards;
 }
 @keyframes abertura-sai { to { opacity: 0; visibility: hidden; } }
 
-.abertura__cenario {
-  position: absolute; inset: -4%;
-  background: url("/cenarios/cap1-nave-pousada.webp") center bottom / cover no-repeat;
-  animation: abertura-camera 2.8s cubic-bezier(.2, .7, .2, 1) both;
+.abertura__amarelo {
+  position: absolute; left: 50%; top: 50%; width: 160vmax; height: 160vmax; margin: -80vmax 0 0 -80vmax; border-radius: 50%;
+  background: var(--livro-grao), var(--livro-sol);
+  transform: scale(0); animation: abertura-amarelo 650ms cubic-bezier(.65, 0, .35, 1) 2.45s forwards;
 }
-@keyframes abertura-camera { from { transform: scale(1.14) translateY(-3%); } to { transform: scale(1); } }
-.abertura__veu {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgb(27 26 69 / .55), rgb(27 26 69 / .1) 55%, rgb(27 26 69 / .25));
-  animation: abertura-luzes 1.4s ease-out both;
-}
-@keyframes abertura-luzes { from { background-color: rgb(27 26 69 / .7); } to { background-color: rgb(27 26 69 / 0); } }
+:root[data-tema="escuro"] .abertura__amarelo { background: var(--livro-grao), #2A2960; }
+@keyframes abertura-amarelo { to { transform: scale(1); } }
 
-.abertura__placa {
-  position: relative; grid-row: 2; display: grid; justify-items: center; gap: 4px; text-align: center;
-  width: min(330px, 100%); padding: 18px 22px 16px; margin-top: -30vh;
-  background: var(--livro-grao), #FFFCF4; border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio);
-  box-shadow: 0 7px 0 var(--livro-tinta);
-  animation: abertura-pop 560ms cubic-bezier(.3, 1.6, .5, 1) 350ms both;
-}
-@keyframes abertura-pop {
-  0% { opacity: 0; transform: translateY(24px) scale(.6) rotate(-4deg); }
-  60% { opacity: 1; transform: translateY(-6px) scale(1.06) rotate(1deg); }
-  100% { transform: none; }
-}
-.abertura__nome { margin: 0; font-family: var(--rqr-font-titulo); font-size: 2.6rem; line-height: 1; font-weight: 900; color: var(--livro-tinta); }
-.abertura__nome::after { /* sublinhado de marca-texto amarelo, desenhado depois do nome */
-  content: ""; display: block; height: 10px; margin: -12px -6px 0; border-radius: 6px; background: var(--livro-sol);
-  position: relative; z-index: -1; transform-origin: left; animation: abertura-marca 420ms ease-out 800ms both;
-}
-@keyframes abertura-marca { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-.abertura__nome { position: relative; z-index: 0; }
-.abertura__frase { margin: 6px 0 0; font-weight: 800; color: #55527A; animation: abertura-texto 420ms ease-out 950ms both; }
-@keyframes abertura-texto { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.abertura__centro { position: relative; display: grid; justify-items: center; gap: 6px; }
+.abertura__logo { position: relative; width: 150px; height: 150px; }
+.abertura__logo > * { position: absolute; inset: 0; }
 
-/* Broto: nasce pequeno na navezinha (centro, perto do pé da tela) e salta para o gramado. */
-.abertura__broto {
-  position: absolute; left: 50%; bottom: 17%; translate: -50% 0; display: grid; place-items: center;
-  animation: abertura-salto 900ms cubic-bezier(.3, 1.5, .5, 1) 650ms both;
+.abertura__esboco { width: 150px; height: 150px; overflow: visible;
+  animation: abertura-some-esboco 300ms ease-out 2.75s forwards; }
+.abertura__esboco path {
+  fill: none; stroke: #FFFCF4; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: abertura-traco 1s cubic-bezier(.45, 0, .2, 1) .35s forwards;
 }
-@keyframes abertura-salto {
-  0% { opacity: 0; transform: translateY(70px) scale(.2); }
-  35% { opacity: 1; }
-  70% { transform: translateY(-18px) scale(1.04, .97); }
-  100% { transform: none; }
-}
-.abertura__poeira {
-  position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; margin: -4.5px; border-radius: 50%;
-  background: #FFF2C6; box-shadow: 0 0 8px #F9DC6E; opacity: 0;
-  animation: abertura-poeira 1.3s ease-out calc(1100ms + var(--i) * 60ms) both;
-  --ang: calc(var(--i) * 45deg);
-}
-@keyframes abertura-poeira {
-  0% { opacity: 0; transform: rotate(var(--ang)) translateX(40px) scale(.4); }
-  30% { opacity: 1; }
-  100% { opacity: 0; transform: rotate(calc(var(--ang) + 30deg)) translateX(104px) scale(1); }
-}
+.abertura__esboco path:nth-child(2), .abertura__esboco path:nth-child(3) { animation-delay: .55s; animation-duration: .6s; }
+.abertura__esboco path:nth-child(n+4) { animation-delay: .8s; animation-duration: .55s; }
+.abertura__esboco path:nth-child(n+7) { animation-delay: 1.05s; animation-duration: .4s; }
+@keyframes abertura-traco { to { stroke-dashoffset: 0; } }
+@keyframes abertura-some-esboco { to { opacity: 0; } }
 
-.abertura__pular { position: absolute; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); min-height: 44px; padding: 0 18px; }
+.abertura__broto { opacity: 0; transform: scale(.96); animation: abertura-cor 450ms ease-out 2.6s forwards; }
+@keyframes abertura-cor { to { opacity: 1; transform: none; } }
 
+.abertura__nome {
+  margin: 0; font-family: var(--rqr-font-titulo); font-size: 2.2rem; font-weight: 700; letter-spacing: .02em;
+  color: var(--livro-tinta); opacity: 0; transform: translateY(8px);
+  animation: abertura-nome 500ms ease-out 1.95s forwards;
+}
+:root[data-tema="escuro"] .abertura__nome { color: var(--noite-creme); }
+@keyframes abertura-nome { to { opacity: 1; transform: none; } }
+
+/* Reduzir animações: já aparece pronta (amarelo, Broto colorido e nome), sem movimento. */
 .abertura--parada, .abertura--parada * { animation: none !important; }
-.abertura--parada .abertura__poeira { display: none; }
+.abertura--parada .abertura__amarelo { transform: scale(1); }
+.abertura--parada .abertura__esboco { display: none; }
+.abertura--parada .abertura__broto, .abertura--parada .abertura__nome { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .abertura, .abertura * { animation: none !important; }
-  .abertura__poeira { display: none; }
+  .abertura__amarelo { transform: scale(1); }
+  .abertura__esboco { display: none; }
+  .abertura__broto, .abertura__nome { opacity: 1; transform: none; }
 }

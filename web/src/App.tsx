@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Bichinho, type Humor } from "./Bichinho";
 import { Contador } from "./Contador";
 import { Respiracao } from "./Respiracao";
@@ -6,39 +7,67 @@ import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
 import { Confete } from "./Confete";
 import { PuloDoBichinho } from "./jogos/pulo/PuloDoBichinho";
+import { JOGOS, nomeCapitulo } from "./jogos/catalogo";
 import { Historia } from "./historia/Historia";
 import { Abertura } from "./Abertura";
-import { capitulosConcluidos } from "./historia/progresso";
+import { ORDEM, capitulosConcluidos, estaDesbloqueado, jaFezCapituloHoje, liberaAmanha } from "./historia/progresso";
+import { capitulos, TITULOS } from "./historia/capitulos";
 import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
 import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
 import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
+import { useProgresso } from "./personalizacao/armazenamento";
+import { categoriaDe, proximoMarco, quantoFalta } from "./personalizacao/aparencia";
 import { abrirPersonalizar } from "./personalizacao/rota";
-import { BotaoCarrinho } from "./carrinho/RoleDeCarrinho";
+import { RoleDeCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
 import { BotaoLibras } from "./BotaoLibras";
-
-type Missao = { id: number; texto: string; icone: NomeIcone; valor: number };
-
-// Dados sintéticos para a demonstração (edital 8.5).
-const missoes: Missao[] = [
-  { id: 1, texto: "Caminhar 15 minutos", icone: "sprout", valor: 20 },
-  { id: 2, texto: "Mandar mensagem pra alguém de confiança", icone: "heartHandshake", valor: 30 },
-  { id: 3, texto: "Anotar os gastos de hoje", icone: "piggyBank", valor: 50 },
-  { id: 4, texto: "Jogar bola ou ir na praça", icone: "house", valor: 40 },
-];
-
-const humores: { id: Humor; rotulo: string }[] = [
-  { id: "calmo", rotulo: "Calmo" },
-  { id: "feliz", rotulo: "Feliz" },
-  { id: "orgulhoso", rotulo: "Orgulhoso" },
-  { id: "cansado", rotulo: "Dia difícil" },
-];
+import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
 
-type Aba = "role" | "missoes" | "jogos" | "ajustes";
-const TITULOS_ABA: Record<Aba, string> = { role: "Seu rolê de hoje", missoes: "Missões do dia", jogos: "Jogos", ajustes: "Ajustes" };
+type Aba = "inicio" | "missoes" | "jogos" | "ajustes";
+const TITULOS_ABA: Record<Aba, string> = { inicio: "Seu dia hoje", missoes: "Missões da semana", jogos: "Jogos", ajustes: "Ajustes" };
+
+/**
+ * Humor do Broto, a partir do que a pessoa fez (nada de demonstração):
+ * - de madrugada (0h–5h): sonolento ("cansado"), sugere descanso;
+ * - semana de missões completa ou capítulo concluído hoje: orgulhoso;
+ * - alguma missão hoje: feliz;
+ * - o resto do tempo: calmo.
+ * Eventos passam por cima por um tempo (missão concluída: pula; "Deu vontade": braços abertos).
+ * Regra (skill gamificacao-etica): ele nunca fica triste para cobrar nem "adoece" por ausência.
+ */
+function humorDoDia(plano: EstadoPlano): Humor {
+  const hora = new Date().getHours();
+  if (hora < 5) return "cansado";
+  const semana = SEMANAS[plano.semana - 1];
+  const semanaCompleta = semana.missoes.every((x) => plano.feitas[x.id]);
+  if (semanaCompleta || jaFezCapituloHoje()) return "orgulhoso";
+  if (plano.feitasHoje > 0) return "feliz";
+  return "calmo";
+}
+
+/** Próxima missão: a primeira por fazer da semana atual; se ela estiver completa, uma de semanas anteriores. */
+function proximaMissao(plano: EstadoPlano): Missao | undefined {
+  for (let n = plano.semana; n >= 1; n--) {
+    const x = SEMANAS[n - 1].missoes.find((mi) => !plano.feitas[mi.id]);
+    if (x) return x;
+  }
+  return undefined;
+}
+
+/** O que a história tem para hoje, para o cartão da tela inicial. */
+function capituloDeHoje(): { titulo: string; estado: string; pronto: boolean } {
+  const feitos = capitulosConcluidos();
+  const id = ORDEM.find((c) => !feitos.includes(c));
+  if (!id) return { titulo: "História completa", estado: "Releia quando quiser", pronto: true };
+  const titulo = TITULOS[id];
+  if (!capitulos[id]) return { titulo, estado: "Chega em breve", pronto: false };
+  if (estaDesbloqueado(id)) return { titulo, estado: "Disponível hoje", pronto: true };
+  if (liberaAmanha(id)) return { titulo, estado: "Libera amanhã", pronto: false };
+  return { titulo, estado: "Depois do anterior", pronto: false };
+}
 
 /** Régua de volume (0 a 10), no mesmo padrão da régua de vontade: setas, Home/End e os botões −/+
  * cobrem quem não consegue arrastar (2.5.7); `aria-valuetext` diz a porcentagem, não só o número (4.1.2). */
@@ -77,19 +106,20 @@ function BotaoAba({ aba, atual, mudar, icone, rotulo }: { aba: Aba; atual: Aba; 
 }
 
 export default function App() {
-  const [aba, setAba] = useState<Aba>("role");
-  const [feitas, setFeitas] = useState<number[]>([]);
-  const [humor, setHumor] = useState<Humor>("calmo");
-  const [protegido, setProtegido] = useState(1240);
+  const [aba, setAba] = useState<Aba>("inicio");
+  const plano = usePlano();
+  const [semanaVista, setSemanaVista] = useState(plano.semana);
+  const [evento, setEvento] = useState<{ humor: Humor; ate: number } | null>(null);
   const [crise, setCrise] = useState(false);
   // "crise": aberto pelo "Deu vontade", com convite de 3 minutos pra onda passar.
-  const [jogo, setJogo] = useState<false | "inicio" | "crise">(false);
+  const [jogo, setJogo] = useState<false | "pulo" | "carrinho" | "crise">(false);
   // false = fechada; true = mapa; "cap1" = primeiro acesso, direto no capítulo 1.
   const [historia, setHistoria] = useState<boolean | "cap1">(false);
   const [abrindo, setAbrindo] = useState(true);
   const conhecer = useConhecer();
   const { perfil } = usePerfil();
-  const [moedaKey, setMoedaKey] = useState(0);
+  const nomeBroto = nomeDoBroto(perfil);
+  const [brilho, setBrilho] = useState(0);
   const [confete, setConfete] = useState(0);
   const [reduzir, setReduzir] = useState(
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
@@ -110,8 +140,11 @@ export default function App() {
     setVolumes((x) => ({ ...x, musica: v }));
   };
   const aparencia = useAparenciaVisivel();
+  const progresso = useProgresso();
+  const feitosCaps = capitulosConcluidos();
 
-  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Guardião`; }, [aba]);
+  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Meu amigo Broto!`; }, [aba]);
+  useEffect(() => { setSemanaVista(plano.semana); }, [plano.semana]);
 
   // O tema anterior fica no menu Jogos; a trilha nova acompanha a navegação principal.
   // A abertura fica silenciosa e a música entra quando o primeiro menu aparece.
@@ -144,36 +177,40 @@ export default function App() {
   useEffect(() => {
     document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
   }, [reduzir]);
+  // O humor de um evento dura um tempo e volta para o humor do dia.
+  useEffect(() => {
+    if (!evento) return;
+    const t = window.setTimeout(() => setEvento(null), Math.max(0, evento.ate - Date.now()));
+    return () => window.clearTimeout(t);
+  }, [evento]);
+  const humor: Humor = evento?.humor ?? humorDoDia(plano);
 
-  const concluir = useCallback((m: Missao) => {
-    if (feitas.includes(m.id)) return;
-    setFeitas((f) => [...f, m.id]);
-    setProtegido((v) => v + m.valor);
-    setMoedaKey((k) => k + 1);
+  const marcar = useCallback((mi: Missao) => {
+    const feita = alternarMissao(mi.id);
+    if (!feita) { setAviso(`Missão desmarcada: ${mi.texto}.`); return; }
+    const semana = SEMANAS.find((s) => s.missoes.includes(mi))!;
+    const feitasNaSemana = semana.missoes.filter((x) => x === mi || plano.feitas[x.id]).length;
+    setEvento({ humor: "feliz", ate: Date.now() + 2600 });
+    setBrilho((k) => k + 1);
     setConfete((c) => c + 1);
-    setHumor("feliz");
-    tocarMissao(feitas.length + 1, missoes.length);
-    window.setTimeout(() => tocar("moeda"), 250);
-    window.setTimeout(() => tocar("folha"), 650);
-    if (feitas.length + 1 === missoes.length) {
-      // Todas concluídas: conquista do dia, depois da moeda e da folha.
-      window.setTimeout(() => tocar("conquista"), 1300);
-    }
-    setAviso(feitas.length + 1 === missoes.length
-      ? `Todas as missões de hoje concluídas!`
-      : `Missão concluída: ${m.texto}.`);
-    window.setTimeout(() => setHumor((h) => (h === "feliz" ? "calmo" : h)), 2600);
-  }, [feitas]);
+    tocarMissao(feitasNaSemana, semana.missoes.length);
+    window.setTimeout(() => tocar("folha"), 450);
+    const completou = feitasNaSemana === semana.missoes.length;
+    if (completou) window.setTimeout(() => tocar("conquista"), 1100);
+    setAviso(completou ? `Semana ${semana.numero} completa! ${nomeBroto} tá orgulhoso.` : `Missão feita: ${mi.texto}.`);
+  }, [plano.feitas, nomeBroto]);
 
-  const reiniciar = () => { setFeitas([]); setHumor("calmo"); setProtegido(1240); };
+  const proxima = proximaMissao(plano);
+  const semanaAtual = SEMANAS[plano.semana - 1];
+  const feitasSemanaAtual = semanaAtual.missoes.filter((x) => plano.feitas[x.id]).length;
 
-  const nivel = feitas.length;
-  const proxima = missoes.find((m) => !feitas.includes(m.id));
+  const abrirCrise = () => { setCrise(true); setEvento({ humor: "apoio", ate: Date.now() + 10 * 60_000 }); };
+  const fecharCrise = () => { setCrise(false); setEvento({ humor: "apoio", ate: Date.now() + 30_000 }); };
 
   return (
     <div className="palco">
       <Decoracao />
-      <main className="celular" aria-label="Prova visual do app">
+      <main className="celular" aria-label={TITULOS_ABA[aba]}>
         <header className="topo">
           <div>
             <p className="topo__oi">{perfil.nome ? `Oi, ${perfil.nome}` : "Oi!"}</p>
@@ -185,123 +222,197 @@ export default function App() {
           </div>
         </header>
 
-        {aba === "role" && (
+        {aba === "inicio" && (
           <>
-            <section className="cena" aria-label="Seu bichinho">
-              <Bichinho humor={humor} nivel={nivel} reduzir={reduzir} aparencia={aparencia} tamanho={170} />
-              {moedaKey > 0 && humor === "feliz" && (
-                <div className="cena__brilho" key={moedaKey}>
+            {/* Cena: o Broto reage ao seu dia. Tocar nele abre a personalização. */}
+            <section className="cena" aria-label={nomeBroto}>
+              <button className="cena__broto" onClick={() => { tocar("clique"); abrirPersonalizar(); }}
+                aria-label={`Personalizar o ${nomeBroto}`}>
+                <Bichinho humor={humor} nivel={Math.min(3, feitasSemanaAtual)} reduzir={reduzir} aparencia={aparencia} tamanho={170} />
+              </button>
+              {brilho > 0 && humor === "feliz" && (
+                <div className="cena__brilho" key={brilho}>
                   <Animacao nome="brilho" tamanho={120} repetir={false} reduzir={reduzir} />
                 </div>
               )}
             </section>
 
-            <section className="cards" aria-label="Seu progresso">
-              <article className="rqr-card mini mini--linha">
-                <span className="mini__icone mini__icone--lottie" style={{ background: "var(--rqr-verde-claro)" }}>
-                  <Animacao nome="broto" tamanho={34} reduzir={reduzir} />
-                </span>
+            {/* Foco no caminho: dias do plano e missões feitas. */}
+            <section className="cards contagem" aria-label="Seu caminho">
+              <article className="rqr-card mini mini--linha contagem__item">
+                <span className="mini__icone mini__icone--dias"><Icone nome="sprout" tamanho={20} /></span>
                 <div>
-                  <p className="mini__rotulo">Dias de cuidado</p>
-                  <p className="mini__valor">12 dias</p>
+                  <p className="mini__rotulo">{plano.concluido ? "Plano concluído" : "Dia do plano"}</p>
+                  <p className="mini__valor">{plano.dia}<small> de {DIAS_DO_PLANO}</small></p>
                 </div>
               </article>
-              <article className="rqr-card mini mini--linha">
-                <span className="mini__icone mini__icone--moeda" key={moedaKey}>
-                  <span className={moedaKey ? "moeda rqr-anim-moeda" : "moeda"} aria-hidden="true">R$</span>
-                </span>
+              <article className="rqr-card mini mini--linha contagem__item">
+                <span className="mini__icone mini__icone--feitas" key={brilho}><Icone nome="check" tamanho={20} /></span>
                 <div>
-                  <p className="mini__rotulo">Protegido</p>
-                  <p className="mini__valor"><Contador valor={protegido} reduzir={reduzir} /></p>
+                  <p className="mini__rotulo">Missões feitas</p>
+                  <p className="mini__valor"><Contador valor={plano.totalFeitas} reduzir={reduzir} formato="numero" /><small> de {TOTAL_MISSOES}</small></p>
                 </div>
               </article>
             </section>
 
-            <section className="proxima" aria-labelledby="proxima-titulo">
-              <div className="proxima__cabeca">
-                <h2 id="proxima-titulo" className="proxima__titulo">{proxima ? "Próxima missão" : "Missões de hoje"}</h2>
-                <span className="progresso progresso--cheio" aria-hidden="true">
-                  <span style={{ transform: `scaleX(${nivel / missoes.length})` }} />
-                </span>
-                <span className="proxima__conta">{nivel}/{missoes.length}</span>
-              </div>
-              {proxima ? (
-                <div className="proxima__corpo" key={proxima.id}>
-                  <span className="proxima__icone"><Icone nome={proxima.icone} /></span>
-                  <p className="proxima__texto">{proxima.texto}<small>+ R$ {proxima.valor} protegidos</small></p>
-                  <button className="kb kb--verde proxima__botao" onClick={() => concluir(proxima)}>
-                    <Icone nome="check" tamanho={20} /> Feito!
+            {/* Dois cartões: o capítulo de hoje e o próximo presente do Broto. */}
+            {(() => {
+              const cap = capituloDeHoje();
+              const presente = proximoMarco(progresso);
+              const vestido = presente ? { ...aparencia, [categoriaDe(presente.item)]: presente.item.id } : aparencia;
+              return (
+                <div className="destaques">
+                  <button className={`destaque destaque--historia ${cap.pronto ? "is-pronto" : ""}`} onClick={() => { tocar("clique"); setHistoria(true); }}>
+                    <span className="destaque__rotulo"><Icone nome="bookOpen" tamanho={14} /> História</span>
+                    <span className="destaque__titulo">{cap.titulo.replace(/^\d+\. /, "")}</span>
+                    <span className="destaque__estado">{cap.estado}</span>
+                    {cap.pronto && cap.estado === "Disponível hoje" && <span className="destaque__novo" aria-hidden="true">Novo!</span>}
+                  </button>
+                  <button className="destaque destaque--presente" onClick={() => { tocar("clique"); abrirPersonalizar(); }}
+                    aria-label={presente ? `Próximo presente: ${presente.item.nome}. ${presente.texto}. Abrir personalização.` : "Personalizar"}>
+                    <span className="presente__vitrine" aria-hidden="true">
+                      <Bichinho humor="calmo" nivel={2} tamanho={64} reduzir aparencia={vestido} />
+                    </span>
+                    <span className="presente__info">
+                      <span className="destaque__rotulo">Próximo presente</span>
+                      <span className="destaque__titulo">{presente ? presente.item.nome : "Tudo liberado!"}</span>
+                      {presente?.item.meta && (
+                        <span className="destaque__estado">
+                          {(() => {
+                            const f = quantoFalta(presente.item, progresso);
+                            const meta = presente.item.meta;
+                            if (meta.tipo === "capitulos") return `Conclua o ${nomeCapitulo(`cap${meta.valor}` as never)}`;
+                            if (meta.tipo === "dias") return `Faltam ${f} ${f === 1 ? "dia" : "dias"}`;
+                            return `Faltam ${f} ${f === 1 ? "missão" : "missões"}`;
+                          })()}
+                        </span>
+                      )}
+                    </span>
                   </button>
                 </div>
-              ) : (
-                <p className="proxima__fim">Tudo feito hoje. Boa!</p>
+              );
+            })()}
+
+            {/* As próximas missões da semana, para marcar aqui mesmo. */}
+            <section className="semana-home" aria-labelledby="semana-home-titulo">
+              <div className="proxima__cabeca">
+                <h2 id="semana-home-titulo" className="proxima__titulo">Semana {semanaAtual.numero} · {semanaAtual.tema}</h2>
+                <span className="proxima__conta">{feitasSemanaAtual}/{semanaAtual.missoes.length}</span>
+              </div>
+              <span className="progresso progresso--cheio" aria-hidden="true">
+                <span style={{ transform: `scaleX(${feitasSemanaAtual / semanaAtual.missoes.length})` }} />
+              </span>
+              {/* As 2 próximas missões da semana em blocos coloridos (como as respostas do Kahoot): tocar marca como feita. */}
+              <ul className="missoes-grade">
+                {semanaAtual.missoes.filter((x) => !plano.feitas[x.id]).slice(0, 2).map((mi, i) => {
+                  const ok = false;
+                  return (
+                    <li key={mi.id} style={{ animationDelay: `${120 + i * 60}ms` }}>
+                      <button className={`missao-bloco missao-bloco--${(semanaAtual.missoes.indexOf(mi) + i * 0) % 4} ${ok ? "is-ok" : ""}`} aria-pressed={ok} onClick={() => marcar(mi)}>
+                        <span className="missao-bloco__topo">
+                          <span className="missao-bloco__icone" aria-hidden="true"><Icone nome={ok ? "check" : mi.icone} tamanho={16} /></span>
+                          <span className="missao-bloco__tempo">{ok ? "Feita" : mi.tempo}</span>
+                        </span>
+                        <span className="missao-bloco__texto">{mi.texto}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+              {feitasSemanaAtual === semanaAtual.missoes.length && (
+                <p className="semana-home__fim">
+                  {plano.semana < SEMANAS.length ? `Semana completa! A próxima chega no dia ${diaDeInicio(plano.semana + 1)}.` : "Você fez todas as missões do plano!"}
+                </p>
               )}
             </section>
 
-            <nav className="atalhos rqr-escalonado" aria-label="Atalhos">
-              <button className="kb kb--azul atalho" onClick={() => { tocar("clique"); setAba("missoes"); }}>
-                <span className="atalho__icone"><Icone nome="listChecks" /></span>
-                <span className="atalho__texto">Missões<small>{nivel} de {missoes.length} feitas</small></span>
-              </button>
-              <button className="kb kb--roxo atalho" onClick={() => { tocar("clique"); setCrise(true); }}>
-                <span className="atalho__icone"><Icone nome="wind" /></span>
-                <span className="atalho__texto">Deu vontade<small>respirar comigo</small></span>
-              </button>
-              <button className="kb kb--rosa atalho" onClick={() => { tocar("clique"); setAba("jogos"); }}>
-                <span className="atalho__icone"><Icone nome="gamepad" /></span>
-                <span className="atalho__texto">Jogos<small>até 3 minutos</small></span>
-              </button>
-              <button className="kb kb--amarelo atalho" onClick={() => { tocar("clique"); abrirPersonalizar(); }}>
-                <span className="atalho__icone"><Icone nome="palette" /></span>
-                <span className="atalho__texto">Personalizar<small>seu bichinho</small></span>
-              </button>
-            </nav>
-
+            <button className="kb kb--roxo deu-vontade" onClick={abrirCrise}>
+              <span className="atalho__icone"><Icone nome="wind" /></span>
+              <span className="atalho__texto">Deu vontade?<small>Respira comigo, a onda passa</small></span>
+            </button>
           </>
         )}
 
-        {aba === "missoes" && (
-          <section aria-labelledby="missoes-titulo" className="aba-missoes">
-            <div className="secao">
-              <h2 id="missoes-titulo" className="sr-only">Missões do dia</h2>
-              <span className="progresso" aria-label={`${nivel} de ${missoes.length} missões`}>
-                <span style={{ transform: `scaleX(${nivel / missoes.length})` }} />
-              </span>
-              <span className="secao__conta">{nivel}/{missoes.length}</span>
-            </div>
-            <ul className="missoes rqr-escalonado">
-              {missoes.map((m) => {
-                const ok = feitas.includes(m.id);
-                return (
-                  <li key={m.id}>
-                    <button className={`missao ${ok ? "is-ok" : ""}`} onClick={() => concluir(m)} aria-pressed={ok}>
-                      <span className="missao__icone"><Icone nome={ok ? "check" : m.icone} /></span>
-                      <span className="missao__texto">{m.texto}</span>
-                      <span className="missao__valor">+ R$ {m.valor}</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-            <p className="mini__nota">Cada missão conta. Dia difícil não zera nada.</p>
-            {nivel > 0 && <button className="link" onClick={() => { tocar("clique"); reiniciar(); }}>Reiniciar demonstração</button>}
-          </section>
-        )}
+        {aba === "missoes" && (() => {
+          const s = SEMANAS[semanaVista - 1];
+          const aberta = semanaVista <= plano.semana;
+          const feitas = s.missoes.filter((x) => plano.feitas[x.id]).length;
+          return (
+            <section aria-labelledby="missoes-titulo" className="aba-missoes">
+              <div className="semana">
+                <button className="semana__seta" onClick={() => setSemanaVista((n) => Math.max(1, n - 1))}
+                  disabled={semanaVista === 1} aria-label="Semana anterior">‹</button>
+                <div className="semana__titulo">
+                  <h2 id="missoes-titulo">Semana {s.numero} de {SEMANAS.length}</h2>
+                  <p>{aberta ? s.tema : `Oculta · chega no dia ${diaDeInicio(s.numero)}`}</p>
+                </div>
+                <button className="semana__seta" onClick={() => setSemanaVista((n) => Math.min(SEMANAS.length, n + 1))}
+                  disabled={semanaVista === SEMANAS.length} aria-label="Próxima semana">›</button>
+              </div>
+              {aberta && (
+                <div className="secao">
+                  <span className="progresso" aria-label={`${feitas} de ${s.missoes.length} missões`}>
+                    <span style={{ transform: `scaleX(${feitas / s.missoes.length})` }} />
+                  </span>
+                  <span className="secao__conta">{feitas}/{s.missoes.length}</span>
+                </div>
+              )}
+              <ul className="missoes" key={semanaVista}>
+                {s.missoes.map((mi) => {
+                  if (!aberta) {
+                    return (
+                      <li key={mi.id}>
+                        <div className="missao is-oculta" aria-label="Missão oculta">
+                          <span className="missao__icone" aria-hidden="true">?</span>
+                          <span className="missao__texto">Missão oculta</span>
+                        </div>
+                      </li>
+                    );
+                  }
+                  const ok = Boolean(plano.feitas[mi.id]);
+                  return (
+                    <li key={mi.id}>
+                      <button className={`missao ${ok ? "is-ok" : ""}`} onClick={() => marcar(mi)} aria-pressed={ok}>
+                        <span className="missao__icone"><Icone nome={ok ? "check" : mi.icone} /></span>
+                        <span className="missao__texto">{mi.texto}{mi.dica && <small>{mi.dica}</small>}</span>
+                        <span className="missao__valor">{mi.tempo}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="mini__nota">
+                {aberta ? "Sem prazo: missão de semana passada continua valendo. Dia difícil não apaga nada." : "As missões começam simples e ficam mais interessantes a cada semana."}
+              </p>
+            </section>
+          );
+        })()}
 
         {aba === "jogos" && (
           <section className="aba-jogos" aria-label="Jogos">
-            <div className="jogos rqr-escalonado">
-              <button className="kb kb--roxo jogo" onClick={() => { tocar("clique"); setHistoria(true); }}>
-                <span className="atalho__icone"><Icone nome="bookOpen" tamanho={28} /></span>
-                <span className="jogo__texto">História do {nomeDoBroto(perfil)}<small>Capítulo por capítulo</small></span>
-              </button>
-              <button className="kb kb--azul jogo" onClick={() => { tocar("clique"); setJogo("inicio"); }}>
-                <span className="atalho__icone"><Icone nome="sprout" tamanho={28} /></span>
-                <span className="jogo__texto">Pulo do Bichinho<small>Pule cada vez mais alto</small></span>
-              </button>
-              <BotaoCarrinho reduzir={reduzir} />
+            <div className="jogos-grade">
+              {JOGOS.map((j) => {
+                const livre = feitosCaps.includes(j.libera);
+                if (j.tipo === "pronto" && livre) {
+                  return (
+                    <button key={j.id} className={`kb ${j.id === "pulo" ? "kb--azul" : "kb--verde"} jogo-cartao`}
+                      onClick={() => { tocar("clique"); setJogo(j.id); }}>
+                      <span className="atalho__icone"><Icone nome={j.icone} tamanho={26} /></span>
+                      <span className="jogo__texto">{j.nome}<small>{j.descricao}</small></span>
+                    </button>
+                  );
+                }
+                return (
+                  <div key={j.id} className="jogo-cartao jogo-cartao--oculto">
+                    <span className="jogo-oculto__icone" aria-hidden="true">?</span>
+                    <span className="jogo__texto">Jogo oculto
+                      <small>{j.tipo === "pronto" ? `Libera ao concluir o ${nomeCapitulo(j.libera)}` : "Ainda não disponível"}</small>
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-            <p className="mini__nota">Partidas de até 3 minutos. Sem moeda, sem vidas, sem perder.</p>
+            <p className="mini__nota">Os jogos chegam com a história. Partidas de até 3 minutos, sem moeda, sem vidas, sem perder.</p>
           </section>
         )}
 
@@ -319,7 +430,7 @@ export default function App() {
                 <BotaoTema compacto />
               </div>
               <button className="ajuste ajuste--link" onClick={() => { tocar("clique"); abrirPersonalizar(); }}>
-                <span className="ajuste__texto">Personalizar<small>Nome, foto e visual do bichinho</small></span>
+                <span className="ajuste__texto">Personalizar<small>Cores, roupas e acessórios do {nomeBroto}</small></span>
                 <span aria-hidden="true" className="ajuste__seta">›</span>
               </button>
             </div>
@@ -330,27 +441,20 @@ export default function App() {
               <ControleVolume id="volume-musica" rotulo="Música" valor={volumes.musica} aoMudar={definirMusica} />
             </div>
 
-            <h2 className="ajustes__grupo">Humor do bichinho (demonstração)</h2>
-            <div className="humores" role="group" aria-label="Ver humores do bichinho (demonstração)">
-              {humores.map((h) => (
-                <button key={h.id} className={`chip ${humor === h.id ? "is-on" : ""}`}
-                  aria-pressed={humor === h.id} onClick={() => { tocar("clique"); setHumor(h.id); }}>{h.rotulo}</button>
-              ))}
-            </div>
-
             {conhecer && (
-              <button className="link" onClick={() => { tocar("clique"); apagarConhecer(); setAviso("O que você contou ao Broto foi apagado."); }}>
-                Apagar o que contei ao Broto
+              <button className="link" onClick={() => { tocar("clique"); apagarConhecer(); setAviso(`O que você contou ao ${nomeBroto} foi apagado.`); }}>
+                Apagar o que contei ao {nomeBroto}
               </button>
             )}
           </section>
         )}
 
         <nav className="tabbar" aria-label="Navegação principal">
-          <BotaoAba aba="role" atual={aba} mudar={setAba} icone="house" rotulo="Rolê" />
+          <BotaoAba aba="inicio" atual={aba} mudar={setAba} icone="house" rotulo="Início" />
           <BotaoAba aba="missoes" atual={aba} mudar={setAba} icone="listChecks" rotulo="Missões" />
-          <button className="tabbar__sos tabbar__historia" onClick={() => { tocar("clique"); setHistoria(true); }}>
-            <span className="tabbar__sos-circulo"><Icone nome="bookOpen" tamanho={24} /></span>
+          <button className={`tabbar__sos tabbar__historia ${capituloDeHoje().estado === "Disponível hoje" ? "is-novo" : ""}`}
+            onClick={() => { tocar("clique"); setHistoria(true); }}>
+            <span className="tabbar__sos-circulo"><span className="livro-pagina"><Icone nome="bookOpen" tamanho={24} /></span></span>
             <span>História</span>
           </button>
           <BotaoAba aba="jogos" atual={aba} mudar={setAba} icone="gamepad" rotulo="Jogos" />
@@ -379,9 +483,11 @@ export default function App() {
           setHistoria("cap1");
         }
       }} />}
-      {jogo && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir} trilhaRetorno={aba === "jogos" ? "jogos" : "app"}
+      {(jogo === "pulo" || jogo === "crise") && <PuloDoBichinho aoFechar={() => setJogo(false)} reduzir={reduzir}
+        trilhaRetorno={aba === "jogos" ? "jogos" : "app"}
         chamada={jogo === "crise" ? "3 minutos pra onda passar. Ajude o bichinho a subir!" : undefined} />}
-      {crise && <Respiracao aoFechar={() => setCrise(false)} reduzir={reduzir}
+      {jogo === "carrinho" && createPortal(<RoleDeCarrinho aoFechar={() => setJogo(false)} reduzir={reduzir} />, document.body)}
+      {crise && <Respiracao aoFechar={fecharCrise} reduzir={reduzir}
         aoJogar={() => { setCrise(false); setJogo("crise"); }} />}
     </div>
   );
