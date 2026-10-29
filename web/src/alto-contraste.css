@@ -261,3 +261,13 @@
   .confete, .respiro__anel { forced-color-adjust: none; }
   .icone, .tabbar__item svg, .atalho__icone svg { forced-color-adjust: auto; }
 }
+
+/* Modal de acessibilidade do primeiro acesso: muda na hora quando a pessoa liga o alto contraste. */
+:root[data-contraste="alto"] .modal-acess { background: var(--ac-pagina); }
+:root[data-contraste="alto"] .modal-acess__caixa { background: var(--ac-pagina); color: var(--ac-texto); border: 3px solid var(--ac-texto); box-shadow: none; }
+:root[data-contraste="alto"] .modal-acess__selo { background: var(--ac-texto); color: var(--ac-pagina); border-color: var(--ac-texto); box-shadow: none; }
+:root[data-contraste="alto"] .modal-acess__titulo:focus-visible { outline: 4px solid var(--ac-foco, var(--ac-texto)); }
+
+/* Fechar (DS gov.br) no alto contraste: cores invertidas do tema, sem sombra. */
+:root[data-contraste="alto"] button.botao-fechar-gov.botao-fechar-gov { background: var(--ac-texto); color: var(--ac-pagina); border: 3px solid var(--ac-pagina); outline: 2px solid var(--ac-texto); box-shadow: none; }
+:root[data-contraste="alto"] button.botao-fechar-gov.botao-fechar-gov:focus-visible { outline: 4px dashed var(--ac-foco); outline-offset: 4px; }

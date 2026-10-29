@@ -31,9 +31,10 @@
   --livro-raio: 20px 24px 19px 26px / 24px 19px 26px 20px;
   --livro-raio-p: 14px 17px 13px 18px / 17px 13px 18px 14px;
 
-  --livro-cena: url("/cenarios/cap1-nave-pousada-anim.webp");
-  --livro-cena-cap1: url("/cenarios/fundo-cap1-anim.webp");
-  --livro-calma: url("/cenarios/cap4-banco-noite-anim.webp");
+  /* Começa com os fundos parados e leves; os animados entram depois (cenarios.ts). */
+  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
+  --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
 
   /* Paleta da marca suavizada para combinar com as ilustrações. */
   --rqr-amarelo: #F9DC6E;
@@ -1022,19 +1023,13 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 /* Painéis que ficam dentro dessas telas entram logo depois, com o mesmo pop. */
 .pulo__painel, .historia__caixa, .especial { animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) 120ms both; }
 
-/* Com "Reduzir animações" ativo ou prefers-reduced-motion, usa os fundos estáticos leves. */
-:root:has(.reduzir-animacoes) {
-  --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
-  --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
-  --livro-calma: url("/cenarios/cap4-banco-noite.webp");
+/* Fundos animados: só depois de baixados inteiros (cenarios.ts) e fora do "Reduzir animações". */
+:root.cenas-animadas:not(:has(.reduzir-animacoes)) {
+  --livro-cena: url("/cenarios/cap1-nave-pousada-anim.webp");
+  --livro-cena-cap1: url("/cenarios/fundo-cap1-anim.webp");
+  --livro-calma: url("/cenarios/cap4-banco-noite-anim.webp");
 }
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    --livro-cena: url("/cenarios/cap1-nave-pousada.webp");
-    --livro-cena-cap1: url("/cenarios/fundo-cap1.webp");
-    --livro-calma: url("/cenarios/cap4-banco-noite.webp");
-  }
-}
+:root.cenas-animadas[data-tema="escuro"]:not(:has(.reduzir-animacoes)) { --livro-cena: var(--livro-calma); }
 
 /* =====================================================================
    Plano de 90 dias, jogos e metas (sem demonstração)
@@ -1366,17 +1361,11 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .destaque { border-width: 2.5px; box-shadow: 0 5px 0 var(--livro-tinta); }
 .destaque:active { transform: translateY(5px); box-shadow: 0 0 0 var(--livro-tinta); }
 .destaque--historia, .destaque--historia.is-pronto { background: var(--livro-grao), var(--livro-lavanda); box-shadow: 0 5px 0 var(--livro-tinta); animation: none; }
-.destaque--historia::after { /* recorte da ilustração no canto, como uma figurinha */
-  content: ""; position: absolute; right: -10px; bottom: -14px; width: 64px; height: 64px; border-radius: 50%;
-  background: url("/cenarios/cap1-nave-pousada.webp") 50% 88% / 260% auto no-repeat; border: 2px solid var(--livro-tinta); opacity: .95;
-}
-.destaque--historia .destaque__titulo, .destaque--historia .destaque__estado { padding-right: 44px; }
 .destaque--presente { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-width: 2.5px; box-shadow: 0 5px 0 var(--livro-tinta); }
 .destaque--presente .destaque__rotulo { color: var(--livro-tinta); opacity: .8; }
 .presente__vitrine { background: var(--livro-grao), #FFFCF4; border: 2px solid var(--livro-tinta); }
 :root[data-tema="escuro"] .destaque { box-shadow: 0 5px 0 var(--noite-funda); border-color: var(--noite-funda); }
 :root[data-tema="escuro"] .destaque--historia, :root[data-tema="escuro"] .destaque--historia.is-pronto { background: var(--livro-grao), var(--noite-roxo); color: var(--noite-creme); }
-:root[data-tema="escuro"] .destaque--historia::after { background-image: url("/cenarios/cap4-banco-noite.webp"); border-color: var(--noite-funda); }
 :root[data-tema="escuro"] .destaque--presente { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
 :root[data-tema="escuro"] .destaque--presente .destaque__rotulo { color: var(--livro-tinta); }
 :root[data-tema="escuro"] .presente__vitrine { background: var(--livro-grao), #FFFCF4; border-color: var(--noite-funda); }
@@ -1560,6 +1549,113 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .chip__texto { min-width: 0; }
 @media (max-height: 640px) { .historia-dialogo .especial__chips .chip { min-height: 34px; font-size: .75rem; } }
 
-/* Pulo do Bichinho: sem faixa colorida no topo, só metros e folhas e os botões. */
-.pulo__topo { background: none !important; border: 0 !important; box-shadow: none; }
-.pulo__placar { display: inline-flex; align-items: center; gap: 4px; margin-right: auto; }
+/* Pulo do Bichinho: o topo flutua transparente sobre o jogo, sem faixa nem rodapé.
+   O placar é uma etiqueta de papel, como as plataformas e os painéis do jogo. */
+.pulo { position: fixed; }
+.pulo__topo {
+  position: absolute; z-index: 3; top: 0; left: 50%; translate: -50% 0; width: min(480px, 100%);
+  padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+  background: none !important; border: 0 !important; box-shadow: none; pointer-events: none;
+}
+.pulo__topo > * { pointer-events: auto; }
+.pulo__placar {
+  display: inline-flex; align-items: center; gap: 4px; margin-right: auto; padding: 4px 12px;
+  border: 2px solid var(--livro-tinta); border-radius: 999px; color: var(--livro-tinta);
+  background: rgb(255 252 244 / .78); box-shadow: 0 3px 0 var(--livro-tinta);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); font-variant-numeric: tabular-nums;
+}
+:root[data-tema="escuro"] .pulo__placar { background: rgb(39 38 90 / .8); color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 3px 0 var(--noite-funda); }
+.pulo__mundo { flex: 1; }
+
+/* Mapa da história: o estado longo ("Libera amanhã · faça uma missão hoje") quebra em linha
+   própria, alinhado embaixo do título, em vez de espremer e cortar as palavras. */
+.historia-cap { flex-wrap: wrap; row-gap: 2px; }
+.historia-cap > span:first-child { flex: 1 1 auto; min-width: 0; }
+.historia-cap__estado { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: normal; word-break: normal; hyphens: none; }
+@media (max-width: 420px) { .historia-cap__estado { flex-basis: 100%; text-align: left; } }
+
+/* Sem piscada entre telas cheias (ver Historia.tsx): fundo fixo e opaco por baixo de todas. */
+.historia-cortina { position: fixed; inset: 0; z-index: 29; background: var(--livro-tinta); }
+/* Pulo aberto a partir da respiração ("Deu vontade"): troca de uma tela cheia por outra, sem pop. */
+.pulo.sem-pop { animation: none; }
+
+/* Menu de baixo sempre visível: a página não rola mais; quem rola é o conteúdo (.celular).
+   O `position: fixed` não servia porque a animação de entrada do .celular deixa um transform
+   ativo, e aí o "fixo" fica preso ao .celular e desce com ele. Com o .celular rolando, o menu
+   `sticky` no fim dele fica sempre no rodapé da tela, e o scroll fica só no conteúdo. */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.palco { height: 100dvh; min-height: 0; overflow: hidden; }
+.celular {
+  height: 100dvh; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+}
+.celular > .tabbar { position: sticky; bottom: 0; z-index: 6; margin-top: auto; flex: none; }
+
+/* Modal de acessibilidade do primeiro acesso (ModalAcessibilidade.tsx): cartão de papel com o
+   pop do livro, sobre o céu da história. Rola por dentro se a tela for baixa. */
+.modal-acess {
+  position: fixed; inset: 0; z-index: 35; display: grid; place-items: center; padding: 16px;
+  background: radial-gradient(circle at 50% 30%, var(--rqr-roxo), var(--livro-tinta) 70%);
+}
+.modal-acess__caixa {
+  display: grid; gap: 12px; width: min(480px, 100%); max-height: calc(100dvh - 32px); overflow-y: auto;
+  padding: 20px 18px; border: 2.5px solid var(--livro-tinta); border-radius: var(--livro-raio);
+  background: var(--livro-grao), var(--livro-papel); color: var(--livro-tinta); box-shadow: 0 6px 0 var(--livro-tinta);
+  animation: tela-pop 380ms cubic-bezier(.3, 1.6, .5, 1) both;
+}
+.modal-acess__caixa { gap: 16px; }
+/* Respiro entre os grupos (Acessibilidade, Vibração, Som) dentro do modal. */
+.modal-acess__ajustes .ajustes__grupo { margin: 14px 0 0; }
+.modal-acess__ajustes .ajustes__grupo:first-child { margin-top: 0; }
+.modal-acess__selos { display: flex; gap: 10px; justify-content: center; }
+.modal-acess__simbolo { width: 64px; height: 64px; }
+/* No tema escuro o contorno preto sumiria: vira branco e o azul continua azul. */
+:root[data-tema="escuro"] .modal-acess__simbolo { filter: invert(1) hue-rotate(180deg); }
+.modal-acess__selo {
+  display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  background: #1351B4; color: #FFFFFF; border: 2.5px solid var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
+}
+.modal-acess__titulo { margin: 0; text-align: center; font-family: var(--rqr-font-titulo); font-size: 1.4rem; }
+.modal-acess__titulo:focus { outline: none; }
+.modal-acess__texto { margin: 0; text-align: center; font-weight: 650; }
+.modal-acess__libras { display: flex; align-items: center; gap: 10px; margin: 10px 0 14px; font-weight: 700; font-size: .9rem; }
+.modal-acess__libras:not(:has(button)) { display: none; } /* sem internet o VLibras não carrega */
+.modal-acess__ajustes { display: grid; gap: 12px; }
+/* A rolagem termina no topo do botão: o rodapé fixo tem a cor do papel e esconde o que passa
+   por baixo; a folga no fim da lista deixa o controle de Música aparecer inteiro acima dele. */
+.modal-acess__rodape {
+  position: sticky; bottom: -20px; z-index: 1; margin: 0 -18px -20px; padding: 10px 18px 20px;
+  background: var(--livro-grao), var(--livro-papel);
+}
+.modal-acess__seguir { width: 100%; }
+.modal-acess__ajustes { padding-bottom: 6px; }
+:root[data-tema="escuro"] .modal-acess__rodape { background: var(--livro-grao), var(--noite-cartao); }
+:root[data-contraste="alto"] .modal-acess__rodape { background: var(--ac-pagina); }
+:root[data-tema="escuro"] .modal-acess__caixa { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); }
+.ajustes__grupo svg { vertical-align: -3px; }
+@media (prefers-reduced-motion: reduce) { .modal-acess__caixa { animation: none; } }
+
+/* Botão de fechar no padrão do DS gov.br (br-button circle primary, ícone fa-times):
+   azul #1351B4 com ícone branco (6,9:1), aro branco para destacar sobre qualquer fundo,
+   foco tracejado âmbar #C2850C de 4 px, alvo de 44 px (WCAG 2.5.8). Igual em todas as telas. */
+button.botao-fechar-gov.botao-fechar-gov {
+  display: grid; place-items: center; width: 44px; height: 44px; min-width: 44px; padding: 0; margin: 0;
+  border-radius: 50%; border: 2px solid #FFFFFF; background: #1351B4; color: #FFFFFF;
+  box-shadow: 0 2px 6px rgb(0 0 0 / .25); font: inherit; line-height: 1; cursor: pointer;
+  transition: background-color 120ms ease, transform 120ms ease;
+}
+button.botao-fechar-gov.botao-fechar-gov svg { width: 20px; height: 20px; }
+button.botao-fechar-gov.botao-fechar-gov:hover { background: #0C326F; color: #FFFFFF; }
+button.botao-fechar-gov.botao-fechar-gov:active { background: #071D41; color: #FFFFFF; transform: scale(.94); box-shadow: none; }
+button.botao-fechar-gov.botao-fechar-gov:focus-visible { outline: 4px dashed #C2850C; outline-offset: 4px; }
+.ajuste__titulo-icone { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Libras: o ícone oficial do VLibras aparece quadrado, como é, sem o círculo dos outros botões. */
+.botao-libras .botao-topo__icone,
+.historia-dialogo__topo .botao-libras .botao-topo__icone,
+:root[data-tema="escuro"] .botao-libras .botao-topo__icone,
+:root[data-tema="escuro"] .historia-dialogo__topo .botao-libras .botao-topo__icone {
+  width: 44px; height: 44px; padding: 0; border: 0; border-radius: 8px; background: none; box-shadow: 0 3px 0 var(--livro-tinta); overflow: hidden;
+}
+.botao-libras .botao-topo__icone img { width: 44px; height: 44px; border-radius: 8px; display: block; }
+.botao-libras:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; border-radius: 10px; }

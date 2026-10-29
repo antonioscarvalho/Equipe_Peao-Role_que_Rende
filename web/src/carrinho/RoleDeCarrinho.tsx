@@ -339,7 +339,7 @@ export function RoleDeCarrinho({ aoFechar, reduzir }: { aoFechar: () => void; re
         </span>
         <BotaoLibras />
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
+        <button className="crise__fechar pulo__fechar botao-fechar-gov" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO"><Icone nome="fechar" tamanho={20} /></button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"

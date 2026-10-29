@@ -32,6 +32,9 @@
       })();
     </script>
     <title>Meu amigo Broto!</title>
+    <!-- Fundos parados da tela inicial: o CSS só os pede tarde, então já começam a baixar aqui. -->
+    <link rel="preload" as="image" href="/cenarios/cap1-nave-pousada.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/cenarios/fundo-cap1.webp" type="image/webp" />
   </head>
   <body>
     <div id="root"></div>

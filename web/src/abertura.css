@@ -22,6 +22,7 @@
   width: min(56vw, 250px); height: auto; opacity: 0;
   animation: abertura-marca 2s cubic-bezier(.2, .8, .2, 1) forwards;
 }
+.abertura__marca--parceiro { width: min(70vw, 320px); }
 @keyframes abertura-marca {
   0% { opacity: 0; transform: scale(.94); }
   25% { opacity: 1; transform: scale(1); }

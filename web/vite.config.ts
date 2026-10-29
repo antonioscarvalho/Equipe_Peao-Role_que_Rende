@@ -45,7 +45,13 @@ export default defineConfig({
       workbox: {
         // O app em si (código, estilos, fontes, ícones) fica guardado na instalação: a tela de
         // ajuda (CVV 188, SAMU 192) e o "Deu vontade" abrem sem internet.
-        globPatterns: ["**/*.{js,css,html,svg,png,woff,woff2,ttf}", "marca/*.webp"], // logo da abertura também offline
+        globPatterns: [
+          "**/*.{js,css,html,svg,png,woff,woff2,ttf}",
+          "marca/*.webp", // logo da abertura também offline
+          // Fundos parados da tela inicial e da história (~250 KB): aparecem já na primeira visita
+          // e sem internet. Os animados (12 MB) ficam no cache de mídia, depois de baixados.
+          "cenarios/fundo-cap1.webp", "cenarios/cap1-nave-pousada.webp", "cenarios/cap4-banco-noite.webp",
+        ],
         maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         navigateFallback: "/index.html",
         // Cenários (13 MB) e sons ficam guardados só depois da primeira vez que aparecem.
