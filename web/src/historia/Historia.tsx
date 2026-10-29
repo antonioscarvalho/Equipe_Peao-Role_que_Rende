@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Dialogo } from "./Dialogo";
 import { PainelCrise } from "../AjudaAgora";
+import { nomeDoBroto, usePerfil } from "../personalizacao";
 import { capitulos, TITULOS } from "./capitulos";
 import {
   ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, marcarAvisoVisto, marcarParte, parteDoCapitulo,
@@ -15,9 +16,12 @@ import "./historia.css";
  * Cada parte pronta fica marcada (progresso.ts), então "Agora não" não faz perder 15 minutos.
  * Fechar o jogo antes do fim também leva à conversa: não existe derrota.
  * `iniciar`: abre direto num capítulo (primeiro acesso do app), e ao terminar fecha a história.
+ * A pergunta dos 18 anos tem tela própria, em voz neutra, antes do cap. 1: não é conversa do alien
+ * (skill conversa-broto). Só "Sim" e "Não", e a resposta vale só para esta visita.
  */
 type Tela =
   | { tipo: "mapa" }
+  | { tipo: "idade"; id: IdCapitulo; menorDeIdade?: boolean }
   | { tipo: "abertura" | "antes" | "jogo" | "depois"; id: IdCapitulo; folhas?: number };
 
 type Props = { aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo };
@@ -31,22 +35,28 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
   const [feitos, setFeitos] = useState(capitulosConcluidos);
   const [anuncio, setAnuncio] = useState("");
   const [crise, setCrise] = useState(false);
+  const [menor, setMenor] = useState(false);
+  const alien = nomeDoBroto(usePerfil().perfil);
   const fecharCrise = useCallback(() => { setCrise(false); botaoAjuda.current?.focus(); }, []);
 
-  useModal(caixa, aoFechar, tela.tipo === "mapa" && !crise);
+  useModal(caixa, aoFechar, (tela.tipo === "mapa" || tela.tipo === "idade") && !crise);
 
   // Volta ao mapa (ou fecha, se veio direto num capítulo).
   const sair = useCallback(() => (iniciar ? aoFechar() : setTela({ tipo: "mapa" })), [iniciar, aoFechar]);
 
-  const abrir = useCallback((id: IdCapitulo) => {
+  /** Começa o capítulo de onde parou. `idadeFeita`: a tela dos 18 anos já passou nesta visita. */
+  const comecar = useCallback((id: IdCapitulo, idadeFeita = false) => {
     const e = capitulos[id];
     if (!e || !estaDesbloqueado(id)) return;
     const parte = parteDoCapitulo(id);
+    // O questionário de entrada fica no começo do cap. 1: antes dele, a tela dos 18 anos.
+    if (id === "cap1" && !parte && !idadeFeita) { setTela({ tipo: "idade", id }); return; }
     if (parte === "depois") setTela({ tipo: "depois", id });
     else if (parte === "jogo" && e.jogo) setTela({ tipo: "jogo", id });
     else if (e.abertura) setTela({ tipo: "abertura", id });
     else setTela({ tipo: "antes", id });
   }, []);
+  const abrir = useCallback((id: IdCapitulo) => comecar(id), [comecar]);
 
   const comecarDireto = useRef(false);
   useEffect(() => {
@@ -81,17 +91,33 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
   const Jogo = tela.tipo === "jogo" ? entrada?.jogo : undefined;
   const Abertura = tela.tipo === "abertura" ? entrada?.abertura : undefined;
   const fimAbertura = useCallback(() => setTela((t) => (t.tipo === "abertura" ? { tipo: "antes", id: t.id } : t)), []);
-  const escondeMapa = tela.tipo !== "mapa" || (Boolean(iniciar) && !aviso);
+  const escondeMapa = (tela.tipo !== "mapa" && tela.tipo !== "idade") || (Boolean(iniciar) && !aviso && tela.tipo !== "idade");
 
   return (
     <>
       <div ref={caixa} className={`historia ${iniciar ? "historia--inicio" : ""}`} role="dialog" aria-modal="true" aria-labelledby="historia-titulo"
         aria-hidden={escondeMapa || undefined} style={escondeMapa ? { visibility: "hidden" } : undefined}>
         <div className="historia__caixa">
-          <h2 id="historia-titulo" ref={titulo} className="historia__titulo" tabIndex={-1}>História do Broto</h2>
+          <h2 id="historia-titulo" ref={titulo} className="historia__titulo" tabIndex={-1}>História do {alien}</h2>
           <button className="historia__fechar" onClick={aoFechar} aria-label="Fechar a história">×</button>
 
-          {aviso ? (
+          {tela.tipo === "idade" ? (
+            tela.menorDeIdade ? (
+              <>
+                <p className="historia__aviso">
+                  Este app é para maiores de 18 anos. Se quiser conversar com alguém, procure um adulto de confiança ou a unidade
+                  de saúde do seu bairro. O CVV atende de graça, a qualquer hora, no 188. A história continua aberta para você.
+                </p>
+                <button className="rqr-botao" onClick={() => comecar(tela.id, true)}>Continuar</button>
+              </>
+            ) : (
+              <>
+                <p className="historia__aviso">Antes de começar: você tem 18 anos ou mais?</p>
+                <button className="rqr-botao" onClick={() => { setMenor(false); comecar(tela.id, true); }}>Sim</button>
+                <button className="rqr-botao" onClick={() => { setMenor(true); setTela({ ...tela, menorDeIdade: true }); }}>Não</button>
+              </>
+            )
+          ) : aviso ? (
             <>
               <p className="historia__aviso">Essa história fala de apostas. Pode pular quando quiser.</p>
               <button className="rqr-botao" onClick={() => { marcarAvisoVisto(); setAviso(false); }}>Começar</button>
@@ -117,7 +143,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
             </ul>
           )}
           <button ref={botaoAjuda} className="historia-ajuda" onClick={() => setCrise(true)}>Preciso de ajuda agora</button>
-          <small className="historia-nota">O Broto é um apoio, não um terapeuta.</small>
+          <small className="historia-nota">{alien} é um apoio, não um terapeuta.</small>
           <p className="sr-only" aria-live="polite">{anuncio}</p>
         </div>
         {crise && <PainelCrise aoFechar={fecharCrise} />}
@@ -126,7 +152,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
       {Abertura && <Abertura aoFim={fimAbertura} reduzir={reduzir} />}
       {(tela.tipo === "antes" || tela.tipo === "depois") && entrada && (
         <Dialogo key={`${tela.id}-${tela.tipo}`} capitulo={entrada.capitulo} cena={entrada.cena} reduzir={reduzir}
-          parte={tela.tipo} folhas={tela.folhas}
+          parte={tela.tipo} folhas={tela.folhas} menor={menor}
           aoFechar={sair} aoConcluir={() => (tela.tipo === "antes" ? depoisDoAntes(tela.id) : concluir(tela.id))} />
       )}
       {Jogo && <Jogo reduzir={reduzir} aoFechar={() => fimDoJogo(0)} aoTerminar={({ folhas }) => fimDoJogo(folhas)} />}

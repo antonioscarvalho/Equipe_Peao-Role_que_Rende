@@ -46,7 +46,7 @@ Estágio: pré-contemplação. Técnica: a fissura é uma onda; ninguém sobe nu
 
 *Pessoa:* De onde você veio?
 
-**Broto:** De um asteroide bem pequenininho, a Vila Estrela. Lá a gente trabalha colhendo poeira de luz. Não é muito, mas é nosso.
+**Broto:** De um asteroide pequeno na beira da galáxia, a Vila Estrela. A gente vive de colher poeira de luz. Não é muito, mas é nosso.
 
 *Pessoa:* Por que você caiu?
 
