@@ -1671,3 +1671,9 @@ input, textarea, [contenteditable="true"] {
   -webkit-user-select: text; user-select: text; -webkit-touch-callout: default;
 }
 img, svg { -webkit-user-drag: none; user-drag: none; }
+
+/* Pulo do Bichinho: o X de sair fica branco (botão secundário do DS gov.br: fundo branco,
+   ícone e aro azul #1351B4, 6,9:1), para destacar sobre o céu do jogo. */
+:root:not([data-contraste="alto"]) .pulo:not(.carrinho) > .pulo__topo button.botao-fechar-gov.botao-fechar-gov { background: #FFFFFF; color: #1351B4; border-color: #1351B4; }
+:root:not([data-contraste="alto"]) .pulo:not(.carrinho) > .pulo__topo button.botao-fechar-gov.botao-fechar-gov:hover { background: #DBE8FB; color: #0C326F; }
+:root:not([data-contraste="alto"]) .pulo:not(.carrinho) > .pulo__topo button.botao-fechar-gov.botao-fechar-gov:active { background: #C5D4EB; color: #071D41; }
