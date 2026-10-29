@@ -36,10 +36,11 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
   const progresso = useProgresso();
   const [aba, setAba] = useState("cor");
   const itens = ITENS[aba];
+  const visivel = aparenciaVisivel(aparencia, progresso);
   return (
     <div className="especial especial--aparencia">
       <div className="especial__previa" aria-hidden="true">
-        <Bichinho humor="feliz" nivel={2} tamanho={92} reduzir aparencia={aparenciaVisivel(aparencia, progresso)} />
+        <Bichinho humor="feliz" nivel={2} tamanho={120} reduzir aparencia={visivel} />
       </div>
       <div className="especial__abas" role="group" aria-label="O que mudar">
         {ABAS.map((a) => (
@@ -55,14 +56,19 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
         </div>
       )}
       {itens && (
-        <div className="especial__chips" role="group" aria-label={ABAS.find((a) => a.id === aba)!.rotulo}>
+        <div className="especial__itens" role="group" aria-label={ABAS.find((a) => a.id === aba)!.rotulo}>
           {itens.map((it) => {
             const livre = liberado(it, progresso);
             const on = aparencia[aba as keyof Aparencia] === it.id;
             return (
-              <button key={it.id} className={`chip ${on ? "is-on" : ""}`} aria-pressed={on} disabled={!livre}
+              <button key={it.id} className={`especial__item ${on ? "is-on" : ""}`} aria-pressed={on} disabled={!livre}
                 onClick={() => { tocar("clique"); mudar({ [aba]: it.id } as Partial<Aparencia>); }}>
-                {it.nome}{!livre && it.meta && ` · ${metaCurta(it.meta)}`}
+                {/* Mini prévia: o Broto já usando o item, como na tela Personalizar. */}
+                <span className="especial__item-previa" aria-hidden="true">
+                  <Bichinho humor="calmo" nivel={2} tamanho={48} reduzir aparencia={{ ...visivel, [aba]: it.id }} />
+                </span>
+                <span className="especial__item-nome">{it.nome}</span>
+                {!livre && it.meta && <span className="especial__item-marco">{metaCurta(it.meta)}</span>}
               </button>
             );
           })}
@@ -83,6 +89,13 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
     </div>
   );
 }
+
+/** Ícone de cada motivo (decorativo: o texto já diz tudo). */
+const ICONE_MOTIVO: Record<string, string> = {
+  "Minha família": "🏡", "Meus filhos": "🧒", "Pagar dívidas": "🧾", "Guardar dinheiro pra um sonho": "🌱",
+  "Dormir melhor": "🌙", "Minha saúde": "💚", "Meu trabalho ou estudo": "📚", "Voltar a confiar em mim": "💪",
+  "Meu relacionamento": "🤝", "Alguém me pediu": "💬", "Só quero entender melhor": "🔎",
+};
 
 export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
   const { mudarNome, mudarNomeBroto } = usePerfil();
@@ -140,7 +153,8 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
       <div className="especial">
         <div className="especial__chips" role="group" aria-label="O que te trouxe aqui (pode marcar vários)">
           {MOTIVOS.map((m) => (
-            <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => { tocar("clique"); alternar(m); }}>{m}</button>
+            <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => { tocar("clique"); alternar(m); }}>
+              <span className="chip__icone" aria-hidden="true">{ICONE_MOTIVO[m]}</span>{m}</button>
           ))}
         </div>
         <button className="rqr-botao" disabled={!marcados.length} onClick={() => {
@@ -148,7 +162,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
           mudar({ motivos: marcados });
           aoFim("Obrigado por me contar. Fica entre a gente.");
         }}>{conversa.broto ? `Contar pro ${conversa.broto}` : "Contar pra ele"}</button>
-        <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); aoFim("Tudo bem. A gente se conhece aos poucos."); }}>Prefiro não dizer</button>
+        <button className="historia-opcao historia-opcao--discreta" onClick={() => { tocar("clique"); aoFim("Tudo bem. A gente se conhece aos poucos."); }}>Prefiro não dizer</button>
       </div>
     );
   }

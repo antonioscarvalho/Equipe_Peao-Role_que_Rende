@@ -392,10 +392,12 @@ export function abaixarTrilha(ligar: boolean) {
  */
 export function tocarMusica(url: string, volume = 1) {
   if (typeof window === "undefined") return;
-  if (volumeMusica <= 0) { console.debug(`[sons] mudo: régua de Música em 0, "${url}" não tocou`); return; }
+  // A cantiga faz parte da história: toca se Música OU Efeitos estiverem ligados.
+  const nivel = Math.max(volumeMusica, volumeEfeitos);
+  if (nivel <= 0) { console.debug(`[sons] mudo: Música e Efeitos em 0, "${url}" não tocou`); return; }
   musicaAtual?.pause();
   const audio = new Audio(url);
-  audio.volume = (volumeMusica / 10) * volume;
+  audio.volume = Math.min(1, (nivel / 10) * volume);
   audio.loop = false;
   musicaAtual = audio;
   abaixarTrilha(true);

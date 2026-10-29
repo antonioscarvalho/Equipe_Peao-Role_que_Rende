@@ -24,7 +24,7 @@ export const cap1: Capitulo = {
   perguntaDoBroto: {
     texto: "Você já quis resolver tudo de uma vez só?",
     opcoes: [
-      { rotulo: "Já", resposta: "Eu também. Deu no que deu: tô numa cratera. Acho que todo mundo que tá cansado quer." },
+      { rotulo: "Já", resposta: "Eu também. Deu no que deu. Olha eu aqui, numa cratera. Acho que todo mundo que tá cansado quer." },
       { rotulo: "Não sei", resposta: "Tudo bem. A gente descobre junto." },
     ],
   },
@@ -44,21 +44,21 @@ export const cap1: Capitulo = {
     // Batismo (skill conversa-broto): a pessoa comenta que ele parece um broto e dá o nome. Pulado se ele já tiver nome.
     { especial: "batismo", humor: "calmo", fala: "Lá na Vila, a família chama a gente de \"pequeno\" até a gente sair de casa. O nome de verdade quem dá é o primeiro amigo que a gente faz longe dela. E eu nunca tinha saído… Então, por enquanto, eu não tenho nome." },
     { especial: "nome", fala: "E você? Como eu te chamo? Pode ser apelido. Ou eu te chamo de \"você\" mesmo." },
-    { fala: "Prazer, {nome}. Você é o primeiro humano que eu vejo de perto. E a recepção tá melhor que a do ET de Varginha: ele foi parar no jornal, eu ganhei alguém pra conversar." },
-    { cena: "vila", fala: "Tá vendo aquele ponto de luz perto das estrelas? É a Vila Estrela. Minha casa." },
+    { fala: "Prazer, {nome}. Você é o primeiro humano que eu vejo de perto. E a recepção tá melhor que a do ET de Varginha. Ele foi parar no jornal, e eu ganhei alguém pra conversar." },
+    { cena: "vila", fala: "Tá vendo aquela bolinha lá no alto, no meio das estrelas? É a Vila Estrela. Minha casa." },
     { fala: "É um asteroide pequeno. Umas vinte casas, um quintal pra cada uma. Minha maior aventura até ontem era ir na casa do vizinho. Olha eu agora." },
     { cena: "colheita", fala: "Lá a gente vive de poeira de luz. Toda manhã a gente colhe a poeira que o sol deixa nas pedras.", opcoes: [
       { rotulo: "Pra que serve a poeira?", resposta: "Pra tudo. Acende as casas, esquenta a comida e faz as naves voarem. Não é muito, mas é nosso." },
       { rotulo: "Dá trabalho?", resposta: "Dá. Acordar cedo, encher pote por pote. Vocês apertam um botão e a luz acende. Folgados." },
     ] },
-    { cena: "musica", fala: "Na colheita a gente canta. A minha Vó Vega ensinou uma cantiga: \"a luz vem devagar…\"" },
+    { cena: "musica", fala: "Na colheita a gente canta. A minha Vó Vega ensinou uma cantiga. Escuta só, é assim…" },
     { fala: "A Nina, minha irmã, sempre entra nessa parte. Esperei a voz dela agora. Esqueci por um segundo que tô longe." },
     { cena: "lua", humor: "calmo", fala: "Aquela é a única lua de vocês?", opcoes: [
       { rotulo: "É, só uma.", resposta: "Lá na Vila tem três. Daqui só dá pra ver uma… Então eu tô longe mesmo." },
       { rotulo: "Quantas vocês têm?", resposta: "Três. Daqui não dá pra ver nenhuma. Então eu tô longe mesmo." },
     ] },
     { cena: "bairro", fala: "Lá na Vila contam histórias sobre vocês. Nenhuma chegou perto de como é de verdade.", opcoes: [
-      { rotulo: "O que contam?", resposta: "Que vocês olham muito pro céu. Agora eu entendo: daqui ele parece enorme." },
+      { rotulo: "O que contam?", resposta: "Que vocês olham muito pro céu. Agora eu entendo. Daqui ele parece enorme." },
       { rotulo: "Você também não é como nos filmes.", resposta: "Eu vi alguns pela janela da nave. Tem um de um ET que só queria ligar pra casa. Agora eu entendo ele." },
     ] },
     { humor: "calmo", fala: "Quando a nave começou a cair, procurei uma luz pra pousar perto. Vim parar nesta praça. Aí você apareceu." },
@@ -66,11 +66,11 @@ export const cap1: Capitulo = {
       { rotulo: "Pode, sem pressa.", resposta: "Obrigado por não me apressar. Ainda tô tentando entender o que aconteceu." },
       { rotulo: "Quer contar agora?", resposta: "Ainda não. Hoje eu só quero voltar pra casa." },
     ] },
-    { cena: "familia", fala: "Minha família tá lá: meu pai Órion, que conserta nave; minha mãe Lyra, que faz a conta da casa render; a Nina; e a Vó Vega, que planta semente de luz no quintal." },
+    { cena: "familia", fala: "Minha família tá lá. Meu pai Órion conserta nave. Minha mãe Lyra faz a conta da casa render. Tem a Nina, e tem a Vó Vega, que planta semente de luz no quintal." },
     { fala: "Eu peguei a nave sozinho, sem avisar ninguém. Eles devem tá me procurando. Eu queria conseguir dizer que tô aqui… e que alguém ficou comigo." },
     { cena: "cratera", humor: "calmo", fala: "Tá vendo essas plataformas acima da cratera? Lá do alto talvez eu consiga mandar um sinal pra minha família. Você me guia?", opcoes: [
       { rotulo: "Bora.", resposta: "Tá. Você me guia e eu pulo. Vou começar pela mais perto." },
-      { rotulo: "Como eu ajudo?", resposta: "Você me diz pra que lado ir: inclina o celular, usa as setas ou segura um lado da tela. Eu faço o resto." },
+      { rotulo: "Como eu ajudo?", resposta: "Você me diz pra que lado ir. Inclina o celular, usa as setas ou segura um lado da tela. Eu faço o resto." },
     ] },
     { fala: "Se aparecerem folhas no caminho, a gente pode guardar. E, se quiser parar, tudo bem. Vamos tentar a primeira plataforma?" },
   ],
@@ -78,7 +78,7 @@ export const cap1: Capitulo = {
     { humor: "feliz", fala: "{folhas}" },
     { cena: "estrelas", humor: "calmo", fala: "Sabe o que a minha Vó diz? Que estrela sozinha é só um ponto. Mas várias juntas viram desenho no céu. Constelação." },
     { fala: "Quando eu olhei pra baixo e vi você, tive coragem de tentar a próxima plataforma. Obrigado por ficar." },
-    { cena: "regua", fala: "E olha: a altura que a gente subiu hoje, ninguém tira. Amanhã eu começo dali, não do chão." },
+    { cena: "regua", fala: "E olha, a altura que a gente subiu hoje ninguém tira. Amanhã eu começo dali, não do chão." },
     { especial: "aparencia", fala: "A queda bagunçou minhas cores. Quer me ajudar a arrumar? Ou eu fico assim mesmo." },
     { humor: "apoio", fala: "Posso te contar uma coisa? Eu não sou médico nem nada. Nem sei me virar direito longe de casa. Mas escutar eu sei. E você não precisa me contar nada que não queira." },
     { especial: "motivo", humor: "calmo", fala: "Se um dia quiser me contar o que te trouxe até aqui, eu escuto. Pode ser hoje, outro dia ou nunca." },
@@ -89,7 +89,7 @@ export const cap1: Capitulo = {
       { rotulo: "Vamos com calma.", resposta: "Combinado. Um pedaço do caminho de cada vez." },
       { rotulo: "Prefiro não dizer.", resposta: "Tudo bem. Obrigado pela companhia de hoje." },
     ] },
-    { cena: "bairro", humor: "calmo", fala: "Tá ficando tarde. Vou ficar perto da praça. Se você voltar, eu tô aqui. Não tenho muita opção, né: tô sem nave." },
+    { cena: "bairro", humor: "calmo", fala: "Tá ficando tarde. Vou ficar perto da praça. Se você voltar, eu tô aqui. Também não tenho muita opção, né? Tô sem nave." },
   ],
   // Sem oferta: o capítulo 1 é só acolhimento.
   licao: "Não dá pra voltar pro céu num pulo só. É uma plataforma de cada vez. E cair não apaga o caminho que você já fez.",
