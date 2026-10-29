@@ -3,7 +3,7 @@
 // Estágio: contemplação. Técnica: distorções do quase-ganho, do ganho no começo, da ilusão de controle e da memória
 // seletiva (skill tcc-reestruturacao-cognitiva), pela história do pai do Broto (distância de si, Kross e Ayduk), e
 // balança decisória (skill entrevista-motivacional). Nada da pessoa é guardado: só o apelido do perfil entra na fala.
-// O jogo Desvia dos Cometas entra em capitulos/index.ts quando ficar pronto; sem ele, a conversa vai direto do "antes" ao "depois".
+// O jogo Desvia dos Cometas (web/src/jogos/cometas/) está registrado em capitulos/index.ts.
 import type { Capitulo } from "../tipos";
 
 export const cap2: Capitulo = {
@@ -43,7 +43,7 @@ export const cap2: Capitulo = {
       { rotulo: "Por que a pior?", resposta: "Porque depois daquele dia, toda perda parecia azar, e todo ganho parecia talento dele." },
       { rotulo: "Ele entendia do cometa?", resposta: "Ele achava que sim. Dizia que sabia a hora certa de ir. O cometa não tava nem aí pra hora dele." },
     ] },
-    { humor: "calmo", fala: "Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles apaga uma luz minha." },
+    { humor: "calmo", fala: "Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles puxa um pouco da minha luz. Ela volta, mas o cometa sai mais forte." },
     { fala: "As sementes verdes são o contrário: simples e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?", opcoes: [
       { rotulo: "Bora.", resposta: "Então eu desvio do brilho, e você me avisa quando eu me distrair." },
       { rotulo: "Como funciona?", resposta: "Você me guia pros lados. O dourado a gente deixa passar, o verde a gente pega. Dá pra parar quando quiser." },

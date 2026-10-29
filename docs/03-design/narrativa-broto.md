@@ -176,7 +176,7 @@ As perguntas são da pessoa para o Broto. Ele pode contar a idade dele, mas nunc
 ### Capítulo 2: O Cometa da Sorte
 **Duração:** 6 a 10 minutos com o jogo. **Estágio:** contemplação. O Broto cumpre a promessa do capítulo 1 ("lá na Vila aconteceu uma coisa com aposta, um dia eu te conto") e conta a história do pai e do Cometa. A pessoa olha para a aposta **pela família dele**, sem precisar falar de si.
 
-**Jogo novo, Desvia dos Cometas:** cometas dourados caem prometendo "+2 luzes", e encostar neles apaga uma luz do Broto. As sementes verdes são simples, ficam sempre no mesmo lugar e fazem ele crescer.
+**Jogo novo, Desvia dos Cometas:** cometas dourados caem prometendo "+2", e encostar neles puxa um pouco do brilho do Broto por 2 segundos: o cometa sobe maior, o brilho volta e nenhuma semente se perde (sem vidas, sem derrota). Quando um cometa passa raspando, aparece um "quase" apagado que não vale nada. As sementes verdes são simples, caem sempre no mesmo caminho e fazem ele crescer. Sementes e cometas seguem um padrão fixo de faixas, sem sorteio. Código em `web/src/jogos/cometas/`.
 
 **O que o capítulo trabalha** (skill `tcc-reestruturacao-cognitiva`, sempre como pergunta ou história, nunca sermão):
 
@@ -214,7 +214,7 @@ As perguntas são da pessoa para o Broto. Ele pode contar a idade dele, mas nunc
 - **Broto:** Hoje eu acho que foi a pior coisa que podia ter acontecido. Ele achou que tinha descoberto o jeito.
   - "Por que a pior?" → "Porque depois daquele dia, toda perda parecia azar, e todo ganho parecia talento dele."
   - "Ele entendia do cometa?" → "Ele achava que sim. Dizia que sabia a hora certa de ir. O cometa não tava nem aí pra hora dele."
-- **Broto:** Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles apaga uma luz minha.
+- **Broto:** Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles puxa um pouco da minha luz. Ela volta, mas o cometa sai mais forte.
 - **Broto:** As sementes verdes são o contrário: simples e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?
   - "Bora." → "Então eu desvio do brilho, e você me avisa quando eu me distrair."
   - "Como funciona?" → "Você me guia pros lados. O dourado a gente deixa passar, o verde a gente pega. Dá pra parar quando quiser."
@@ -334,7 +334,7 @@ Ninguém fica rico no final. A família está junta, e o bairro voltou a ter rol
 | Jogo | Mecanismo psicológico | Estado |
 |---|---|---|
 | Pulo do Bichinho | Tarefa visual que compete com a imagem da fissura | Pronto |
-| Desvia dos Cometas | Treino de recusa: não encostar no brilho que promete o dobro | A fazer |
+| Desvia dos Cometas | Treino de recusa: não encostar no brilho que promete o dobro | Pronto |
 | Acende a Casa | Atenção e memória com recompensa previsível | A fazer |
 | Liga as Estrelas | Calma, sem tempo; regula a emoção antes de falar do segredo | A fazer |
 | Monta o Farol | Junta o esforço acumulado em algo visível; reforça a confiança | A fazer |
