@@ -20,3 +20,11 @@ createRoot(document.getElementById("root")!).render(
 
 carregarVLibras();
 carregarCenasAnimadas();
+
+// Texto do app não copia (o CSS já impede a seleção; isto cobre Ctrl+C e arrastar imagem).
+// Campos de digitar continuam funcionando normalmente.
+const ehCampo = (alvo: EventTarget | null) => alvo instanceof HTMLElement && !!alvo.closest("input, textarea, [contenteditable='true']");
+for (const tipo of ["copy", "cut"] as const) {
+  document.addEventListener(tipo, (e) => { if (!ehCampo(e.target)) e.preventDefault(); });
+}
+document.addEventListener("dragstart", (e) => { if (e.target instanceof HTMLImageElement) e.preventDefault(); });

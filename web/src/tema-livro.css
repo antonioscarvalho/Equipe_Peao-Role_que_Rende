@@ -1659,3 +1659,21 @@ button.botao-fechar-gov.botao-fechar-gov:focus-visible { outline: 4px dashed #C2
 }
 .botao-libras .botao-topo__icone img { width: 44px; height: 44px; border-radius: 8px; display: block; }
 .botao-libras:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; border-radius: 10px; }
+
+/* Texto do app não seleciona nem copia (pedido do produto): sem seleção ao tocar/arrastar,
+   sem a lupa e o menu "copiar" do toque longo no iPhone e sem o destaque azul do toque.
+   Leitores de tela não são afetados. Campos de digitar (nome) continuam selecionáveis. */
+html, body, #root {
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text; user-select: text; -webkit-touch-callout: default;
+}
+img, svg { -webkit-user-drag: none; user-drag: none; }
+
+/* Pulo do Bichinho: o X de sair fica branco (botão secundário do DS gov.br: fundo branco,
+   ícone e aro azul #1351B4, 6,9:1), para destacar sobre o céu do jogo. */
+:root:not([data-contraste="alto"]) .pulo:not(.carrinho) > .pulo__topo button.botao-fechar-gov.botao-fechar-gov { background: #FFFFFF; color: #1351B4; border-color: #1351B4; }
+:root:not([data-contraste="alto"]) .pulo:not(.carrinho) > .pulo__topo button.botao-fechar-gov.botao-fechar-gov:hover { background: #DBE8FB; color: #0C326F; }
+:root:not([data-contraste="alto"]) .pulo:not(.carrinho) > .pulo__topo button.botao-fechar-gov.botao-fechar-gov:active { background: #C5D4EB; color: #071D41; }
