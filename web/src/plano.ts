@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { NomeIcone } from "./icones-data";
+import { gravarGuardado, lerJson } from "./guardado";
 
 /**
  * Plano de 90 dias: 13 semanas, cada uma com um tema e 4 missões semanais.
@@ -119,21 +120,22 @@ const diasEntre = (de: string, ate: string) =>
   Math.round((Date.parse(`${ate}T12:00:00`) - Date.parse(`${de}T12:00:00`)) / 86_400_000);
 
 function ler(): Gravado {
-  try {
-    const bruto = JSON.parse(localStorage.getItem(CHAVE) ?? "null") as Partial<Gravado> | null;
-    if (bruto && typeof bruto.inicio === "string" && /^\d{4}-\d{2}-\d{2}$/.test(bruto.inicio)) {
-      const feitas: Record<string, string> = {};
-      const validas = new Set(SEMANAS.flatMap((s) => s.missoes.map((x) => x.id)));
-      for (const [id, dia] of Object.entries(bruto.feitas ?? {})) if (validas.has(id) && typeof dia === "string") feitas[id] = dia;
-      return { inicio: bruto.inicio, feitas };
-    }
-  } catch { /* dado corrompido: recomeça */ }
+  const bruto = lerJson(CHAVE) as Partial<Gravado> | null;
+  if (bruto && typeof bruto.inicio === "string" && /^\d{4}-\d{2}-\d{2}$/.test(bruto.inicio)) {
+    const feitas: Record<string, string> = {};
+    const validas = new Set(SEMANAS.flatMap((s) => s.missoes.map((x) => x.id)));
+    const gravadas = typeof bruto.feitas === "object" && bruto.feitas ? bruto.feitas : {};
+    for (const [id, dia] of Object.entries(gravadas)) if (validas.has(id) && typeof dia === "string") feitas[id] = dia;
+    return { inicio: bruto.inicio, feitas };
+  }
+  // Primeiro uso ou dado corrompido: recomeça. Grava sem avisar os ouvintes, porque `ler` roda
+  // dentro deles e durante a renderização; com aviso, cada leitura disparava outra.
   const novo = { inicio: hojeLocal(), feitas: {} };
-  gravar(novo);
+  gravarGuardado(CHAVE, JSON.stringify(novo));
   return novo;
 }
 function gravar(g: Gravado) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(g)); } catch { /* modo privado: vale até fechar */ }
+  gravarGuardado(CHAVE, JSON.stringify(g));
   window.dispatchEvent(new Event(EVENTO));
 }
 

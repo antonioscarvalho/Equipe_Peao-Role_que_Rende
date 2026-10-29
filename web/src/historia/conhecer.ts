@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { gravarGuardado, lerJson } from "../guardado";
 
 /**
  * O que a pessoa contou ao Broto no cap. 1 (questionario-onboarding.md, telas 3 e 5).
@@ -18,24 +19,20 @@ export const METAS = ["Parar de apostar", "Diminuir primeiro", "Ainda não sei"]
 export type Conhecer = { motivos: string[]; meta: string | null };
 
 export function lerConhecer(): Conhecer | null {
-  try {
-    const b = JSON.parse(localStorage.getItem(CHAVE) ?? "null") as Partial<Conhecer> | null;
-    if (!b) return null;
-    const motivos = Array.isArray(b.motivos) ? b.motivos.filter((m): m is string => (MOTIVOS as readonly string[]).includes(m as string)) : [];
-    const meta = (METAS as readonly string[]).includes(b.meta as string) ? (b.meta as string) : null;
-    return motivos.length || meta ? { motivos, meta } : null;
-  } catch {
-    return null;
-  }
+  const b = lerJson(CHAVE) as Partial<Conhecer> | null;
+  if (!b || typeof b !== "object") return null;
+  const motivos = Array.isArray(b.motivos) ? b.motivos.filter((m): m is string => (MOTIVOS as readonly string[]).includes(m as string)) : [];
+  const meta = (METAS as readonly string[]).includes(b.meta as string) ? (b.meta as string) : null;
+  return motivos.length || meta ? { motivos, meta } : null;
 }
 
 export function guardarConhecer(c: Conhecer) {
-  try { localStorage.setItem(CHAVE, JSON.stringify(c)); } catch { /* modo privado: fica só na conversa */ }
+  gravarGuardado(CHAVE, JSON.stringify(c));
   window.dispatchEvent(new Event(EVENTO));
 }
 
 export function apagarConhecer() {
-  try { localStorage.removeItem(CHAVE); } catch { /* nada a fazer */ }
+  gravarGuardado(CHAVE, null);
   window.dispatchEvent(new Event(EVENTO));
 }
 

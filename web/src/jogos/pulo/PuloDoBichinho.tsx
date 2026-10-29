@@ -4,6 +4,7 @@ import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
 import { pararTrilha, tocar, tocarTrilha } from "../../sons";
 import { vibrar } from "../../tato";
+import { gravarGuardado, lerRecorde } from "../../guardado";
 import { useAparenciaVisivel } from "../../personalizacao";
 import { BotaoTema } from "../../BotaoTema";
 import { useEsconderVLibras } from "../../vlibras";
@@ -51,7 +52,12 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   useEsconderVLibras(estado === "jogando");
   const [pontos, setPontos] = useState(0);
   const [folhas, setFolhas] = useState(0);
-  const [recorde, setRecorde] = useState(() => Number(localStorage.getItem(CHAVE_RECORDE) ?? 0));
+  const [recorde, setRecorde] = useState(() => lerRecorde(CHAVE_RECORDE));
+  const guardarRecorde = (final: number) => {
+    const novo = Math.max(lerRecorde(CHAVE_RECORDE), final);
+    gravarGuardado(CHAVE_RECORDE, String(novo));
+    setRecorde(novo);
+  };
   // "ok" só quando chega leitura de verdade do giroscópio.
   const [sensor, setSensor] = useState<"desconhecido" | "ok" | "sem">("desconhecido");
   const [graus, setGraus] = useState<number | null>(null);
@@ -450,11 +456,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
 
       const encerrar = (fim: "caiu" | "tempo", aviso: string) => {
         const final = g.maisAlta;
-        setRecorde((r) => {
-          const novo = Math.max(r, final);
-          localStorage.setItem(CHAVE_RECORDE, String(novo));
-          return novo;
-        });
+        guardarRecorde(final);
         setAviso(aviso);
         setEstado(fim);
       };

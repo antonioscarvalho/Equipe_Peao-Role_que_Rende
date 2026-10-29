@@ -26,6 +26,7 @@ import { useVibrar, vibrar } from "./tato";
 import { BotaoLibras } from "./BotaoLibras";
 import { PainelCrise } from "./AjudaAgora";
 import { ehMenorDeIdade } from "./menor";
+import { gravarGuardado, lerGuardado } from "./guardado";
 import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
@@ -512,8 +513,8 @@ export default function App() {
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);
         // Primeiro acesso: o capítulo 1 apresenta o Broto e o app conhece a pessoa.
-        if (!capitulosConcluidos().includes("cap1") && !localStorage.getItem(CHAVE_PRIMEIRO_ACESSO)) {
-          try { localStorage.setItem(CHAVE_PRIMEIRO_ACESSO, "1"); } catch { /* modo privado */ }
+        if (!capitulosConcluidos().includes("cap1") && !lerGuardado(CHAVE_PRIMEIRO_ACESSO)) {
+          gravarGuardado(CHAVE_PRIMEIRO_ACESSO, "1");
           setHistoria("cap1");
         }
       }} />}

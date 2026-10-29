@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { aparenciaVisivel, sanear, type Aparencia, type Progresso } from "./aparencia";
 import { usePlano } from "../plano";
 import { capitulosConcluidos } from "../historia/progresso";
+import { gravarGuardado, lerJson } from "../guardado";
 
 /**
  * A escolha fica só neste aparelho (spec 009, CA-6). A prova visual não tem banco,
@@ -22,23 +23,19 @@ export function useProgresso(): Progresso {
 
 export function lerAparencia(): Aparencia {
   try {
-    return sanear(JSON.parse(localStorage.getItem(CHAVE) ?? "null"));
+    return sanear(lerJson(CHAVE));
   } catch {
     return sanear(null);
   }
 }
 
 function gravar(a: Aparencia) {
-  try {
-    localStorage.setItem(CHAVE, JSON.stringify(a));
-  } catch {
-    // Modo privado ou cota cheia: a escolha vale só até fechar a página.
-  }
+  gravarGuardado(CHAVE, JSON.stringify(a));
   window.dispatchEvent(new Event(EVENTO));
 }
 
 export function apagarAparencia() {
-  try { localStorage.removeItem(CHAVE); } catch { /* nada a fazer */ }
+  gravarGuardado(CHAVE, null);
   window.dispatchEvent(new Event(EVENTO));
 }
 

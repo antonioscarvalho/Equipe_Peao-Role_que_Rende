@@ -1,5 +1,6 @@
 import type { IdCapitulo } from "./tipos";
 import { hojeLocal } from "../plano";
+import { gravarGuardado, lerJson } from "../guardado";
 
 /**
  * Progresso da história, só neste aparelho (mesmo padrão de personalizacao/armazenamento.ts).
@@ -20,7 +21,7 @@ type Gravado = { concluidos: IdCapitulo[]; avisoVisto: boolean; partes: Partial<
 
 function ler(): Gravado {
   try {
-    const bruto = JSON.parse(localStorage.getItem(CHAVE) ?? "null") as Partial<Gravado> | null;
+    const bruto = lerJson(CHAVE) as Partial<Gravado> | null;
     const concluidos = Array.isArray(bruto?.concluidos)
       ? ORDEM.filter((id) => bruto!.concluidos!.includes(id))
       : [];
@@ -37,11 +38,7 @@ function ler(): Gravado {
 }
 
 function gravar(g: Gravado) {
-  try {
-    localStorage.setItem(CHAVE, JSON.stringify(g));
-  } catch {
-    // Modo privado ou cota cheia: o progresso vale só até fechar a página.
-  }
+  gravarGuardado(CHAVE, JSON.stringify(g));
 }
 
 export function capitulosConcluidos(): IdCapitulo[] {
