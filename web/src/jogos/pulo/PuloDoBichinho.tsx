@@ -1,3 +1,4 @@
+import { Icone } from "../../Icone";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
@@ -192,8 +193,6 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     // Cenários ilustrados para a subida: Praça/Cidade (cap1) -> Céu/Telhados/Cometa (cap2) -> Espaço e Vila Estrela.
     const imgCidade = new Image();
     imgCidade.src = "/cenarios/cap1-nave-pousada.webp";
-    const imgCeu = new Image();
-    imgCeu.src = "/cenarios/cap2-nave-cometa.webp";
 
     // Estrelas do espaço profundo (geradas uma vez para a partida).
     const estrelasEspaco = Array.from({ length: 48 }, (_, i) => ({
@@ -207,28 +206,25 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
     const desenharFundoElevando = (alturaPx: number, agoraMs: number) => {
       // Paralaxe suave: a cada ~2400px de subida (~120m), percorremos da cidade até o espaço profundo.
       const sub = reduzir ? Math.min(2600, alturaPx) : alturaPx;
-      // pCidade: 0 na grama -> 1 aos ~1100px (~55m)
-      const pCidade = Math.min(1, sub / 1100);
-      // pCeu: começa a aparecer aos 500px (~25m) e vai subindo até 2500px (~125m)
-      const pCeu = Math.max(0, Math.min(1, (sub - 500) / 2000));
-      // pEspaco: começa aos 2000px (~100m) e domina a partir de 2700px (~135m)
-      const pEspaco = Math.max(0, Math.min(1, (sub - 2000) / 700));
-
-      // 1. Base de céu/espaço profundo
+      // Fundo em faixas que se misturam devagar, sem troca brusca (revisão 29/10):
+      // praça (ilustração) → só céu → céu escurecendo → espaço com estrelas.
+      const misturar = (c1: string, c2: string, t: number) => {
+        const h = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+        const [a1, a2] = [h(c1), h(c2)];
+        return `rgb(${a1.map((v, i) => Math.round(v + (a2[i] - v) * t)).join(",")})`;
+      };
+      const suave = (x: number) => { const t = Math.max(0, Math.min(1, x)); return t * t * (3 - 2 * t); };
+      // 0 = céu de dia (azul-claro), 1 = espaço. Fica só céu entre ~45 m e ~70 m e escurece até ~130 m.
+      const escuro = suave((sub - 1400) / 1200);
+      const topo = misturar("#AFC8F2", "#0C0B24", escuro);
+      const base = misturar("#F8E7B8", "#262154", escuro);
       const grad = ctx.createLinearGradient(0, 0, 0, g.h);
-      if (pEspaco < 1) {
-        grad.addColorStop(0, "#141336");
-        grad.addColorStop(1, pCidade < 1 ? C.ceu2 : "#2A2559");
-      } else {
-        grad.addColorStop(0, "#0C0B24");
-        grad.addColorStop(0.6, "#17153D");
-        grad.addColorStop(1, "#262154");
-      }
+      grad.addColorStop(0, topo);
+      grad.addColorStop(1, base);
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, g.w, g.h);
 
-      // Auxiliar para desenhar uma imagem vertical (720x1290) cobrindo a largura e deslizando na vertical:
-      // posY = 1 mostra a base da imagem (chão/telhados); posY = 0 mostra o topo (céu/cometa).
+      // Ilustração da praça só no começo: desce da tela e some por igual, revelando o céu.
       const desenharCenarioVertical = (img: HTMLImageElement, posY: number, alpha: number, deslocamentoExtraY = 0) => {
         if (alpha <= 0 || !img.complete || !img.naturalWidth) return;
         const escala = Math.max(g.w / img.naturalWidth, (g.h * 1.35) / img.naturalHeight);
@@ -242,28 +238,14 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
         ctx.drawImage(img, dx, dy, dw, dh);
         ctx.restore();
       };
-
-      // 2. Cenário 2 (Telhados noturnos -> Céu estrelado -> Nebulosa e Cometa dourado)
-      if (sub > 350 && pEspaco < 1) {
-        const fadeEntrada = Math.min(1, (sub - 350) / 450);
-        const fadeSaida = 1 - pEspaco;
-        // Começa mostrando a base (posY = 1, telhados) e sobe até o topo (posY = 0, cometa)
-        const posY = 1 - pCeu;
-        const sairPorBaixo = sub > 2300 ? (sub - 2300) * 0.25 : 0;
-        desenharCenarioVertical(imgCeu, posY, fadeEntrada * fadeSaida, sairPorBaixo);
-      }
-
-      // 3. Cenário 1 (Praça e Cidade ao entardecer — começo da subida)
-      if (sub < 1200) {
-        const alphaCidade = sub < 650 ? 1 : 1 - (sub - 650) / 550;
-        // Começa na base da praça (posY = 1) e sobe até o topo das árvores/casas (posY = 0), depois desce da tela
-        const posY = Math.max(0, 1 - pCidade);
-        const descerPraBaixo = sub > 700 ? (sub - 700) * 0.45 : 0;
-        desenharCenarioVertical(imgCidade, posY, alphaCidade, descerPraBaixo);
+      if (sub < 1000) {
+        const alphaCidade = 1 - suave((sub - 300) / 600);
+        const posY = Math.max(0, 1 - sub / 900);
+        desenharCenarioVertical(imgCidade, posY, alphaCidade, sub > 500 ? (sub - 500) * 0.4 : 0);
       }
 
       // 4. Camada de Espaço Sideral + Luas + Vila Estrela (a partir de ~80m, intensificando no espaço)
-      const visEspaco = Math.max(0, Math.min(1, (sub - 1400) / 900));
+      const visEspaco = suave((sub - 1900) / 900);
       if (visEspaco > 0) {
         ctx.save();
         // Estrelas em duas camadas de paralaxe
@@ -515,9 +497,9 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   return (
     <div className="pulo" role="dialog" aria-modal="true" aria-labelledby="pulo-titulo">
       <div className="pulo__topo">
-        <h2 id="pulo-titulo" className="pulo__titulo">Pulo do Bichinho</h2>
+        <h2 id="pulo-titulo" className="sr-only">Pulo do Bichinho</h2>
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>
-          <b>{pontos} m</b> · 🍃 {folhas}
+          <b>{pontos} m</b> · <Icone nome="sprout" tamanho={16} /> {folhas}
         </span>
         <BotaoLibras />
         <BotaoTema compacto />
@@ -535,13 +517,19 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
           <div className="pulo__painel rqr-escalonado">
             <Bichinho humor="feliz" nivel={1} tamanho={110} reduzir={reduzir} aparencia={aparencia} />
             <p className="pulo__chamada">{chamada ?? "Ajude o bichinho a subir até as nuvens!"}</p>
-            <ul className="pulo__dicas">
-              <li><b>Celular:</b> incline para os lados</li>
-              <li><b>Computador:</b> setas ← → ou A / D</li>
-              <li><b>Ou:</b> segure o lado esquerdo ou direito da tela</li>
-              <li>Nuvem branca some depois de um pulo. Mola rosa joga lá pro alto. Pegue as folhas 🍃</li>
-              <li>Cada partida dura até 3 minutos.</li>
-            </ul>
+            {/* Como jogar em animação, com pouco texto: o celular inclina e as setas apertam juntos. */}
+            <div className="pulo__como" role="img" aria-label="Incline o celular ou use as setas do teclado para os lados. Também dá pra segurar um lado da tela.">
+              <div className="pulo__como-item" aria-hidden="true">
+                <span className="pulo__celular"><span className="pulo__celular-tela" /></span>
+                <small>Incline</small>
+              </div>
+              <span className="pulo__como-ou" aria-hidden="true">ou</span>
+              <div className="pulo__como-item" aria-hidden="true">
+                <span className="pulo__teclas"><kbd className="pulo__tecla pulo__tecla--esq">←</kbd><kbd className="pulo__tecla pulo__tecla--dir">→</kbd></span>
+                <small>Setas</small>
+              </div>
+            </div>
+            <p className="pulo__dica">Pegue as folhas 🍃 e cuidado com a nuvem branca.</p>
             <button className="rqr-botao" onClick={comecar}>Começar</button>
             {recorde > 0 && <small>Seu recorde: {recorde} m</small>}
           </div>

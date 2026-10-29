@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 import { Bichinho, type Humor } from "../Bichinho";
 import { PainelCrise } from "../AjudaAgora";
 import { Icone } from "../Icone";
@@ -58,7 +58,7 @@ type Props = {
 };
 
 function frasesDeFolhas(n: number | undefined) {
-  if (!n) return "Não deu pra pegar folha dessa vez. Tudo bem: a tentativa conta igual.";
+  if (!n) return "Não deu pra pegar folha dessa vez. Tudo bem, a tentativa conta igual.";
   return n === 1 ? "A gente pegou uma folha no caminho! Vou guardar ela aqui." : `A gente pegou ${n} folhas no caminho! Vou guardar todas aqui.`;
 }
 
@@ -189,10 +189,25 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
     passo?.humor ?? (etapa === "licao" ? "orgulhoso" : etapa === "broto" ? "apoio" : etapa === "abertura" ? "cansado" : "calmo");
   const cenaDoMomento = etapa === "licao" ? "amanhecer" : etapa === "roteiro" || etapa === "abertura" ? cenaAtual : undefined;
 
+  const seguir =
+    etapa === "roteiro" && passo && (respondeu || (!passo.opcoes && !passo.especial)) ? () => irParaPasso(i + 1)
+    : etapa === "abertura" ? () => irParaPasso(0)
+    : etapa === "broto" && respondeu ? depoisDoBroto
+    : etapa === "oferta" ? () => ir("licao", capitulo.licao)
+    : null;
+  const avancar = () => { tocar("clique"); if (!completo) completar(); else seguir?.(); };
+  // Toque fora dos botões (na cena ou na caixa): primeiro mostra o texto todo, depois segue.
+  // Atalho só de ponteiro (toque/mouse): teclado e leitor usam o botão "Continuar", que segue existindo.
+  const tocarCaixa = (e: PointerEvent) => {
+    if (menu || crise || (e.target as HTMLElement).closest("button, input, a, form")) return;
+    if (!completo) { completar(); return; }
+    if (seguir) avancar();
+  };
+
   return (
     <div ref={caixa} className="historia-dialogo" role="dialog" aria-modal="true" aria-labelledby="dialogo-titulo">
       {/* Cena em tela cheia, como nos RPGs (Persona, Stardew Valley): a arte é a protagonista. */}
-      <div className="historia-dialogo__palco">
+      <div className="historia-dialogo__palco" onPointerUp={tocarCaixa}>
         {CenaDoCapitulo
           ? <CenaDoCapitulo momento={{ etapa: etapa === "roteiro" ? "abertura" : etapa, pergunta, cena: cenaDoMomento }} reduzir={reduzir}
               ator={<Bichinho humor={humor} nivel={2} tamanho={104} reduzir={reduzir} aparencia={aparencia} />} />
@@ -273,7 +288,8 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
       </div>
 
       {/* Caixa de texto de RPG: nome do Broto, a fala e o "seguir" no canto. */}
-      <div className="historia-caixa">
+      {/* Toque em qualquer parte da caixa: completa o texto ou segue (o botão continua para teclado e leitor). */}
+      <div className={`historia-caixa ${seguir || !completo ? "is-tocavel" : ""}`} onPointerUp={tocarCaixa}>
         <span className="historia-caixa__nome" aria-hidden="true">{nomeAlien}</span>
         <div className="historia-caixa__fala" key={fala} aria-hidden="true">
           <span className="historia-balao__texto">
@@ -283,18 +299,11 @@ export function Dialogo({ capitulo, aoConcluir, aoFechar, reduzir, parte = "depo
           <span className="historia-balao__texto historia-balao__molde">{fala}</span>
         </div>
         {/* Leitor de tela recebe a fala inteira de uma vez, não letra por letra. */}
-        <p className="sr-only" aria-live="polite">{nomeAlien}: {fala}</p>
-        {(() => {
-          const seguir =
-            etapa === "roteiro" && passo && (respondeu || (!passo.opcoes && !passo.especial)) ? () => irParaPasso(i + 1)
-            : etapa === "abertura" ? () => irParaPasso(0)
-            : etapa === "broto" && respondeu ? depoisDoBroto
-            : etapa === "oferta" ? () => ir("licao", capitulo.licao)
-            : null;
-          if (etapa === "licao") return <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); aoConcluir(); }}>Concluir capítulo ▸</button>;
-          return seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); completo ? seguir() : completar(); }}>
-            {completo ? "Continuar ▸" : "Mostrar tudo ▸"}</button>;
-        })()}
+        <p className="sr-only" aria-live="polite">{nomeAlien} diz. {fala}</p>
+        {etapa === "licao"
+          ? <button ref={seguirRef} className="historia-caixa__seguir" onClick={() => { tocar("clique"); aoConcluir(); }}>Concluir capítulo ▸</button>
+          : seguir && <button ref={seguirRef} className="historia-caixa__seguir" onClick={avancar}>
+            {completo ? "Continuar ▸" : "Mostrar tudo ▸"}</button>}
       </div>
       </div>
       {crise && <PainelCrise aoFechar={fecharCrise} />}

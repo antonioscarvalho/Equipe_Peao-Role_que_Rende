@@ -31,9 +31,9 @@ export const cap2: Capitulo = {
       { rotulo: "Só se você quiser.", resposta: "Eu quero. Acho que contar ajuda a entender." },
     ] },
     { fala: "Lembra da cantiga da Vó? \"A luz vem devagar.\" Lá na Vila todo mundo sabia ela de cor." },
-    { fala: "Aí um dia apareceu no céu uma coisa que prometia o contrário: luz rápida. A gente chamava de Cometa da Sorte." },
+    { fala: "Aí um dia apareceu no céu uma coisa que prometia o contrário. Luz rápida. A gente chamava de Cometa da Sorte." },
     { fala: "Era uma estação enorme, passando bem no meio das três luas. Cheia de cor e de música. Dava pra ver de qualquer quintal." },
-    { fala: "A promessa era simples: você dava um pouco da sua luz e ele devolvia o dobro. Era só apertar um botão.", opcoes: [
+    { fala: "A promessa era simples. Você dava um pouco da sua luz e ele devolvia o dobro. Era só apertar um botão.", opcoes: [
       { rotulo: "Parece bom demais.", resposta: "Lá na Vila ninguém tinha estudado conta de cometa. Mas a Vó desconfiou na hora." },
       { rotulo: "E as pessoas acreditavam?", resposta: "Muita gente. Quando a conta da casa aperta, uma promessa fácil soa como saída." },
     ] },
@@ -44,7 +44,7 @@ export const cap2: Capitulo = {
       { rotulo: "Ele entendia do cometa?", resposta: "Ele achava que sim. Dizia que sabia a hora certa de ir. O cometa não tava nem aí pra hora dele." },
     ] },
     { humor: "calmo", fala: "Os cometas desse jogo são parecidos com aquele: dourados, brilhando, prometendo o dobro. Encostar neles apaga uma luz minha." },
-    { fala: "As sementes verdes são o contrário: simples e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?", opcoes: [
+    { fala: "As sementes verdes são o contrário. Simples, e sempre no mesmo lugar. Essas fazem a gente crescer. Você me ajuda a desviar?", opcoes: [
       { rotulo: "Bora.", resposta: "Então eu desvio do brilho, e você me avisa quando eu me distrair." },
       { rotulo: "Como funciona?", resposta: "Você me guia pros lados. O dourado a gente deixa passar, o verde a gente pega. Dá pra parar quando quiser." },
     ] },
@@ -52,24 +52,24 @@ export const cap2: Capitulo = {
   depoisDoJogo: [
     { humor: "feliz", fala: "{folhas}" },
     { humor: "calmo", fala: "Reparou? O dourado brilha mais justo quando chega perto. É de propósito." },
-    { fala: "Com meu pai era assim. Toda vez ele voltava dizendo: \"Foi quase, filho. Na próxima vem.\"" },
+    { fala: "Com meu pai era assim. Toda vez ele voltava dizendo \"Foi quase, filho. Na próxima vem.\"" },
     { fala: "Só que o quase nunca acendeu uma lâmpada lá em casa. Quase ganhar é só um jeito bonito de perder.", opcoes: [
       { rotulo: "Faz sentido.", resposta: "Eu demorei pra entender. O cometa fazia o quase parecer um prêmio." },
       { rotulo: "Às vezes o quase dá esperança.", resposta: "Dá. E era isso que o cometa queria: que a esperança voltasse no dia seguinte, com mais luz." },
     ] },
-    { fala: "E tem uma coisa que ninguém comentava: o cometa sempre ia embora mais brilhante do que tinha chegado. Aquela luz vinha de algum lugar." },
-    { fala: "Vocês aqui na Terra têm novela, né? Era igual: a vila inteira via que a vilã ia aprontar. Menos o meu pai." },
+    { fala: "E tem uma coisa que ninguém comentava. O cometa sempre ia embora mais brilhante do que tinha chegado. Aquela luz vinha de algum lugar." },
+    { fala: "Vocês aqui na Terra têm novela, né? Era igual. A vila inteira via que a vilã ia aprontar. Menos o meu pai." },
     { humor: "apoio", fala: "Fiquei pensando numa coisa. O que o cometa dava pro meu pai? E o que ele tirava?", opcoes: [
       { rotulo: "Dava esperança.", resposta: "Dava. E um alívio rápido quando a conta apertava. Isso é verdade, não vou fingir que não." },
-      { rotulo: "Tirava a luz da casa.", resposta: "Tirava. E tirava ele da gente: tava em casa, mas com a cabeça no céu." },
+      { rotulo: "Tirava a luz da casa.", resposta: "Tirava. E tirava ele da gente. Tava em casa, mas com a cabeça no céu." },
       { rotulo: "As duas coisas.", resposta: "É isso que deixa tudo difícil. Se o cometa só tirasse, ninguém voltava lá." },
     ] },
     { humor: "calmo", fala: "Quer pensar nisso pra você também? Só pensar. Não precisa me contar nada.", opcoes: [
-      { rotulo: "Quero pensar.", resposta: "Então pensa com calma: o que a aposta te dá, e o que ela te tira. Fica só com você. Eu não guardo nada disso." },
+      { rotulo: "Quero pensar.", resposta: "Então pensa com calma no que a aposta te dá e no que ela te tira. Fica só com você. Eu não guardo nada disso." },
       { rotulo: "Hoje não.", resposta: "Justo. A pergunta fica aí pra quando fizer sentido." },
       { rotulo: "Tá pesado ouvir isso.", resposta: "Obrigado por me dizer. A gente pode parar aqui. Olha quem pode te ajudar agora. Eu espero.", abreCrise: true },
     ] },
-    { humor: "calmo", fala: "Ainda tem uma parte que eu não contei: o que aconteceu com as luzes lá de casa depois disso." },
+    { humor: "calmo", fala: "Ainda tem uma parte que eu não contei. O que aconteceu com as luzes lá de casa depois disso." },
     { fala: "Meu pai dizia que amanhã recuperava tudo. Essa eu conto da próxima vez. Hoje já foi bastante." },
     { humor: "calmo", fala: "Obrigado por escutar. Aqui na Terra, você é a primeira pessoa pra quem eu conto isso." },
   ],

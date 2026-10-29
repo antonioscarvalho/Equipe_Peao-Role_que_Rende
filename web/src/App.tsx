@@ -14,7 +14,7 @@ import { ORDEM, capitulosConcluidos, estaDesbloqueado, jaFezCapituloHoje, libera
 import { capitulos, TITULOS } from "./historia/capitulos";
 import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
-import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, pararTrilha, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
+import { definirVolumeEfeitos, definirVolumeMusica, pararTrilha, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
 import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { useProgresso } from "./personalizacao/armazenamento";
 import { categoriaDe, proximoMarco, quantoFalta } from "./personalizacao/aparencia";
@@ -24,6 +24,8 @@ import { BotaoTema } from "./BotaoTema";
 import { useContraste } from "./tema";
 import { useVibrar, vibrar } from "./tato";
 import { BotaoLibras } from "./BotaoLibras";
+import { PainelCrise } from "./AjudaAgora";
+import { ehMenorDeIdade } from "./menor";
 import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
@@ -78,7 +80,7 @@ function ControleVolume({ id, rotulo, valor, aoMudar }: { id: string; rotulo: st
   return (
     <div className="controle-volume">
       <div className="controle-volume__topo">
-        <label htmlFor={id}>{rotulo}</label>
+        <label htmlFor={id} className="ajuste__texto">{rotulo}</label>
         <span className="controle-volume__valor" aria-hidden="true">{valor === 0 ? "Mudo" : `${pct}%`}</span>
       </div>
       <div className="controle-volume__linha">
@@ -118,6 +120,8 @@ export default function App() {
   // false = fechada; true = mapa; "cap1" = primeiro acesso, direto no capítulo 1.
   const [historia, setHistoria] = useState<boolean | "cap1">(false);
   const [abrindo, setAbrindo] = useState(true);
+  // Respondeu que tem menos de 18 anos (tela de idade da história): só a tela de ajuda, sem o resto do app.
+  const [menorDeIdade, setMenorDeIdade] = useState(ehMenorDeIdade);
   const conhecer = useConhecer();
   const { perfil } = usePerfil();
   const nomeBroto = nomeDoBroto(perfil);
@@ -190,18 +194,6 @@ export default function App() {
     if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
   }, [aba, abrindo, historia, crise]);
 
-  // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
-  const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);
-  useEffect(() => {
-    const tempo = { current: 0 };
-    const parar = ouvirTrilhaInfo((info) => {
-      setHudMusica(info);
-      window.clearTimeout(tempo.current);
-      tempo.current = window.setTimeout(() => setHudMusica(null), 4500);
-    });
-    return () => { window.clearTimeout(tempo.current); parar(); };
-  }, []);
-
   useEffect(() => {
     document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
   }, [reduzir]);
@@ -235,6 +227,8 @@ export default function App() {
 
   const abrirCrise = () => { setCrise(true); setEvento({ humor: "apoio", ate: Date.now() + 10 * 60_000 }); };
   const fecharCrise = () => { setCrise(false); setEvento({ humor: "apoio", ate: Date.now() + 30_000 }); };
+
+  if (menorDeIdade) return <PainelCrise bloqueio aoFechar={() => {}} />;
 
   return (
     <div className="palco">
@@ -486,7 +480,7 @@ export default function App() {
             </div>
 
             <h2 className="ajustes__grupo">Som</h2>
-            <div className="controles-volume">
+            <div className="ajustes controles-volume">
               <ControleVolume id="volume-efeitos" rotulo="Efeitos" valor={volumes.efeitos} aoMudar={definirEfeitos} />
               <ControleVolume id="volume-musica" rotulo="Música" valor={volumes.musica} aoMudar={definirMusica} />
             </div>
@@ -514,16 +508,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {!historia && hudMusica && (
-        <div className="hud-musica" role="status" aria-live="polite">
-          <Icone nome="music" tamanho={18} />
-          <div className="hud-musica__texto">
-            <span className="hud-musica__titulo">{hudMusica.titulo}</span>
-            <span className="hud-musica__artista">{hudMusica.artista}</span>
-          </div>
-        </div>
-      )}
-      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
+      {historia && <Historia aoFechar={() => setHistoria(false)} aoMenorDeIdade={() => { setHistoria(false); setMenorDeIdade(true); }} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
         trilhaRetorno={aba === "jogos" ? "jogos" : "app"} />}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);

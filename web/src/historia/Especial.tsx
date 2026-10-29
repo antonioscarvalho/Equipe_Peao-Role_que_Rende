@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useRef, useState, type FocusEvent } from "react";
 import { tocar } from "../sons";
 import { vibrar } from "../tato";
 import { usePerfil, NOME_MAX } from "../personalizacao";
 import { useAparencia, useProgresso } from "../personalizacao/armazenamento";
 import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, metaCurta, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
 import { Bichinho } from "../Bichinho";
+import { Icone } from "../Icone";
+import type { NomeIcone } from "../icones-data";
 import { MOTIVOS, METAS, guardarConhecer, type Conhecer } from "./conhecer";
 import type { Passo } from "./tipos";
 
@@ -37,10 +39,11 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
   const progresso = useProgresso();
   const [aba, setAba] = useState("cor");
   const itens = ITENS[aba];
+  const visivel = aparenciaVisivel(aparencia, progresso);
   return (
     <div className="especial especial--aparencia">
       <div className="especial__previa" aria-hidden="true">
-        <Bichinho humor="feliz" nivel={2} tamanho={92} reduzir aparencia={aparenciaVisivel(aparencia, progresso)} />
+        <Bichinho humor="feliz" nivel={2} tamanho={120} reduzir aparencia={visivel} />
       </div>
       <div className="especial__abas" role="group" aria-label="O que mudar">
         {ABAS.map((a) => (
@@ -56,14 +59,19 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
         </div>
       )}
       {itens && (
-        <div className="especial__chips" role="group" aria-label={ABAS.find((a) => a.id === aba)!.rotulo}>
+        <div className="especial__itens" role="group" aria-label={ABAS.find((a) => a.id === aba)!.rotulo}>
           {itens.map((it) => {
             const livre = liberado(it, progresso);
             const on = aparencia[aba as keyof Aparencia] === it.id;
             return (
-              <button key={it.id} className={`chip ${on ? "is-on" : ""}`} aria-pressed={on} disabled={!livre}
+              <button key={it.id} className={`especial__item ${on ? "is-on" : ""}`} aria-pressed={on} disabled={!livre}
                 onClick={() => { tocar("clique"); mudar({ [aba]: it.id } as Partial<Aparencia>); }}>
-                {it.nome}{!livre && it.meta && ` · ${metaCurta(it.meta)}`}
+                {/* Mini prévia: o Broto já usando o item, como na tela Personalizar. */}
+                <span className="especial__item-previa" aria-hidden="true">
+                  <Bichinho humor="calmo" nivel={2} tamanho={48} reduzir aparencia={{ ...visivel, [aba]: it.id }} />
+                </span>
+                <span className="especial__item-nome">{it.nome}</span>
+                {!livre && it.meta && <span className="especial__item-marco">{metaCurta(it.meta)}</span>}
               </button>
             );
           })}
@@ -85,11 +93,19 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
   );
 }
 
+/** Ícone de cada motivo (decorativo: o texto já diz tudo). Lucide, nada de emoji. */
+const ICONE_MOTIVO: Record<string, NomeIcone> = {
+  "Minha família": "house", "Meus filhos": "baby", "Pagar dívidas": "receipt", "Guardar dinheiro pra um sonho": "sprout",
+  "Dormir melhor": "moon", "Minha saúde": "heart", "Meu trabalho ou estudo": "briefcase", "Voltar a confiar em mim": "shieldCheck",
+  "Meu relacionamento": "handHeart", "Alguém me pediu": "messageCircle", "Só quero entender melhor": "search",
+};
+
 export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
   const { mudarNome, mudarNomeBroto } = usePerfil();
   const [texto, setTexto] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [marcados, setMarcados] = useState<string[]>([]);
+  const enviado = useRef(false);
 
   if (tipo === "aparencia") return <Aparencia aoFim={aoFim} />;
 
@@ -109,25 +125,36 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
 
   if (tipo === "nome") {
     const enviar = () => {
+      if (enviado.current) return;
       tocar("clique");
       const e = mudarNome(texto);
       if (e) { vibrar("aviso"); setErro(e === "longo" ? `Até ${NOME_MAX} letras.` : "Use só letras."); return; }
       const nome = texto.replace(/\s+/g, " ").trim() || null;
+      enviado.current = true;
       mudar({ nome });
       aoFim(null);
+    };
+    // No celular, o "Pronto" do teclado só fechava o teclado e a pessoa precisava apertar o
+    // "Pronto" da tela de novo. Agora fechar o teclado com um nome escrito já confirma.
+    const aoSair = (e: FocusEvent<HTMLInputElement>) => {
+      const destino = e.relatedTarget as HTMLElement | null;
+      if (!texto.trim() || destino?.closest(".especial")) return;
+      enviar();
     };
     return (
       <form className="especial" onSubmit={(e) => { e.preventDefault(); enviar(); }}>
         <label htmlFor="especial-nome" className="especial__rotulo">Como {conversa.broto ?? "o alien"} te chama (opcional)</label>
         <input id="especial-nome" className="especial__campo" value={texto} maxLength={NOME_MAX + 5} autoComplete="nickname"
-          enterKeyHint="done" autoCapitalize="words" spellCheck={false}
+          enterKeyHint="done" onBlur={aoSair} autoCapitalize="words" spellCheck={false}
           onFocus={(e) => window.setTimeout(() => e.target.scrollIntoView({ block: "center" }), 300)}
           onChange={(e) => { setTexto(e.target.value); setErro(null); }} aria-describedby={erro ? "especial-nome-erro" : undefined} />
         {erro && <p id="especial-nome-erro" className="especial__erro" role="alert">{erro}</p>}
-        <button className="rqr-botao" type="submit">Pronto</button>
-        <button className="historia-opcao historia-opcao--leve" type="button" onClick={() => { tocar("clique"); mudar({ nome: null }); aoFim(null); }}>
-          Prefiro não dizer
-        </button>
+        <div className="especial__fim">
+          <button className="historia-opcao historia-opcao--leve" type="button" onClick={() => { tocar("clique"); mudar({ nome: null }); aoFim(null); }}>
+            Prefiro não dizer
+          </button>
+          <button className="rqr-botao" type="submit">Pronto</button>
+        </div>
       </form>
     );
   }
@@ -141,7 +168,8 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
       <div className="especial">
         <div className="especial__chips" role="group" aria-label="O que te trouxe aqui (pode marcar vários)">
           {MOTIVOS.map((m) => (
-            <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => { tocar("clique"); alternar(m); }}>{m}</button>
+            <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => { tocar("clique"); alternar(m); }}>
+              <span className="chip__icone" aria-hidden="true">{ICONE_MOTIVO[m] && <Icone nome={ICONE_MOTIVO[m]} tamanho={18} />}</span><span className="chip__texto">{m}</span></button>
           ))}
         </div>
         <button className="rqr-botao" disabled={!marcados.length} onClick={() => {
@@ -149,7 +177,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
           mudar({ motivos: marcados });
           aoFim("Obrigado por me contar. Fica entre a gente.");
         }}>{conversa.broto ? `Contar pro ${conversa.broto}` : "Contar pra ele"}</button>
-        <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); aoFim("Tudo bem. A gente se conhece aos poucos."); }}>Prefiro não dizer</button>
+        <button className="historia-opcao historia-opcao--discreta" onClick={() => { tocar("clique"); aoFim("Tudo bem. A gente se conhece aos poucos."); }}>Prefiro não dizer</button>
       </div>
     );
   }
