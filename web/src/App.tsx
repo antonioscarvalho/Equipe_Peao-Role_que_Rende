@@ -14,7 +14,7 @@ import { ORDEM, capitulosConcluidos, estaDesbloqueado, jaFezCapituloHoje, libera
 import { capitulos, TITULOS } from "./historia/capitulos";
 import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
-import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
+import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, pararTrilha, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
 import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { useProgresso } from "./personalizacao/armazenamento";
 import { categoriaDe, proximoMarco, quantoFalta } from "./personalizacao/aparencia";
@@ -150,6 +150,10 @@ export default function App() {
   // A abertura fica silenciosa e a música entra quando o primeiro menu aparece.
   useEffect(() => {
     if (abrindo) return;
+    if (historia) {
+      pararTrilha();
+      return;
+    }
     const menuJogos = aba === "jogos";
     tocarTrilha(
       menuJogos ? "/sons/trilha-alegre.opus" : "/sons/trilha-leve.opus",
@@ -157,7 +161,7 @@ export default function App() {
         ? { titulo: "Rolê de Hoje", artista: "Tema do menu de jogos" }
         : { titulo: "Um Passo de Cada Vez", artista: "Trilha do app" },
     );
-  }, [aba, abrindo]);
+  }, [aba, abrindo, historia]);
 
   // Pré-carrega apenas o que a pessoa provavelmente vai abrir a seguir; evita baixar a OST inteira no início.
   useEffect(() => {
@@ -168,9 +172,8 @@ export default function App() {
         "/sons/trilha-carrinho.opus",
       ]);
     }
-    if (historia) precarregarTrilhas(["/sons/cantiga-vo.opus"]);
     if (crise) precarregarTrilhas(["/sons/respirar-calma.opus"]);
-  }, [aba, abrindo, historia, crise]);
+  }, [aba, abrindo, crise]);
 
   // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
   const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);
@@ -474,7 +477,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {hudMusica && (
+      {!historia && hudMusica && (
         <div className="hud-musica" role="status" aria-live="polite">
           <Icone nome="music" tamanho={18} />
           <div className="hud-musica__texto">
