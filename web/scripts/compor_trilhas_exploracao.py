@@ -112,8 +112,9 @@ def acrescentar_pluck(canal, nota, inicio, volume, decaimento, detune, atraso=0.
 def acrescentar_nota_melodia(canal, nota, inicio, duracao, volume, detune, atraso=0.0):
     t0 = inicio + atraso
     freq = hz(nota) * (1.0 + detune)
-    ataque = 0.018
-    soltura = 0.18
+    ataque = 0.006
+    soltura = 0.2
+    nivel_soltura = 0.88 * math.exp(-1.45 * duracao) + 0.12 * math.exp(-11.0 * duracao)
     limite = min(len(canal), int((t0 + duracao + soltura) * SR))
     i0 = max(0, int(t0 * SR))
     for i in range(i0, limite):
@@ -121,12 +122,13 @@ def acrescentar_nota_melodia(canal, nota, inicio, duracao, volume, detune, atras
         if t < ataque:
             env = t / ataque
         elif t < duracao:
-            env = 0.82 + 0.18 * math.exp(-2.5 * (t - ataque))
+            env = 0.88 * math.exp(-1.45 * t) + 0.12 * math.exp(-11.0 * t)
         else:
-            env = 0.82 * math.exp(-13.0 * (t - duracao))
-        vibrato = 0.0018 * math.sin(2.0 * math.pi * 5.1 * t)
-        fase = 2.0 * math.pi * freq * (1.0 + vibrato) * t
-        onda = 0.72 * math.sin(fase) + 0.21 * math.sin(2.0 * fase) + 0.07 * math.sin(3.0 * fase)
+            env = nivel_soltura * math.exp(-12.0 * (t - duracao))
+        fase = 2.0 * math.pi * freq * t
+        onda = (0.55 * math.sin(fase) + 0.25 * math.sin(2.0 * fase)
+                + 0.13 * math.sin(3.0 * fase) + 0.06 * math.sin(4.0 * fase)
+                + 0.025 * math.exp(-16.0 * t) * math.sin(5.0 * fase))
         canal[i] += volume * env * onda
 
 
