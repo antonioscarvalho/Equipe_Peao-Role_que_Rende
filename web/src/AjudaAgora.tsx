@@ -56,7 +56,7 @@ export function PainelCrise({ aoFechar, bloqueio = false }: { aoFechar: () => vo
   return (
     <div className="crise ajuda-agora__painel" role="dialog" aria-modal="true" aria-labelledby="ajuda-agora-titulo">
       <div className="tela-libras"><BotaoLibras /></div>
-      {!bloqueio && <button className="crise__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar" data-vlibras-gloss="FECHAR">×</button>}
+      {!bloqueio && <button className="crise__fechar botao-fechar-gov" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar" data-vlibras-gloss="FECHAR"><Icone nome="fechar" tamanho={20} /></button>}
       <h2 id="ajuda-agora-titulo" ref={titulo} tabIndex={-1} className="crise__titulo">
         Você não precisa passar por isso sozinho(a).
       </h2>

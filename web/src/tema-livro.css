@@ -1579,14 +1579,17 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 /* Pulo aberto a partir da respiração ("Deu vontade"): troca de uma tela cheia por outra, sem pop. */
 .pulo.sem-pop { animation: none; }
 
-/* Menu de baixo sempre fixo na tela. Antes era `sticky`, mas o .palco tem overflow: hidden,
-   então ele ficava no fim do conteúdo: descia ao trocar de aba (Jogos) e sumia nas abas
-   compridas (Ajustes) até rolar a página. Agora é fixo e o conteúdo ganha espaço embaixo. */
-.celular:has(> .tabbar) { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
-.celular > .tabbar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; margin: 0;
-  padding-inline: max(8px, calc((100vw - 560px) / 2));
+/* Menu de baixo sempre visível: a página não rola mais; quem rola é o conteúdo (.celular).
+   O `position: fixed` não servia porque a animação de entrada do .celular deixa um transform
+   ativo, e aí o "fixo" fica preso ao .celular e desce com ele. Com o .celular rolando, o menu
+   `sticky` no fim dele fica sempre no rodapé da tela, e o scroll fica só no conteúdo. */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.palco { height: 100dvh; min-height: 0; overflow: hidden; }
+.celular {
+  height: 100dvh; min-height: 0; overflow-y: auto; overscroll-behavior: contain;
+  scroll-padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
 }
+.celular > .tabbar { position: sticky; bottom: 0; z-index: 6; margin-top: auto; flex: none; }
 
 /* Modal de acessibilidade do primeiro acesso (ModalAcessibilidade.tsx): cartão de papel com o
    pop do livro, sobre o céu da história. Rola por dentro se a tela for baixa. */
@@ -1603,7 +1606,7 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .modal-acess__selos { display: flex; gap: 10px; justify-content: center; }
 .modal-acess__selo {
   display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
-  background: #1B5FAF; color: #FFFFFF; border: 2.5px solid var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
+  background: #1351B4; color: #FFFFFF; border: 2.5px solid var(--livro-tinta); box-shadow: 0 3px 0 var(--livro-tinta);
 }
 .modal-acess__titulo { margin: 0; text-align: center; font-family: var(--rqr-font-titulo); font-size: 1.4rem; }
 .modal-acess__titulo:focus { outline: none; }
@@ -1615,3 +1618,18 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 :root[data-tema="escuro"] .modal-acess__caixa { background: var(--livro-grao), var(--noite-cartao); color: var(--noite-creme); border-color: var(--noite-linha); }
 .ajustes__grupo svg { vertical-align: -3px; }
 @media (prefers-reduced-motion: reduce) { .modal-acess__caixa { animation: none; } }
+
+/* Botão de fechar no padrão do DS gov.br (br-button circle primary, ícone fa-times):
+   azul #1351B4 com ícone branco (6,9:1), aro branco para destacar sobre qualquer fundo,
+   foco tracejado âmbar #C2850C de 4 px, alvo de 44 px (WCAG 2.5.8). Igual em todas as telas. */
+button.botao-fechar-gov.botao-fechar-gov {
+  display: grid; place-items: center; width: 44px; height: 44px; min-width: 44px; padding: 0; margin: 0;
+  border-radius: 50%; border: 2px solid #FFFFFF; background: #1351B4; color: #FFFFFF;
+  box-shadow: 0 2px 6px rgb(0 0 0 / .25); font: inherit; line-height: 1; cursor: pointer;
+  transition: background-color 120ms ease, transform 120ms ease;
+}
+button.botao-fechar-gov.botao-fechar-gov svg { width: 20px; height: 20px; }
+button.botao-fechar-gov.botao-fechar-gov:hover { background: #0C326F; color: #FFFFFF; }
+button.botao-fechar-gov.botao-fechar-gov:active { background: #071D41; color: #FFFFFF; transform: scale(.94); box-shadow: none; }
+button.botao-fechar-gov.botao-fechar-gov:focus-visible { outline: 4px dashed #C2850C; outline-offset: 4px; }
+.ajuste__titulo-icone { display: inline-flex; align-items: center; gap: 6px; }

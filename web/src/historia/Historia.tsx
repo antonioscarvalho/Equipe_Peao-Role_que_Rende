@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../BotaoLibras";
+import { Icone } from "../Icone";
 import { Dialogo } from "./Dialogo";
 import { PainelCrise } from "../AjudaAgora";
 import { nomeDoBroto, usePerfil } from "../personalizacao";
@@ -120,7 +121,7 @@ export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app", ao
         <div className="tela-libras"><BotaoLibras /></div>
         <div className="historia__caixa">
           <h2 id="historia-titulo" ref={titulo} className="historia__titulo" tabIndex={-1}>História do {alien}</h2>
-          <button className="historia__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar a história">×</button>
+          <button className="historia__fechar botao-fechar-gov" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar a história"><Icone nome="fechar" tamanho={20} /></button>
 
           {tela.tipo === "idade" ? (
             <>

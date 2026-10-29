@@ -29,6 +29,10 @@ export const icones = {
   palette: "<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\"><path d=\"M12 22a1 1 0 0 1 0-20a10 9 0 0 1 10 9a5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z\"/><circle cx=\"13.5\" cy=\"6.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"17.5\" cy=\"10.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"6.5\" cy=\"12.5\" r=\".5\" fill=\"currentColor\"/><circle cx=\"8.5\" cy=\"7.5\" r=\".5\" fill=\"currentColor\"/></g>",
   // IconOven "sign-language" (licença MIT, https://iconoven.com/icons), traço 2 como os do Lucide.
   libras: "<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M7.25 21.25V14L4.6 11.35a1.5 1.5 0 0 1 2.12-2.12l1.03 1.02V5.5a1.5 1.5 0 0 1 3 0V4.25a1.5 1.5 0 0 1 3 0V5.5a1.5 1.5 0 0 1 3 0V8a1.5 1.5 0 0 1 3 0v6.5a6.75 6.75 0 0 1-3.5 5.9v.85Zm3.5-15.75V10m3-4.5V10m3-2v2m-14-2.75C2.75 5.5 3.6 4.05 5 3m13.75-.25a3.5 3.5 0 0 1 2.5 2.5\"/>",
+  // Fechar (fa-times/xmark) e alto contraste (fa-adjust/circle-half-stroke): os mesmos do
+  // Padrão Digital de Governo (DS gov.br), que usa a família Font Awesome.
+  fechar: "<svg viewBox=\"0 0 384 512\" width=\"100%\" height=\"100%\"><path fill=\"currentColor\" d=\"M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7L86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256L41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3l105.4 105.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256z\"/></svg>",
+  contraste: "<svg viewBox=\"0 0 512 512\" width=\"100%\" height=\"100%\"><path fill=\"currentColor\" d=\"M448 256c0-106-86-192-192-192v384c106 0 192-86 192-192M0 256a256 256 0 1 1 512 0a256 256 0 1 1-512 0\"/></svg>",
   // Font Awesome Free 6 (ícones CC BY 4.0, fontawesome.com/license/free), via Iconify.
   // Acessibilidade: desenho do logo de acessibilidade da ONU (2015). Libras: Símbolo Internacional
   // de Interpretação em Língua de Sinais (duas mãos). Em <svg> próprio porque o desenho não é 24x24.

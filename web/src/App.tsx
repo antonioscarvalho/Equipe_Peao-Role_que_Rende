@@ -240,7 +240,7 @@ export default function App() {
       <h2 className="ajustes__grupo"><Icone nome="acessibilidade" tamanho={18} /> Acessibilidade e conforto</h2>
       <div className="ajustes">
         <label className="ajuste">
-          <span className="ajuste__texto">Alto contraste<small>Cores mais fortes e sem textura atrás do texto</small></span>
+          <span className="ajuste__texto"><span className="ajuste__titulo-icone"><Icone nome="contraste" tamanho={18} /> Alto contraste</span><small>Cores mais fortes e sem textura atrás do texto</small></span>
           <input type="checkbox" role="switch" checked={contraste.alto} onChange={(e) => { tocar("clique"); contraste.mudar(e.target.checked); }} />
           <span className="interruptor__trilho" aria-hidden="true" />
         </label>

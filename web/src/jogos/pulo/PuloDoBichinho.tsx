@@ -501,7 +501,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
         </span>
         <BotaoLibras />
         <BotaoTema compacto />
-        <button className="crise__fechar pulo__fechar" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO">×</button>
+        <button className="crise__fechar pulo__fechar botao-fechar-gov" onClick={fechar} aria-label="Fechar jogo" data-vlibras-gloss="FECHAR JOGO"><Icone nome="fechar" tamanho={20} /></button>
       </div>
 
       <div ref={caixaRef} className="pulo__mundo"
