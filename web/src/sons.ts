@@ -376,8 +376,8 @@ export function tocarTrilha(url: string, info?: InfoTrilha) {
       .then(() => console.debug(`[sons] trilha "${url}" tocando`))
       .catch((erro) => console.warn(`[sons] trilha não tocou ${url}:`, erro));
   } else console.debug(`[sons] trilha "${url}" carregada, mas muda (régua de Música em 0)`);
-  animarVolume(nova, volumeAlvoTrilha(), 900);
-  if (antiga) animarVolume(antiga, 0, 600, () => antiga.pause());
+  animarVolume(nova, volumeAlvoTrilha(), 450);
+  if (antiga) animarVolume(antiga, 0, 300, () => antiga.pause());
   if (info) {
     infoTrilhaAtual = info;
     window.dispatchEvent(new CustomEvent<InfoTrilha>(EVENTO_TRILHA_INFO, { detail: info }));
