@@ -22,6 +22,8 @@ import { abrirPersonalizar } from "./personalizacao/rota";
 import { RoleDeCarrinho } from "./carrinho/RoleDeCarrinho";
 import { BotaoTema } from "./BotaoTema";
 import { BotaoLibras } from "./BotaoLibras";
+import { PainelCrise } from "./AjudaAgora";
+import { ehMenorDeIdade } from "./menor";
 import { DIAS_DO_PLANO, SEMANAS, TOTAL_MISSOES, alternarMissao, diaDeInicio, usePlano, type EstadoPlano, type Missao } from "./plano";
 
 const CHAVE_PRIMEIRO_ACESSO = "rqr:primeiro-acesso";
@@ -116,6 +118,8 @@ export default function App() {
   // false = fechada; true = mapa; "cap1" = primeiro acesso, direto no capítulo 1.
   const [historia, setHistoria] = useState<boolean | "cap1">(false);
   const [abrindo, setAbrindo] = useState(true);
+  // Respondeu que tem menos de 18 anos (tela de idade da história): só a tela de ajuda, sem o resto do app.
+  const [menorDeIdade, setMenorDeIdade] = useState(ehMenorDeIdade);
   const conhecer = useConhecer();
   const { perfil } = usePerfil();
   const nomeBroto = nomeDoBroto(perfil);
@@ -204,6 +208,8 @@ export default function App() {
 
   const abrirCrise = () => { setCrise(true); setEvento({ humor: "apoio", ate: Date.now() + 10 * 60_000 }); };
   const fecharCrise = () => { setCrise(false); setEvento({ humor: "apoio", ate: Date.now() + 30_000 }); };
+
+  if (menorDeIdade) return <PainelCrise bloqueio aoFechar={() => {}} />;
 
   return (
     <div className="palco">
@@ -462,7 +468,7 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
-      {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
+      {historia && <Historia aoFechar={() => setHistoria(false)} aoMenorDeIdade={() => { setHistoria(false); setMenorDeIdade(true); }} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined}
         trilhaRetorno={aba === "jogos" ? "jogos" : "app"} />}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);

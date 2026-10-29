@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useRef, useState, type FocusEvent } from "react";
 import { tocar } from "../sons";
 import { usePerfil, NOME_MAX } from "../personalizacao";
 import { useAparencia, useProgresso } from "../personalizacao/armazenamento";
 import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, metaCurta, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
 import { Bichinho } from "../Bichinho";
+import { Icone } from "../Icone";
+import type { NomeIcone } from "../icones-data";
 import { MOTIVOS, METAS, guardarConhecer, type Conhecer } from "./conhecer";
 import type { Passo } from "./tipos";
 
@@ -90,11 +92,11 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
   );
 }
 
-/** Ícone de cada motivo (decorativo: o texto já diz tudo). */
-const ICONE_MOTIVO: Record<string, string> = {
-  "Minha família": "🏡", "Meus filhos": "🧒", "Pagar dívidas": "🧾", "Guardar dinheiro pra um sonho": "🌱",
-  "Dormir melhor": "🌙", "Minha saúde": "💚", "Meu trabalho ou estudo": "📚", "Voltar a confiar em mim": "💪",
-  "Meu relacionamento": "🤝", "Alguém me pediu": "💬", "Só quero entender melhor": "🔎",
+/** Ícone de cada motivo (decorativo: o texto já diz tudo). Lucide, nada de emoji. */
+const ICONE_MOTIVO: Record<string, NomeIcone> = {
+  "Minha família": "house", "Meus filhos": "baby", "Pagar dívidas": "receipt", "Guardar dinheiro pra um sonho": "sprout",
+  "Dormir melhor": "moon", "Minha saúde": "heart", "Meu trabalho ou estudo": "briefcase", "Voltar a confiar em mim": "shieldCheck",
+  "Meu relacionamento": "handHeart", "Alguém me pediu": "messageCircle", "Só quero entender melhor": "search",
 };
 
 export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
@@ -102,6 +104,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
   const [texto, setTexto] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [marcados, setMarcados] = useState<string[]>([]);
+  const enviado = useRef(false);
 
   if (tipo === "aparencia") return <Aparencia aoFim={aoFim} />;
 
@@ -121,25 +124,36 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
 
   if (tipo === "nome") {
     const enviar = () => {
+      if (enviado.current) return;
       tocar("clique");
       const e = mudarNome(texto);
       if (e) { setErro(e === "longo" ? `Até ${NOME_MAX} letras.` : "Use só letras."); return; }
       const nome = texto.replace(/\s+/g, " ").trim() || null;
+      enviado.current = true;
       mudar({ nome });
       aoFim(null);
+    };
+    // No celular, o "Pronto" do teclado só fechava o teclado e a pessoa precisava apertar o
+    // "Pronto" da tela de novo. Agora fechar o teclado com um nome escrito já confirma.
+    const aoSair = (e: FocusEvent<HTMLInputElement>) => {
+      const destino = e.relatedTarget as HTMLElement | null;
+      if (!texto.trim() || destino?.closest(".especial")) return;
+      enviar();
     };
     return (
       <form className="especial" onSubmit={(e) => { e.preventDefault(); enviar(); }}>
         <label htmlFor="especial-nome" className="especial__rotulo">Como {conversa.broto ?? "o alien"} te chama (opcional)</label>
         <input id="especial-nome" className="especial__campo" value={texto} maxLength={NOME_MAX + 5} autoComplete="nickname"
-          enterKeyHint="done" autoCapitalize="words" spellCheck={false}
+          enterKeyHint="done" onBlur={aoSair} autoCapitalize="words" spellCheck={false}
           onFocus={(e) => window.setTimeout(() => e.target.scrollIntoView({ block: "center" }), 300)}
           onChange={(e) => { setTexto(e.target.value); setErro(null); }} aria-describedby={erro ? "especial-nome-erro" : undefined} />
         {erro && <p id="especial-nome-erro" className="especial__erro" role="alert">{erro}</p>}
-        <button className="rqr-botao" type="submit">Pronto</button>
-        <button className="historia-opcao historia-opcao--leve" type="button" onClick={() => { tocar("clique"); mudar({ nome: null }); aoFim(null); }}>
-          Prefiro não dizer
-        </button>
+        <div className="especial__fim">
+          <button className="historia-opcao historia-opcao--leve" type="button" onClick={() => { tocar("clique"); mudar({ nome: null }); aoFim(null); }}>
+            Prefiro não dizer
+          </button>
+          <button className="rqr-botao" type="submit">Pronto</button>
+        </div>
       </form>
     );
   }
@@ -154,7 +168,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
         <div className="especial__chips" role="group" aria-label="O que te trouxe aqui (pode marcar vários)">
           {MOTIVOS.map((m) => (
             <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => { tocar("clique"); alternar(m); }}>
-              <span className="chip__icone" aria-hidden="true">{ICONE_MOTIVO[m]}</span>{m}</button>
+              <span className="chip__icone" aria-hidden="true">{ICONE_MOTIVO[m] && <Icone nome={ICONE_MOTIVO[m]} tamanho={18} />}</span><span className="chip__texto">{m}</span></button>
           ))}
         </div>
         <button className="rqr-botao" disabled={!marcados.length} onClick={() => {

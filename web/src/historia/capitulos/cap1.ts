@@ -45,6 +45,8 @@ export const cap1: Capitulo = {
     { especial: "batismo", humor: "calmo", fala: "Lá na Vila, a família chama a gente de \"pequeno\" até a gente sair de casa. O nome de verdade quem dá é o primeiro amigo que a gente faz longe dela. E eu nunca tinha saído… Então, por enquanto, eu não tenho nome." },
     { especial: "nome", fala: "E você? Como eu te chamo? Pode ser apelido. Ou eu te chamo de \"você\" mesmo." },
     { fala: "Prazer, {nome}. Você é o primeiro humano que eu vejo de perto. E a recepção tá melhor que a do ET de Varginha. Ele foi parar no jornal, e eu ganhei alguém pra conversar." },
+    // Personalização logo no começo: a pessoa já deixa o Broto com a cara dela.
+    { especial: "aparencia", fala: "A queda bagunçou minhas cores. Quer me ajudar a arrumar? Ou eu fico assim mesmo." },
     { cena: "vila", fala: "Tá vendo aquela bolinha lá no alto, no meio das estrelas? É a Vila Estrela. Minha casa." },
     { fala: "É um asteroide pequeno. Umas vinte casas, um quintal pra cada uma. Minha maior aventura até ontem era ir na casa do vizinho. Olha eu agora." },
     { cena: "colheita", fala: "Lá a gente vive de poeira de luz. Toda manhã a gente colhe a poeira que o sol deixa nas pedras.", opcoes: [
@@ -79,7 +81,6 @@ export const cap1: Capitulo = {
     { cena: "estrelas", humor: "calmo", fala: "Sabe o que a minha Vó diz? Que estrela sozinha é só um ponto. Mas várias juntas viram desenho no céu. Constelação." },
     { fala: "Quando eu olhei pra baixo e vi você, tive coragem de tentar a próxima plataforma. Obrigado por ficar." },
     { cena: "regua", fala: "E olha, a altura que a gente subiu hoje ninguém tira. Amanhã eu começo dali, não do chão." },
-    { especial: "aparencia", fala: "A queda bagunçou minhas cores. Quer me ajudar a arrumar? Ou eu fico assim mesmo." },
     { humor: "apoio", fala: "Posso te contar uma coisa? Eu não sou médico nem nada. Nem sei me virar direito longe de casa. Mas escutar eu sei. E você não precisa me contar nada que não queira." },
     { especial: "motivo", humor: "calmo", fala: "Se um dia quiser me contar o que te trouxe até aqui, eu escuto. Pode ser hoje, outro dia ou nunca." },
     { especial: "meta", fala: "Lá na Vila aconteceu uma coisa com aposta. Um dia eu te conto. E você, com as apostas, o que faz sentido agora? Pode não responder." },

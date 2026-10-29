@@ -9,6 +9,7 @@ import {
 } from "./progresso";
 import { useModal } from "./useModal";
 import { tocar } from "../sons";
+import { marcarMenorDeIdade } from "../menor";
 import type { IdCapitulo } from "./tipos";
 import "./historia.css";
 
@@ -19,16 +20,20 @@ import "./historia.css";
  * Fechar o jogo antes do fim também leva à conversa: não existe derrota.
  * `iniciar`: abre direto num capítulo (primeiro acesso do app), e ao terminar fecha a história.
  * A pergunta dos 18 anos tem tela própria, em voz neutra, antes do cap. 1: não é conversa do alien
- * (skill conversa-broto). Só "Sim" e "Não", e a resposta vale só para esta visita.
+ * (skill conversa-broto). Só "Sim" e "Não". "Não" fica gravado (menor.ts) e o app passa a mostrar só a ajuda.
  */
 type Tela =
   | { tipo: "mapa" }
-  | { tipo: "idade"; id: IdCapitulo; menorDeIdade?: boolean }
+  | { tipo: "idade"; id: IdCapitulo }
   | { tipo: "abertura" | "antes" | "jogo" | "depois"; id: IdCapitulo; folhas?: number };
 
-type Props = { aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo; trilhaRetorno?: "app" | "jogos" };
+type Props = {
+  aoFechar: () => void; reduzir: boolean; iniciar?: IdCapitulo; trilhaRetorno?: "app" | "jogos";
+  /** "Não tenho 18 anos": o app passa a mostrar só a tela de ajuda. */
+  aoMenorDeIdade?: () => void;
+};
 
-export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app" }: Props) {
+export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app", aoMenorDeIdade }: Props) {
   const caixa = useRef<HTMLDivElement>(null);
   const titulo = useRef<HTMLHeadingElement>(null);
   const botaoAjuda = useRef<HTMLButtonElement>(null);
@@ -111,26 +116,19 @@ export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app" }: 
           <button className="historia__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar a história">×</button>
 
           {tela.tipo === "idade" ? (
-            tela.menorDeIdade ? (
-              <>
-                <p className="historia__aviso">
-                  Este app é para maiores de 18 anos. Se quiser conversar com alguém, procure um adulto de confiança ou a unidade
-                  de saúde do seu bairro. O CVV atende de graça, a qualquer hora, no 188. A história continua aberta para você.
-                </p>
-                <button className="rqr-botao" onClick={() => { tocar("clique"); comecar(tela.id, true); }}>Continuar</button>
-              </>
-            ) : (
-              <>
-                <p className="historia__aviso">Antes de começar: você tem 18 anos ou mais?</p>
+            <>
+              <p className="historia__aviso">Antes de começar: você tem 18 anos ou mais?</p>
+              <div className="historia__par">
                 <button className="rqr-botao" onClick={() => { tocar("clique"); setMenor(false); comecar(tela.id, true); }}>Sim</button>
-                <button className="rqr-botao" onClick={() => { tocar("clique"); setMenor(true); setTela({ ...tela, menorDeIdade: true }); }}>Não</button>
-              </>
-            )
+                <button className="rqr-botao" onClick={() => { tocar("clique"); marcarMenorDeIdade(); aoMenorDeIdade?.(); }}>Não</button>
+              </div>
+            </>
           ) : aviso ? (
             <>
               <p className="historia__aviso">Essa história fala de apostas. Pode pular quando quiser.</p>
               <button className="rqr-botao" onClick={() => { tocar("clique"); marcarAvisoVisto(); setAviso(false); }}>Começar</button>
-              <button className="historia-agora-nao" onClick={() => { tocar("clique"); aoFechar(); }}>Agora não</button>
+              {/* No primeiro acesso não tem "Agora não": a história é a apresentação do app. */}
+              {!iniciar && <button className="historia-agora-nao" onClick={() => { tocar("clique"); aoFechar(); }}>Agora não</button>}
             </>
           ) : (
             <ul className="historia__mapa">

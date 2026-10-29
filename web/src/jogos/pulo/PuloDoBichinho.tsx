@@ -1,3 +1,4 @@
+import { Icone } from "../../Icone";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
@@ -494,9 +495,9 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   return (
     <div className="pulo" role="dialog" aria-modal="true" aria-labelledby="pulo-titulo">
       <div className="pulo__topo">
-        <h2 id="pulo-titulo" className="pulo__titulo">Pulo do Bichinho</h2>
+        <h2 id="pulo-titulo" className="sr-only">Pulo do Bichinho</h2>
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>
-          <b>{pontos} m</b> · 🍃 {folhas}
+          <b>{pontos} m</b> · <Icone nome="sprout" tamanho={16} /> {folhas}
         </span>
         <BotaoLibras />
         <BotaoTema compacto />

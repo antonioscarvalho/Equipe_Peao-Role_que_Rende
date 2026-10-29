@@ -181,7 +181,9 @@ const CHAVE_VOL_MUSICA = "rqr:volume-musica";
 function lerVolumeGravado(chave: string, padrao: number): number {
   if (typeof window === "undefined") return padrao;
   try {
-    const v = Number(localStorage.getItem(chave));
+    const guardado = localStorage.getItem(chave);
+    if (guardado === null || guardado === "") return padrao; // Number(null) é 0: sem isso o app abria mudo.
+    const v = Number(guardado);
     return Number.isFinite(v) && v >= 0 && v <= 10 ? v : padrao;
   } catch {
     return padrao;
@@ -198,7 +200,7 @@ function gravarVolume(chave: string, v: number) {
 
 // Escala 0 a 10 (como a régua de vontade), não um booleano: 0 é mudo, sem precisar de outro estado.
 let volumeEfeitos = lerVolumeGravado(CHAVE_VOL_EFEITOS, 4);
-let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 4);
+let volumeMusica = lerVolumeGravado(CHAVE_VOL_MUSICA, 2);
 
 export function volumesIniciais() {
   return { efeitos: volumeEfeitos, musica: volumeMusica };

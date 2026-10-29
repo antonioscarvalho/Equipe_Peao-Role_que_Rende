@@ -1463,7 +1463,7 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .historia-caixa.is-tocavel { cursor: pointer; }
 
 /* 16. Perguntas da pessoa: número ímpar de perguntas não deixa buraco na grade. */
-.historia-dialogo__acoes > .historia-opcao:nth-last-child(2):nth-child(odd):not(.historia-opcao--seguir) { grid-column: 1 / -1; }
+.historia-dialogo__acoes > .historia-opcao:nth-child(odd):has(+ .historia-opcao--seguir) { grid-column: 1 / -1; }
 
 /* 12/13. Motivos: chips com ícone, "Prefiro não dizer" discreto. */
 .especial__chips .chip { display: inline-flex; align-items: center; gap: 6px; }
@@ -1532,3 +1532,34 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 :root[data-tema="escuro"] .especial__item { background: var(--livro-grao), #36357A; color: var(--noite-creme); border-color: var(--noite-linha); box-shadow: 0 4px 0 var(--noite-funda); }
 :root[data-tema="escuro"] .especial__item.is-on { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
 :root[data-tema="escuro"] .especial__item:disabled { background: var(--livro-grao), #24234F; }
+
+/* ---------- Revisão "O botão de fala 3d deveria ser azul" ---------- */
+/* Título da história recebe foco por script (tabIndex -1): sem retângulo em volta. */
+.historia__titulo:focus, .historia__titulo:focus-visible { outline: none; box-shadow: none; }
+
+/* Sim / Não lado a lado, mesma largura. */
+.historia__par { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.historia__par > .rqr-botao { width: 100%; margin: 0; }
+
+/* Geometria única das escolhas da história: 2 por linha, e a última sobra (número ímpar)
+   ocupa a linha inteira. Vale para escolhas soltas, perguntas do Broto e perguntas do app. */
+.historia-dialogo__acoes > .historia-opcao:last-child:nth-child(odd),
+.historia-dialogo .especial:not(form):not(.especial--aparencia) > .historia-opcao:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+/* Campo de nome: "Prefiro não dizer" e "Pronto" lado a lado. */
+.historia-dialogo form.especial .especial__fim > .historia-opcao { box-shadow: 0 5px 0 var(--livro-tinta); }
+
+/* Motivos: todas as opções na tela, em grade de 2, sem rolagem. */
+.historia-dialogo:has(.especial__chips) .historia-dialogo__acoes { max-height: none; overflow: visible; }
+.historia-dialogo .especial__chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.historia-dialogo .especial__chips .chip {
+  width: 100%; min-height: 40px; padding: 4px 8px; justify-content: flex-start; text-align: left;
+  font-size: .8rem; line-height: 1.15; border-radius: var(--livro-raio-p);
+}
+.historia-dialogo .especial__chips .chip:last-child:nth-child(odd) { grid-column: 1 / -1; justify-content: center; }
+.chip__texto { min-width: 0; }
+@media (max-height: 640px) { .historia-dialogo .especial__chips .chip { min-height: 34px; font-size: .75rem; } }
+
+/* Pulo do Bichinho: sem faixa colorida no topo, só metros e folhas e os botões. */
+.pulo__topo { background: none !important; border: 0 !important; box-shadow: none; }
+.pulo__placar { display: inline-flex; align-items: center; gap: 4px; margin-right: auto; }
