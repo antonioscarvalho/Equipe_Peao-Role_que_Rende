@@ -1238,3 +1238,7 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 :root[data-tema="escuro"] .tabbar__historia .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-tomate); color: var(--livro-tinta); border-color: var(--livro-tinta); }
 .destaque--historia, .destaque--historia.is-pronto { background: var(--livro-grao), var(--livro-tomate-claro); color: var(--livro-tinta); }
 :root[data-tema="escuro"] .destaque--historia, :root[data-tema="escuro"] .destaque--historia.is-pronto { background: var(--livro-grao), var(--noite-tomate); color: var(--noite-creme); }
+/* O botão central do menu continua amarelo; só o cartão da História na tela inicial é vermelho. */
+.tabbar__historia .tabbar__sos-circulo, :root[data-tema="escuro"] .tabbar__historia .tabbar__sos-circulo { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-color: var(--livro-tinta); }
+/* A estrelinha é decorativa: texto alternativo vazio para não entrar no nome do botão. */
+.tabbar__historia.is-novo .tabbar__sos-circulo::after { content: "★" / ""; }

@@ -237,6 +237,40 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 /* ---------- Interruptores (animações e sons) ---------- */
 .interruptores { display: flex; gap: 8px; align-items: flex-start; }
 
+/* ---------- Controle de volume (efeitos e música) ---------- */
+.controles-volume { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 320px; margin: 10px 0; }
+.controle-volume__topo { display: flex; justify-content: space-between; align-items: baseline; font-weight: 700; font-size: 13px; }
+.controle-volume__valor { color: var(--rqr-texto-fraco); font-weight: 600; }
+.controle-volume__linha { display: flex; align-items: center; gap: 6px; }
+.controle-volume__passo { display: grid; place-items: center; width: 44px; height: 44px; min-width: 44px; border-radius: 99px;
+  border: 3px solid var(--rqr-borda); background: var(--rqr-fundo-conteudo); color: var(--rqr-texto); font-size: 20px; font-weight: 700;
+  cursor: pointer; flex-shrink: 0; }
+.controle-volume__passo:focus-visible { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 2px; }
+.controle-volume__linha input[type="range"] { flex: 1; height: 44px; margin: 0; background: transparent; appearance: none; cursor: pointer; }
+.controle-volume__linha input[type="range"]::-webkit-slider-runnable-track {
+  height: 10px; border-radius: 99px; background: var(--rqr-fundo-suave); border: 2px solid var(--rqr-borda);
+}
+.controle-volume__linha input[type="range"]::-moz-range-track {
+  height: 10px; border-radius: 99px; background: var(--rqr-fundo-suave); border: 2px solid var(--rqr-borda);
+}
+.controle-volume__linha input[type="range"]::-webkit-slider-thumb {
+  /* contraste: ignorar pseudo-elemento sem texto (só a bolinha do controle); o script presume
+     cor de texto herdada do body, mas nada é desenhado dentro dele; o contorno é que importa. */
+  appearance: none; width: 28px; height: 28px; margin-top: -9px; border-radius: 50%;
+  background: var(--rqr-azul-claro); border: 3px solid var(--rqr-borda); cursor: pointer;
+}
+.controle-volume__linha input[type="range"]::-moz-range-thumb {
+  /* contraste: ignorar pseudo-elemento sem texto (só a bolinha do controle); mesmo motivo do -webkit- acima. */
+  width: 28px; height: 28px; border-radius: 50%; background: var(--rqr-azul-claro); border: 3px solid var(--rqr-borda); cursor: pointer;
+}
+/* contraste: o rosa-escuro padrão do foco não passa 3:1 sobre o azul-claro da bolinha (medido:
+   1,65:1) — o mesmo buraco de paleta que já existe no .interruptor e no .botao-tema:hover.
+   Em vez de herdar essa falha, uso azul-escuro (5,54:1 sobre o azul-claro) só aqui, e como
+   `box-shadow` (não `outline`): a sombra segue o `border-radius: 50%`, então o anel fica
+   100% em cima da bolinha redonda, sem canto encostando no trilho (onde azul-escuro erra). */
+.controle-volume__linha input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px var(--rqr-azul-escuro); }
+.controle-volume__linha input[type="range"]:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px var(--rqr-azul-escuro); }
+
 /* ---------- Botão de tema (Automático → Claro → Escuro) ---------- */
 .botao-tema { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0; border: 0; background: none;
   cursor: pointer; font-size: 11px; font-weight: 700; text-align: center; max-width: 76px; color: var(--rqr-texto); }
@@ -295,6 +329,33 @@ h1, h2 { font-family: "Nunito Sans", var(--rqr-font-titulo); margin: 0; }
 .pulo__resultado { margin: 0; font-size: 18px; }
 .pulo__recorde { margin: 0; font-weight: 800; color: var(--rqr-rosa-escuro); }
 .pulo__nota { margin: 0; padding: 6px 12px; font-size: 12px; text-align: center; color: var(--rqr-amarelo); }
+
+/* HUD "tocando agora" (estilo Forza Horizon / Cozy Plants): aparece ao trocar de trilha e some só. */
+.hud-musica {
+  position: fixed; z-index: 55; pointer-events: none;
+  top: calc(8px + env(safe-area-inset-top, 0px)); right: calc(8px + env(safe-area-inset-right, 0px));
+  display: flex; align-items: center; gap: 8px; max-width: 220px; padding: 8px 12px;
+  border-radius: 14px; background: var(--rqr-fundo-conteudo); color: var(--rqr-texto);
+  border: 2px solid var(--rqr-borda); box-shadow: 0 2px 0 rgb(0 0 0 / .2);
+  animation: hud-musica-entra var(--rqr-dur-base) var(--rqr-ease-pop), hud-musica-sai .5s ease-in 4s forwards;
+}
+.reduzir-animacoes .hud-musica { animation: hud-musica-sai .5s ease-in 4s forwards; }
+.hud-musica__texto { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.hud-musica__titulo { font-weight: 800; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hud-musica__artista { font-size: 11px; color: var(--rqr-texto-fraco); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@keyframes hud-musica-entra { from { opacity: 0; translate: 16px 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes hud-musica-sai { from { opacity: 1; } to { opacity: 0; } }
+
+/* "Preciso de ajuda agora" (specs 001 e 006): fixo, acima de todas as camadas, 1 toque. */
+.ajuda-agora {
+  position: fixed; z-index: 60;
+  top: calc(8px + env(safe-area-inset-top, 0px)); left: calc(8px + env(safe-area-inset-left, 0px));
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px;
+  border-radius: 999px; border: 2px solid var(--rqr-amarelo); cursor: pointer;
+  background: var(--rqr-azul-escuro); color: var(--rqr-branco); font: 800 14px/1 var(--rqr-font-titulo);
+  box-shadow: 0 2px 0 rgb(0 0 0 / .2);
+}
+.ajuda-agora:focus-visible { outline: 3px solid var(--rqr-rosa-escuro); outline-offset: 3px; }
 
 /* Painel do protocolo de crise (CVV 188, SAMU 192), aberto pela história do Broto. */
 .ajuda-agora__painel { z-index: 70; max-width: 100%; }

@@ -14,7 +14,7 @@ import { ORDEM, capitulosConcluidos, estaDesbloqueado, jaFezCapituloHoje, libera
 import { capitulos, TITULOS } from "./historia/capitulos";
 import { apagarConhecer, useConhecer } from "./historia/conhecer";
 import type { NomeIcone } from "./icones-data";
-import { ligarSons, tocar, tocarMissao } from "./sons";
+import { definirVolumeEfeitos, definirVolumeMusica, ouvirTrilhaInfo, precarregarTrilhas, tocar, tocarMissao, tocarTrilha, volumesIniciais } from "./sons";
 import { nomeDoBroto, useAparenciaVisivel, usePerfil } from "./personalizacao";
 import { useProgresso } from "./personalizacao/armazenamento";
 import { categoriaDe, proximoMarco, quantoFalta } from "./personalizacao/aparencia";
@@ -69,11 +69,36 @@ function capituloDeHoje(): { titulo: string; estado: string; pronto: boolean } {
   return { titulo, estado: "Depois do anterior", pronto: false };
 }
 
+/** Régua de volume (0 a 10), no mesmo padrão da régua de vontade: setas, Home/End e os botões −/+
+ * cobrem quem não consegue arrastar (2.5.7); `aria-valuetext` diz a porcentagem, não só o número (4.1.2). */
+function ControleVolume({ id, rotulo, valor, aoMudar }: { id: string; rotulo: string; valor: number; aoMudar: (v: number) => void }) {
+  const pct = valor * 10;
+  return (
+    <div className="controle-volume">
+      <div className="controle-volume__topo">
+        <label htmlFor={id}>{rotulo}</label>
+        <span className="controle-volume__valor" aria-hidden="true">{valor === 0 ? "Mudo" : `${pct}%`}</span>
+      </div>
+      <div className="controle-volume__linha">
+        <button type="button" className="controle-volume__passo" aria-label={`Diminuir ${rotulo.toLowerCase()}`}
+          onClick={() => aoMudar(Math.max(0, valor - 1))}>−</button>
+        {/* a11y: tem rótulo, sim — <label htmlFor={id}> duas linhas acima, mesmo `id`. O auditar.mjs
+            não liga `htmlFor={id}`/`id={id}` dinâmico entre elementos não-irmãos; falso positivo. */}
+        <input id={id} type="range" min={0} max={10} step={1} value={valor}
+          onChange={(e) => aoMudar(Number(e.target.value))}
+          aria-valuetext={valor === 0 ? "mudo" : `${pct} por cento`} />
+        <button type="button" className="controle-volume__passo" aria-label={`Aumentar ${rotulo.toLowerCase()}`}
+          onClick={() => aoMudar(Math.min(10, valor + 1))}>+</button>
+      </div>
+    </div>
+  );
+}
+
 function BotaoAba({ aba, atual, mudar, icone, rotulo }: { aba: Aba; atual: Aba; mudar: (a: Aba) => void; icone: NomeIcone; rotulo: string }) {
   const ativa = aba === atual;
   return (
     <button className={`tabbar__item ${ativa ? "is-active" : ""}`} aria-current={ativa ? "page" : undefined}
-      onClick={() => { mudar(aba); tocar("clique"); }}>
+      onClick={() => { tocar("clique"); mudar(aba); }}>
       <Icone nome={icone} tamanho={22} />
       <span>{rotulo}</span>
     </button>
@@ -100,16 +125,48 @@ export default function App() {
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
   const [aviso, setAviso] = useState("");
-  // Sons das missões ligados por padrão; o interruptor desliga.
+  // Efeitos (missões, cliques) e música (cantiga, trilha) têm volume e guarda separados,
+  // numa régua de 0 a 10 (cada setter já aplica e grava; nenhum efeito extra precisa disso).
   // A respiração (SOS) continua sem som por padrão, conforme spec 003 CA-3.
-  const [sons, setSons] = useState(true);
+  const [volumes, setVolumes] = useState(volumesIniciais);
+  const definirEfeitos = (v: number) => {
+    const eraMudo = volumes.efeitos === 0;
+    definirVolumeEfeitos(v);
+    setVolumes((x) => ({ ...x, efeitos: v }));
+    if (eraMudo && v > 0) tocar("clique");
+  };
+  const definirMusica = (v: number) => {
+    definirVolumeMusica(v);
+    setVolumes((x) => ({ ...x, musica: v }));
+  };
   const aparencia = useAparenciaVisivel();
   const progresso = useProgresso();
   const feitosCaps = capitulosConcluidos();
 
-  useEffect(() => { ligarSons(sons); }, [sons]);
   useEffect(() => { document.title = `${TITULOS_ABA[aba]} · ${nomeBroto}`; }, [aba, nomeBroto]);
   useEffect(() => { setSemanaVista(plano.semana); }, [plano.semana]);
+
+  // Trilha leve, alegre e energética pra todo o app (não só a história) — abaixa, não para,
+  // em telas de crise e na respiração (ver abaixarTrilha em AjudaAgora.tsx e Respiracao.tsx).
+  useEffect(() => {
+    tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Um Passo de Cada Vez", artista: "Tema do app" });
+    // Baixa as outras trilhas (jogos, cantiga) em segundo plano, sem tocar — assim, quando a
+    // pessoa realmente entrar num mini jogo ou numa cena, a troca é instantânea, sem flicar.
+    precarregarTrilhas();
+  }, []);
+
+  // HUD "tocando agora" (Forza Horizon / Cozy Plants): some sozinho depois de uns segundos.
+  const [hudMusica, setHudMusica] = useState<{ titulo: string; artista: string } | null>(null);
+  useEffect(() => {
+    const tempo = { current: 0 };
+    const parar = ouvirTrilhaInfo((info) => {
+      setHudMusica(info);
+      window.clearTimeout(tempo.current);
+      tempo.current = window.setTimeout(() => setHudMusica(null), 4500);
+    });
+    return () => { window.clearTimeout(tempo.current); parar(); };
+  }, []);
+
   useEffect(() => {
     document.documentElement.classList.toggle("reduzir-animacoes", reduzir);
   }, [reduzir]);
@@ -361,19 +418,20 @@ export default function App() {
                 <input type="checkbox" checked={reduzir} onChange={(e) => setReduzir(e.target.checked)} />
                 <span className="interruptor__trilho" aria-hidden="true" />
               </label>
-              <label className="ajuste">
-                <span className="ajuste__texto">Sons<small>Sons ao concluir missões</small></span>
-                <input type="checkbox" checked={sons} onChange={(e) => { setSons(e.target.checked); if (e.target.checked) { ligarSons(true); tocar("clique"); } }} />
-                <span className="interruptor__trilho" aria-hidden="true" />
-              </label>
               <div className="ajuste">
                 <span className="ajuste__texto">Tema<small>Claro, escuro ou automático</small></span>
                 <BotaoTema compacto />
               </div>
-              <button className="ajuste ajuste--link" onClick={() => abrirPersonalizar()}>
+              <button className="ajuste ajuste--link" onClick={() => { tocar("clique"); abrirPersonalizar(); }}>
                 <span className="ajuste__texto">Personalizar<small>Cores, roupas e acessórios do {nomeBroto}</small></span>
                 <span aria-hidden="true" className="ajuste__seta">›</span>
               </button>
+            </div>
+
+            <h2 className="ajustes__grupo">Som</h2>
+            <div className="controles-volume">
+              <ControleVolume id="volume-efeitos" rotulo="Efeitos" valor={volumes.efeitos} aoMudar={definirEfeitos} />
+              <ControleVolume id="volume-musica" rotulo="Música" valor={volumes.musica} aoMudar={definirMusica} />
             </div>
 
             {conhecer && (
@@ -399,6 +457,15 @@ export default function App() {
         <p className="sr-only" aria-live="polite">{aviso}</p>
       </main>
       <Confete disparo={confete} reduzir={reduzir} />
+      {hudMusica && (
+        <div className="hud-musica" role="status" aria-live="polite">
+          <Icone nome="music" tamanho={18} />
+          <div className="hud-musica__texto">
+            <span className="hud-musica__titulo">{hudMusica.titulo}</span>
+            <span className="hud-musica__artista">{hudMusica.artista}</span>
+          </div>
+        </div>
+      )}
       {historia && <Historia aoFechar={() => setHistoria(false)} reduzir={reduzir} iniciar={historia === "cap1" ? "cap1" : undefined} />}
       {abrindo && <Abertura reduzir={reduzir} aoFim={() => {
         setAbrindo(false);

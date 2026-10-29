@@ -8,6 +8,7 @@ import {
   ORDEM, avisoVisto, capitulosConcluidos, concluirCapitulo, estaDesbloqueado, liberaAmanha, marcarAvisoVisto, marcarParte, parteDoCapitulo,
 } from "./progresso";
 import { useModal } from "./useModal";
+import { tocar } from "../sons";
 import type { IdCapitulo } from "./tipos";
 import "./historia.css";
 
@@ -101,7 +102,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
         <div className="tela-libras"><BotaoLibras /></div>
         <div className="historia__caixa">
           <h2 id="historia-titulo" ref={titulo} className="historia__titulo" tabIndex={-1}>História do {alien}</h2>
-          <button className="historia__fechar" onClick={aoFechar} aria-label="Fechar a história">×</button>
+          <button className="historia__fechar" onClick={() => { tocar("clique"); aoFechar(); }} aria-label="Fechar a história">×</button>
 
           {tela.tipo === "idade" ? (
             tela.menorDeIdade ? (
@@ -122,8 +123,8 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
           ) : aviso ? (
             <>
               <p className="historia__aviso">Essa história fala de apostas. Pode pular quando quiser.</p>
-              <button className="rqr-botao" onClick={() => { marcarAvisoVisto(); setAviso(false); }}>Começar</button>
-              <button className="historia-agora-nao" onClick={aoFechar}>Agora não</button>
+              <button className="rqr-botao" onClick={() => { tocar("clique"); marcarAvisoVisto(); setAviso(false); }}>Começar</button>
+              <button className="historia-agora-nao" onClick={() => { tocar("clique"); aoFechar(); }}>Agora não</button>
             </>
           ) : (
             <ul className="historia__mapa">
@@ -135,7 +136,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
                 const estado = ok ? "Concluído · ler de novo" : !pronto ? "Em breve" : meio ? "Continuar" : livre ? "Disponível" : liberaAmanha(id) ? "Libera amanhã · faça uma missão hoje" : "Depois do anterior";
                 return (
                   <li key={id}>
-                    <button className={`historia-cap ${ok ? "is-ok" : ""}`} disabled={!livre} onClick={() => abrir(id)}>
+                    <button className={`historia-cap ${ok ? "is-ok" : ""}`} disabled={!livre} onClick={() => { tocar("clique"); abrir(id); }}>
                       <span>{TITULOS[id]}</span>
                       <span className="historia-cap__estado">{estado}</span>
                     </button>
@@ -144,7 +145,7 @@ export function Historia({ aoFechar, reduzir, iniciar }: Props) {
               })}
             </ul>
           )}
-          <button ref={botaoAjuda} className="historia-ajuda" onClick={() => setCrise(true)}>Preciso de ajuda agora</button>
+          <button ref={botaoAjuda} className="historia-ajuda" onClick={() => { tocar("clique"); setCrise(true); }}>Preciso de ajuda agora</button>
           <small className="historia-nota">{alien} é um apoio, não um terapeuta.</small>
           <p className="sr-only" aria-live="polite">{anuncio}</p>
         </div>

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BotaoLibras } from "../../BotaoLibras";
 import { Bichinho } from "../../Bichinho";
-import { tocar } from "../../sons";
+import { tocar, tocarTrilha } from "../../sons";
 import { useAparenciaVisivel } from "../../personalizacao";
 import { BotaoTema } from "../../BotaoTema";
 import { useEsconderVLibras } from "../../vlibras";
@@ -58,6 +58,16 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   const fechar = () => (aoTerminar ? aoTerminar({ folhas: jogo.current.folhasPegas }) : aoFechar());
   const fecharRef = useRef(fechar);
   fecharRef.current = fechar;
+
+  // Trilha própria do jogo, com transição suave pra entrar e, ao fechar, de volta pro tema do app.
+  useEffect(() => {
+    console.log("[pulo] montou, pedindo trilha-pulo.opus"); // diagnóstico: prova que este efeito roda
+    tocarTrilha("/sons/trilha-pulo.opus", { titulo: "Pulo do Bichinho", artista: "Trilha do jogo" });
+    return () => {
+      console.log("[pulo] desmontou, voltando pra trilha-alegre.opus");
+      tocarTrilha("/sons/trilha-alegre.opus", { titulo: "Um Passo de Cada Vez", artista: "Tema do app" });
+    };
+  }, []);
 
   // Estado do jogo fora do React (muda 60x por segundo).
   const jogo = useRef({
@@ -148,8 +158,10 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
   // Laço principal do jogo.
   useEffect(() => {
     if (estado !== "jogando") return;
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) { console.error("[pulo] sem canvas/contexto 2d — jogo não roda, sem som de pulo"); return; }
+    console.log("[pulo] laço do jogo começou");
     const css = getComputedStyle(document.documentElement);
     const cor = (n: string) => css.getPropertyValue(n).trim() || "#000";
     const C = {
@@ -310,13 +322,18 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada }: Props
         encerrar("tempo", `3 minutos de passeio! Você subiu ${g.maisAlta} metros e pegou ${g.folhasPegas} folhas. Que tal uma pausa?`);
         return;
       }
-      id = requestAnimationFrame(passo);
+      id = requestAnimationFrame(passoSeguro);
+    };
+    // Qualquer erro no laço (ex.: canvas/estado inesperado) aparece no console em vez de travar
+    // a partida em silêncio sem explicação.
+    const passoSeguro = (agora: number) => {
+      try { passo(agora); } catch (erro) { console.error("[pulo] erro no laço do jogo:", erro); }
     };
 
     // Pausa se a aba ficar escondida.
     const visib = () => { if (!document.hidden) ultimo = performance.now(); };
     document.addEventListener("visibilitychange", visib);
-    id = requestAnimationFrame(passo);
+    id = requestAnimationFrame(passoSeguro);
     return () => { cancelAnimationFrame(id); document.removeEventListener("visibilitychange", visib); };
   }, [estado, reduzir]);
 

@@ -3,6 +3,7 @@ import type { Capitulo, IdCapitulo, PropsJogo } from "../tipos";
 import type { Cena } from "../cenas/tipos";
 import { PuloDoBichinho } from "../../jogos/pulo/PuloDoBichinho";
 import { cap1 } from "./cap1";
+import { cap2 } from "./cap2";
 import { CenaCap1 } from "../cenas/CenaCap1";
 import { Queda } from "../Queda";
 
@@ -17,6 +18,7 @@ export type EntradaCapitulo = { capitulo: Capitulo; jogo?: ComponentType<PropsJo
 
 export const capitulos: Partial<Record<IdCapitulo, EntradaCapitulo>> = {
   cap1: { capitulo: cap1, jogo: PuloDoBichinho, nomeJogo: "Pulo do Bichinho", cena: CenaCap1, abertura: Queda },
+  cap2: { capitulo: cap2 },
 };
 
 /** Títulos do mapa para quem ainda não chegou (narrativa-broto.md, "Mapa"). */

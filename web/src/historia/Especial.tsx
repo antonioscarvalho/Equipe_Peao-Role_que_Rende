@@ -99,7 +99,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
           mudarNomeBroto("Broto");
           mudar({ broto: "Broto" });
           aoFim("Broto… Meu primeiro nome de verdade. Gostei.");
-        }}>Você parece um broto. Vou te chamar de Broto.</button>
+        }}>Nossa, você parece um broto. Vou te chamar de Broto.</button>
       </div>
     );
   }

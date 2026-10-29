@@ -22,7 +22,7 @@ Jovem adulto de uns 25 anos: esperto, mas ainda não é independente. Nunca tinh
 
 ## Backstory
 
-Chega sem nome: na Vila, o nome de verdade quem dá é o primeiro amigo feito longe de casa. A pessoa batiza ele no cap. 1 num comentário: "Você parece um broto. Vou te chamar de Broto." Não existe escolha de outro nome. Esperto e sarcástico com ele mesmo e com a Terra, nunca com a pessoa. Ver a skill `conversa-broto`.
+Chega sem nome: na Vila, o nome de verdade quem dá é o primeiro amigo feito longe de casa. A pessoa batiza ele no cap. 1 num comentário: "Nossa, você parece um broto. Vou te chamar de Broto." Não existe escolha de outro nome. Esperto e sarcástico com ele mesmo e com a Terra, nunca com a pessoa. Ver a skill `conversa-broto`.
 
 Viu a casa apagar lâmpada por lâmpada enquanto o pai ia ao Cometa da Sorte. Numa noite pegou a nave da família para buscar a luz de volta sozinho; a nave, sem combustível, apagou no meio do caminho e ele caiu como um meteoro na praça do bairro.
 
