@@ -1361,17 +1361,11 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .destaque { border-width: 2.5px; box-shadow: 0 5px 0 var(--livro-tinta); }
 .destaque:active { transform: translateY(5px); box-shadow: 0 0 0 var(--livro-tinta); }
 .destaque--historia, .destaque--historia.is-pronto { background: var(--livro-grao), var(--livro-lavanda); box-shadow: 0 5px 0 var(--livro-tinta); animation: none; }
-.destaque--historia::after { /* recorte da ilustração no canto, como uma figurinha */
-  content: ""; position: absolute; right: -10px; bottom: -14px; width: 64px; height: 64px; border-radius: 50%;
-  background: url("/cenarios/cap1-nave-pousada.webp") 50% 88% / 260% auto no-repeat; border: 2px solid var(--livro-tinta); opacity: .95;
-}
-.destaque--historia .destaque__titulo, .destaque--historia .destaque__estado { padding-right: 44px; }
 .destaque--presente { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); border-width: 2.5px; box-shadow: 0 5px 0 var(--livro-tinta); }
 .destaque--presente .destaque__rotulo { color: var(--livro-tinta); opacity: .8; }
 .presente__vitrine { background: var(--livro-grao), #FFFCF4; border: 2px solid var(--livro-tinta); }
 :root[data-tema="escuro"] .destaque { box-shadow: 0 5px 0 var(--noite-funda); border-color: var(--noite-funda); }
 :root[data-tema="escuro"] .destaque--historia, :root[data-tema="escuro"] .destaque--historia.is-pronto { background: var(--livro-grao), var(--noite-roxo); color: var(--noite-creme); }
-:root[data-tema="escuro"] .destaque--historia::after { background-image: url("/cenarios/cap4-banco-noite.webp"); border-color: var(--noite-funda); }
 :root[data-tema="escuro"] .destaque--presente { background: var(--livro-grao), var(--livro-sol); color: var(--livro-tinta); }
 :root[data-tema="escuro"] .destaque--presente .destaque__rotulo { color: var(--livro-tinta); }
 :root[data-tema="escuro"] .presente__vitrine { background: var(--livro-grao), #FFFCF4; border-color: var(--noite-funda); }
