@@ -1,5 +1,5 @@
 /**
- * Perfil da pessoa: como o Guardião a chama, a foto e o cenário. A aparência do bichinho é
+ * Perfil da pessoa: como o Broto a chama, a foto e o cenário. A aparência do bichinho é
  * de `aparencia.ts` e o perfil só a junta na leitura (`usePerfil`).
  *
  * Regras (skill design-etico-saude-digital, spec 008):
@@ -9,7 +9,7 @@
  */
 
 export interface Perfil {
-  /** Como o Guardião chama a pessoa. null = sem nome, e os textos falam "você". */
+  /** Como o Broto chama a pessoa. null = sem nome, e os textos falam "você". */
   nome: string | null;
   /** Nome que a pessoa deu ao alien no cap. 1 (skill conversa-broto). null = ainda não batizado. */
   nomeBroto: string | null;

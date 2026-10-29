@@ -65,7 +65,7 @@ export function PainelCrise({ aoFechar }: { aoFechar: () => void }) {
       <a className="ajuda" href="tel:192"><Icone nome="phone" /> SAMU · risco imediato · 192</a>
       <a className="ajuda" href="https://cvv.org.br" target="_blank" rel="noreferrer"><Icone nome="heartHandshake" /> Chat do CVV (precisa de internet)</a>
       <p>Você também pode ir à unidade de saúde (UBS) do seu bairro ou ao CAPS.</p>
-      <small>Este app é um apoio e não substitui atendimento profissional nem serviço de emergência.</small>
+      <small>O Meu amigo Broto! é um apoio e não substitui atendimento profissional nem serviço de emergência.</small>
       <button className="rqr-botao" onClick={() => { tocar("clique"); aoFechar(); }}>Voltar, sem pressa</button>
     </div>
   );

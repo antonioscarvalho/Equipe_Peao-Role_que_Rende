@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { tocar } from "../sons";
 import { usePerfil, NOME_MAX } from "../personalizacao";
 import { useAparencia, useProgresso } from "../personalizacao/armazenamento";
 import { CABECA, CORES, CORES_ROUPA, PEITO, ROSTO, ROUPAS, aparenciaVisivel, liberado, metaCurta, type Aparencia, type OpcaoItem } from "../personalizacao/aparencia";
@@ -42,14 +43,14 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
       </div>
       <div className="especial__abas" role="group" aria-label="O que mudar">
         {ABAS.map((a) => (
-          <button key={a.id} className={`especial__aba ${aba === a.id ? "is-on" : ""}`} aria-pressed={aba === a.id} onClick={() => setAba(a.id)}>{a.rotulo}</button>
+          <button key={a.id} className={`especial__aba ${aba === a.id ? "is-on" : ""}`} aria-pressed={aba === a.id} onClick={() => { tocar("clique"); setAba(a.id); }}>{a.rotulo}</button>
         ))}
       </div>
       {aba === "cor" && (
         <div className="especial__cores" role="group" aria-label="Cor do corpo">
           {CORES.map((c) => (
             <button key={c.id} className="especial__cor" style={{ background: c.valor }} aria-pressed={aparencia.cor === c.id}
-              aria-label={c.nome} onClick={() => mudar({ cor: c.id })} />
+              aria-label={c.nome} onClick={() => { tocar("clique"); mudar({ cor: c.id }); }} />
           ))}
         </div>
       )}
@@ -60,7 +61,7 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
             const on = aparencia[aba as keyof Aparencia] === it.id;
             return (
               <button key={it.id} className={`chip ${on ? "is-on" : ""}`} aria-pressed={on} disabled={!livre}
-                onClick={() => mudar({ [aba]: it.id } as Partial<Aparencia>)}>
+                onClick={() => { tocar("clique"); mudar({ [aba]: it.id } as Partial<Aparencia>); }}>
                 {it.nome}{!livre && it.meta && ` · ${metaCurta(it.meta)}`}
               </button>
             );
@@ -71,13 +72,13 @@ function Aparencia({ aoFim }: { aoFim: (r: string | null) => void }) {
         <div className="especial__cores" role="group" aria-label="Cor da roupa">
           {CORES_ROUPA.map((c) => (
             <button key={c.id} className="especial__cor" style={{ background: c.valor }} aria-pressed={aparencia.corRoupa === c.id}
-              aria-label={`Roupa ${c.nome}`} onClick={() => mudar({ corRoupa: c.id })} />
+              aria-label={`Roupa ${c.nome}`} onClick={() => { tocar("clique"); mudar({ corRoupa: c.id }); }} />
           ))}
         </div>
       )}
       <div className="especial__fim">
-        <button className="historia-opcao historia-opcao--leve" onClick={() => aoFim("Do jeito que eu caí, então. Tá valendo!")}>Deixar como está</button>
-        <button className="rqr-botao" onClick={() => aoFim("Ficou a minha cara! Quer dizer… a nossa. Dá pra mudar quando quiser, em Personalizar.")}>Pronto</button>
+        <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); aoFim("Do jeito que eu caí, então. Tá valendo!"); }}>Deixar como está</button>
+        <button className="rqr-botao" onClick={() => { tocar("clique"); aoFim("Ficou a minha cara! Quer dizer… a nossa. Dá pra mudar quando quiser, em Personalizar."); }}>Pronto</button>
       </div>
     </div>
   );
@@ -96,6 +97,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
     return (
       <div className="especial">
         <button className="historia-opcao" onClick={() => {
+          tocar("clique");
           mudarNomeBroto("Broto");
           mudar({ broto: "Broto" });
           aoFim("Broto… Meu primeiro nome de verdade. Gostei.");
@@ -106,6 +108,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
 
   if (tipo === "nome") {
     const enviar = () => {
+      tocar("clique");
       const e = mudarNome(texto);
       if (e) { setErro(e === "longo" ? `Até ${NOME_MAX} letras.` : "Use só letras."); return; }
       const nome = texto.replace(/\s+/g, " ").trim() || null;
@@ -121,7 +124,7 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
           onChange={(e) => { setTexto(e.target.value); setErro(null); }} aria-describedby={erro ? "especial-nome-erro" : undefined} />
         {erro && <p id="especial-nome-erro" className="especial__erro" role="alert">{erro}</p>}
         <button className="rqr-botao" type="submit">Pronto</button>
-        <button className="historia-opcao historia-opcao--leve" type="button" onClick={() => { mudar({ nome: null }); aoFim(null); }}>
+        <button className="historia-opcao historia-opcao--leve" type="button" onClick={() => { tocar("clique"); mudar({ nome: null }); aoFim(null); }}>
           Prefiro não dizer
         </button>
       </form>
@@ -137,14 +140,15 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
       <div className="especial">
         <div className="especial__chips" role="group" aria-label="O que te trouxe aqui (pode marcar vários)">
           {MOTIVOS.map((m) => (
-            <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => alternar(m)}>{m}</button>
+            <button key={m} className={`chip ${marcados.includes(m) ? "is-on" : ""}`} aria-pressed={marcados.includes(m)} onClick={() => { tocar("clique"); alternar(m); }}>{m}</button>
           ))}
         </div>
         <button className="rqr-botao" disabled={!marcados.length} onClick={() => {
+          tocar("clique");
           mudar({ motivos: marcados });
           aoFim("Obrigado por me contar. Fica entre a gente.");
         }}>{conversa.broto ? `Contar pro ${conversa.broto}` : "Contar pra ele"}</button>
-        <button className="historia-opcao historia-opcao--leve" onClick={() => aoFim("Tudo bem. A gente se conhece aos poucos.")}>Prefiro não dizer</button>
+        <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); aoFim("Tudo bem. A gente se conhece aos poucos."); }}>Prefiro não dizer</button>
       </div>
     );
   }
@@ -158,9 +162,9 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
     return (
       <div className="especial">
         {METAS.map((m) => (
-          <button key={m} className="historia-opcao" onClick={() => { mudar({ meta: m }); aoFim(resp[m]); }}>{m}</button>
+          <button key={m} className="historia-opcao" onClick={() => { tocar("clique"); mudar({ meta: m }); aoFim(resp[m]); }}>{m}</button>
         ))}
-        <button className="historia-opcao historia-opcao--leve" onClick={() => aoFim("Justo. Não precisa decidir nada hoje.")}>Prefiro não responder</button>
+        <button className="historia-opcao historia-opcao--leve" onClick={() => { tocar("clique"); aoFim("Justo. Não precisa decidir nada hoje."); }}>Prefiro não responder</button>
       </div>
     );
   }
@@ -170,10 +174,11 @@ export function Especial({ tipo, conversa, mudar, aoFim }: Props) {
   return (
     <div className="especial">
       <button className="historia-opcao" onClick={() => {
+        tocar("clique");
         guardarConhecer({ motivos: conversa.motivos, meta: conversa.meta } satisfies Conhecer);
         aoFim("Guardado. Só aqui, no seu celular.");
       }}>Guardar</button>
-      <button className="historia-opcao" onClick={() => aoFim("Combinado. Fica só nessa conversa.")}>Não guardar</button>
+      <button className="historia-opcao" onClick={() => { tocar("clique"); aoFim("Combinado. Fica só nessa conversa."); }}>Não guardar</button>
     </div>
   );
 }

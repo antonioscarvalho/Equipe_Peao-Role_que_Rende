@@ -143,7 +143,7 @@ export default function App() {
   const progresso = useProgresso();
   const feitosCaps = capitulosConcluidos();
 
-  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · ${nomeBroto}`; }, [aba, nomeBroto]);
+  useEffect(() => { document.title = `${TITULOS_ABA[aba]} · Meu amigo Broto!`; }, [aba]);
   useEffect(() => { setSemanaVista(plano.semana); }, [plano.semana]);
 
   // Trilha leve, alegre e energética pra todo o app (não só a história) — abaixa, não para,
@@ -435,7 +435,7 @@ export default function App() {
             </div>
 
             {conhecer && (
-              <button className="link" onClick={() => { apagarConhecer(); setAviso(`O que você contou ao ${nomeBroto} foi apagado.`); }}>
+              <button className="link" onClick={() => { tocar("clique"); apagarConhecer(); setAviso(`O que você contou ao ${nomeBroto} foi apagado.`); }}>
                 Apagar o que contei ao {nomeBroto}
               </button>
             )}
