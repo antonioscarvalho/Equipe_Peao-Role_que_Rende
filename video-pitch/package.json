@@ -1,0 +1,27 @@
+{
+  "name": "video-pitch-broto",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Vídeo de pitch (sem áudio) do Meu amigo Broto!, feito com Remotion a partir de capturas do app real.",
+  "scripts": {
+    "capturar": "node captura/capturar.mjs",
+    "studio": "remotion studio",
+    "render": "remotion render Pitch out/pitch-broto.mp4 --codec=h264 --crf=18 --muted",
+    "still": "remotion still Pitch out/capa.png --frame=60"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.539",
+    "@remotion/google-fonts": "^4.0.539",
+    "@remotion/transitions": "^4.0.539",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.539"
+  },
+  "devDependencies": {
+    "@remotion/bundler": "^4.0.539",
+    "@remotion/renderer": "^4.0.539",
+    "@types/react": "^18.3.31",
+    "typescript": "^7.0.2"
+  }
+}

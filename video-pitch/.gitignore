@@ -1,0 +1,6 @@
+node_modules/
+captura/node_modules/
+captura/tmp/
+captura/sonda/
+captura/folha*.png
+out/
