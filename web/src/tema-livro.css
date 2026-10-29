@@ -1659,3 +1659,15 @@ button.botao-fechar-gov.botao-fechar-gov:focus-visible { outline: 4px dashed #C2
 }
 .botao-libras .botao-topo__icone img { width: 44px; height: 44px; border-radius: 8px; display: block; }
 .botao-libras:focus-visible { outline: 3px solid var(--rqr-foco); outline-offset: 3px; border-radius: 10px; }
+
+/* Texto do app não seleciona nem copia (pedido do produto): sem seleção ao tocar/arrastar,
+   sem a lupa e o menu "copiar" do toque longo no iPhone e sem o destaque azul do toque.
+   Leitores de tela não são afetados. Campos de digitar (nome) continuam selecionáveis. */
+html, body, #root {
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text; user-select: text; -webkit-touch-callout: default;
+}
+img, svg { -webkit-user-drag: none; user-drag: none; }
