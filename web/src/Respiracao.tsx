@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Bichinho } from "./Bichinho";
 import { Icone } from "./Icone";
 import { Animacao } from "./Animacao";
-import { tocar } from "./sons";
+import { abaixarTrilha, tocar } from "./sons";
 
 const fases = [
   { nome: "Inspire", seg: 4, classe: "inspira" },
@@ -24,6 +24,8 @@ export function Respiracao({ aoFechar, aoJogar, reduzir }: { aoFechar: () => voi
   // Começa "vazio" e cresce na primeira inspiração, para a transição aparecer desde o início.
   const [montado, setMontado] = useState(false);
   useEffect(() => { const id = requestAnimationFrame(() => setMontado(true)); return () => cancelAnimationFrame(id); }, []);
+  // Mesmo ritmo calmo da respiração: a trilha alegre abaixa enquanto essa tela estiver aberta.
+  useEffect(() => { abaixarTrilha(true); return () => abaixarTrilha(false); }, []);
 
   useEffect(() => {
     if (terminou) return;

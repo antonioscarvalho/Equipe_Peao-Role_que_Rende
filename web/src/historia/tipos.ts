@@ -33,7 +33,8 @@ export interface Passo {
   /** Momento da arte de fundo (ver as cenas do capítulo). Fica valendo até outro passo mudar. */
   cena?: string
   humor?: 'calmo' | 'feliz' | 'cansado' | 'orgulhoso' | 'apoio'
-  opcoes?: { rotulo: string; resposta?: string; abreCrise?: boolean }[]
+  /** `som: "cantiga"` toca de novo a cantiga da Vó (ex.: resposta que cita "tum-tum, tá-rá"). */
+  opcoes?: { rotulo: string; resposta?: string; abreCrise?: boolean; som?: 'cantiga' }[]
   /** Pergunta do app com tela própria (só a base implementa). */
   especial?: 'nome' | 'aparencia' | 'idade' | 'motivo' | 'meta' | 'guardar'
 }

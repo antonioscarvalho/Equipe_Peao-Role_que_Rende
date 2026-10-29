@@ -62,7 +62,7 @@ export const cap1: Capitulo = {
     { cena: "musica", humor: "feliz", fala: "E na colheita a gente canta. Tem uma cantiga que a minha Vó Vega ensinou… é assim: tum-tum, tá-rá, tum-tum… a luz vem devagar…" },
     { fala: "A Nina, minha irmã, sempre entra nessa parte. Fiquei esperando a voz dela… Esqueci por um segundo que tô longe." },
     { fala: "E você, tem alguma música de que gosta? Quero conhecer um pedacinho daqui também.", opcoes: [
-      { rotulo: "Samba ou pagode", resposta: "Ouvi um pagode enquanto caía! Acho que tinha uma roda perto da praça. Tum-tum, tá-rá… combina com a cantiga da Vó!" },
+      { rotulo: "Samba ou pagode", resposta: "Ouvi um pagode enquanto caía! Acho que tinha uma roda perto da praça. Tum-tum, tá-rá… combina com a cantiga da Vó!", som: "cantiga" },
       { rotulo: "Funk", resposta: "Aquele grave que faz o chão tremer? Achei que era o meu coração batendo depois da queda!" },
       { rotulo: "Sertanejo", resposta: "Música de saudade, né? Acho que eu vou gostar. Tô com um pouco de saudade de casa." },
       { rotulo: "Gospel ou louvor", resposta: "Música de fé. A Vó Vega diz que cantar junto deixa a gente mais leve." },
