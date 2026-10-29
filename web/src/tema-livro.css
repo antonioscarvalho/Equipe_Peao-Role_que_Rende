@@ -1573,3 +1573,8 @@ h1, h2, .topo__titulo, .abertura__nome, .crise__titulo { font-weight: 700; lette
 .historia-cap > span:first-child { flex: 1 1 auto; min-width: 0; }
 .historia-cap__estado { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: normal; word-break: normal; hyphens: none; }
 @media (max-width: 420px) { .historia-cap__estado { flex-basis: 100%; text-align: left; } }
+
+/* Sem piscada entre telas cheias (ver Historia.tsx): fundo fixo e opaco por baixo de todas. */
+.historia-cortina { position: fixed; inset: 0; z-index: 29; background: var(--livro-tinta); }
+/* Pulo aberto a partir da respiração ("Deu vontade"): troca de uma tela cheia por outra, sem pop. */
+.pulo.sem-pop { animation: none; }

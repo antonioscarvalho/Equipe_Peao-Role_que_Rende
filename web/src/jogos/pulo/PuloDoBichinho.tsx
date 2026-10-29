@@ -493,7 +493,7 @@ export function PuloDoBichinho({ aoFechar, aoTerminar, reduzir, chamada, trilhaR
   const novoRecorde = estado === "caiu" && pontos > 0 && pontos >= recorde;
 
   return (
-    <div className="pulo" role="dialog" aria-modal="true" aria-labelledby="pulo-titulo">
+    <div className={`pulo ${chamada ? "sem-pop" : ""}`} role="dialog" aria-modal="true" aria-labelledby="pulo-titulo">
       <div className="pulo__topo">
         <h2 id="pulo-titulo" className="sr-only">Pulo do Bichinho</h2>
         <span className="pulo__placar" aria-label={`${pontos} metros, ${folhas} folhas`}>

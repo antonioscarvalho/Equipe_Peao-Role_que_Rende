@@ -106,8 +106,15 @@ export function Historia({ aoFechar, reduzir, iniciar, trilhaRetorno = "app", ao
   const fimAbertura = useCallback(() => setTela((t) => (t.tipo === "abertura" ? { tipo: "antes", id: t.id } : t)), []);
   const escondeMapa = (tela.tipo !== "mapa" && tela.tipo !== "idade") || (Boolean(iniciar) && !aviso && tela.tipo !== "idade");
 
+  // Cortina opaca atrás das telas da história: na troca entre elas (mapa → abertura → conversa →
+  // jogo → conversa), uma sai na hora e a outra entra com o pop, que começa transparente. Sem a
+  // cortina, por uma fração de segundo aparecia a tela inicial do app por trás (a "piscada").
+  // No mapa aberto pelo app ela não entra, para o pop de abrir a história continuar visível.
+  const cortina = tela.tipo !== "mapa" || Boolean(iniciar);
+
   return (
     <>
+      {cortina && <div className="historia-cortina" aria-hidden="true" />}
       <div ref={caixa} className={`historia ${iniciar ? "historia--inicio" : ""}`} role="dialog" aria-modal="true" aria-labelledby="historia-titulo"
         aria-hidden={escondeMapa || undefined} style={escondeMapa ? { visibility: "hidden" } : undefined}>
         <div className="tela-libras"><BotaoLibras /></div>
