@@ -4,7 +4,7 @@
 // Só dados sintéticos: o nome digitado na história é "Marcos".
 import { chromium } from "playwright";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
@@ -23,10 +23,37 @@ mkdirSync(SAIDA, { recursive: true });
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const navegador = await chromium.launch({ args: ["--autoplay-policy=no-user-gesture-required"] });
-const contexto = await navegador.newContext({
-  viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true,
+const OPCOES_CONTEXTO = { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
+let contexto = await navegador.newContext(OPCOES_CONTEXTO);
+let pagina = await contexto.newPage();
+
+// O avatar do VLibras é Unity/WebGL: ele roda num segundo Chromium com WebGL pelo SwiftShader
+// (no primeiro, sem essas flags, as animações e o jogo ficam mais fluidos).
+const navegadorWebGL = await chromium.launch({
+  args: [
+    "--autoplay-policy=no-user-gesture-required", "--use-gl=angle", "--use-angle=swiftshader",
+    "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--enable-webgl",
+  ],
 });
-const pagina = await contexto.newPage();
+
+// O player do VLibras baixa ~20 MB do jsDelivr e desiste se demorar (a rede às vezes leva 40 s+).
+// Baixamos uma vez para um cache local e servimos de lá, para o avatar carregar a tempo.
+const VLIBRAS_UNITY = "https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/vlibras-portal@v7.12.2/app/unity";
+const CACHE_VLIBRAS = join(QUADROS, "..", "vlibras-cache");
+mkdirSync(CACHE_VLIBRAS, { recursive: true });
+await Promise.all(["playerweb.data.unityweb", "playerweb.wasm.code.unityweb", "playerweb.wasm.framework.unityweb"].map(async (n) => {
+  const destino = join(CACHE_VLIBRAS, n);
+  if (existsSync(destino)) return;
+  const resp = await fetch(`${VLIBRAS_UNITY}/${n}?v=7.12.2`);
+  writeFileSync(destino, Buffer.from(await resp.arrayBuffer()));
+}));
+const servirVLibrasDoCache = (ctx) => ctx.route(/playerweb\.(data|wasm\.code|wasm\.framework)\.unityweb/, (rota) => {
+  const nome = rota.request().url().match(/(playerweb\.[a-z.]+\.unityweb)/)[1];
+  rota.fulfill({
+    status: 200, contentType: "application/vnd.unity", headers: { "access-control-allow-origin": "*" },
+    body: readFileSync(join(CACHE_VLIBRAS, nome)),
+  });
+});
 
 /** Foto da tela inteira, depois de as animações de entrada assentarem. */
 async function foto(nome, ms = 1500) {
@@ -70,8 +97,8 @@ async function clipe(nome, segundos, acao) {
   writeFileSync(lista, linhas.join("\n"));
   execFileSync(FFMPEG, [
     "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", caminho(lista),
-    "-vf", "fps=30,scale=780:1688:force_original_aspect_ratio=decrease,pad=780:1688:(ow-iw)/2:(oh-ih)/2,format=yuv420p",
-    "-t", String(segundos), "-an", "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-movflags", "+faststart",
+    "-vf", "fps=30,scale=780:1688:force_original_aspect_ratio=decrease:out_range=tv,pad=780:1688:(ow-iw)/2:(oh-ih)/2,format=yuv420p",
+    "-t", String(segundos), "-an", "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-color_range", "tv", "-movflags", "+faststart",
     caminho(join(SAIDA, `${nome}.mp4`)),
   ]);
   console.log("clipe", nome, quadros.length, "quadros");
@@ -163,34 +190,66 @@ await pagina.evaluate(() => {
   document.documentElement.dataset.tema = "claro";
 });
 
-// 8. Pulo do Bichinho: começa a partida e alterna as setas para o Broto pular de lado a lado.
+// 8. Pulo do Bichinho: começa a partida e um "piloto" mira a plataforma mais próxima.
+//    O piloto lê o estado do jogo pela fibra do React (a ref `jogo`) e só aperta as setas virtuais.
 await aba("Jogos").click();
 await botao(/Pulo do Bichinho/).click();
 await pagina.locator(".pulo .rqr-botao", { hasText: "Começar" }).click();
-await espera(600);
-await clipe("pulo", 4, async () => {
-  for (const tecla of ["ArrowRight", "ArrowLeft", "ArrowRight", "ArrowLeft"]) {
-    await pagina.keyboard.down(tecla);
-    await espera(900);
-    await pagina.keyboard.up(tecla);
-    await espera(100);
+await pagina.evaluate(() => {
+  const bicho = document.querySelector(".pulo__bicho");
+  const chave = Object.keys(bicho).find((k) => k.startsWith("__reactFiber"));
+  let fibra = bicho[chave], g = null;
+  while (fibra && !g) {
+    for (let h = fibra.memoizedState; h && !g; h = h.next) {
+      const v = h.memoizedState?.current;
+      if (v && Array.isArray(v.plats) && v.teclas) g = v;
+    }
+    fibra = fibra.return;
   }
+  if (!g) return;
+  const BICHO = 56, PLAT_W = 72;
+  const pilotar = () => {
+    const pes = g.y + BICHO;
+    const candidatas = g.plats.filter((p) => !p.quebrou && p.tipo !== "nuvem" && (g.vy > 0 ? p.y >= pes - 4 : p.y < pes - 10));
+    candidatas.sort((a, b) => Math.abs(a.y - pes) - Math.abs(b.y - pes));
+    const alvo = candidatas[0];
+    if (alvo) {
+      const dx = alvo.x + (alvo.w ?? PLAT_W) / 2 - (g.x + BICHO / 2);
+      g.teclas.e = dx < -8; g.teclas.d = dx > 8;
+    }
+    requestAnimationFrame(pilotar);
+  };
+  pilotar();
 });
+await espera(1500);
+await clipe("pulo", 4, () => espera(4000));
 await pagina.keyboard.press("Escape");
 await espera(1000);
 
-// 9. VLibras: abre a bolha, espera o avatar 3D e toca num texto para ele sinalizar.
+// 9. VLibras: abre a bolha, espera o avatar 3D, dispensa o tutorial e o aviso de dados
+//    e toca no título da tela para ele sinalizar.
+//    Abre no Chromium com WebGL, levando o mesmo localStorage (nome, missões, capítulo 1).
 try {
-  await aba("Início").click();
-  await espera(1000);
+  const estado = await contexto.storageState();
+  await navegador.close();
+  contexto = await navegadorWebGL.newContext({ ...OPCOES_CONTEXTO, storageState: estado });
+  await servirVLibrasDoCache(contexto);
+  pagina = await contexto.newPage();
+  await pagina.goto(URL_APP, { waitUntil: "load", timeout: 60000 });
+  await aba("Início").waitFor({ timeout: 40000 });
+  await espera(2000);
   await botao("Traduzir para Libras com o VLibras").click();
-  await espera(15000);
-  const texto = pagina.locator(".deu-vontade .atalho__texto").first();
-  await texto.click();
-  await clipe("vlibras", 4, async () => { await espera(2500); });
-  await foto("vlibras", 0);
+  await pagina.getByText("Pular", { exact: true }).last().click({ timeout: 60000 }).catch(() => {});
+  await pagina.getByText("Não aceitar", { exact: true }).click({ timeout: 15000 }).catch(() => {});
+  await espera(1500);
+  await pagina.locator(".topo__titulo").click();
+  await clipe("vlibras", 4, async () => {
+    await espera(600);
+    await pagina.screenshot({ path: join(SAIDA, "vlibras.png") });
+    console.log("foto vlibras");
+  });
 } catch (erro) {
   console.log("VLibras não capturado:", erro.message);
 }
 
-await navegador.close();
+await navegadorWebGL.close();

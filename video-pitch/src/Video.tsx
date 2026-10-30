@@ -202,7 +202,7 @@ const CENAS: Cena[] = [
     de: 3, ate: 5, rotulo: "Libras", tag: "Acessibilidade", cor: C.ceu, titulo: "Libras em toda tela, com o *VLibras*.",
     texto: "Um toque no botão azul e o avatar traduz o texto para Libras.", icone: "marca/vlibras.svg",
     chips: [["VLibras gov.br", C.ceu], ["Leitor de tela", C.menta], ["Só teclado", C.lavanda]],
-    telas: ["telas/vlibras.mp4"],
+    telas: ["telas/vlibras.png"],
   },
   {
     de: 5, ate: 7, rotulo: "Foco", tag: "Menos carga cognitiva", cor: C.menta, titulo: "Uma coisa por vez, sem *pressa*.",
@@ -219,7 +219,7 @@ const CENAS: Cena[] = [
   {
     de: 9, ate: 11, rotulo: "Jogos", tag: "Na hora da vontade", cor: C.salvia, titulo: "Jogos de 3 minutos, *zero* aposta.",
     texto: "Distração para a onda passar. Sem moeda, sem sorte, sem ranking. E o CVV 188 a um toque.",
-    chips: [["Pulo do Bichinho", C.sol], ["Carrinho no Morro", C.menta], ["Ajuda 24 h", C.rosa]],
+    chips: [["Pulo do Bichinho", C.sol], ["Mais jogos na história", C.menta], ["Ajuda 24 h", C.rosa]],
     telas: ["telas/jogos.png", "telas/pulo.mp4", "telas/ajuda.png"],
   },
 ];
